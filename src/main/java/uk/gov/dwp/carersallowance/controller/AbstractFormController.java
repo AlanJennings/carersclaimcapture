@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 
-import uk.gov.dwp.carersallowance.controller.validations.FormValidationError;
-import uk.gov.dwp.carersallowance.controller.validations.ValidationError;
 import uk.gov.dwp.carersallowance.utils.Parameters;
+import uk.gov.dwp.carersallowance.validations.FormValidationError;
+import uk.gov.dwp.carersallowance.validations.ValidationError;
 
 public abstract class AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractFormController.class);
@@ -26,9 +26,38 @@ public abstract class AbstractFormController {
         validationSummary = new ValidationSummary();
     }
 
+    /************************ START ABSTRACT METHODS **************************/
+
+    /**
+     * Validate form contents before progressing
+     */
     protected abstract void validate(Map<String, Object> fieldValues, String[] fields);
 
+    /**
+     * Used for various URLs in Google Analytics in particular
+     */
+    public abstract String getCurrentPage();           // e.g. /allowance/benefits
+
+    /**
+     * The names of the input fields
+     */
+    public abstract String[] getFields();
+
     public ValidationSummary getValidationSummary() { return validationSummary; }
+
+    /*********************** END ABSTRACT METHODS ******************************/
+
+    protected String showForm(HttpServletRequest request, Model model) {
+
+        LOG.trace("Starting AbstractFormController.showForm");
+        LOG.debug("model = {}", model);
+
+        model.addAttribute("currentPage", getCurrentPage());
+        syncSessionToModel(request, getFields(), model);
+
+        LOG.trace("Ending AbstractFormController.showForm");
+        return getCurrentPage();        // returns the view name
+    }
 
     protected void syncSessionToModel(HttpServletRequest request, String[] fieldNames, Model model) {
         LOG.trace("Started AbstractFormController.syncSessionToModel");

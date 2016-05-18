@@ -3,6 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
+        <!-- current page = <c:out value='${currentPage}' /> -->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Eligibility - Can you get Carer&#x27;s Allowance?</title>
 
@@ -20,7 +21,7 @@
             (function(){if(window.opera){return;}
             setTimeout(function(){var a=document,g,b={families:(g=
             ["nta"]),urls:["<link href="<c:url value='/assets/stylesheet/fonts-ie8.css' />" ]},
-            c="<c:url value='/assets/javascript//webfont-debug.js' />",d="script",
+            c="<c:url value='/assets/javascript/webfont-debug.js' />",d="script",
             e=a.createElement(d),formData=a.getElementsByTagName(d)[0],h=g.length;WebFontConfig
             ={custom:b},e.src=c,formData.parentNode.insertBefore(e,formData);for(;h=h-1;a.documentElement
             .className+=' wf-'+g[h].replace(/\s/g,'').toLowerCase()+'-n4-loading');},0)
@@ -55,15 +56,31 @@
            var landingURL = "http://www.gov.uk/carers-allowance/how-to-claim"
         </script>
         
-        <script src="<c:url value='/assets/javascript/jquery/jquery-1.9.1.js' />" type="text/javascript"></script>
-        <script src="<c:url value='/assets/javascript/date.js' />" type="text/javascript"></script>
-        <script src="<c:url value='/assets/javascript/bb.js' />" type="text/javascript"></script>        
-        <script src="<c:url value='/assets/javascript/stageprompt-2.0.1.js' />" type="text/javascript"></script>
-        <script src="<c:url value='/assets/javascript/custom.js' />" ></script>
+        <script type="text/javascript" src="<c:url value='/assets/javascript/jquery/jquery-1.9.1.js' />" />
+        <script type="text/javascript" src="<c:url value='/assets/javascript/date.js' />" />
+        <script type="text/javascript" src="<c:url value='/assets/javascript/bb.js' />" />
+        <script type="text/javascript" src="<c:url value='/assets/javascript/stageprompt-2.0.1.js' />" />
+        <script type="text/javascript" src="<c:url value='/assets/javascript/custom.js' />" />
         
         <!--[if (lt IE 9) & (!IEMobile)]>
         <script src="<c:url value='/assets/javascript/respond.min.js' />" ></script>
         <![endif]-->
+        
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            
+            ga('create', 'UA-57523228-1', {
+              
+              'siteSpeedSampleRate': '100'
+            
+            });
+            ga('send', 'pageview');
+            ga('set', 'anonymizeIp', true);
+            ga('set', 'nonInteraction', true);
+        </script>
     </head>
     <body>
         <script type="text/javascript">
@@ -82,11 +99,12 @@
         <!--end header-->
         
         <div id="global-cookie-message">
-            <p>
-                This service uses cookies. 
+            <p>This service uses cookies. 
                 <a rel="external" 
-                   target="_blank" href="/cookies/en" 
-                   onmousedown="trackEvent(&#x27;/allowance/eligibility&#x27;,&#x27;Cookies - from banner&#x27;);" onkeydown="trackEvent(&#x27;/allowance/eligibility&#x27;,&#x27;Cookies - from banner&#x27;);"
+                   target="_blank" 
+                   href="/cookies/en" 
+                   onmousedown="trackEvent(&#x27;<c:out value='${currentPage}' />&#x27;,&#x27;Cookies - from banner&#x27;);" 
+                   onkeydown="trackEvent(&#x27;<c:out value='${currentPage}' />&#x27;,&#x27;Cookies - from banner&#x27;);"
                 >Find out more</a>
             </p>
         </div>
@@ -106,19 +124,16 @@
                 </div>
                 
                 <div class="grid-row main-grid">
-                    <jsp:include page="../contactDetails.jsp" >
-                        <jsp:param name="trackEventPath" value="/allowance/eligibility" />
-                    </jsp:include>
-                    
+
                     <jsp:include page="./eligibility-content.jsp" >
-                        <jsp:param name="trackEventPath" value="/allowance/eligibility" />
+                        <jsp:param name="currentPage" value="<c:out value='${currentPage}' />" />
                     </jsp:include>                
                 </div>
             </div>
         </main>
 
         <jsp:include page="../footer.jsp" >
-            <jsp:param name="trackEventPath" value="/allowance/eligibility" />
+            <jsp:param name="currentPage" value="<c:out value='${currentPage}' />" />
         </jsp:include>
 
         <div id="global-app-error" class="app-error hidden"></div>        

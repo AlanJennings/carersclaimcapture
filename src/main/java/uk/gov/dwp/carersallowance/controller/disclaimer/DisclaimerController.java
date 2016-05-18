@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.allowance;
+package uk.gov.dwp.carersallowance.controller.disclaimer;
 
 import java.util.Map;
 
@@ -16,11 +16,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
 @Controller
-public class BenefitsController extends AbstractFormController {
-    private static final Logger LOG = LoggerFactory.getLogger(BenefitsController.class);
+public class DisclaimerController extends AbstractFormController {
+    private static final Logger LOG = LoggerFactory.getLogger(DisclaimerController.class);
 
-    private static final String CURRENT_PAGE = "/allowance/benefits";
-    private static final String NEXT_PAGE    = "redirect:/allowance/eligibility";
+    private static final String CURRENT_PAGE = "/disclaimer/disclaimer";
+    private static final String NEXT_PAGE    = "redirect:/third-party/third-party";
 
     private static final String[] FIELDS = {"benefitsAnswer"};
 
@@ -53,8 +53,8 @@ public class BenefitsController extends AbstractFormController {
         LOG.debug("model = {}, redirectAttrs = {}", model, redirectAttrs);
         LOG.debug("benefitsAnswer = {}", benefitsAnswer);
 
-        syncModelToSession(model, getFields(), request);
-        validate(model.asMap(), getFields());
+        syncModelToSession(model, FIELDS, request);
+        validate(model.asMap(), FIELDS);
 
         if(hasErrors()) {
             LOG.info("there are validation errors, re-showing form");
@@ -63,8 +63,7 @@ public class BenefitsController extends AbstractFormController {
         }
 
         LOG.trace("Ending BenefitsController.postForm");
-
-        return getNextPage();
+        return NEXT_PAGE;
     }
 
     /**

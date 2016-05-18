@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.validations;
+package uk.gov.dwp.carersallowance.validations;
 
 public interface ValidationError {
     public String getId();

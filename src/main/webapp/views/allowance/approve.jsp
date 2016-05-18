@@ -3,6 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
+        <!-- current page = <c:out value='${currentPage}' /> -->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Can you get Carer&#x27;s Allowance?</title>
 
@@ -37,6 +38,8 @@
         <script src="<c:url value='/assets/javascript/ie.js' />" type="text/javascript"></script>
         <![endif]-->
 
+        <link href="<c:url value='/assets/stylesheet/fonts.css' />"  media="all" rel="stylesheet" type="text/css">
+
         <link rel="shortcut icon" href="<c:url value='/assets/images/favicon-447e4ac1ab790342660eacfe3dcce264.ico' />" type="image/x-icon">
         <link rel="icon"  href="<c:url value='/assets/images/favicon-447e4ac1ab790342660eacfe3dcce264.ico' />" type="image/x-icon">
 
@@ -54,12 +57,12 @@
         <script type="text/javascript">
            var landingURL = "http://www.gov.uk/carers-allowance/how-to-claim"
         </script>
-        <script src="<c:url value='/assets/javascript/jquery/jquery-1.9.1.js" type="text/javascript' />"></script>
-        <script src="<c:url value='/assets/javascript/date.js" type="text/javascript' />"></script>
-        <script src="<c:url value='/assets/javascript/bb.js" type="text/javascript' />"></script>        
-        <script src="<c:url value='/assets/javascript/stageprompt-2.0.1.js' />" type="text/javascript"></script>
-        <script src="<c:url value='/assets/javascript/custom.js' />" ></script>
-        
+        <script type="text/javascript" src="<c:url value='/assets/javascript/jquery/jquery-1.9.1.js' />" />
+        <script type="text/javascript" src="<c:url value='/assets/javascript/date.js' />" />
+        <script type="text/javascript" src="<c:url value='/assets/javascript/bb.js' />" />
+        <script type="text/javascript" src="<c:url value='/assets/javascript/stageprompt-2.0.1.js' />" />
+        <script type="text/javascript" src="<c:url value='/assets/javascript/custom.js' />" />
+
         <!--[if (lt IE 9) & (!IEMobile)]>
         <script src="<c:url value='/assets/javascript/respond.min.js' />" ></script>
         <![endif]-->
@@ -86,28 +89,26 @@
             document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
         </script>
         
-        <a href="#main" class="visuallyhidden">Skip to main content</a>
-            
+        <a href="#main" class="visuallyhidden">Skip to main content</a>            
         <header role="banner" class="global-header" id="global-header">
             <div class="wrapper clearfix">
                 <a href="https://www.gov.uk" title="Go to the gov.uk homepage" target="govlink" class="crown">GOV.UK</a>
                 <h1 class="heading-medium">Carer's Allowance</h1>
             </div>
         </header>
-
         <!--end header-->
         
         <div id="global-cookie-message">
             <p>This service uses cookies. 
-                <a rel="external" 
+                <a rel="external"
                    target="_blank" 
                    href="/cookies/en" 
-                   onmousedown="trackEvent(&#x27;/allowance/approve&#x27;,&#x27;Cookies - from banner&#x27;);" 
-                   onkeydown="trackEvent(&#x27;/allowance/approve&#x27;,&#x27;Cookies - from banner&#x27;);"
+                   onmousedown="trackEvent(&#x27;<c:out value='${currentPage}' />&#x27;,&#x27;Cookies - from banner&#x27;);" 
+                   onkeydown="trackEvent(&#x27;<c:out value='${currentPage}' />&#x27;,&#x27;Cookies - from banner&#x27;);"
                 >Find out more</a>
             </p>
-        </div>        
-            
+        </div>
+        
         <div id="global-browser-prompt">
             <p>For a safer, faster, better experience online you should upgrade your browser. <a href="https://www.gov.uk/support/browsers">Find out more about browsers</a> <a href="#" class="dismiss" title="Dismiss this message">Close</a></p>
         </div>
@@ -118,29 +119,26 @@
                 <div class="prototype">
                     <p>This is a prototype. You can't claim Carer's Allowance using this service. <a rel="external" target="_blank" href="https://www.gov.uk/carers-allowance/how-to-claim" target="claimLink">Claim for Carer's Allowance using the live service</a></p>
                 </div>
-                        
+    
                 <div class="helper-mobile" id="helper-toggle">
                     <a class="help">Get help</a>
                 </div>
-                
+            
                 <div class="grid-row main-grid">
-                    <jsp:include page="../contactDetails.jsp" >
-                        <jsp:param name="trackEventPath" value="/allowance/approve" />
-                    </jsp:include>
                     
                     <jsp:include page="./approve-content.jsp" >
-                        <jsp:param name="trackEventPath" value="/allowance/approve" />
-                    </jsp:include>                
-                
+                        <jsp:param name="currentPage" value="<c:out value='${currentPage}' />" />
+                    </jsp:include>
+
                 </div>
             </div>
-         </main>
+        </main>
 
         <jsp:include page="../footer.jsp" >
-            <jsp:param name="trackEventPath" value="/allowance/eligibility" />
+            <jsp:param name="currentPage" value="<c:out value='${currentPage}' />" />
         </jsp:include>
    
-          <div id="global-app-error" class="app-error hidden"></div>
+        <div id="global-app-error" class="app-error hidden"></div>
       
       </body>
 </html>

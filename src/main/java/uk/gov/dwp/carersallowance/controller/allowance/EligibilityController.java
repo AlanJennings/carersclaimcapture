@@ -20,22 +20,27 @@ public class EligibilityController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(EligibilityController.class);
 
     private static final String CURRENT_PAGE = "/allowance/eligibility";
-    private static final String FORWARD = "redirect:/allowance/approve";
+    private static final String NEXT_PAGE    = "redirect:/allowance/approve";
 
     private static final String[] FIELDS = {"over35HoursAWeek", "over16YearsOld", "originCountry"};
 
+    @Override
+    public String getCurrentPage() {
+        return CURRENT_PAGE;
+    }
+
+    public String getNextPage() {
+        return NEXT_PAGE;
+    }
+
+    @Override
+    public String[] getFields() {
+        return FIELDS;
+    }
+
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
     public String showForm(HttpServletRequest request, Model model) {
-        LOG.trace("Starting EligibilityController.showForm");
-        try {
-            LOG.debug("model = {}", model);
-
-            syncSessionToModel(request, FIELDS, model);
-
-            return CURRENT_PAGE;        // returns the view name
-        } finally {
-            LOG.trace("Ending EligibilityController.showForm");
-        }
+        return super.showForm(request, model);
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
@@ -60,7 +65,7 @@ public class EligibilityController extends AbstractFormController {
                 return showForm(request, model);
             }
 
-            return FORWARD;
+            return NEXT_PAGE;
         } finally {
             LOG.trace("Ending EligibilityController.postForm");
         }

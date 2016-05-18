@@ -28,14 +28,14 @@
                         <ul class="form-group form-group-compound" id="benefitsAnswer">
                             <li>           
                                 <div class="block-label " 
-                                     onmousedown="trackEvent(&#x27;${param.trackEventPath}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Personal Independence Payment (PIP) daily living component&quot;);"
+                                     onmousedown="trackEvent(&#x27;${param.currentPage}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Personal Independence Payment (PIP) daily living component&quot;);"
                                 >
                                     <input type="radio" 
                                            id="benefitsAnswer_PIP" 
                                            name="benefitsAnswer" 
                                            value="PIP"  
                                            <c:if test="${benefitsAnswer=='PIP'}">checked</c:if>                                           
-                                           onmousedown="trackEvent(&#x27;${param.trackEventPath}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Personal Independence Payment (PIP) daily living component&quot;);"
+                                           onmousedown="trackEvent(&#x27;${param.currentPage}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Personal Independence Payment (PIP) daily living component&quot;);"
                                     />
                                     <span>Personal Independence Payment (PIP) daily living component</span>
                                </div>
@@ -44,14 +44,14 @@
                             <li>            
                                 <label class="block-label" 
                                        for="benefitsAnswer_DLA" 
-                                       onmousedown="trackEvent(&#x27;${param.trackEventPath}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Disability Living Allowance (DLA) - middle or highest care rate&quot;);"
+                                       onmousedown="trackEvent(&#x27;${param.currentPage}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Disability Living Allowance (DLA) - middle or highest care rate&quot;);"
                                 >
                                     <input type="radio" 
                                            id="benefitsAnswer_DLA" 
                                            name="benefitsAnswer" 
                                            value="DLA"  
                                            <c:if test="${benefitsAnswer=='DLA'}">checked</c:if>  
-                                           onmousedown="trackEvent(&#x27;${param.trackEventPath}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Disability Living Allowance (DLA) - middle or highest care rate&quot;);"  
+                                           onmousedown="trackEvent(&#x27;${param.currentPage}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Disability Living Allowance (DLA) - middle or highest care rate&quot;);"  
                                     />
                                     <span>Disability Living Allowance (DLA) - middle or highest care rate</span>
                                 </label>
@@ -60,14 +60,14 @@
                             <li>            
                                 <label class="block-label" 
                                        for="benefitsAnswer_AA" 
-                                       onmousedown="trackEvent(&#x27;${param.trackEventPath}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Attendance Allowance (AA)&quot;);"
+                                       onmousedown="trackEvent(&#x27;${param.currentPage}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Attendance Allowance (AA)&quot;);"
                                 >
                                     <input type="radio" 
                                            id="benefitsAnswer_AA" 
                                            name="benefitsAnswer" 
                                            value="AA"  
                                            <c:if test="${benefitsAnswer=='AA'}">checked</c:if>  
-                                           onmousedown="trackEvent(&#x27;${param.trackEventPath}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Attendance Allowance (AA)&quot;);"
+                                           onmousedown="trackEvent(&#x27;${param.currentPage}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Attendance Allowance (AA)&quot;);"
                                     />
                                     <span>Attendance Allowance (AA)</span>
                                 </label>
@@ -77,14 +77,14 @@
                                 
                                 <label class="block-label" 
                                        for="benefitsAnswer_CAA"  
-                                       onmousedown="trackEvent(&#x27;${param.trackEventPath}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Constant Attendance Allowance (CAA)&quot;);"
+                                       onmousedown="trackEvent(&#x27;${param.currentPage}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Constant Attendance Allowance (CAA)&quot;);"
                                 >
                                     <input type="radio" 
                                            id="benefitsAnswer_CAA" 
                                            name="benefitsAnswer" 
                                            value="CAA"  
                                            <c:if test="${benefitsAnswer=='CAA'}">checked</c:if>  
-                                           onmousedown="trackEvent(&#x27;${param.trackEventPath}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Constant Attendance Allowance (CAA)&quot;);"  
+                                           onmousedown="trackEvent(&#x27;${param.currentPage}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Constant Attendance Allowance (CAA)&quot;);"  
                                     />
                                     <span>Constant Attendance Allowance (CAA)</span>
                                 </label>
@@ -93,14 +93,14 @@
                             <li>           
                                 <label class="block-label" 
                                        for="benefitsAnswer_AFIP" 
-                                       onmousedown="trackEvent(&#x27;${param.trackEventPath}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Armed Forces Independence Payment (AFIP)&quot;);"
+                                       onmousedown="trackEvent(&#x27;${param.currentPage}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Armed Forces Independence Payment (AFIP)&quot;);"
                                 >
                                     <input type="radio" 
                                            id="benefitsAnswer_AFIP" 
                                            name="benefitsAnswer"
                                            value="AFIP" 
                                            <c:if test="${benefitsAnswer=='AFIP'}">checked</c:if>  
-                                           onmousedown="trackEvent(&#x27;${param.trackEventPath}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Armed Forces Independence Payment (AFIP)&quot;);"  
+                                           onmousedown="trackEvent(&#x27;${param.currentPage}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;Armed Forces Independence Payment (AFIP)&quot;);"  
                                     />
                                     <span>Armed Forces Independence Payment (AFIP)</span>
                                 </label>
@@ -109,14 +109,14 @@
                             <li>            
                                 <label class="block-label" 
                                        for="benefitsAnswer_NONE" 
-                                       onmousedown="trackEvent(&#x27;${param.trackEventPath}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;None of these benefits&quot;);"
+                                       onmousedown="trackEvent(&#x27;${param.currentPage}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;None of these benefits&quot;);"
                                 >
                                     <input type="radio" 
                                            id="benefitsAnswer_NONE" 
                                            name="benefitsAnswer" 
                                            value="NONE" 
                                            <c:if test="${benefitsAnswer=='NONE'}">checked</c:if>  
-                                           onmousedown="trackEvent(&#x27;${param.trackEventPath}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;None of these benefits&quot;);"
+                                           onmousedown="trackEvent(&#x27;${param.currentPage}&#x27;,&#x27;What benefit does the person you care for get?&#x27;,&quot;None of these benefits&quot;);"
                                     />
                                     <span>None of these benefits</span>
                                 </label>

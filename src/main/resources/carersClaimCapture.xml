@@ -1,7 +1,7 @@
-valdiations can be layered on top of this (on the value tag)
-
 <FormData>
-    <page sectionId="" url="/allowance/benefits">
+<!-- 
+    validations can be layered on top of this (on the value tag)
+ -->    <page sectionId="" url="/allowance/benefits">
         <title>Can you get Carer's Allowance?</title>
         <beforeLink></beforeLink>
         <nextLink>/allowance/eligibility</nextLink>
