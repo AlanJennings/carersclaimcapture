@@ -9,7 +9,7 @@
         <ol class="list-bullet">
             <c:forEach var="error" items="${errors.formErrors}" varStatus="status">
                 <li>
-                    <a href="#<c:out value="${error.id}"/>"><c:out value="${error.errorMessage}"/></a>
+                    <a href="#<c:out value="${error.id}"/>"><c:out value="${error.displayName}"/> - <c:out value="${error.errorMessage}"/></a>
                 </li>
             </c:forEach>
         </ol>

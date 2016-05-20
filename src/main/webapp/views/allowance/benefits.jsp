@@ -23,7 +23,7 @@
                     </c:if>
                     <li class="form-group <c:out value='${benefitsAnswer_AdditionalClass}'/>">
                         <c:if test="${errors.hasError('benefitsAnswer')}" >
-                            <p class="validation-message">You must complete this section</p>
+                            <p class="validation-message">${errors.getErrorMessage('benefitsAnswer')}</p>
                         </c:if>
                         
                         <fieldset class="question-group">

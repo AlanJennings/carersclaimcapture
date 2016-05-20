@@ -29,7 +29,7 @@
                     </c:if>
                     <li class="form-group <c:out value='${thirdParty_AdditionalClass}'/>">
                         <c:if test="${errors.hasError('thirdParty')}" >
-                            <p class="validation-message">You must complete this section</p>
+                            <p class="validation-message">${errors.getErrorMessage('thirdParty')}</p>
                         </c:if>
                     
                         <fieldset>
@@ -67,14 +67,22 @@
                             </ul>
                         </fieldset>
                     </li>
-                    
+
                     <li id="thirdPartyWrap" class="form-group">
                         <ul class="extra-group">
-                            <li class="form-group ">
+
+                            <c:if test="${errors.hasError('nameAndOrganisation')}" >
+                                <c:set var="thirdParty_nameAndOrganisation_AdditionalClass" value="validation-error" />
+                            </c:if>
+                            <li class="form-group <c:out value='${thirdParty_nameAndOrganisation_AdditionalClass}'/>">
+                                <c:if test="${errors.hasError('nameAndOrganisation')}" >
+                                    <p class="validation-message">${errors.getErrorMessage('nameAndOrganisation')}</p>
+                                </c:if>
+
                                 <label id="thirdParty_nameAndOrganisation_questionLabel"
                                        class="form-label-bold"
                                        for="thirdParty_nameAndOrganisation">Your name and organisation </label>
-                                    
+
                                 <input type="text"
                                        class="form-control "
                                        id="thirdParty_nameAndOrganisation"
@@ -82,7 +90,7 @@
                                        value="${nameAndOrganisation}"
                                        maxLength="60"
                                        autocomplete="off">
-    
+
                                 <p class="form-hint">
                                     Fill the rest of the form in as if you're the carer. For
                                     example, if asked for 'your address' put the address of

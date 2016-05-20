@@ -203,9 +203,9 @@ public abstract class AbstractFormController {
         }
         if(emptyField) {
             if(populatedField) {
-                addFormError(id, fieldTitle + " - " + "Invalid value");
+                addFormError(id, fieldTitle, "Invalid value");
             } else {
-                addFormError(id, fieldTitle + " - " + "You must complete this section");
+                addFormError(id, fieldTitle, "You must complete this section");
             }
         }
         LOG.trace("Ending AbstractFormController.validateMandatoryDateField");
@@ -219,7 +219,7 @@ public abstract class AbstractFormController {
         LOG.debug("fieldName = {}, fieldValues={}", fieldName, new LoggingObjectWrapper(fieldValues));
         if(isEmpty(fieldValues)) {
             LOG.debug("missing mandatory field: {}", fieldName);
-            addFormError(fieldName, fieldTitle + " - " + "You must complete this section");
+            addFormError(fieldName, fieldTitle, "You must complete this section");
         }
         LOG.trace("Ending AbstractFormController.validateMandatoryField");
     }
@@ -305,8 +305,8 @@ public abstract class AbstractFormController {
         return true;
     }
 
-    protected void addFormError(String id, String errorMessage) {
-        validationSummary.addFormError(id, errorMessage);
+    protected void addFormError(String id, String displayName, String errorMessage) {
+        validationSummary.addFormError(id, displayName, errorMessage);
     }
 
     protected boolean hasErrors() {
@@ -322,8 +322,8 @@ public abstract class AbstractFormController {
 
         public List<ValidationError> getFormErrors()  { return formErrors; }
 
-        protected void addFormError(String id, String errorMessage) {
-            formErrors.add(new FormValidationError(id, errorMessage));
+        protected void addFormError(String id, String displayName, String errorMessage) {
+            formErrors.add(new FormValidationError(id, displayName, errorMessage));
         }
 
         public void reset() {
@@ -334,22 +334,39 @@ public abstract class AbstractFormController {
             return !formErrors.isEmpty();
         }
 
-        private boolean containsError(List<ValidationError> errors, String id) {
-            if(errors == null || StringUtils.isEmpty(id)) {
-                return false;
+        public String getErrorDisplayName(String id) {
+            ValidationError error = getError(id);
+            if(error == null) {
+                return null;
+            }
+            return error.getDisplayName();
+        }
+
+        public String getErrorMessage(String id) {
+            ValidationError error = getError(id);
+            if(error == null) {
+                return null;
+            }
+            return error.getErrorMessage();
+        }
+
+        public ValidationError getError(String id) {
+            if(formErrors == null || StringUtils.isEmpty(id)) {
+                return null;
             }
 
-            for(ValidationError error: errors) {
+            for(ValidationError error: formErrors) {
                 if(id.equals(error.getId())) {
-                    return true;
+                    return error;
                 }
             }
 
-            return false;
+            return null;
         }
 
         public boolean hasError(String id) {
-            return containsError(formErrors, id);
+            ValidationError error = getError(id);
+            return error != null;
         }
 
         public String toString() {

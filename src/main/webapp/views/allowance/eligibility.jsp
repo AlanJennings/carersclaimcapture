@@ -26,7 +26,7 @@
                     </c:if>
                     <li class="form-group ${over35HoursAWeek_AdditionalClass} ">
                         <c:if test="${errors.hasError('over35HoursAWeek')}" >
-                            <p class="validation-message">You must complete this section</p>
+                            <p class="validation-message">${errors.getErrorMessage('over35HoursAWeek')}</p>
                         </c:if>
                         <fieldset class="question-group">
                             <legend  id="hours_answer_questionLabel"  class="form-label-bold ">
@@ -81,7 +81,7 @@
                     </c:if>
                     <li class="form-group ${over16YearsOld_AdditionalClass}">
                         <c:if test="${errors.hasError('over16YearsOld')}" >
-                            <p class="validation-message">You must complete this section</p>
+                            <p class="validation-message">${errors.getErrorMessage('over16YearsOld')}</p>
                         </c:if>
                         <fieldset class="question-group">
                             <legend  id="over16_answer_questionLabel"  class="form-label-bold ">
@@ -129,7 +129,7 @@
                     </c:if>
                     <li class="form-group ${originCountry_AdditionalClass}">
                         <c:if test="${errors.hasError('originCountry')}" >
-                            <p class="validation-message">You must complete this section</p>
+                            <p class="validation-message">${errors.getErrorMessage('originCountry')}</p>
                         </c:if>
                         <fieldset class="question-group">                    
                             <legend id="origin_questionLabel" class="form-label-bold ">

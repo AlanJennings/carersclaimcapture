@@ -39,7 +39,7 @@
                     </c:if>
                     <li class="form-group  <c:out value='${dateOfClaim_AdditionalClass}'/>">
                         <c:if test="${errors.hasError('dateOfClaim')}" >
-                            <p class="validation-message">You must complete this section</p>
+                            <p class="validation-message">${errors.getErrorMessage('dateOfClaim')}</p>
                         </c:if>
                         <fieldset class="question-group">
                             <legend id="dateOfClaim_questionLabel" class="form-label-bold"> Claim date </legend>
@@ -99,7 +99,7 @@
                     </c:if>
                     <li class="form-group <c:out value='${beforeClaimCaring_AdditionalClass}'/>">
                         <c:if test="${errors.hasError('beforeClaimCaring')}" >
-                            <p class="validation-message">You must complete this section</p>
+                            <p class="validation-message">${errors.getErrorMessage('beforeClaimCaring')}</p>
                         </c:if>
 
                         <fieldset class="question-group">
@@ -137,16 +137,16 @@
                         </fieldset>
                     </li>
     
-                    <c:if test="${errors.hasError('beforeClaimCaring_date')}" >
-                        <c:set var="beforeClaimCaring_date_AdditionalClass" value="validation-error" />
-                    </c:if>
-                    <li id="careStartDateWrap" class="form-group <c:out value='${beforeClaimCaring_date_AdditionalClass}'/>">
-                        <c:if test="${errors.hasError('beforeClaimCaring_date')}" >
-                            <p class="validation-message">You must complete this section</p>
-                        </c:if>
-                        
+                    <li id="careStartDateWrap" class="form-group">
                         <ul class="extra-group">
-                            <li class="form-group ">
+                            <c:if test="${errors.hasError('beforeClaimCaringDate')}" >
+                                <c:set var="beforeClaimCaring_date_AdditionalClass" value="validation-error" />
+                            </c:if>
+                            <li class="form-group <c:out value='${beforeClaimCaring_date_AdditionalClass}'/>">
+                                <c:if test="${errors.hasError('beforeClaimCaringDate')}" >
+                                    <p class="validation-message">${errors.getErrorMessage('beforeClaimCaringDate')}</p>
+                                </c:if>
+                                
                                 <fieldset class="question-group">
                                     <legend id="beforeClaimCaring_date_questionLabel" class="form-label-bold">
                                         When did you begin caring? 
