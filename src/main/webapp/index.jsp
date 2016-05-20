@@ -30,10 +30,6 @@
                 padding-bottom: 3px;
             }
             
-            li:hover {
-                border: 1px solid #111111;
-            }
-            
             .unavailable {
                 background-color: #F57777;
             }
@@ -45,37 +41,37 @@
             <div class="section">
                 <h2 class="section-name">allowance</h2>
                 <ul>
-                    <li><a href="http://localhost:8080/CarersClaimCapture/allowance/benefits">benefits</a></li>
-                    <li><a href="http://localhost:8080/CarersClaimCapture/allowance/eligibility">eligibility</a></li>
-                    <li><a href="http://localhost:8080/CarersClaimCapture/allowance/approve">approve</a></li>
+                    <li><a href="http://localhost:8080/CarersClaimCapture/allowance/benefits">benefits</a> (/allowance/benefits)</li>
+                    <li><a href="http://localhost:8080/CarersClaimCapture/allowance/eligibility">eligibility</a> (/allowance/eligibility)</li>
+                    <li><a href="http://localhost:8080/CarersClaimCapture/allowance/approve">approve</a> (/allowance/approve)</li>
                 </ul>
             </div>
     
             <div class="section">
                 <h2 class="section-name">disclaimer</h2>
                 <ul>
-                    <li><a href="http://localhost:8080/CarersClaimCapture/disclaimer/disclaimer">disclaimer</a></li>
+                    <li><a href="http://localhost:8080/CarersClaimCapture/disclaimer/disclaimer">disclaimer</a> (/disclaimer/disclaimer)</li>
                 </ul>
             </div>
     
             <div class="section">
                 <h2 class="section-name">third-party</h2>
                 <ul>
-                    <li><a href="http://localhost:8080/CarersClaimCapture/third-party/third-party">third-party</a></li>
+                    <li><a href="http://localhost:8080/CarersClaimCapture/third-party/third-party">third-party</a> (/third-party/third-party)</li>
                 </ul>
             </div>
     
             <div class="section">
                 <h2 class="section-name">your-claim-date</h2>
                 <ul>
-                    <li><a href="http://localhost:8080/CarersClaimCapture/your-claim-date/claim-date">claim-date</a></li>
+                    <li><a href="http://localhost:8080/CarersClaimCapture/your-claim-date/claim-date">claim-date</a> (/your-claim-date/claim-date)</li>
                 </ul>
             </div>
     
             <div class="section">
                 <h2 class="section-name">about-you</h2>
                 <ul>
-                    <li><a href="http://localhost:8080/CarersClaimCapture/about-you/your-details">your-details</a></li>
+                    <li><a href="http://localhost:8080/CarersClaimCapture/about-you/your-details">your-details</a> (/about-you/your-details)</li>
                     <li class="unavailable"><a href="http://localhost:8080/CarersClaimCapture/about-you/marital-status">marital-status</a></li>
                     <li class="unavailable"><a href="http://localhost:8080/CarersClaimCapture/about-you/contact-details">contact-details</a></li>
                     <li class="unavailable"><a href="http://localhost:8080/CarersClaimCapture/about-you/nationality-and-residency">nationality-and-residency</a></li>

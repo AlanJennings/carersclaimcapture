@@ -3,12 +3,10 @@ package uk.gov.dwp.carersallowance.controller.disclaimer;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -17,18 +15,24 @@ import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
 @Controller
 public class DisclaimerController extends AbstractFormController {
-    private static final Logger LOG = LoggerFactory.getLogger(DisclaimerController.class);
+    private static final String PREVIOUS_PAGE = "/allowance/approve";
+    private static final String CURRENT_PAGE  = "/disclaimer/disclaimer";
+    private static final String NEXT_PAGE     = "/third-party/third-party";
+    private static final String PAGE_TITLE    = "Disclaimer - Before you start";
 
-    private static final String CURRENT_PAGE = "/disclaimer/disclaimer";
-    private static final String NEXT_PAGE    = "redirect:/third-party/third-party";
+    private static final String[] FIELDS = {};
 
-    private static final String[] FIELDS = {"benefitsAnswer"};
+    @Override
+    public String getPreviousPage() {
+        return PREVIOUS_PAGE;
+    }
 
     @Override
     public String getCurrentPage() {
         return CURRENT_PAGE;
     }
 
+    @Override
     public String getNextPage() {
         return NEXT_PAGE;
     }
@@ -38,32 +42,19 @@ public class DisclaimerController extends AbstractFormController {
         return FIELDS;
     }
 
+    @Override
+    public String getPageTitle() {
+        return PAGE_TITLE;
+    }
+
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
     public String showForm(HttpServletRequest request, Model model) {
         return super.showForm(request, model);
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
-    public String postForm(HttpServletRequest request,
-                           @ModelAttribute("benefitsAnswer") String benefitsAnswer,
-                           Model model,
-                           RedirectAttributes redirectAttrs) {
-
-        LOG.trace("Starting BenefitsController.postForm");
-        LOG.debug("model = {}, redirectAttrs = {}", model, redirectAttrs);
-        LOG.debug("benefitsAnswer = {}", benefitsAnswer);
-
-        syncModelToSession(model, FIELDS, request);
-        validate(model.asMap(), FIELDS);
-
-        if(hasErrors()) {
-            LOG.info("there are validation errors, re-showing form");
-            model.addAttribute("errors", getValidationSummary());
-            return showForm(request, model);
-        }
-
-        LOG.trace("Ending BenefitsController.postForm");
-        return NEXT_PAGE;
+    public String postForm(HttpServletRequest request, HttpSession session, Model model, RedirectAttributes redirectAttrs) {
+        return super.postForm(request, session, model, redirectAttrs);
     }
 
     /**
@@ -72,12 +63,7 @@ public class DisclaimerController extends AbstractFormController {
      * over the (rather poor) reporting behaviour
      * @return
      */
-    protected void validate(Map<String, Object> fieldValues, String[] fields) {
-        LOG.trace("Starting BenefitsController.validate");
-
+    protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         getValidationSummary().reset();
-
-        validateMandatoryField(fieldValues, "benefitsAnswer", "What benefit does the person you care for get?");
-        LOG.trace("Ending BenefitsController.validate");
     }
 }

@@ -12,7 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 import uk.gov.dwp.carersallowance.validations.FormValidationError;
 import uk.gov.dwp.carersallowance.validations.ValidationError;
@@ -28,38 +30,88 @@ public abstract class AbstractFormController {
 
     /************************ START ABSTRACT METHODS **************************/
 
-    /**
-     * Validate form contents before progressing
-     */
-    protected abstract void validate(Map<String, Object> fieldValues, String[] fields);
-
-    /**
-     * Used for various URLs in Google Analytics in particular
-     */
-    public abstract String getCurrentPage();           // e.g. /allowance/benefits
-
-    /**
-     * The names of the input fields
-     */
+    public abstract String   getPreviousPage();
+    public abstract String   getCurrentPage();           // e.g. /allowance/benefits
+    public abstract String   getNextPage();
+    public abstract String   getPageTitle();
     public abstract String[] getFields();
 
-    public ValidationSummary getValidationSummary() { return validationSummary; }
+    protected abstract void validate(Map<String, String[]> fieldValues, String[] fields);
 
     /*********************** END ABSTRACT METHODS ******************************/
+
+    public ValidationSummary getValidationSummary() { return validationSummary; }
 
     protected String showForm(HttpServletRequest request, Model model) {
 
         LOG.trace("Starting AbstractFormController.showForm");
         LOG.debug("model = {}", model);
 
+        model.addAttribute("previousPage", getPreviousPage());
         model.addAttribute("currentPage", getCurrentPage());
-        syncSessionToModel(request, getFields(), model);
+        model.addAttribute("nextPage", getNextPage());
+        model.addAttribute("pageTitle", getPageTitle());
+
+        copyFromSessionToModel(request, getFields(), model);
 
         LOG.trace("Ending AbstractFormController.showForm");
         return getCurrentPage();        // returns the view name
     }
 
-    protected void syncSessionToModel(HttpServletRequest request, String[] fieldNames, Model model) {
+    /**
+     * Including Model as a parameter gives us access to the model, but does not
+     * populate it with the request data.  To populate the model with request data
+     * you need to include @ModelAttributes for the specific values you want persisted
+     * which must be hard coded and therefore does not work for a configurable approach
+     *
+     * If you want access to the session you can include the session as a parameter
+     * or include the request as a parameter and get it from there.  If you wish to
+     * store the intermediate values in the session you obviously need access, though
+     * this will be temporary as we can't maintain a consistent session for mobile
+     * clients and will move to an application cache, probably memcached.
+     * We could use @SessionAttributes which have a configurable persistence
+     * mechanism that defaults to the session, except they are completely untestable
+     * without a fully working application which is itself not workable.
+     *
+     * So since request gives us what we want in term of the parameter map, and Model
+     * does not it seems the only reason to include model is so we can set values in it.
+     *
+     * Including RedirectAttributes is needed if we wish redirects to work at all
+     * even if we never use it!!
+     */
+    protected String postForm(HttpServletRequest request,
+                              HttpSession session,
+                              Model model,
+                              RedirectAttributes redirectAttrs) {
+
+        LOG.trace("Starting AbstractFormController.postForm");
+        try {
+            LOG.debug("redirectAttrs = {}, model = {}", redirectAttrs, model);
+            LOG.debug("session = {}", session);
+            LOG.debug("request.getParameterMap() = {}", request.getParameterMap());
+
+            copyFromRequestToSession(request, getFields());
+
+            getValidationSummary().reset();
+            validate(request.getParameterMap(), getFields());
+
+            if(hasErrors()) {
+                LOG.info("there are validation errors, re-showing form");
+                copyFromRequestToModel(request, getFields(), model);
+                model.addAttribute("errors", getValidationSummary());
+                return showForm(request, model);
+            }
+
+            return "redirect:" + getNextPage();
+        } finally {
+            LOG.trace("Ending AbstractFormController.postForm");
+        }
+    }
+
+    /**
+     * Copy the named values from the session to the model
+     */
+    protected void copyFromSessionToModel(HttpServletRequest request, String[] fieldNames, Model model) {
         LOG.trace("Started AbstractFormController.syncSessionToModel");
         try {
             Parameters.validateMandatoryArgs(new Object[]{request, model}, new String[]{"request", "model"});
@@ -79,8 +131,8 @@ public abstract class AbstractFormController {
         }
     }
 
-    protected void syncModelToSession(Model model, String[] fieldNames, HttpServletRequest request) {
-        LOG.trace("Started AbstractFormController.syncModelToSession");
+    protected void copyFromRequestToModel(HttpServletRequest request, String[] fieldNames, Model model) {
+        LOG.trace("Started AbstractFormController.syncRequestToModel");
         try {
             Parameters.validateMandatoryArgs(new Object[]{request, model}, new String[]{"request", "model"});
             if(fieldNames == null) {
@@ -88,10 +140,43 @@ public abstract class AbstractFormController {
             }
 
             LOG.debug("fieldNames = {}", Arrays.asList(fieldNames));
-            HttpSession session = request.getSession();
-            Map<String, Object> map = model.asMap();
             for(String fieldName: fieldNames) {
-                Object fieldValue = map.get(fieldName);
+                Object fieldValue;
+                String[] requestValues = request.getParameterMap().get(fieldName);
+                if(requestValues == null || requestValues.length > 1) {
+                    fieldValue = requestValues;
+                } else {
+                    fieldValue = requestValues[0];
+                }
+                LOG.debug("fieldName = {}, fieldValue = {}", fieldName, fieldValue);
+                model.addAttribute(fieldName,  fieldValue);
+            }
+        } finally {
+            LOG.trace("Ending AbstractFormController.syncRequestToModel");
+        }
+    }
+
+    /**
+     * Copy the named values from the model to the session
+     */
+    protected void copyFromRequestToSession(HttpServletRequest request, String[] fieldNames) {
+        LOG.trace("Started AbstractFormController.syncModelToSession");
+        try {
+            Parameters.validateMandatoryArgs(request, "request");
+            if(fieldNames == null) {
+                return;
+            }
+
+            LOG.debug("fieldNames = {}", Arrays.asList(fieldNames));
+            HttpSession session = request.getSession();
+            for(String fieldName: fieldNames) {
+                Object fieldValue;
+                String[] requestValues = request.getParameterMap().get(fieldName);
+                if(requestValues == null || requestValues.length > 1) {
+                    fieldValue = requestValues;
+                } else {
+                    fieldValue = requestValues[0];
+                }
                 LOG.debug("fieldName = {}, fieldValue = {}", fieldName, fieldValue);
                 session.setAttribute(fieldName,  fieldValue);
             }
@@ -100,15 +185,124 @@ public abstract class AbstractFormController {
         }
     }
 
-    protected void validateMandatoryField(Map<String, Object> fieldValues, String fieldName, String fieldTitle) {
+    protected void validateMandatoryDateField(Map<String, String[]> allfieldValues, String id, String[] dateFieldNames, String fieldTitle) {
+        LOG.trace("Started AbstractFormController.validateMandatoryDateField");
+        Parameters.validateMandatoryArgs(new Object[]{allfieldValues, id, dateFieldNames, fieldTitle}, new String[]{"allfieldValues", "id", "dateFieldNames", "fieldTitle"});
+
+        boolean emptyField = false;
+        boolean populatedField = false;
+        for(String dateField: dateFieldNames) {
+            String[] fieldValues = allfieldValues.get(dateField);
+            LOG.debug("fieldName = {}, fieldValues={}", dateField, new LoggingObjectWrapper(fieldValues));
+            if(isEmpty(fieldValues)) {
+                LOG.debug("missing mandatory field: {}", dateField);
+                emptyField = true;
+            } else {
+                populatedField = true;
+            }
+        }
+        if(emptyField) {
+            if(populatedField) {
+                addFormError(id, fieldTitle + " - " + "Invalid value");
+            } else {
+                addFormError(id, fieldTitle + " - " + "You must complete this section");
+            }
+        }
+        LOG.trace("Ending AbstractFormController.validateMandatoryDateField");
+    }
+
+    protected void validateMandatoryField(Map<String, String[]> allfieldValues, String fieldName, String fieldTitle) {
         LOG.trace("Started AbstractFormController.validateMandatoryField");
-        Object fieldValue = fieldValues.get(fieldName);
-        LOG.debug("fieldName = {}, fieldValue={}", fieldName, fieldValue);
-        if(StringUtils.isEmpty(fieldValue)) {
+        Parameters.validateMandatoryArgs(new Object[]{allfieldValues, fieldName, fieldTitle}, new String[]{"allfieldValues", "fieldName", "fieldTitle"});
+
+        String[] fieldValues = allfieldValues.get(fieldName);
+        LOG.debug("fieldName = {}, fieldValues={}", fieldName, new LoggingObjectWrapper(fieldValues));
+        if(isEmpty(fieldValues)) {
             LOG.debug("missing mandatory field: {}", fieldName);
             addFormError(fieldName, fieldTitle + " - " + "You must complete this section");
         }
         LOG.trace("Ending AbstractFormController.validateMandatoryField");
+    }
+
+    /**
+     * TODO -> c.f. Hamcrest Matchers
+     * Return true if the value is populated and matches the value parameter.  Otherwise return false;
+     *
+     * @return false if there are no values for this fieldName, or all of them are blank
+     * or the supplied value parameter does not match all the non-blank values (after trimming).
+     * Otherwise return true;
+     */
+    protected boolean fieldValue_Equals(Map<String, String[]> allfieldValues, String fieldName, String value) {
+        LOG.trace("Started AbstractFormController.isValuePopulated");
+        try {
+            Parameters.validateMandatoryArgs(new Object[]{allfieldValues, fieldName, value}, new String[]{"allfieldValues", "fieldName", "value"});
+
+            String[] fieldValues = allfieldValues.get(fieldName);
+            LOG.debug("fieldName = {}, fieldValues={}", fieldName, new LoggingObjectWrapper(fieldValues));
+            if(isEmpty(fieldValues)) {
+                return false;
+            }
+
+            boolean match = false;
+            boolean mismatch = false;
+            for(String fieldValue: fieldValues) {
+                if(fieldValue == null || fieldValue.trim().equals("")) {
+                    continue;
+                }
+
+                if(value.equals(fieldValue.trim())) {
+                    match = true;
+                } else  {
+                    mismatch = true;
+                }
+            }
+
+            if(mismatch) {
+                return false;
+            }
+            return match;
+        } finally {
+            LOG.trace("Ending AbstractFormController.isValuePopulated");
+        }
+    }
+
+    protected boolean fieldValue_NotBlank(Map<String, String[]> allfieldValues, String fieldName) {
+        return !fieldValue_Blank(allfieldValues, fieldName);
+    }
+
+    protected boolean fieldValue_Blank(Map<String, String[]> allfieldValues, String fieldName) {
+        LOG.trace("Started AbstractFormController.fieldValue_Blank");
+        try {
+            Parameters.validateMandatoryArgs(new Object[]{allfieldValues, fieldName}, new String[]{"allfieldValues", "fieldName"});
+
+            String[] fieldValues = allfieldValues.get(fieldName);
+            LOG.debug("fieldName = {}, fieldValues={}", fieldName, new LoggingObjectWrapper(fieldValues));
+            return isEmpty(fieldValues);
+
+        } finally {
+            LOG.trace("Ending AbstractFormController.fieldValue_Blank");
+        }
+    }
+
+    public String safeTrim(String value) {
+        if(value == null) {
+            return null;
+        }
+        return value.trim();
+    }
+
+    private boolean isEmpty(String[] values) {
+        if(values == null) {
+            return true;
+        }
+
+        // None of them are populated, even if there is more than one
+        for(String value: values) {
+            if(StringUtils.isEmpty(value) == false) {
+                return false;
+            }
+        }
+        return true;
     }
 
     protected void addFormError(String id, String errorMessage) {

@@ -1,141 +1,216 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-    <head>
-        <!-- current page = <c:out value='${currentPage}' /> -->
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Eligibility - Can you get Carer&#x27;s Allowance?</title>
 
-        <!-- Carer's Allowance stylesheet -->
-        <link rel="stylesheet" media="screen" href="<c:url value='/assets/stylesheet/app_t.min.css' />" />
+<!-- <c:out value="${errors}"/> -->
 
-        <!-- Print stylesheet -->
-        <link href="<c:url value='/assets/stylesheet/print.css' />" media="print" rel="stylesheet" type="text/css">
-
-        <!-- To prevent call to /browserconfig.xml from IE11 and higher. We do not use notifications. -->
-        <meta name="msapplication-config" content="none" />
-
-        <!--[if IE 8]>
-        <script type="text/javascript">
-            (function(){if(window.opera){return;}
-            setTimeout(function(){var a=document,g,b={families:(g=
-            ["nta"]),urls:["<link href="<c:url value='/assets/stylesheet/fonts-ie8.css' />" ]},
-            c="<c:url value='/assets/javascript/webfont-debug.js' />",d="script",
-            e=a.createElement(d),formData=a.getElementsByTagName(d)[0],h=g.length;WebFontConfig
-            ={custom:b},e.src=c,formData.parentNode.insertBefore(e,formData);for(;h=h-1;a.documentElement
-            .className+=' wf-'+g[h].replace(/\s/g,'').toLowerCase()+'-n4-loading');},0)
-            })()
-        </script>
-
-        <![endif]-->
-
-        <!--[if gte IE 9]><!-->
-        <link href="<c:url value='/assets/stylesheet/fonts.css' />" media="all" rel="stylesheet" type="text/css">
-        <!--<![endif]-->
-
-        <!--[if lt IE 9]>
-        <script src="<c:url value='/assets/javascript/ie.js' />" type="text/javascript"></script>
-        <![endif]-->
-
-        <link rel="shortcut icon" href="<c:url value='/assets/images/favicon-447e4ac1ab790342660eacfe3dcce264.ico' />" type="image/x-icon">
-        <link rel="icon"  href="<c:url value='/assets/images/favicon-447e4ac1ab790342660eacfe3dcce264.ico' />" type="image/x-icon">
-
-        <!-- For third-generation iPad with high-resolution Retina display: -->
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<c:url value='/assets/images/apple-touch-icon-144x144-4e306e01c31e237722b82b7aa7130082.png' />">
-        <!-- For iPhone with high-resolution Retina display: -->
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<c:url value='/assets/images/apple-touch-icon-114x114-f1d7ccdc7b86d923386b373a9ba5e3db.png' />">
-        <!-- For first- and second-generation iPad: -->
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<c:url value='/assets/images/apple-touch-icon-72x72-2ddbe540853e3ba0d30fbad2a95eab3c.png' />">
-        <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
-        <link rel="apple-touch-icon-precomposed" href="<c:url value='/assets/images/apple-touch-icon-57x57-37527434942ed8407b091aae5feff3f3.png' />">
-
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <script type="text/javascript">
-           var landingURL = "http://www.gov.uk/carers-allowance/how-to-claim"
-        </script>
-        
-        <script type="text/javascript" src="<c:url value='/assets/javascript/jquery/jquery-1.9.1.js' />" />
-        <script type="text/javascript" src="<c:url value='/assets/javascript/date.js' />" />
-        <script type="text/javascript" src="<c:url value='/assets/javascript/bb.js' />" />
-        <script type="text/javascript" src="<c:url value='/assets/javascript/stageprompt-2.0.1.js' />" />
-        <script type="text/javascript" src="<c:url value='/assets/javascript/custom.js' />" />
-        
-        <!--[if (lt IE 9) & (!IEMobile)]>
-        <script src="<c:url value='/assets/javascript/respond.min.js' />" ></script>
-        <![endif]-->
-        
-        <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-            
-            ga('create', 'UA-57523228-1', {
-              
-              'siteSpeedSampleRate': '100'
-            
-            });
-            ga('send', 'pageview');
-            ga('set', 'anonymizeIp', true);
-            ga('set', 'nonInteraction', true);
-        </script>
-    </head>
-    <body>
-        <script type="text/javascript">
-            document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
-        </script>
-        
-        <a href="#main" class="visuallyhidden">Skip to main content</a>
-            
-        <header role="banner" class="global-header" id="global-header">
-            <div class="wrapper clearfix">
-                <a href="https://www.gov.uk" title="Go to the gov.uk homepage" target="govlink" class="crown">GOV.UK</a>
-                <h1 class="heading-medium">Carer's Allowance</h1>
-            </div>
-        </header>
-
-        <!--end header-->
-        
-        <div id="global-cookie-message">
-            <p>This service uses cookies. 
-                <a rel="external" 
-                   target="_blank" 
-                   href="/cookies/en" 
-                   onmousedown="trackEvent(&#x27;<c:out value='${currentPage}' />&#x27;,&#x27;Cookies - from banner&#x27;);" 
-                   onkeydown="trackEvent(&#x27;<c:out value='${currentPage}' />&#x27;,&#x27;Cookies - from banner&#x27;);"
-                >Find out more</a>
-            </p>
-        </div>
-        
-        <div id="global-browser-prompt">
-            <p>For a safer, faster, better experience online you should upgrade your browser. <a href="https://www.gov.uk/support/browsers">Find out more about browsers</a> <a href="#" class="dismiss" title="Dismiss this message">Close</a></p>
-        </div>
-
-        <main class="container" role="main" id="main">
-            <div class="carers-allowance clearfix">
-                <div class="prototype">
-                    <p>This is a prototype. You can't claim Carer's Allowance using this service. <a rel="external" target="_blank" href="https://www.gov.uk/carers-allowance/how-to-claim" target="claimLink">Claim for Carer's Allowance using the live service</a></p>
-                </div>
+<t:mainPage>
+    <article class="column-three-quarters main-content eligible">
     
-                <div class="helper-mobile" id="helper-toggle">
-                    <a class="help">Get help</a>
-                </div>
+        <nav class="back-nav" role="navigation">
+            <a id="topBackButton" name="topBackButton" href="<c:url value='${previousPage}?changing=true' />">Back</a>
+        </nav>
+
+        <h1 class="form-title heading-large">Can you get Carer's Allowance?</h1>
+        <form action="<c:url value='${currentPage}' />" method="POST" role="form">    
+            <jsp:include page="../validationSummary.jsp" />
+            <input type="hidden" name="csrfToken" value="4c040ea5f674dd84171d37ca879c956bd91b3965-1461573007666-37e54fc00423766525e2af12"/>
+            <fieldset class="form-elements form-eligibility">
+                <ul>
                 
-                <div class="grid-row main-grid">
+                    <!-- over35HoursAWeek -->
+                    <c:if test="${errors.hasError('over35HoursAWeek')}" >
+                        <c:set var="over35HoursAWeek_AdditionalClass" value="validation-error" />
+                    </c:if>
+                    <li class="form-group ${over35HoursAWeek_AdditionalClass} ">
+                        <c:if test="${errors.hasError('over35HoursAWeek')}" >
+                            <p class="validation-message">You must complete this section</p>
+                        </c:if>
+                        <fieldset class="question-group">
+                            <legend  id="hours_answer_questionLabel"  class="form-label-bold ">
+                                Do you spend 35 hours or more each week caring for the person you care for?
+                            </legend>        
+        
+                            <p class="form-hint">For example, cooking meals, or helping them with their shopping.</p>
+                            <ul class="inline " id="hours_answer">  
+                                <li>            
+                                    <div class="block-label"                                            
+                                         onmousedown="trackEvent('${currentPage}','hours.answer',&quot;Yes&quot;);"
+                                    >
+                                        <input type="radio" 
+                                               id="hours_answer_yes" 
+                                               name="over35HoursAWeek" 
+                                               onmousedown="trackEvent('${currentPage}','hours.answer',&quot;Yes&quot;);"  
+                                               value="yes"  
+                                               <c:if test="${over35HoursAWeek=='yes'}">checked</c:if>  
+                                        />
+                                        <span>Yes</span>
+                                    </div>
+                                </li>
+                                    
+                                <li>                                     
+                                    <div class="block-label" 
+                                           for="hours_answer_no" 
+                                           onmousedown="trackEvent('${currentPage}','hours.answer',&quot;No&quot;);"
+                                    >
+                                        <input type="radio" 
+                                               id="hours_answer_no" 
+                                               name="over35HoursAWeek" 
+                                               onmousedown="trackEvent('${currentPage}','hours.answer',&quot;No&quot;);"  
+                                               value="no"  
+                                               <c:if test="${over35HoursAWeek=='no'}">checked</c:if>  
+                                        />
+                                        <span>No</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </fieldset>
+            
+                        <div id="warninghours_answer" class="validation-summary" style="display: none;">                
+                            <p>You can't get Carer's Allowance if you care for someone less than 35 hours a week. You might still be entitled to 
+                                <a rel="external" href="https://gov.uk/carers-credit" target="_blank"> Carer's Credit</a>.
+                            </p>                
+                        </div>
+                    </li>
 
-                    <jsp:include page="./eligibility-content.jsp" >
-                        <jsp:param name="currentPage" value="<c:out value='${currentPage}' />" />
-                    </jsp:include>                
-                </div>
-            </div>
-        </main>
+                    <!-- over16YearsOld -->
+                    <c:if test="${errors.hasError('over16YearsOld')}" >
+                        <c:set var="over16YearsOld_AdditionalClass" value="validation-error" />
+                    </c:if>
+                    <li class="form-group ${over16YearsOld_AdditionalClass}">
+                        <c:if test="${errors.hasError('over16YearsOld')}" >
+                            <p class="validation-message">You must complete this section</p>
+                        </c:if>
+                        <fieldset class="question-group">
+                            <legend  id="over16_answer_questionLabel"  class="form-label-bold ">
+                                Are you aged 16 or over?
+                            </legend>
+                            <ul class="inline " id="over16_answer">   
+                                <li>           
+                                    <div class="block-label" 
+                                         onmousedown="trackEvent('${currentPage}','over16.answer',&quot;Yes&quot;);"
+                                    >
+                                        <input type="radio" 
+                                               id="over16_answer_yes" 
+                                               name="over16YearsOld" 
+                                               onmousedown="trackEvent('${currentPage}','over16.answer',&quot;Yes&quot;);"  
+                                               value="yes"
+                                               <c:if test="${over16YearsOld=='yes'}">checked</c:if>  
+                                        />
+                                        <span>Yes</span>
+                                    </div>
+                                </li>    
+                                <li>                                      
+                                    <div class="block-label" 
+                                         onmousedown="trackEvent('${currentPage}','over16.answer',&quot;No&quot;);"
+                                    >
+                                        <input type="radio" 
+                                               id="over16_answer_no" 
+                                               name="over16YearsOld" 
+                                               onmousedown="trackEvent('${currentPage}','over16.answer',&quot;No&quot;);"  
+                                               <c:if test="${over16YearsOld=='no'}">checked</c:if>  
+                                               value="no"  
+                                        />
+                                        <span>No</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </fieldset>
+                        <div id="warningover16_answer" class="validation-summary" style="display: none;">                
+                                <p>You can only get Carer's Allowance if you're 16 or over.</p>                
+                        </div>
+                    </li>
+        
+                    <!-- originCountry -->
+                    <c:if test="${errors.hasError('originCountry')}" >
+                        <c:set var="originCountry_AdditionalClass" value="validation-error" />
+                    </c:if>
+                    <li class="form-group ${originCountry_AdditionalClass}">
+                        <c:if test="${errors.hasError('originCountry')}" >
+                            <p class="validation-message">You must complete this section</p>
+                        </c:if>
+                        <fieldset class="question-group">                    
+                            <legend id="origin_questionLabel" class="form-label-bold ">
+                                Which country do you live in?
+                            </legend>
+                            
+                            <ul class="form-group form-group-compound" id="origin">
+                                <li>                
+                                    <div class="block-label" for="origin_GB" onmousedown="">
+                                        <input type="radio" 
+                                               id="origin_GB" 
+                                               name="originCountry" 
+                                               onmousedown=""  
+                                               value="GB"  
+                                               <c:if test="${originCountry=='GB'}">checked</c:if>  
+                                        >
+                                        <span>England, Scotland or Wales</span>
+                                    </div>
+                                </li>
+                                <li>                
+                                    <div class="block-label" for="origin_NI" onmousedown="">
+                                        <input type="radio" 
+                                               id="origin_NI" 
+                                               name="originCountry" 
+                                               onmousedown=""  
+                                               value="NI"  
+                                               <c:if test="${originCountry=='NI'}">checked</c:if>  
+                                        >
+                                        <span>Northern Ireland</span>
+                                    </div>
+                                </li>
+                                <li>                
+                                    <div class="block-label" for="origin_OTHER" onmousedown="">
+                                        <input type="radio" 
+                                               id="origin_OTHER" 
+                                               name="originCountry" 
+                                               onmousedown=""  
+                                               value="OTHER"  
+                                               <c:if test="${originCountry=='OTHER'}">checked</c:if>  
+                                        >
+                                        <span>Another country</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </fieldset>
+                        <div id="originWarning" class="prompt breaks-prompt validation-summary">
+                            <p>You can normally get Carer's Allowance if you live in England, Scotland or Wales. You might get it if you live in the EEA (European Economic Area) or Switzerland, but you must apply to find out.</p>
+                        </div>
+                    </li>
+                </ul>
+            </fieldset>
 
-        <jsp:include page="../footer.jsp" >
-            <jsp:param name="currentPage" value="<c:out value='${currentPage}' />" />
-        </jsp:include>
+            <nav class="form-steps" role="navigation">
+                <ul>
+                    <li>
+                        <button type="submit" id="next" name="action" value="next" class="button"  >Next</button>
+                    </li>       
+                    <li>
+                        <a id="bottomBackButton" name="bottomBackButton" href="<c:url value='${previousPage}?changing=true' />">Back</a>
+                    </li>
+                </ul>
+            </nav>
+        </form>
 
-        <div id="global-app-error" class="app-error hidden"></div>        
-    </body>
-</html>
+        <script type="text/javascript" src="<c:url value='/assets/javascript/s_eligibility/answerNoMessage.js' />" ></script>
+        <script type="text/javascript">
+            $(function () {
+                window.initEvents("warninghours_answer","hours_answer_yes", "hours_answer_no");
+                window.initEvents("warningover16_answer","over16_answer_yes", "over16_answer_no");
+                window.initEvents("warninglivesInGB_answer","livesInGB_answer_yes", "livesInGB_answer_no");
+                window.originWarning("origin_GB", "origin_NI", "origin_OTHER", "originWarning");
+                window.gaEvents("origin_GB", "origin_NI", "origin_OTHER");
+            
+                var hoursId = 'hours_answer';
+                var res = $('#'+hoursId).parents('li.form-group')
+                                        .find('.validation-summary a')
+                                        .click(
+                                            function(){
+                                                trackEvent('allowance/eligibility','carers-credit','clicked');
+                                            });
+            });
+        </script>
+    </article>
+</t:mainPage>
