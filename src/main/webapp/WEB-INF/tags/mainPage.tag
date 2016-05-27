@@ -126,29 +126,9 @@
             </p>
         </div>
 
-        <main class="container" role="main" id="main">
-            <div class="carers-allowance clearfix">
-
-                <div class="prototype">
-                    <p>This is a prototype. You can't claim Carer's Allowance using this service. <a rel="external" target="_blank" href="https://www.gov.uk/carers-allowance/how-to-claim" target="claimLink">Claim for Carer's Allowance using the live service</a></p>
-                </div>
-<%--    
-                <section class="js-message">
-                    <h2>Javascript is currently disabled</h2>
-                    <p>For full functionality of this website it is necessary to enable JavaScript, not doing so will result in a reduced user experience.</p>
-                </section>
---%>
-                <div class="helper-mobile" id="helper-toggle">
-                    <a class="help">Get help</a>
-                </div>
-            
-                <div class="grid-row main-grid">
-
-                    <jsp:doBody/>
-                    
-                </div>
-            </div>
-        </main>
+        
+        <jsp:doBody/>
+        
 
         <jsp:include page="../footer.jsp" >
             <jsp:param name="currentPage" value="<c:out value='${currentPage}' />" />
