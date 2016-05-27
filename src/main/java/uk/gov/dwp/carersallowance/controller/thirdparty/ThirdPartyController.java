@@ -72,7 +72,7 @@ public class ThirdPartyController extends AbstractFormController {
         LOG.trace("Starting BenefitsController.validate");
 
         validateMandatoryField(fieldValues, "thirdParty", "Are you the carer?");
-        if(fieldValue_Equals(fieldValues, "thirdParty", "noCarer")) {
+        if(fieldValue_Equals(fieldValues, "thirdParty", "no")) {
             validateMandatoryField(fieldValues, "nameAndOrganisation", "Your name and organisation");
         }
 

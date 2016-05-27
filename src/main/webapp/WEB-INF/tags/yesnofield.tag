@@ -5,14 +5,27 @@
 <%@attribute name="name" required="true" type="java.lang.String"%>
 <%@attribute name="value" required="false" type="java.lang.String"%>
 <%@attribute name="label" required="false" type="java.lang.String"%>
+<%@attribute name="yesLabel" required="false" type="java.lang.String"%>
+<%@attribute name="noLabel" required="false" type="java.lang.String"%>
+
 <%@attribute name="hintBefore" required="false" type="java.lang.String"%>
 <%@attribute name="hintAfter" required="false" type="java.lang.String"%>
-<%@attribute name="warningText" required="false" type="java.lang.String"%>
+<%@attribute name="warningText" required="false" type="java.lang.String"%><!-- TODO change this to noWarningtext, also add yesWarningText -->
 
 <%@attribute name="hasError" required="false" type="java.lang.Object"%>
 <%@attribute name="errorMessage" required="false" type="java.lang.String"%>
 
 <!-- TODO add track events separately using jquery -->
+<!-- TODO add javascript for the warning text -->
+
+
+<%-- set default values for yes & no labels --%>
+<c:if test="${empty yesLabel}">
+    <c:set var="yesLabel" value="Yes" />
+</c:if>
+<c:if test="${empty noLabel}">
+    <c:set var="noLabel" value="No" />
+</c:if>
 
 <c:if test="${hasError}" >
     <c:set var="additionalClass" value="validation-error" />
@@ -32,11 +45,10 @@
                     <input type="radio" 
                            id="${id}_yes" 
                            name="${name}" 
-                           <%-- onmousedown="trackEvent('${currentPage}','${id}','Yes');" --%> 
                            value="yes"  
                            <c:if test="${value=='yes'}">checked</c:if>  
                     />
-                    <span>Yes</span>
+                    <span><c:out value="${yesLabel}" /></span>
                 </div>
             </li>
                 
@@ -46,11 +58,10 @@
                     <input type="radio" 
                            id="${id}_no" 
                            name="${name}" 
-                           <%-- onmousedown="trackEvent('${currentPage}','${id}','No');" --%> 
                            value="no"  
                            <c:if test="${value=='no'}">checked</c:if>  
                     />
-                    <span>No</span>
+                    <span><c:out value="${noLabel}" /></span>
                 </div>
             </li>
         </ul>

@@ -14,7 +14,7 @@
         </nav>
 
         <h1 class="form-title heading-large">Can you get Carer's Allowance?</h1>
-        <form action="<c:url value='${currentPage}' />" method="POST" role="form">    
+        <form action="<c:url value='${currentPage}' />" method="POST" role="form" style="margin-bottom: 30px;">    
             <jsp:include page="../validationSummary.jsp" />
             <input type="hidden" name="csrfToken" value="4c040ea5f674dd84171d37ca879c956bd91b3965-1461573007666-37e54fc00423766525e2af12"/>
             <fieldset class="form-elements form-eligibility">
@@ -73,12 +73,13 @@
                     <li>
                         <button type="submit" id="next" name="action" value="next" class="button"  >Next</button>
                     </li>       
-                    <li>
-                        <a id="bottomBackButton" name="bottomBackButton" href="<c:url value='${previousPage}?changing=true' />">Back</a>
-                    </li>
                 </ul>
             </nav>
         </form>
+
+        <nav class="back-nav" role="navigation">
+            <a id="bottomBackButton" name="bottomBackButton" href="<c:url value='${previousPage}?changing=true' />">Back</a>
+        </nav>
 
         <script type="text/javascript" src="<c:url value='/assets/javascript/s_eligibility/answerNoMessage.js' />" ></script>
         <script type="text/javascript">
@@ -91,12 +92,10 @@
             
                 // trigger a ga event when errors are shown (not currently working)
                 var hoursId = 'hours_answer';
-                var res = $('#'+hoursId).parents('li.form-group')
-                                        .find('.validation-summary a')
-                                        .click(
-                                            function(){
-                                                trackEvent('allowance/eligibility','carers-credit','clicked');
-                                            });
+                var res = $('#'+hoursId).parents('li.form-group').find('.validation-summary a').click(
+                    function(){
+                        trackEvent('allowance/eligibility','carers-credit','clicked');
+                    });
             });
         </script>
     </article>

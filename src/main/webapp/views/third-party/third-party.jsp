@@ -17,13 +17,42 @@
             Are you applying for Carer's Allowance for yourself?
         </h1>
     
-        <form action="<c:url value='${currentPage}' />" method="POST" role="form">
+        <form action="<c:url value='${currentPage}' />" method="POST" role="form" style="margin-bottom: 30px;" >
             <jsp:include page="../validationSummary.jsp" />
             <input type="hidden" name="csrfToken" value="ac56313b00f29fa2952b1e80" />
     
             <fieldset class="form-elements">
                 <ul>
                 
+                    <!-- Note the values have changed from 'yesCarer/noCarer to yes/no -->
+                    <t:radiobuttons id="thirdParty" 
+                                    name="thirdParty" 
+                                    optionIds="yes|no"
+                                    optionValues="Yes, you're the carer|
+                                                  No, you're applying on behalf of the carer"
+                                    value="${thirdParty}"
+                                    label="Are you the carer?" 
+                                    hasError="${errors.hasError('thirdParty')}" 
+                                    errorMessage="${errors.getErrorMessage('thirdParty')}" 
+                    />
+                    
+                    <li id="thirdPartyWrap" class="form-group">
+                        <ul class="extra-group">
+                            <t:textedit id="nameAndOrganisation" 
+                                        name="nameAndOrganisation" 
+                                        value="${nameAndOrganisation}" 
+                                        maxLength="60" 
+                                        label="Your name and organisation" 
+                                        hasError="${errors.hasError('nameAndOrganisation')}" 
+                                        errorMessage="${errors.getErrorMessage('nameAndOrganisation')}" 
+                                        hintAfter='<p class="form-hint">Fill the rest of the form in as if you&rsquo;re the carer. For
+                                                      example, if asked for &rsquo;your address&rsquo; put the address of
+                                                      the person doing the caring.
+                                                   </p>'
+                            />
+                        </ul>
+                    </li>                    
+<!-- 
                     <c:if test="${errors.hasError('thirdParty')}" >
                         <c:set var="thirdParty_AdditionalClass" value="validation-error" />
                     </c:if>
@@ -99,6 +128,8 @@
                             </li>
                         </ul>
                     </li>
+ -->                    
+                    
                 </ul>
             </fieldset>
             
@@ -107,26 +138,24 @@
                     <li>
                         <button type="submit" id="next" name="action" value="next" class="button">Next</button>
                     </li>
-    
-                    <li>
-                        <script type="text/javascript">
-                            $(document).ready(function(){
-                                $("#save").click(function(){
-                                    var saveurl=$(this).attr("href");
-                                    var saveurl=$(this).attr("href");
-                                    $("form").attr( "action", saveurl );
-                                    $("form").submit()
-                                });
-                            });
-                        </script>
-                    </li>
-    
-                    <li>
-                        <a id="bottomBackButton" name="bottomBackButton" href="<c:url value='${previousPage}' />">Back</a>
-                    </li>
                 </ul>
             </nav>
         </form>
+        
+        <nav class="back-nav" role="navigation">
+            <a id="bottomBackButton" name="bottomBackButton" href="<c:url value='${previousPage}' />">Back</a>
+        </nav>
+
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("#save").click(function(){
+                    var saveurl=$(this).attr("href");
+                    var saveurl=$(this).attr("href");
+                    $("form").attr( "action", saveurl );
+                    $("form").submit()
+                });
+            });
+        </script>
         
         <script type="text/javascript" src="<c:url value='/assets/javascript/third_party/thirdParty.js' />"></script>
         <script type="text/javascript">
@@ -137,7 +166,7 @@
             });
             
             $(function() {
-                window.initEvents("thirdParty_yesCarer", "thirdParty_noCarer", "thirdParty_nameAndOrganisation")
+                window.initEvents("thirdParty_yes", "thirdParty_no", "nameAndOrganisation")
                 trackEvent ( "times", "claim - start" );
                 setCookie("claimstart", new Date().getTime());
             });

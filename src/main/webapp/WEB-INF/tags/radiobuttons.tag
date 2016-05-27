@@ -3,7 +3,7 @@
 
 <%@attribute name="id" required="true" type="java.lang.String"%>
 <%@attribute name="name" required="true" type="java.lang.String"%>
-<%@attribute name="optionIds" required="true" type="java.lang.String"%>
+<%@attribute name="optionIds" required="true" type="java.lang.String"%> <!-- Note optionIds are white-space sensitive -->
 <%@attribute name="optionValues" required="true" type="java.lang.String"%>
 <%@attribute name="value" required="false" type="java.lang.String"%>
 <%@attribute name="label" required="false" type="java.lang.String"%>
@@ -29,8 +29,9 @@
 
         ${hintBefore}
         <ul class="form-group form-group-compound" id="${id}">
-        
+            <!-- value='<c:out value="${value}" />' -->
             <c:forTokens items="${optionIds}" delims="|" var="optionId" varStatus="optionIdIndex">
+               <!-- value='<c:out value="${optionId}" />' -->
                <li>                
                     <div class="block-label" for="${id}_${optionId}" onmousedown="">
                         <input type="radio" 
