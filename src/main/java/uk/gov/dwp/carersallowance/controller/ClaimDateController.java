@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.yourclaimdate;
+package uk.gov.dwp.carersallowance.controller;
 
 import java.util.Map;
 
@@ -13,16 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import uk.gov.dwp.carersallowance.controller.AbstractFormController;
-
 //TODO
 @Controller
 public class ClaimDateController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(ClaimDateController.class);
 
-    private static final String PREVIOUS_PAGE = "/third-party/third-party";
     private static final String CURRENT_PAGE  = "/your-claim-date/claim-date";
-    private static final String NEXT_PAGE     = "/about-you/your-details";
     private static final String PAGE_TITLE    = "Claim date - When do you want Carer's Allowance to start?";
 
     private static final String[] FIELDS = {"dateOfClaim_year",
@@ -34,18 +30,8 @@ public class ClaimDateController extends AbstractFormController {
                                             "beforeClaimCaringDate_day"};
 
     @Override
-    public String getPreviousPage() {
-        return PREVIOUS_PAGE;
-    }
-
-    @Override
     public String getCurrentPage() {
         return CURRENT_PAGE;
-    }
-
-    @Override
-    public String getNextPage() {
-        return NEXT_PAGE;
     }
 
     @Override
@@ -77,10 +63,10 @@ public class ClaimDateController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryDateField(fieldValues, "dateOfClaim", new String[]{"dateOfClaim_day", "dateOfClaim_month", "dateOfClaim_year"}, "Claim date");
-        validateMandatoryField(fieldValues, "beforeClaimCaring", "Were you caring for the person for more than 35 hours a week before this date?");
+        validateMandatoryDateField(fieldValues, "Claim date", "dateOfClaim", new String[]{"dateOfClaim_day", "dateOfClaim_month", "dateOfClaim_year"});
+        validateMandatoryFields(fieldValues, "Were you caring for the person for more than 35 hours a week before this date?", "beforeClaimCaring");
         if(fieldValue_Equals(fieldValues, "beforeClaimCaring", "yes")) {
-            validateMandatoryDateField(fieldValues, "beforeClaimCaringDate", new String[]{"beforeClaimCaringDate_day", "beforeClaimCaringDate_month", "beforeClaimCaringDate_year"}, "When did you begin caring?");
+            validateMandatoryDateField(fieldValues, "When did you begin caring?", "beforeClaimCaringDate", new String[]{"beforeClaimCaringDate_day", "beforeClaimCaringDate_month", "beforeClaimCaringDate_year"});
         }
         LOG.trace("Ending BenefitsController.validate");
     }

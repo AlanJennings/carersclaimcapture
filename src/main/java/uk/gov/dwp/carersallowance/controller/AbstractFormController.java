@@ -22,17 +22,53 @@ import uk.gov.dwp.carersallowance.validations.ValidationError;
 public abstract class AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractFormController.class);
 
+    private static final String[] PAGES = {
+            "/allowance/benefits",
+            "/allowance/eligibility",
+            "/allowance/approve",
+            "/disclaimer/disclaimer",
+            "/third-party/third-party",
+            "/your-claim-date/claim-date",
+            "/about-you/your-details",
+            "/about-you/marital-status",
+            "/about-you/contact-details",
+            "/about-you/nationality-and-residency",
+            "/about-you/other-eea-state-or-switzerland",
+            "/your-partner/personal-details",
+            "/care-you-provide/their-personal-details",
+            "/care-you-provide/more-about-the-care",
+            "/breaks/breaks-in-care",
+            "/education/your-course-details",
+            "/your-income/your-income",
+            "/your-income/employment/been-employed",
+            "/your-income/self-employment/self-employment-dates",
+            "/your-income/self-employment/pensions-and-expenses",
+            "/your-income/employment/additional-info",
+            "/your-income/statutory-sick-pay",
+            "/your-income/smp-spa-sap",
+            "/your-income/fostering-allowance",
+            "/your-income/direct-payment",
+            "/your-income/other-income",
+            "/pay-details/how-we-pay-you",
+            "/information/additional-info",
+            "/preview",
+            "/consent-and-declaration/declaration",
+            "/thankyou/apply-carers"
+        };
+
+    public static final String   PHONE_REGEX = "[ 0123456789]{0,20}";       // probably convert to an enum
+
     private ValidationSummary validationSummary;
+    private List<String>      pageList;
 
     public AbstractFormController() {
         validationSummary = new ValidationSummary();
+        pageList = new ArrayList<>(Arrays.asList(PAGES));
     }
 
     /************************ START ABSTRACT METHODS **************************/
 
-    public abstract String   getPreviousPage();
     public abstract String   getCurrentPage();           // e.g. /allowance/benefits
-    public abstract String   getNextPage();
     public abstract String   getPageTitle();
     public abstract String[] getFields();
 
@@ -41,6 +77,26 @@ public abstract class AbstractFormController {
     /*********************** END ABSTRACT METHODS ******************************/
 
     public ValidationSummary getValidationSummary() { return validationSummary; }
+
+    public String getPreviousPage() {
+        String currentPage = getCurrentPage();
+        int index = pageList.indexOf(currentPage);
+        if(index == 0) {
+            return null;
+        }
+        String previousPage = pageList.get(index - 1);
+        return previousPage;
+    }
+
+    public String getNextPage() {
+        String currentPage = getCurrentPage();
+        int index = pageList.indexOf(currentPage);
+        if(index == (pageList.size() -1)) {
+            return null;
+        }
+        String nextPage = pageList.get(index + 1);
+        return nextPage;
+    }
 
     protected String showForm(HttpServletRequest request, Model model) {
 
@@ -185,7 +241,7 @@ public abstract class AbstractFormController {
         }
     }
 
-    protected void validateMandatoryDateField(Map<String, String[]> allfieldValues, String id, String[] dateFieldNames, String fieldTitle) {
+    protected void validateMandatoryDateField(Map<String, String[]> allfieldValues, String fieldTitle, String id, String[] dateFieldNames) {
         LOG.trace("Started AbstractFormController.validateMandatoryDateField");
         Parameters.validateMandatoryArgs(new Object[]{allfieldValues, id, dateFieldNames, fieldTitle}, new String[]{"allfieldValues", "id", "dateFieldNames", "fieldTitle"});
 
@@ -211,17 +267,38 @@ public abstract class AbstractFormController {
         LOG.trace("Ending AbstractFormController.validateMandatoryDateField");
     }
 
-    protected void validateMandatoryField(Map<String, String[]> allfieldValues, String fieldName, String fieldTitle) {
+    protected void validateMandatoryFields(Map<String, String[]> allfieldValues, String fieldTitle, String...fieldNames) {
         LOG.trace("Started AbstractFormController.validateMandatoryField");
-        Parameters.validateMandatoryArgs(new Object[]{allfieldValues, fieldName, fieldTitle}, new String[]{"allfieldValues", "fieldName", "fieldTitle"});
+        Parameters.validateMandatoryArgs(new Object[]{allfieldValues, fieldTitle}, new String[]{"allfieldValues", "fieldTitle"});
 
-        String[] fieldValues = allfieldValues.get(fieldName);
-        LOG.debug("fieldName = {}, fieldValues={}", fieldName, new LoggingObjectWrapper(fieldValues));
-        if(isEmpty(fieldValues)) {
-            LOG.debug("missing mandatory field: {}", fieldName);
-            addFormError(fieldName, fieldTitle, "You must complete this section");
+        LOG.debug("fieldNames = {}", new LoggingObjectWrapper(fieldNames));
+        for(String fieldName: fieldNames) {
+            String[] fieldValues = allfieldValues.get(fieldName);
+            LOG.debug("fieldName = {}, fieldValues={}", fieldName, new LoggingObjectWrapper(fieldValues));
+
+            if(isEmpty(fieldValues)) {
+                LOG.debug("missing mandatory field: {}", fieldName);
+                addFormError(fieldName, fieldTitle, "You must complete this section");
+                break;
+            }
         }
+
         LOG.trace("Ending AbstractFormController.validateMandatoryField");
+    }
+
+    protected void validateEmailAddress(Map<String, String[]> allfieldValues, String fieldTitle, String fieldName) {
+        // TODO
+    }
+
+    /**
+     * Validate that two fields match (e.g. for email address, passwords etc)
+     */
+    protected void validateMatchingValues(Map<String, String[]> allfieldValues, String firstTitle, String firstName, String secondTitle, String secondName) {
+        // TODO
+    }
+
+    protected void validateRegexField(Map<String, String[]> allfieldValues, String fieldTitle, String fieldname, String regex) {
+        // TODO
     }
 
     /**

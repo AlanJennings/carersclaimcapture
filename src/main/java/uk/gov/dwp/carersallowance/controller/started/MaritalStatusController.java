@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.thirdparty;
+package uk.gov.dwp.carersallowance.controller.started;
 
 import java.util.Map;
 
@@ -15,31 +15,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
-//TODO
 @Controller
-public class ThirdPartyController extends AbstractFormController {
-    private static final Logger LOG = LoggerFactory.getLogger(ThirdPartyController.class);
+public class MaritalStatusController extends AbstractFormController {
+    private static final Logger LOG = LoggerFactory.getLogger(MaritalStatusController.class);
 
-    private static final String PREVIOUS_PAGE = "/disclaimer/disclaimer";
-    private static final String CURRENT_PAGE  = "/third-party/third-party";
-    private static final String NEXT_PAGE     = "/your-claim-date/claim-date";
-    private static final String PAGE_TITLE    = "Third Party - Are you applying for Carer's Allowance for yourself?";
+    private static final String CURRENT_PAGE  = "/about-you/marital-status";
+    private static final String PAGE_TITLE    = "Your status - About you - the carer";
 
-    private static final String[] FIELDS = {"thirdParty", "nameAndOrganisation", };
-
-    @Override
-    public String getPreviousPage() {
-        return PREVIOUS_PAGE;
-    }
+    private static final String[] FIELDS = {"maritalStatus"};
 
     @Override
     public String getCurrentPage() {
         return CURRENT_PAGE;
-    }
-
-    @Override
-    public String getNextPage() {
-        return NEXT_PAGE;
     }
 
     @Override
@@ -71,10 +58,7 @@ public class ThirdPartyController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "thirdParty", "Are you the carer?");
-        if(fieldValue_Equals(fieldValues, "thirdParty", "no")) {
-            validateMandatoryField(fieldValues, "nameAndOrganisation", "Your name and organisation");
-        }
+        validateMandatoryFields(fieldValues, "Your Status", "maritalStatus");
 
         LOG.trace("Ending BenefitsController.validate");
     }

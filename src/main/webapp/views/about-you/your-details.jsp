@@ -4,8 +4,6 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<!-- <c:out value="${errors}"/> -->
-
 <t:mainPage>
     <t:pageContent pageTitle="About you - the carer" section="Section 3 of 11" backLink="${previousPage}">
     

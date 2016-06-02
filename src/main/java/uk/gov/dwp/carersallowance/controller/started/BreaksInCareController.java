@@ -1,10 +1,12 @@
-package uk.gov.dwp.carersallowance.controller.allowance;
+package uk.gov.dwp.carersallowance.controller.started;
 
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,27 +16,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
 @Controller
-public class ApproveContoller extends AbstractFormController {
-    private static final String PREVIOUS_PAGE = "/allowance/eligibility";
-    private static final String CURRENT_PAGE  = "/allowance/approve";
-    private static final String NEXT_PAGE     = "/disclaimer/disclaimer";
-    private static final String PAGE_TITLE    = "Can you get Carer's Allowance?";
+public class BreaksInCareController extends AbstractFormController {
+    private static final Logger LOG = LoggerFactory.getLogger(BreaksInCareController.class);
 
-    private static final String[] FIELDS = {"allowedToContinue"};
+    private static final String CURRENT_PAGE  = "/breaks/breaks-in-care";
+    private static final String PAGE_TITLE    = "Breaks from care - About the person you care for";
 
-    @Override
-    public String getPreviousPage() {
-        return PREVIOUS_PAGE;
-    }
+    private static final String[] FIELDS = {"answer"};
 
     @Override
     public String getCurrentPage() {
         return CURRENT_PAGE;
-    }
-
-    @Override
-    public String getNextPage() {
-        return NEXT_PAGE;
     }
 
     @Override
@@ -54,10 +46,24 @@ public class ApproveContoller extends AbstractFormController {
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
     public String postForm(HttpServletRequest request, HttpSession session, Model model, RedirectAttributes redirectAttrs) {
+        // TODO we need to pick up multiple events here
+        // to add, edit, remove breaks
+        // see also BreakInCareDetailController
+
         return super.postForm(request, session, model, redirectAttrs);
     }
 
-    @Override
+    /**
+     * Might use BindingResult, and spring Validator, not sure yet
+     * don't want to perform type conversion prior to controller as we have no control
+     * over the (rather poor) reporting behaviour
+     * @return
+     */
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
+        LOG.trace("Starting BenefitsController.validate");
+
+        validateMandatoryFields(fieldValues, "Have you had any more breaks from caring for this person since 1 March 2016?", "answer");
+
+        LOG.trace("Ending BenefitsController.validate");
     }
 }

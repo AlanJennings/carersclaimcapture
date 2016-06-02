@@ -6,7 +6,17 @@
 
 <t:mainPage>
     <t:pageContent pageTitle="Are you applying for Carer's Allowance for yourself?" section="Section 1 of 11" backLink="${previousPage}"> 
-        
+        <!-- Note the values have changed from 'yesCarer/noCarer to yes/no -->
+        <t:radiobuttons id="thirdParty" 
+                        name="thirdParty" 
+                        optionIds="yes|no"
+                        optionValues="Yes, you're the carer|
+                                      No, you're applying on behalf of the carer"
+                        value="${thirdParty}"
+                        label="Are you the carer?" 
+                        hasError="${errors.hasError('thirdParty')}" 
+                        errorMessage="${errors.getErrorMessage('thirdParty')}" 
+        />
 
         <li id="thirdPartyWrap" class="form-group">
             <ul class="extra-group">

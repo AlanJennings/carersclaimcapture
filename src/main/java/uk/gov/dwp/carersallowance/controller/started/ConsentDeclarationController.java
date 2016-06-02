@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.allowance;
+package uk.gov.dwp.carersallowance.controller.started;
 
 import java.util.Map;
 
@@ -16,29 +16,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
 @Controller
-public class EligibilityController extends AbstractFormController {
-    private static final Logger LOG = LoggerFactory.getLogger(EligibilityController.class);
+public class ConsentDeclarationController extends AbstractFormController {
+    private static final Logger LOG = LoggerFactory.getLogger(ConsentDeclarationController.class);
 
-    private static final String PREVIOUS_PAGE = "/allowance/benefits";
-    private static final String CURRENT_PAGE  = "/allowance/eligibility";
-    private static final String NEXT_PAGE     = "/allowance/approve";
-    private static final String PAGE_TITLE    = "Eligibility - Can you get Carer's Allowance?";
+    private static final String CURRENT_PAGE  = "/consent-and-declaration/declaration";
+    private static final String PAGE_TITLE    = "Declaration - Consent and declaration";
 
-    private static final String[] FIELDS = {"over35HoursAWeek", "over16YearsOld", "originCountry"};
-
-    @Override
-    public String getPreviousPage() {
-        return PREVIOUS_PAGE;
-    }
+    private static final String[] FIELDS = {"tellUsWhyInformation",
+                                            "tellUsWhyPerson"};
 
     @Override
     public String getCurrentPage() {
         return CURRENT_PAGE;
-    }
-
-    @Override
-    public String getNextPage() {
-        return NEXT_PAGE;
     }
 
     @Override
@@ -61,14 +50,20 @@ public class EligibilityController extends AbstractFormController {
         return super.postForm(request, session, model, redirectAttrs);
     }
 
-    @Override
+    /**
+     * Might use BindingResult, and spring Validator, not sure yet
+     * don't want to perform type conversion prior to controller as we have no control
+     * over the (rather poor) reporting behaviour
+     * @return
+     */
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
-        LOG.trace("Starting EligibilityController.validate");
+        LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "over35HoursAWeek", "Do you spend 35 hours or more each week caring for the person you care for?");
-        validateMandatoryField(fieldValues, "over16YearsOld", "Are you aged 16 or over?");
-        validateMandatoryField(fieldValues, "originCountry", "Which country do you live in?");
-        LOG.trace("Ending EligibilityController.validate");
+        validateMandatoryFields(fieldValues, "Do you agree to the Carer's Allowance Unit contacting anyone mentioned in this form?", "tellUsWhyInformation");
+        if(fieldValue_Equals(fieldValues, "tellUsWhyInformation", "no")) {
+            validateMandatoryFields(fieldValues, "List anyone you don't want to be contacted and say why.", "tellUsWhyPerson");
+        }
+
+        LOG.trace("Ending BenefitsController.validate");
     }
 }
-

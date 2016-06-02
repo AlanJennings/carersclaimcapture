@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.allowance;
+package uk.gov.dwp.carersallowance.controller.started;
 
 import java.util.Map;
 
@@ -16,29 +16,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
 @Controller
-public class BenefitsController extends AbstractFormController {
-    private static final Logger LOG = LoggerFactory.getLogger(BenefitsController.class);
+public class AdditionalInfoController extends AbstractFormController {
+    private static final Logger LOG = LoggerFactory.getLogger(AdditionalInfoController.class);
 
-    private static final String PREVIOUS_PAGE = "";
-    private static final String CURRENT_PAGE  = "/allowance/benefits";
-    private static final String NEXT_PAGE     = "/allowance/eligibility";
-    private static final String PAGE_TITLE    = "What benefit does the person you care for get? - Can you get Carer's Allowance?";
+    private static final String CURRENT_PAGE  = "/information/additional-info";
+    private static final String PAGE_TITLE    = "Additional information - Information";
 
-    private static final String[] FIELDS = {"benefitsAnswer"};
-
-    @Override
-    public String getPreviousPage() {
-        return PREVIOUS_PAGE;
-    }
+    private static final String[] FIELDS = {"anythingElse",
+                                            "anythingElseText",
+                                            "welshCommunication"};
 
     @Override
     public String getCurrentPage() {
         return CURRENT_PAGE;
-    }
-
-    @Override
-    public String getNextPage() {
-        return NEXT_PAGE;
     }
 
     @Override
@@ -70,7 +60,12 @@ public class BenefitsController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "benefitsAnswer", "What benefit does the person you care for get?");
+        validateMandatoryFields(fieldValues, "Do you want to tell us any additional information about your claim?", "anythingElse");
+        if(fieldValue_Equals(fieldValues, "anythingElse", "yes")) {
+            validateMandatoryFields(fieldValues, "Tell us anything else you think we should know about your claim", "anythingElseText");
+        }
+
+        validateMandatoryFields(fieldValues, "Do you live in Wales and want to receive future communications in Welsh?", "maritalStatus");
 
         LOG.trace("Ending BenefitsController.validate");
     }

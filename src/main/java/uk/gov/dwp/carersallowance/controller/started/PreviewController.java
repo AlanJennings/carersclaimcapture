@@ -1,10 +1,12 @@
-package uk.gov.dwp.carersallowance.controller.disclaimer;
+package uk.gov.dwp.carersallowance.controller.started;
 
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,27 +16,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
 @Controller
-public class DisclaimerController extends AbstractFormController {
-    private static final String PREVIOUS_PAGE = "/allowance/approve";
-    private static final String CURRENT_PAGE  = "/disclaimer/disclaimer";
-    private static final String NEXT_PAGE     = "/third-party/third-party";
-    private static final String PAGE_TITLE    = "Disclaimer - Before you start";
+public class PreviewController extends AbstractFormController {
+    private static final Logger LOG = LoggerFactory.getLogger(PreviewController.class);
+
+    private static final String CURRENT_PAGE  = "/preview";
+    private static final String PAGE_TITLE    = "Check your answers";
 
     private static final String[] FIELDS = {};
 
     @Override
-    public String getPreviousPage() {
-        return PREVIOUS_PAGE;
-    }
-
-    @Override
     public String getCurrentPage() {
         return CURRENT_PAGE;
-    }
-
-    @Override
-    public String getNextPage() {
-        return NEXT_PAGE;
     }
 
     @Override
@@ -64,6 +56,8 @@ public class DisclaimerController extends AbstractFormController {
      * @return
      */
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
-        getValidationSummary().reset();
+        LOG.trace("Starting BenefitsController.validate");
+
+        LOG.trace("Ending BenefitsController.validate");
     }
 }

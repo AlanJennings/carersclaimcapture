@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.aboutyou;
+package uk.gov.dwp.carersallowance.controller.started;
 
 import java.util.Map;
 
@@ -15,29 +15,22 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
-//TODO
 @Controller
-public class YourDetailsController extends AbstractFormController {
-    private static final Logger LOG = LoggerFactory.getLogger(YourDetailsController.class);
+public class YourIncomeController extends AbstractFormController {
+    private static final Logger LOG = LoggerFactory.getLogger(YourIncomeController.class);
 
-    private static final String PREVIOUS_PAGE = "/your-claim-date/claim-date";
-    private static final String CURRENT_PAGE  = "/about-you/your-details";
-    private static final String NEXT_PAGE     = "/about-you/marital-status";
-    private static final String PAGE_TITLE    = "Your details - About you - the carer";
+    private static final String CURRENT_PAGE  = "/your-income/your-income";
+    private static final String PAGE_TITLE    = "Your income";
 
-    private static final String[] FIELDS = {"title",
-                                            "firstName",
-                                            "middleName",
-                                            "surname",
-                                            "nationalInsuranceNumber",
-                                            "dateOfBirth_day",
-                                            "dateOfBirth_month",
-                                            "dateOfBirth_year"};
-
-    @Override
-    public String getPreviousPage() {
-        return PREVIOUS_PAGE;
-    }
+    private static final String[] FIELDS = {"beenEmployedSince6MonthsBeforeClaim",
+                                            "beenSelfEmployedSince1WeekBeforeClaim",
+                                            "yourIncome"/*,
+                                            "yourIncome_sickpay",       // these should be multi-valued checkboxes
+                                            "yourIncome_patmatadoppay",
+                                            "yourIncome_fostering",
+                                            "yourIncome_directpay",
+                                            "yourIncome_anyother",
+                                            "yourIncome_none"*/};
 
     @Override
     public String getCurrentPage() {
@@ -46,7 +39,11 @@ public class YourDetailsController extends AbstractFormController {
 
     @Override
     public String getNextPage() {
-        return NEXT_PAGE;
+        // TODO this depends on the answers to beenEmployedSince6MonthsBeforeClaim
+        //    & beenSelfEmployedSince1WeekBeforeClaim
+        //    & yourIncome
+
+        return super.getNextPage();
     }
 
     @Override
@@ -77,14 +74,10 @@ public class YourDetailsController extends AbstractFormController {
      */
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
-
-        validateMandatoryField(fieldValues, "title", "Title");
-        validateMandatoryField(fieldValues, "firstName", "First name");
-        // "middleName" is optional,
-        validateMandatoryField(fieldValues, "surname","Last name");
-        validateMandatoryField(fieldValues, "nationalInsuranceNumber", "National Insurance number");
-
-        validateMandatoryDateField(fieldValues, "dateOfBirth", new String[]{"dateOfBirth_day", "dateOfBirth_month", "dateOfBirth_year"}, "Date of Birth");
+// TODO the dates are from earlier in the claim
+        validateMandatoryFields(fieldValues, "Have you been in employment since 1 December 2015?", "beenEmployedSince6MonthsBeforeClaim");
+        validateMandatoryFields(fieldValues, "Have you been in self-employment since 25 May 2016?", "beenSelfEmployedSince1WeekBeforeClaim");
+        validateMandatoryFields(fieldValues, "What other income have you had since 1 June 2016?", "yourIncome");
 
         LOG.trace("Ending BenefitsController.validate");
     }
