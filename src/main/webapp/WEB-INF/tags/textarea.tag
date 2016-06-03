@@ -1,12 +1,14 @@
 <%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <%@attribute name="id" required="true" type="java.lang.String"%>
 <%@attribute name="name" required="true" type="java.lang.String"%>
-<%@attribute name="checkedValue" required="true" type="java.lang.String"%>
 <%@attribute name="value" required="false" type="java.lang.String"%>
-<%@attribute name="text" required="false" type="java.lang.String"%>
+<%@attribute name="maxLength" required="false" type="java.lang.String"%>
 <%@attribute name="additionalClasses" required="false" type="java.lang.String"%>
+<%@attribute name="showRemainingChars" required="false" type="java.lang.String"%>
+
 <%@attribute name="outerClass" required="false" type="java.lang.String"%>
 <%@attribute name="label" required="false" type="java.lang.String"%>
 <%@attribute name="hintBefore" required="false" type="java.lang.String"%>
@@ -19,8 +21,17 @@
     <c:set var="errorMessage" value="${errors.getErrorMessage(name)}" />
 </c:if>
 
-<c:if test="${empty outerClass}">
+<c:if test="${empty outerClass}" >
     <c:set var="outerClass" value="form-group" />
+</c:if>
+
+<c:if test="${empty showRemainingChars}" >
+    <c:set var="showRemainingChars" value="no" />
+</c:if>
+
+<%-- Override showRemainingChars if no maxlength has been set --%>
+<c:if test="${empty maxLength}" >
+    <c:set var="showRemainingChars" value="no" />
 </c:if>
 
 <c:if test="${hasError}" >
@@ -32,16 +43,12 @@
         <p class="validation-message">${errorMessage}</p>
     </c:if>
 
+    <label class="form-label-bold" for="${id}"> ${label} </label>
     ${hintBefore} 
-    
-    <c:if test="${value=checkedValue}" >
-        <c:set var="checked" value="checked" />
+    <textarea class="form-control ${additionalClasses}" id="${id}" name="${name}" maxLength="${maxLength}" >${value}</textarea>
+    <c:if test="${showRemainingChars='true'}" >
+        <c:set var="remainingChars" value="${maxLength - fn:length(value)}" />
+        <p class="form-hint countdown">${remainingChars} characters left</p>
     </c:if>
-    <label for="${id}"> 
-        <span class="form-label-bold">${label} </span>
-        <input type="checkbox" id="${id}" name="${name}" value="${checkedValue}">
-        <span>${text}</span>
-    </label>
-    
     ${hintAfter}
 </li>

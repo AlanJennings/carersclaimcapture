@@ -18,24 +18,21 @@
                         value="${benefitsAnswer}"
                         label="What benefit does the person you care for get?" 
                         hintBefore='<p class="form-hint">Don&rsquo;t include any benefits they&rsquo;ve applied for if they haven&rsquo;t got a decision yet.</p>'
-                        warningText='
-                          <div id="answerNoMessageWrap" class="prompt breaks-prompt validation-summary" style="display: none;">
-                              <p>You&rsquo;ll only get Carer&rsquo;s Allowance if the person you care for gets one of these benefits.</p>
-                          </div>'
-                        hasError="${validationErrors.hasError('benefitsAnswer')}" 
-                        errorMessage="${validationErrors.getErrorMessage('benefitsAnswer')}" 
+                        errors="${validationErrors}" 
         />
+        
+        <t:hiddenWarning id="answerNoMessageWrap" triggerId="benefitsAnswer" triggerValue="NONE">
+            <p>You'll only get Carer's Allowance if the person you care for gets one of these benefits.</p>
+        </t:hiddenWarning>
     
     </t:pageContent>
     
-    <script type="text/javascript" src="<c:url value='/assets/javascript/s_eligibility/answerNoBenefitsMessage.js' />" ></script>
     <script type="text/javascript">
         $(function () {
             window.trackEvent = function(arg1, arg2) {
                 // do nothing
             };
             
-            window.initEvents("benefitsAnswer", "NONE");
             trackEvent("times", "claim - eligibility");
             setCookie("claimeligibility",new Date().getTime());                       
             GOVUK.performance.stageprompt.setupForGoogleAnalytics()

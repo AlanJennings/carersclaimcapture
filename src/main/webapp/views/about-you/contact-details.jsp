@@ -17,13 +17,12 @@
                    valueThree="${address_lineThree}"
                    maxlength="35"
                    label="Address"
-                   hasError="${validationErrors.hasError('address')}" 
-                   errorMessage="${validationErrors.getErrorMessage('address')}"
+                   errors="${validationErrors}"
         />
         
-        <t:textedit id="postcode" name="postcode" value="${postcode}" maxLength="10" label="Postcode" hasError="${validationErrors.hasError('postcode')}" errorMessage="${validationErrors.getErrorMessage('postcode')}" />
+        <t:textedit id="postcode" name="postcode" value="${postcode}" maxLength="10" label="Postcode" errors="${validationErrors}" />
         
-        <t:textedit id="howWeContactYou" name="howWeContactYou" value="${howWeContactYou}" maxLength="20" label="Contact number" hasError="${validationErrors.hasError('howWeContactYou')}" errorMessage="${validationErrors.getErrorMessage('howWeContactYou')}" />
+        <t:textedit id="howWeContactYou" name="howWeContactYou" value="${howWeContactYou}" maxLength="20" label="Contact number" errors="${validationErrors}" />
         <t:checkbox id="contactYouByTextphone" 
                     name="contactYouByTextphone" 
                     checkedValue="true" 
@@ -31,28 +30,24 @@
                     text="This is a textphone for people with hearing difficulties." 
                     additionalClasses="checkbox-single"
                     outerClass="form-group checkbox-single" 
-                    hasError="${validationErrors.hasError('contactYouByTextphone')}" 
-                    errorMessage="${validationErrors.getErrorMessage('contactYouByTextphone')}"
+                    errors="${validationErrors}"
         />
         
         <t:yesnofield id="wantsEmailContact" 
                       name="wantsEmailContact" 
                       value="${wantsEmailContact}"
                       label="Do you want an email to confirm your application has been received?" 
-                      hasError="${validationErrors.hasError('wantsEmailContact')}" 
-                      errorMessage="${validationErrors.getErrorMessage('wantsEmailContact')}" 
+                      errors="${validationErrors}" 
         />
         
-        <li id="emailWrap" class="form-group" aria-hidden="false" style="display: none;">
-            <ul class="extra-group">
-                <t:textedit id="mail" name="mail" value="${mail}" maxLength="254" label="Your email address" hasError="${validationErrors.hasError('mail')}" errorMessage="${validationErrors.getErrorMessage('mail')}" /> 
-                <t:textedit id="mailConfirmation" name="mailConfirmation" value="${mailConfirmation}" maxLength="254" label="Confirm your email address" hasError="${validationErrors.hasError('mailConfirmation')}" errorMessage="${validationErrors.getErrorMessage('mailConfirmation')}" /> 
-            </ul>
-        </li>
+        <t:hiddenPanel id="emailWrap" triggerId="wantsEmailContact" triggerValue="yes">
+            <t:textedit id="mail" name="mail" value="${mail}" maxLength="254" label="Your email address" errors="${validationErrors}" /> 
+            <t:textedit id="mailConfirmation" name="mailConfirmation" value="${mailConfirmation}" maxLength="254" label="Confirm your email address" errors="${validationErrors}" /> 
+        </t:hiddenPanel>
         
     </t:pageContent>
     
-    <script type="text/javascript" src="<c:url value='/assets/javascript/email.js' />"></script>
+<%--     <script type="text/javascript" src="<c:url value='/assets/javascript/email.js' />"></script>   --%>
     <script type="text/javascript" src="<c:url value='/assets/javascript/trackInputOnEvent.js' />"></script>
     
     <script type="text/javascript">

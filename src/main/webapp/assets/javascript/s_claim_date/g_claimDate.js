@@ -1,6 +1,6 @@
 (function() {
   var daysInMonth, hideCareStartDateWrap, initDateWarningOnChange, isLeapYear, isLegalDate, showCareStartDateWrap;
-
+/*
   window.initEvents = function(spent35HoursCaringBeforeClaimY, spent35HoursCaringBeforeClaimN, day, month, year) {
     if (!$("#" + spent35HoursCaringBeforeClaimY).prop('checked')) {
       hideCareStartDateWrap(day, month, year);
@@ -23,7 +23,7 @@
     $("#" + month).val("");
     return $("#" + year).val("");
   };
-
+*/
   window.initDateWarning = function(warningId, day, month, year, text, testMode) {
     $("#" + day).on("change keyup", function() {
       return initDateWarningOnChange(warningId, day, month, year, text, testMode);

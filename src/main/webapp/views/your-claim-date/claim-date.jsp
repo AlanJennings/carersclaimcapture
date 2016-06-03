@@ -26,8 +26,7 @@
                      valueMonth="${dateOfClaim_month}" 
                      valueYear="${dateOfClaim_year}" 
                      label="Claim date" 
-                     hasError="${validationErrors.hasError('dateOfClaim')}" 
-                     errorMessage="${validationErrors.getErrorMessage('dateOfClaim')}" 
+                     errors="${validationErrors}" 
                      hintBefore='<p class="form-hint" id="dateOfClaim_defaultDateContextualHelp">
                                      This is when you want to claim Carer&rsquo;s Allowance from, eg 16 2 2016.
                                  </p>'
@@ -41,26 +40,22 @@
                       name="beforeClaimCaring" 
                       value="${beforeClaimCaring}"
                       label="Were you caring for the person for more than 35 hours a week before this date?" 
-                      hasError="${validationErrors.hasError('beforeClaimCaring')}" 
-                      errorMessage="${validationErrors.getErrorMessage('beforeClaimCaring')}" 
+                      errors="${validationErrors}" 
         />
 
-        <li id="careStartDateWrap" class="form-group">
-            <ul class="extra-group">
-                <t:datefield id="beforeClaimCaringDate" 
-                             nameDay="beforeClaimCaringDate_day" 
-                             nameMonth="beforeClaimCaringDate_month" 
-                             nameYear="beforeClaimCaringDate_year" 
-                             valueDay="${beforeClaimCaringDate_day}" 
-                             valueMonth="${beforeClaimCaringDate_month}" 
-                             valueYear="${beforeClaimCaringDate_year}" 
-                             label="When did you begin caring?" 
-                             hasError="${validationErrors.hasError('beforeClaimCaringDate')}" 
-                             errorMessage="${validationErrors.getErrorMessage('beforeClaimCaringDate')}" 
-                             hintBefore='<p class="form-hint" id="beforeClaimCaring_date_defaultDateContextualHelp">For example, 16 5 2015</p>'
-                />
-            </ul>
-        </li>
+        <t:hiddenPanel id="careStartDateWrap" triggerId="beforeClaimCaring" triggerValue="yes" >
+            <t:datefield id="beforeClaimCaringDate" 
+                         nameDay="beforeClaimCaringDate_day" 
+                         nameMonth="beforeClaimCaringDate_month" 
+                         nameYear="beforeClaimCaringDate_year" 
+                         valueDay="${beforeClaimCaringDate_day}" 
+                         valueMonth="${beforeClaimCaringDate_month}" 
+                         valueYear="${beforeClaimCaringDate_year}" 
+                         label="When did you begin caring?" 
+                         errors="${validationErrors}" 
+                         hintBefore='<p class="form-hint" id="beforeClaimCaring_date_defaultDateContextualHelp">For example, 16 5 2015</p>'
+            />
+        </t:hiddenPanel>
     </t:pageContent>
 
     <script type="text/javascript">

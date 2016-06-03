@@ -11,8 +11,12 @@
 <%@attribute name="hintAfter" required="false" type="java.lang.String"%>
 <%@attribute name="warningText" required="false" type="java.lang.String"%>
 
-<%@attribute name="hasError" required="false" type="java.lang.Object"%>
-<%@attribute name="errorMessage" required="false" type="java.lang.String"%>
+<%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+
+<c:if test="${not empty errors}">
+    <c:set var="hasError" value="${errors.hasError(name)}" />
+    <c:set var="errorMessage" value="${errors.getErrorMessage(name)}" />
+</c:if>
 
 <%-- TODO add track events separately using jquery --%>
 
@@ -56,6 +60,4 @@
         </ul>
         ${hintAfter}
     </fieldset>
-
-    ${warningText}
 </li>

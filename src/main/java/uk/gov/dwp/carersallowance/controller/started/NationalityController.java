@@ -71,7 +71,7 @@ public class NationalityController extends AbstractFormController {
         validateMandatoryFields(fieldValues, "Have you always lived in England, Scotland or Wales?", "alwaysLivedInUK");
         validateMandatoryFields(fieldValues, "Have you been away from England, Scotland or Wales for more than 52 weeks in the 3 years before your claim date?","trip52Weeks");
 
-        if(fieldValue_Equals(fieldValues, "nationality", "Another nationality")) {
+        if(fieldValue_Equals(fieldValues, "nationality", "Another_nationality")) {
             validateMandatoryFields(fieldValues, "Your nationality", "actualnationality");
         }
 
@@ -87,7 +87,7 @@ public class NationalityController extends AbstractFormController {
             }
         }
 
-        if(fieldValue_Equals(fieldValues, "trip52weeks", "yes")) {
+        if(fieldValue_Equals(fieldValues, "trip52Weeks", "yes")) {
             validateMandatoryFields(fieldValues, "Tell us about where you've been.", "tripDetails");
         }
 

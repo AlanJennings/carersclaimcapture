@@ -1,4 +1,5 @@
 (function() {
+/*
   window.initEvents = function(id, answer_yes, answer_no) {
     $("#" + answer_yes).on("click", function() {
       return $("#" + id).hide();
@@ -23,7 +24,7 @@
       return $("#" + warning).show();
     });
   };
-
+*/
   window.gaEvents = function(goodButton, badButton, otherButton) {
     $("#" + goodButton).on("click", function() {
       return trackEvent(window.location.pathname, $(this).attr("id"), "CorrectCountry");

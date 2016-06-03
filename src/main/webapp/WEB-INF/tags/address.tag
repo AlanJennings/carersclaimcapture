@@ -14,8 +14,12 @@
 <%@attribute name="hintBefore" required="false" type="java.lang.String"%>
 <%@attribute name="hintAfter" required="false" type="java.lang.String"%>
 
-<%@attribute name="hasError" required="false" type="java.lang.Object"%>
-<%@attribute name="errorMessage" required="false" type="java.lang.String"%>
+<%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+
+<c:if test="${not empty errors}">
+    <c:set var="hasError" value="${errors.hasError(id)}" />
+    <c:set var="errorMessage" value="${errors.getErrorMessage(id)}" />
+</c:if>
 
 <c:if test="${hasError}" >
     <c:set var="errorClass" value="validation-error" />

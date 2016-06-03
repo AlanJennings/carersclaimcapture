@@ -10,10 +10,13 @@
 
 <%@attribute name="hintBefore" required="false" type="java.lang.String"%>
 <%@attribute name="hintAfter" required="false" type="java.lang.String"%>
-<%@attribute name="warningText" required="false" type="java.lang.String"%><!-- TODO change this to noWarningtext, also add yesWarningText -->
 
-<%@attribute name="hasError" required="false" type="java.lang.Object"%>
-<%@attribute name="errorMessage" required="false" type="java.lang.String"%>
+<%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+
+<c:if test="${not empty errors}">
+    <c:set var="hasError" value="${errors.hasError(name)}" />
+    <c:set var="errorMessage" value="${errors.getErrorMessage(name)}" />
+</c:if>
 
 <!-- TODO add track events separately using jquery -->
 <!-- TODO add javascript for the warning text -->
@@ -30,7 +33,7 @@
 <c:if test="${hasError}" >
     <c:set var="errorClass" value="validation-error" />
 </c:if>
-<li class="form-group <c:out value='${errorClass}'/>">
+<li class="form-group <c:out value='${errorClass}'/>" style="margin-bottom: 22px;">
     <c:if test="${hasError}" >
         <p class="validation-message">${errorMessage}</p>
     </c:if>
@@ -74,6 +77,4 @@
         </ul>
         ${hintAfter}
     </fieldset>
-
-    ${warningText}
 </li>

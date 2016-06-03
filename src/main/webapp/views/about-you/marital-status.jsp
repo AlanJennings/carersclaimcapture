@@ -18,8 +18,7 @@
                                       Living with partner"
                         value="${maritalStatus}"
                         label="Your status" 
-                        hasError="${validationErrors.hasError('maritalStatus')}" 
-                        errorMessage="${validationErrors.getErrorMessage('maritalStatus')}" 
+                        errors="${validationErrors}" 
         />
     
     </t:pageContent>

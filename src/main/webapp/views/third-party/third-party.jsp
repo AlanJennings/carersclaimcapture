@@ -7,7 +7,7 @@
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" pageTitle="Are you applying for Carer's Allowance for yourself?" section="Section 1 of 11" backLink="${previousPage}"> 
-        <!-- Note the values have changed from 'yesCarer/noCarer to yes/no -->
+        <%--  Note the values have changed from 'yesCarer/noCarer to yes/no --%>
         <t:radiobuttons id="thirdParty" 
                         name="thirdParty" 
                         optionIds="yes|no"
@@ -15,26 +15,22 @@
                                       No, you're applying on behalf of the carer"
                         value="${thirdParty}"
                         label="Are you the carer?" 
-                        hasError="${validationErrors.hasError('thirdParty')}" 
-                        errorMessage="${validationErrors.getErrorMessage('thirdParty')}" 
+                        errors="${validationErrors}" 
         />
 
-        <li id="thirdPartyWrap" class="form-group">
-            <ul class="extra-group">
-                <t:textedit id="nameAndOrganisation" 
-                            name="nameAndOrganisation" 
-                            value="${nameAndOrganisation}" 
-                            maxLength="60" 
-                            label="Your name and organisation" 
-                            hasError="${validationErrors.hasError('nameAndOrganisation')}" 
-                            errorMessage="${validationErrors.getErrorMessage('nameAndOrganisation')}" 
-                            hintAfter='<p class="form-hint">Fill the rest of the form in as if you&rsquo;re the carer. For
-                                          example, if asked for &rsquo;your address&rsquo; put the address of
-                                          the person doing the caring.
-                                       </p>'
-                />
-            </ul>
-        </li>
+        <t:hiddenPanel id="thirdPartyWrap" triggerId="thirdParty" triggerValue="no">
+            <t:textedit id="nameAndOrganisation" 
+                        name="nameAndOrganisation" 
+                        value="${nameAndOrganisation}" 
+                        maxLength="60" 
+                        label="Your name and organisation" 
+                        errors="${validationErrors}"
+                        hintAfter='<p class="form-hint">Fill the rest of the form in as if you&rsquo;re the carer. For
+                                      example, if asked for &rsquo;your address&rsquo; put the address of
+                                      the person doing the caring.
+                                   </p>'
+            />
+        </t:hiddenPanel>
     </t:pageContent>
 
     <script type="text/javascript">
@@ -47,8 +43,9 @@
             });
         });
     </script>
-    
+<%--   
     <script type="text/javascript" src="<c:url value='/assets/javascript/third_party/thirdParty.js' />"></script>
+--%> 
     <script type="text/javascript">
         $(function () {
             trackEvent ( "times", "claim - start" );
@@ -57,7 +54,7 @@
         });
         
         $(function() {
-            window.initEvents("thirdParty_yes", "thirdParty_no", "nameAndOrganisation")
+            // window.initEvents("thirdParty_yes", "thirdParty_no", "nameAndOrganisation")
             trackEvent ( "times", "claim - start" );
             setCookie("claimstart", new Date().getTime());
         });
