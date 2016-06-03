@@ -16,8 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
 @Controller
-public class JobPaymentScheduleController extends AbstractFormController {
-    private static final Logger LOG = LoggerFactory.getLogger(JobPaymentScheduleController.class);
+public class JobPensionAndExpensesController extends AbstractFormController {
+    private static final Logger LOG = LoggerFactory.getLogger(JobPensionAndExpensesController.class);
 
     private static final String CURRENT_PAGE  = "/employment/last-wage/"; // parameter to indicate which job index
     private static final String PAGE_TITLE    = "Your pay - Your income";

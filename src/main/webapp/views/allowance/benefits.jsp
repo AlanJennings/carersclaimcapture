@@ -4,8 +4,8 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<t:mainPage>
-    <t:pageContent pageTitle="Can you get Carer's Allowance?">
+<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+    <t:pageContent errors="${validationErrors}" pageTitle="Can you get Carer's Allowance?">
         <t:radiobuttons id="benefitsAnswer" 
                         name="benefitsAnswer" 
                         optionIds="PIP|DLA|AA|CAA|AFIP|NONE"
@@ -22,8 +22,8 @@
                           <div id="answerNoMessageWrap" class="prompt breaks-prompt validation-summary" style="display: none;">
                               <p>You&rsquo;ll only get Carer&rsquo;s Allowance if the person you care for gets one of these benefits.</p>
                           </div>'
-                        hasError="${errors.hasError('benefitsAnswer')}" 
-                        errorMessage="${errors.getErrorMessage('benefitsAnswer')}" 
+                        hasError="${validationErrors.hasError('benefitsAnswer')}" 
+                        errorMessage="${validationErrors.getErrorMessage('benefitsAnswer')}" 
         />
     
     </t:pageContent>

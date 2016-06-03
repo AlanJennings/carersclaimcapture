@@ -1,7 +1,9 @@
 <%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <%@attribute name="pageTitle" required="true" type="java.lang.String"%>
+<%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
 <%@attribute name="section" required="false" type="java.lang.String"%>
 <%@attribute name="backLink" required="false" type="java.lang.String"%>
 <%@attribute name="nextButtonText" required="false" type="java.lang.String"%>
@@ -44,7 +46,9 @@
                 
                 <form action="<c:url value='${currentPage}' />" method="POST" role="form" style="margin-bottom: 30px;">
                     <input type="hidden" name="csrfToken" value="1b8e21408cf8c53aeaf62e523f4af3e8b7fe4b6a-1460720627654-dfd779df76ec152c0ae4d491"/>    
-                    <jsp:include page="../validationSummary.jsp" />
+                    
+                    <t:validationSummary errors="${errors}" />
+                    
                     <fieldset class="form-elements form-eligibility">
                         <ul>
                             

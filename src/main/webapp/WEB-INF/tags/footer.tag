@@ -1,3 +1,8 @@
+<%@ tag description="Footer Tag" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@attribute name="currentPage" required="true" type="java.lang.String"%>
+
 <footer class="global-footer" id="global-footer">
     <div class="container clearfix">
         <div>
@@ -5,8 +10,8 @@
                 <a id="lang-cy" 
                    href="/change-language/cy" 
                    aria-label="Newid yr iaith diofyn i Gymraeg" 
-                   onmousedown="trackEvent('${param.currentPage}','Language Selection Welsh');" 
-                   onkeydown="trackEvent('${param.currentPage}','Language Selection Welsh');"
+                   onmousedown="trackEvent('${currentPage}','Language Selection Welsh');" 
+                   onkeydown="trackEvent('${currentPage}','Language Selection Welsh');"
                 >Cymraeg</a>
 
                 <a id="cookies" 
@@ -14,8 +19,8 @@
                    rel="external" 
                    target="_blank" 
                    aria-label="This link opens in a new window"
-                   onmousedown="trackEvent('${param.currentPage}','Cookies - from footer');" 
-                   onkeydown="trackEvent('${param.currentPage}','Cookies - from footer');" 
+                   onmousedown="trackEvent('${currentPage}','Cookies - from footer');" 
+                   onkeydown="trackEvent('${currentPage}','Cookies - from footer');" 
                 >Cookies</a>
 
                 <a id="privacy" 
@@ -23,8 +28,8 @@
                    rel="external" 
                    target="privacyLink" 
                    aria-label="This link opens in a new window"
-                   onmousedown="trackEvent('${param.currentPage}','Privacy');" 
-                   onkeydown="trackEvent('${param.currentPage}','Privacy');" 
+                   onmousedown="trackEvent('${currentPage}','Privacy');" 
+                   onkeydown="trackEvent('${currentPage}','Privacy');" 
                 >Privacy</a>
 
                 <a id="claim-feedback" 
@@ -32,8 +37,8 @@
                    rel="external" 
                    target="_blank" 
                    aria-label="This link opens in a new window"
-                   onmousedown="trackEvent('${param.currentPage}','Feedback');" 
-                   onkeydown="trackEvent('${param.currentPage}','Feedback');" 
+                   onmousedown="trackEvent('${currentPage}','Feedback');" 
+                   onkeydown="trackEvent('${currentPage}','Feedback');" 
                 >Feedback</a>
             </nav>
             <p>Helpline - 0345 608 4321</p>
@@ -45,8 +50,8 @@
                    href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3" 
                    target="openGovLink" 
                    aria-label="This link opens in a new window"
-                   onmousedown="trackEvent('${param.currentPage}','Open Government Licence');" 
-                   onkeydown="trackEvent('${param.currentPage}','Open Government Licence');" 
+                   onmousedown="trackEvent('${currentPage}','Open Government Licence');" 
+                   onkeydown="trackEvent('${currentPage}','Open Government Licence');" 
                 >Open Government Licence v3.0</a>
                 , except where otherwise stated
             </p>
@@ -55,8 +60,8 @@
             <a class="crown" 
                href="http://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm" 
                target="crownLink" 
-               onmousedown="trackEvent('${param.currentPage}','Crown Copyright');" 
-               onkeydown="trackEvent('${param.currentPage}','Crown Copyright');"
+               onmousedown="trackEvent('${currentPage}','Crown Copyright');" 
+               onkeydown="trackEvent('${currentPage}','Crown Copyright');"
             >&copy; Crown Copyright</a>
         </div>
     </div>

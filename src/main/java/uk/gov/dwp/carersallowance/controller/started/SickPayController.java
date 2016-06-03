@@ -19,7 +19,7 @@ import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 public class SickPayController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(SickPayController.class);
 
-    private static final String CURRENT_PAGE  = "/about-you/marital-status";
+    private static final String CURRENT_PAGE  = "/your-income/statutory-sick-pay";
     private static final String PAGE_TITLE    = "Your income Statutory Sick Pay";
 
     private static final String[] FIELDS = {"stillBeingPaidThisPay",

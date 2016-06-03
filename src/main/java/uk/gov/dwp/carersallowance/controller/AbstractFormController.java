@@ -2,8 +2,12 @@ package uk.gov.dwp.carersallowance.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -14,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import uk.gov.dwp.carersallowance.utils.CollectionUtils;
 import uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 import uk.gov.dwp.carersallowance.validations.FormValidationError;
@@ -57,6 +62,7 @@ public abstract class AbstractFormController {
         };
 
     public static final String   PHONE_REGEX = "[ 0123456789]{0,20}";       // probably convert to an enum
+    public static final String   EMAIL_REGEX = "[ 0123456789]{0,20}";       // probably convert to an enum
 
     private ValidationSummary validationSummary;
     private List<String>      pageList;
@@ -154,7 +160,7 @@ public abstract class AbstractFormController {
             if(hasErrors()) {
                 LOG.info("there are validation errors, re-showing form");
                 copyFromRequestToModel(request, getFields(), model);
-                model.addAttribute("errors", getValidationSummary());
+                model.addAttribute("validationErrors", getValidationSummary());
                 return showForm(request, model);
             }
 
@@ -286,19 +292,98 @@ public abstract class AbstractFormController {
         LOG.trace("Ending AbstractFormController.validateMandatoryField");
     }
 
-    protected void validateEmailAddress(Map<String, String[]> allfieldValues, String fieldTitle, String fieldName) {
-        // TODO
+    /**
+     * At least two out of three address fields should be populated
+     */
+    protected void validateAddressFields(Map<String, String[]> allfieldValues, String fieldTitle, String id, String[] addressFieldNames) {
+        LOG.trace("Started AbstractFormController.validateMandatoryField");
+        Parameters.validateMandatoryArgs(new Object[]{allfieldValues, fieldTitle}, new String[]{"allfieldValues", "fieldTitle"});
+        if(addressFieldNames == null || addressFieldNames.length == 0) {
+            return;
+        }
+
+        if(addressFieldNames.length != 3) {
+            throw new IllegalArgumentException("There must be three address fields");
+        }
+
+        int populated = 0;
+        LOG.debug("addressFieldNames = {}", new LoggingObjectWrapper(addressFieldNames));
+        for(String fieldName: addressFieldNames) {
+            String[] fieldValues = allfieldValues.get(fieldName);
+            LOG.debug("fieldName = {}, fieldValues={}", fieldName, new LoggingObjectWrapper(fieldValues));
+
+            if(isEmpty(fieldValues) == false) {
+                populated++;
+            }
+        }
+
+        if(populated < 2) {
+            LOG.debug("missing mandatory address field: {}", new LoggingObjectWrapper(addressFieldNames));
+            addFormError(id, fieldTitle, "You must complete this section");
+        }
+
+        LOG.trace("Ending AbstractFormController.validateMandatoryField");
     }
 
     /**
      * Validate that two fields match (e.g. for email address, passwords etc)
      */
-    protected void validateMatchingValues(Map<String, String[]> allfieldValues, String firstTitle, String firstName, String secondTitle, String secondName) {
-        // TODO
+    protected void validateMatchingValues(Map<String, String[]> allfieldValues, String firstTitle, String firstName, String secondTitle, String secondName, boolean caseInsensitve) {
+        LOG.trace("Started AbstractFormController.validateMatchingValues");
+        try {
+            Parameters.validateMandatoryArgs(new Object[]{allfieldValues, firstTitle, firstName, secondTitle, secondName}, new String[]{"allfieldValues", "firstTitle", "firstName", "secondTitle", "secondName"});
+
+            String[] firstFieldValues = allfieldValues.get(firstName);
+            String[] secondFieldValues = allfieldValues.get(secondName);
+            LOG.debug("firstName = {}, firstFieldValues={}", firstName, new LoggingObjectWrapper(firstFieldValues));
+            LOG.debug("secondName = {}, secondFieldValues={}", firstName, new LoggingObjectWrapper(secondFieldValues));
+
+            if(firstFieldValues == secondFieldValues) {
+                return;
+            }
+
+            if(firstFieldValues != null && firstFieldValues != null) {
+                Set<String> firstValuesSet = new HashSet<>(Arrays.asList(firstFieldValues));
+                Set<String> secondValuesSet = new HashSet<>(Arrays.asList(secondFieldValues));
+
+                if(caseInsensitve) {
+                    firstValuesSet = CollectionUtils.toUpperCase(firstValuesSet);
+                    secondValuesSet = CollectionUtils.toUpperCase(secondValuesSet);
+                }
+                if(firstValuesSet.equals(secondValuesSet)) {
+                    return;
+                }
+            }
+
+            LOG.debug("{} ({}) does not match {} ({}).", firstName, new LoggingObjectWrapper(firstFieldValues), secondName, new LoggingObjectWrapper(secondFieldValues));
+            addFormError(secondName, secondTitle, "Your emails must match");
+
+        } finally {
+            LOG.trace("Started AbstractFormController.validateMatchingValues");
+        }
     }
 
-    protected void validateRegexField(Map<String, String[]> allfieldValues, String fieldTitle, String fieldname, String regex) {
-        // TODO
+    protected void validateRegexField(Map<String, String[]> allfieldValues, String fieldTitle, String fieldName, String regex) {
+        LOG.trace("Started AbstractFormController.validateRegexField");
+        try {
+            Parameters.validateMandatoryArgs(new Object[]{allfieldValues, fieldTitle, fieldName, regex}, new String[]{"allfieldValues", "fieldTitle", "fieldName", "regex"});
+            Pattern pattern = Pattern.compile(regex);   // this is re-usable
+
+            String[] fieldValues = allfieldValues.get(fieldName);
+            LOG.debug("fieldName = {}, fieldValues={}", fieldName, new LoggingObjectWrapper(fieldValues));
+
+            for(String value: fieldValues) {
+                Matcher matcher = pattern.matcher(value);
+                if(matcher.matches() == false) {
+                    LOG.debug("value: '{}' does not match regex: {}", value, regex);
+                    addFormError(fieldName, fieldTitle, "Invalid value");
+                    break;
+                }
+            }
+
+        } finally {
+            LOG.trace("Started AbstractFormController.validateRegexField");
+        }
     }
 
     /**
@@ -456,5 +541,37 @@ public abstract class AbstractFormController {
 
             return buffer.toString();
         }
+    }
+
+    public static class ValidationPatterns {
+
+        public static int    ACCOUNT_HOLDER_NAME_MAX_LENGTH = 60;
+        public static int    ACCOUNT_NUMBER_MAX_LENGTH      = 10;
+        public static int    ACCOUNT_NUMBER_MIN_LENGTH      = 6;
+        public static int    CURRENCY_REGEX_MAX_LENGTH      = 12;
+        public static int    FULL_NAME_MAX_LENGTH           = 60;
+        public static int    NAME_MAX_LENGTH                = 35;
+        public static int    NATIONALITY_MAX_LENGTH         = 35;
+        public static int    PHONE_NUMBER_MAX_LENGTH        = 20;
+
+        public static String ACCOUNT_HOLDER_NAME_REGEX      = "^[$RESTRICTED_CHARS]{1,$ACCOUNT_HOLDER_NAME_MAX_LENGTH}$$";
+        public static String ACCOUNT_NUMBER_REGEX           = "^$ACCOUNT_NUMBER_SEQ{$ACCOUNT_NUMBER_MIN_LENGTH,$ACCOUNT_NUMBER_MAX_LENGTH}$$";
+        public static String ACCOUNT_NUMBER_SEQ             = "\\d";
+        public static String CURRENCY_REGEX                 = "^\\£?[0-9]{1,8}(\\.[0-9]{1,2})?$";
+        public static String DECIMAL_REGEX                  = "^[0-9]{1,12}(\\.[0-9]{1,2})?$";
+        public static String EMAIL_REGEX                    = "^[a-zA-Z0-9\\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])*(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9]))+$";
+        public static String FULL_NAME_REGEX                = "^[$RESTRICTED_CHARS]{1,$FULL_NAME_MAX_LENGTH}$$";
+        public static String NATIONALITY_REGEX              = "^[$NATIONALITY_SEQ]{1,$NATIONALITY_MAX_LENGTH}$$";
+        public static String NATIONALITY_SEQ                = "^[a-zA-ZÀ-ƶ \\-\\']$";
+        public static String NINO_REGEX                     = "(([A-CEHJ-MOPRSW-Y]{1}[A-CEGHJ-NPR-TW-Z]{1}[0-9]{6})|([G]{1}[ACEGHJ-NPR-TW-Z]{1}[0-9]{6})|([N]{1}[A-CEGHJL-NPR-TW-Z]{1}[0-9]{6})|([T]{1}[A-CEGHJ-MPR-TW-Z]{1}[0-9]{6})|([Z]{1}[A-CEGHJ-NPR-TW-Y]{1}[0-9]{6}))(([A-D ]{1})|([\\S\\s\\d]{0,0}))";
+        public static String NUMBER_OR_SPACE_REGEX          = "^[0-9 ]*$";
+        public static String NUMBER_REGEX                   = "^[0-9]*$";
+        public static String PHONE_NUMBER_REGEX             = "^[$PHONE_NUMBER_SEQ]{7,$PHONE_NUMBER_MAX_LENGTH}$$";
+        public static String PHONE_NUMBER_SEQ               = "^[0-9 \\-]$";
+        public static String POSTCODE_REGEX                 = "^(?i)(GIR 0AA)|((([A-Z][0-9][0-9]?)|(([A-Z][A-HJ-Y][0-9][0-9]?)|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) ?[0-9][A-Z]{2})$";
+        public static String RESTRICTED_CHARS               = "^[A-Za-zÀ-ƶ\\s0-9\\(\\)&£€\\\"\\'!\\-_:;\\.,/\\?\\@]*$";
+        public static String RESTRICTED_POSTCODE_REGEX      = "^[A-Za-zÀ-ƶ\\s0-9]*$";
+        public static String SORT_CODE_REGEX                = "^\\d{6}$";
+        public static String SURNAME_REGEX                  = "^[$RESTRICTED_CHARS]{1,$NAME_MAX_LENGTH}$$";
     }
 }

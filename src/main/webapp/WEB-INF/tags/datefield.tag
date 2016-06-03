@@ -16,9 +16,9 @@
 <%@attribute name="errorMessage" required="false" type="java.lang.String"%>
 
 <c:if test="${hasError}" >
-    <c:set var="additionalClass" value="validation-error" />
+    <c:set var="errorClass" value="validation-error" />
 </c:if>
-<li class="form-group <c:out value='${additionalClass}'/>">
+<li class="form-group <c:out value='${errorClass}'/>">
     <c:if test="${hasError}" >
         <p class="validation-message">${errorMessage}</p>
     </c:if>

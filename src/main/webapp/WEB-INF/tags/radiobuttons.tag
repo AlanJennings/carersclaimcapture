@@ -14,12 +14,12 @@
 <%@attribute name="hasError" required="false" type="java.lang.Object"%>
 <%@attribute name="errorMessage" required="false" type="java.lang.String"%>
 
-<!-- TODO add track events separately using jquery -->
+<%-- TODO add track events separately using jquery --%>
 
 <c:if test="${hasError}" >
-    <c:set var="additionalClass" value="validation-error" />
+    <c:set var="errorClass" value="validation-error" />
 </c:if>
-<li class="form-group <c:out value='${additionalClass}'/>">
+<li class="form-group <c:out value='${errorClass}'/>">
     <c:if test="${hasError}" >
         <p class="validation-message">${errorMessage}</p>
     </c:if>
@@ -29,11 +29,13 @@
 
         ${hintBefore}
         <ul class="form-group form-group-compound" id="${id}">
-            <!-- value='<c:out value="${value}" />' -->
             <c:forTokens items="${optionIds}" delims="|" var="optionId" varStatus="optionIdIndex">
-               <!-- value='<c:out value="${optionId}" />' -->
                <li>                
-                    <div class="block-label" for="${id}_${optionId}" onmousedown="">
+                    <%-- 
+                        clicking on a label is the same as clicking on an input (to gain focus probably), so by spanning the control 
+                        with a label instead of a div makes the whole control click-able, not just the tiny radio button in the middle 
+                    --%>
+                    <label class="block-label" for="${id}_${optionId}">
                         <input type="radio" 
                                id="${id}_${optionId}" 
                                name="${name}" 
@@ -47,7 +49,7 @@
                                 <span>${optionValue}</span>
                             </c:if>
                         </c:forTokens>
-                    </div>
+                    </label>
                 </li>
             </c:forTokens>
 

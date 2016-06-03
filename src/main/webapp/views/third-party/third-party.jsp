@@ -4,8 +4,9 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<t:mainPage>
-    <t:pageContent pageTitle="Are you applying for Carer's Allowance for yourself?" section="Section 1 of 11" backLink="${previousPage}"> 
+<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+
+    <t:pageContent errors="${validationErrors}" pageTitle="Are you applying for Carer's Allowance for yourself?" section="Section 1 of 11" backLink="${previousPage}"> 
         <!-- Note the values have changed from 'yesCarer/noCarer to yes/no -->
         <t:radiobuttons id="thirdParty" 
                         name="thirdParty" 
@@ -14,8 +15,8 @@
                                       No, you're applying on behalf of the carer"
                         value="${thirdParty}"
                         label="Are you the carer?" 
-                        hasError="${errors.hasError('thirdParty')}" 
-                        errorMessage="${errors.getErrorMessage('thirdParty')}" 
+                        hasError="${validationErrors.hasError('thirdParty')}" 
+                        errorMessage="${validationErrors.getErrorMessage('thirdParty')}" 
         />
 
         <li id="thirdPartyWrap" class="form-group">
@@ -25,8 +26,8 @@
                             value="${nameAndOrganisation}" 
                             maxLength="60" 
                             label="Your name and organisation" 
-                            hasError="${errors.hasError('nameAndOrganisation')}" 
-                            errorMessage="${errors.getErrorMessage('nameAndOrganisation')}" 
+                            hasError="${validationErrors.hasError('nameAndOrganisation')}" 
+                            errorMessage="${validationErrors.getErrorMessage('nameAndOrganisation')}" 
                             hintAfter='<p class="form-hint">Fill the rest of the form in as if you&rsquo;re the carer. For
                                           example, if asked for &rsquo;your address&rsquo; put the address of
                                           the person doing the caring.

@@ -66,14 +66,15 @@ public class ContactDetailsController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        // These are combined mandatory fields
-        validateMandatoryFields(fieldValues, "Address", "address_lineOne", "address_lineTwo");
-        validateMandatoryFields(fieldValues,"Your email address", "mail");
+        validateAddressFields(fieldValues, "Address", "address", new String[]{"address_lineOne", "address_lineTwo", "address_lineThree"});
+        validateMandatoryFields(fieldValues,"Do you want an email to confirm your application has been received?", "wantsEmailContact");
 
-        validateEmailAddress(fieldValues,"Your email address", "mail");
-        validateEmailAddress(fieldValues,"Confirm your email address", "mailConfirmation");
+        if(fieldValue_Equals(fieldValues, "wantsEmailContact", "yes")) {
+            validateMandatoryFields(fieldValues,"Your email address", "mail");
+            validateRegexField(fieldValues,"Your email address", "mail", AbstractFormController.ValidationPatterns.EMAIL_REGEX);
 
-        validateMatchingValues(fieldValues,"Your email address", "mail", "Confirm your email address", "mailConfirmation");
+            validateMatchingValues(fieldValues,"Your email address", "mail", "Confirm your email address", "mailConfirmation", true);
+        }
 
         LOG.trace("Ending BenefitsController.validate");
     }

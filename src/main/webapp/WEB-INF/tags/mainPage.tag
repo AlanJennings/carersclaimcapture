@@ -1,5 +1,10 @@
 <%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+
+<%@attribute name="pageTitle" required="true" type="java.lang.String"%>
+<%@attribute name="currentPage" required="true" type="java.lang.String"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
     <!--[if IE 6]>         <html class="ie ie6" lang="en"> <![endif]-->
@@ -129,10 +134,7 @@
         
         <jsp:doBody/>
         
-
-        <jsp:include page="../footer.jsp" >
-            <jsp:param name="currentPage" value="<c:out value='${currentPage}' />" />
-        </jsp:include>
+        <t:footer currentPage="${currentPage}" />
         
         <div id="global-app-error" class="app-error hidden"></div>            
     </body>

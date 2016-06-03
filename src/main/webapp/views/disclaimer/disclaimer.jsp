@@ -4,8 +4,9 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<t:mainPage>
-    <t:pageContent pageTitle="Before you start" nextButtonText="I agree - start my application" backLink="${previousPage}">
+<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+
+    <t:pageContent errors="${validationErrors}" pageTitle="Before you start" nextButtonText="I agree - start my application" backLink="${previousPage}">
         <t:hmtlsection value='<p>When you claim Carer&rsquo;s Allowance the person you care for may stop getting:</p>'/> 
 
         <t:hmtlsection value='<ul class="list-bullet">

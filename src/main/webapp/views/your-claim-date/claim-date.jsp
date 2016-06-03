@@ -4,8 +4,9 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<t:mainPage>
-    <t:pageContent pageTitle="When do you want Carer's Allowance to start?" section="Section 2 of 11" backLink="${previousPage}">
+<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+
+    <t:pageContent errors="${validationErrors}" pageTitle="When do you want Carer's Allowance to start?" section="Section 2 of 11" backLink="${previousPage}">
         <t:hmtlsection value='<p>
                               Most claims can be backdated 3 months. You may be able to 
                               <a rel="external" 
@@ -25,8 +26,8 @@
                      valueMonth="${dateOfClaim_month}" 
                      valueYear="${dateOfClaim_year}" 
                      label="Claim date" 
-                     hasError="${errors.hasError('dateOfClaim')}" 
-                     errorMessage="${errors.getErrorMessage('dateOfClaim')}" 
+                     hasError="${validationErrors.hasError('dateOfClaim')}" 
+                     errorMessage="${validationErrors.getErrorMessage('dateOfClaim')}" 
                      hintBefore='<p class="form-hint" id="dateOfClaim_defaultDateContextualHelp">
                                      This is when you want to claim Carer&rsquo;s Allowance from, eg 16 2 2016.
                                  </p>'
@@ -40,8 +41,8 @@
                       name="beforeClaimCaring" 
                       value="${beforeClaimCaring}"
                       label="Were you caring for the person for more than 35 hours a week before this date?" 
-                      hasError="${errors.hasError('beforeClaimCaring')}" 
-                      errorMessage="${errors.getErrorMessage('beforeClaimCaring')}" 
+                      hasError="${validationErrors.hasError('beforeClaimCaring')}" 
+                      errorMessage="${validationErrors.getErrorMessage('beforeClaimCaring')}" 
         />
 
         <li id="careStartDateWrap" class="form-group">
@@ -54,8 +55,8 @@
                              valueMonth="${beforeClaimCaringDate_month}" 
                              valueYear="${beforeClaimCaringDate_year}" 
                              label="When did you begin caring?" 
-                             hasError="${errors.hasError('beforeClaimCaringDate')}" 
-                             errorMessage="${errors.getErrorMessage('beforeClaimCaringDate')}" 
+                             hasError="${validationErrors.hasError('beforeClaimCaringDate')}" 
+                             errorMessage="${validationErrors.getErrorMessage('beforeClaimCaringDate')}" 
                              hintBefore='<p class="form-hint" id="beforeClaimCaring_date_defaultDateContextualHelp">For example, 16 5 2015</p>'
                 />
             </ul>

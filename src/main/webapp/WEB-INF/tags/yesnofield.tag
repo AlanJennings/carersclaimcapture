@@ -28,9 +28,9 @@
 </c:if>
 
 <c:if test="${hasError}" >
-    <c:set var="additionalClass" value="validation-error" />
+    <c:set var="errorClass" value="validation-error" />
 </c:if>
-<li class="form-group <c:out value='${additionalClass}'/>">
+<li class="form-group <c:out value='${errorClass}'/>">
     <c:if test="${hasError}" >
         <p class="validation-message">${errorMessage}</p>
     </c:if>
@@ -40,8 +40,12 @@
 
         ${hintBefore}
         <ul class="inline " id="${id}">  
-            <li>            
-                <div class="block-label" <%-- onmousedown="trackEvent('${currentPage}','${id}','Yes');" --%>>
+            <li>
+                <%-- 
+                    clicking on a label is the same as clicking on an input (to gain focus probably), so by spanning the control with a label
+                    instead of a div makes the whole control click-able, not just the tiny checkbox in the middle 
+                --%>
+                <label class="block-label">
                     <input type="radio" 
                            id="${id}_yes" 
                            name="${name}" 
@@ -49,12 +53,15 @@
                            <c:if test="${value=='yes'}">checked</c:if>  
                     />
                     <span><c:out value="${yesLabel}" /></span>
-                </div>
+                </label>
             </li>
                 
             <li>                                     
-                <div class="block-label" <%-- onmousedown="trackEvent('${currentPage}','${id}','No');" --%>
-                >
+                <%-- 
+                    clicking on a label is the same as clicking on an input (to gain focus probably), so by spanning the control with a label
+                    instead of a div makes the whole control click-able, not just the tiny checkbox in the middle 
+                --%>            
+                <label class="block-label">
                     <input type="radio" 
                            id="${id}_no" 
                            name="${name}" 
@@ -62,7 +69,7 @@
                            <c:if test="${value=='no'}">checked</c:if>  
                     />
                     <span><c:out value="${noLabel}" /></span>
-                </div>
+                </label>
             </li>
         </ul>
         ${hintAfter}

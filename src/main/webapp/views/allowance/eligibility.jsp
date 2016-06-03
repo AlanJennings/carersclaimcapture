@@ -4,8 +4,8 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<t:mainPage>
-    <t:pageContent pageTitle="Can you get Carer's Allowance?" backLink="${previousPage}">
+<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+    <t:pageContent errors="${validationErrors}" pageTitle="Can you get Carer's Allowance?" backLink="${previousPage}">
         <t:yesnofield id="over35HoursAWeek" 
                       name="over35HoursAWeek" 
                       value="${over35HoursAWeek}"
@@ -17,8 +17,8 @@
                                   <a rel="external" href="https://gov.uk/carers-credit" target="_blank"> Carer&rsquo;s Credit</a>.
                               </p>                
                           </div>'
-                      hasError="${errors.hasError('over35HoursAWeek')}" 
-                      errorMessage="${errors.getErrorMessage('over35HoursAWeek')}" 
+                      hasError="${validationErrors.hasError('over35HoursAWeek')}" 
+                      errorMessage="${validationErrors.getErrorMessage('over35HoursAWeek')}" 
         />
 
         <t:yesnofield id="over16YearsOld" 
@@ -29,8 +29,8 @@
                           <div id="warningover16_answer" class="validation-summary" style="display: none;">                
                               <p>You can only get Carer&rsquo;s Allowance if you&rsquo;re 16 or over.</p>                
                           </div>'
-                      hasError="${errors.hasError('over16YearsOld')}" 
-                      errorMessage="${errors.getErrorMessage('over16YearsOld')}" 
+                      hasError="${validationErrors.hasError('over16YearsOld')}" 
+                      errorMessage="${validationErrors.getErrorMessage('over16YearsOld')}" 
         />
 
         <t:radiobuttons id="originCountry" 
@@ -47,8 +47,8 @@
                                   must apply to find out.
                               </p>
                           </div>'
-                        hasError="${errors.hasError('originCountry')}" 
-                        errorMessage="${errors.getErrorMessage('originCountry')}" 
+                        hasError="${validationErrors.hasError('originCountry')}" 
+                        errorMessage="${validationErrors.getErrorMessage('originCountry')}" 
         />
     </t:pageContent>
     

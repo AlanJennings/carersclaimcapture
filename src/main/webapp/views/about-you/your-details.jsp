@@ -4,13 +4,14 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<t:mainPage>
-    <t:pageContent pageTitle="About you - the carer" section="Section 3 of 11" backLink="${previousPage}">
+<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+
+    <t:pageContent errors="${validationErrors}" pageTitle="About you - the carer" section="Section 3 of 11" backLink="${previousPage}">
     
-        <t:textedit id="title" name="title" value="${title}" maxLength="20" label="Title" hasError="${errors.hasError('title')}" errorMessage="${errors.getErrorMessage('title')}" /> 
-        <t:textedit id="firstName" name="firstName" value="${firstName}" maxLength="17" label="First name" hasError="${errors.hasError('firstName')}" errorMessage="${errors.getErrorMessage('firstName')}" />
-        <t:textedit id="middleName" name="middleName" value="${middleName}" maxLength="17" label="Middle name(s)" hasError="${errors.hasError('middleName')}" errorMessage="${errors.getErrorMessage('middleName')}" />
-        <t:textedit id="surname" name="surname" value="${surname}" maxLength="35" label="Last name" hasError="${errors.hasError('surname')}" errorMessage="${errors.getErrorMessage('surname')}" />
+        <t:textedit id="title" name="title" value="${title}" maxLength="20" label="Title" hasError="${validationErrors.hasError('title')}" errorMessage="${validationErrors.getErrorMessage('title')}" /> 
+        <t:textedit id="firstName" name="firstName" value="${firstName}" maxLength="17" label="First name" hasError="${validationErrors.hasError('firstName')}" errorMessage="${validationErrors.getErrorMessage('firstName')}" />
+        <t:textedit id="middleName" name="middleName" value="${middleName}" maxLength="17" label="Middle name(s)" hasError="${validationErrors.hasError('middleName')}" errorMessage="${validationErrors.getErrorMessage('middleName')}" />
+        <t:textedit id="surname" name="surname" value="${surname}" maxLength="35" label="Last name" hasError="${validationErrors.hasError('surname')}" errorMessage="${validationErrors.getErrorMessage('surname')}" />
         
         <!-- We accept a possible space around each character with 9 max in nino ie. AB010203D so 9*2+1 ==> 19 chars max -->
         <t:textedit id="nationalInsuranceNumber" 
@@ -18,8 +19,8 @@
                     value="${nationalInsuranceNumber}" 
                     maxLength="19" 
                     label="National Insurance number" 
-                    hasError="${errors.hasError('nationalInsuranceNumber')}" 
-                    errorMessage="${errors.getErrorMessage('nationalInsuranceNumber')}" 
+                    hasError="${validationErrors.hasError('nationalInsuranceNumber')}" 
+                    errorMessage="${validationErrors.getErrorMessage('nationalInsuranceNumber')}" 
                     additionalClasses="ni-number"
                     hintBefore='<p class="form-hint">For example, VO123456D</p>'
                     hintAfter='<p class="form-hint">This is on your NI number card, benefit letter, payslip or P60.</p>'
@@ -32,9 +33,9 @@
                      valueDay="${dateOfBirth_day}" 
                      valueMonth="${dateOfBirth_month}" 
                      valueYear="${dateOfBirth_year}" 
-                     label="National Insurance number" 
-                     hasError="${errors.hasError('dateOfBirth')}" 
-                     errorMessage="${errors.getErrorMessage('dateOfBirth')}" 
+                     label="Date of birth" 
+                     hasError="${validationErrors.hasError('dateOfBirth')}" 
+                     errorMessage="${validationErrors.getErrorMessage('dateOfBirth')}" 
                      hintBefore='<p class="form-hint" id="dateOfBirth_defaultDateContextualHelp">For example, 16 5 1976</p>'
         />
 

@@ -4,8 +4,9 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<t:mainPage>
-    <t:pageContent pageTitle="About you - the carer" section="Section 3 of 11" backLink="${previousPage}">
+<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+
+    <t:pageContent errors="${validationErrors}" pageTitle="About you - the carer" section="Section 3 of 11" backLink="${previousPage}">
         <t:radiobuttons id="maritalStatus" 
                         name="maritalStatus" 
                         optionIds="Married or civil partner|Single|Divorced or civil partnership dissolved|Widowed or surviving civil partner|Separated|Living with partner"
@@ -17,8 +18,8 @@
                                       Living with partner"
                         value="${maritalStatus}"
                         label="Your status" 
-                        hasError="${errors.hasError('maritalStatus')}" 
-                        errorMessage="${errors.getErrorMessage('maritalStatus')}" 
+                        hasError="${validationErrors.hasError('maritalStatus')}" 
+                        errorMessage="${validationErrors.getErrorMessage('maritalStatus')}" 
         />
     
     </t:pageContent>

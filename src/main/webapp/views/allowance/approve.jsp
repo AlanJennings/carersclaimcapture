@@ -4,8 +4,8 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<t:mainPage>
-    <t:pageContent pageTitle="Can you get Carer's Allowance?" backLink="${previousPage}">
+<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+    <t:pageContent errors="${validationErrors}" pageTitle="Can you get Carer's Allowance?" backLink="${previousPage}">
 
         <input type="hidden" id="allowedToContinue" name="allowedToContinue" value="true"/>
         <input type="hidden" id="js" name="jsEnabled" value="false">
