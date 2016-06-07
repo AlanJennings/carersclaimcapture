@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.started;
+package uk.gov.dwp.carersallowance.controller;
 
 import java.util.Map;
 
@@ -12,8 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
 @Controller
 public class CareeDetailsController extends AbstractFormController {
@@ -31,11 +29,11 @@ public class CareeDetailsController extends AbstractFormController {
                                             "dateOfBirth_month",
                                             "dateOfBirth_year",
                                             "relationship",
-                                            "theirAddress",
+                                            "sameAddress",
                                             "address_lineOne",
                                             "address_lineTwo",
                                             "address_lineThree",
-                                            "postCode"};
+                                            "postcode"};
 
     @Override
     public String getCurrentPage() {
@@ -76,10 +74,8 @@ public class CareeDetailsController extends AbstractFormController {
         validateMandatoryFields(fieldValues, "Last name", "surname");
         validateMandatoryDateField(fieldValues, "Date of Birth", "dateOfBirth", new String[]{"dateOfBirth_day", "dateOfBirth_month", "dateOfBirth_year"});
         validateMandatoryFields(fieldValues, "What's their relationship to you?", "relationship");
-        validateMandatoryFields(fieldValues, "Do they live at the same address as you?", "theirAddress");
-        if(fieldValue_Equals(fieldValues, "thirdParty", "no")) {
-            validateMandatoryFields(fieldValues, "Address", "address_lineOne", "address_lineTwo");
-        }
+        validateMandatoryFields(fieldValues, "Do they live at the same address as you?", "sameAddress");
+        // address and postcode are not mandatory
 
         LOG.trace("Ending BenefitsController.validate");
     }

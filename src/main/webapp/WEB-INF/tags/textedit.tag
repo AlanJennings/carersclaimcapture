@@ -8,6 +8,7 @@
 <%@attribute name="additionalClasses" required="false" type="java.lang.String"%>
 
 <%@attribute name="outerClass" required="false" type="java.lang.String"%>
+<%@attribute name="outerStyle" required="false" type="java.lang.String"%>
 <%@attribute name="label" required="false" type="java.lang.String"%>
 <%@attribute name="hintBefore" required="false" type="java.lang.String"%>
 <%@attribute name="hintAfter" required="false" type="java.lang.String"%>
@@ -25,10 +26,14 @@
 </c:if>
 <%-- End of the default values --%>
 
+<c:if test="${not empty outerStyle}">
+    <c:set var='outerStyle' value=' style="${outerStyle}"' />
+</c:if>
+
 <c:if test="${hasError}" >
     <c:set var="errorClass" value="validation-error" />
 </c:if>
-<li class="<c:out value='${outerClass}'/> <c:out value='${errorClass}'/>">
+<li class="<c:out value='${outerClass}'/> <c:out value='${errorClass}'/> <c:out value='${outerStyle}'/>">
     <c:if test="${hasError}" >
         <p class="validation-message">${errorMessage}</p>
     </c:if>

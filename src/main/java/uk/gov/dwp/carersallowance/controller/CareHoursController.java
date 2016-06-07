@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.started;
+package uk.gov.dwp.carersallowance.controller;
 
 import java.util.Map;
 
@@ -13,16 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import uk.gov.dwp.carersallowance.controller.AbstractFormController;
-
 @Controller
-public class BreaksInCareController extends AbstractFormController {
-    private static final Logger LOG = LoggerFactory.getLogger(BreaksInCareController.class);
+public class CareHoursController extends AbstractFormController {
+    private static final Logger LOG = LoggerFactory.getLogger(CareHoursController.class);
 
-    private static final String CURRENT_PAGE  = "/breaks/breaks-in-care";
-    private static final String PAGE_TITLE    = "Breaks from care - About the person you care for";
+    private static final String CURRENT_PAGE  = "/care-you-provide/more-about-the-care";
+    private static final String PAGE_TITLE    = "More about the care you provide - About the person you care for";
 
-    private static final String[] FIELDS = {"answer"};
+    private static final String[] FIELDS = {"spent35HoursCaring"};
 
     @Override
     public String getCurrentPage() {
@@ -46,10 +44,6 @@ public class BreaksInCareController extends AbstractFormController {
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
     public String postForm(HttpServletRequest request, HttpSession session, Model model, RedirectAttributes redirectAttrs) {
-        // TODO we need to pick up multiple events here
-        // to add, edit, remove breaks
-        // see also BreakInCareDetailController
-
         return super.postForm(request, session, model, redirectAttrs);
     }
 
@@ -62,7 +56,7 @@ public class BreaksInCareController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "Have you had any more breaks from caring for this person since 1 March 2016?", "answer");
+        validateMandatoryFields(fieldValues, "Do you spend 35 hours or more each week caring for this person?", "spent35HoursCaring");
 
         LOG.trace("Ending BenefitsController.validate");
     }

@@ -16,13 +16,13 @@
                           name="hadPartnerSinceClaimDate" 
                           value="${hadPartnerSinceClaimDate}"
                           label="Have you lived with a partner at any time since your claim date?" 
-                          hintBefore="<div class="prompt">
+                          hintBefore='<div class="prompt">
                                           <p>Your claim date is 3 June 2016. By partner we mean:</p>
                                           <ul class="list-bullet">
-                                              <li>a person you're married to or live with as if you are married.</li>
-                                              <li>a civil partner or a person you live with as if you're civil partners.</li>
+                                              <li>a person you&#39;re married to or live with as if you are married.</li>
+                                              <li>a civil partner or a person you live with as if you&#39;re civil partners.</li>
                                           </ul>
-                                      </div>"
+                                      </div>'
                           errors="${validationErrors}" 
         />
         
@@ -64,7 +64,7 @@
                           name="separated" 
                           value="${separated}"
                           label="Have you separated since your claim date?" 
-                          hintBefore="<p class="form-hint">Your claim date is 3 June 2016.</p>"
+                          hintBefore='<p class="form-hint">Your claim date is 3 June 2016.</p>'
                           errors="${validationErrors}" 
             />
             

@@ -1,6 +1,7 @@
 package uk.gov.dwp.carersallowance.utils;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Wrap an object so that when it is logged we get readable output, but don't incur the cost of
@@ -19,9 +20,19 @@ public class LoggingObjectWrapper {
         }
 
         if(object instanceof String[]) {
-            return Arrays.asList(object).toString();
+            List<String> list = Arrays.asList((String[])object);
+            return list.toString();
         }
 
         return object.toString();
+    }
+
+    public static void main(String[] args) {
+        Object[] objects = new Object[]{"single", new String[]{"one", "two"}, null};
+        for(Object object : objects) {
+            System.out.println(object);
+            System.out.println(new LoggingObjectWrapper(object));
+            System.out.println();
+        }
     }
 }

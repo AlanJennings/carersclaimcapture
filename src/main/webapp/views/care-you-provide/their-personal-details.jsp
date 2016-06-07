@@ -12,7 +12,6 @@
         <t:textedit id="firstName" name="firstName" value="${firstName}" maxLength="17" label="First name" errors="${validationErrors}" />
         <t:textedit id="middleName" name="middleName" value="${middleName}" maxLength="17" label="Middle name(s)" errors="${validationErrors}" />
         <t:textedit id="surname" name="surname" value="${surname}" maxLength="35" label="Last name" errors="${validationErrors}" />
-        <t:textedit id="otherNames" name="otherNames" value="${otherNames}" maxLength="35" label="Other surname or maiden name (optional)" errors="${validationErrors}" />
         
         <!-- We accept a possible space around each character with 9 max in nino ie. AB010203D so 9*2+1 ==> 19 chars max -->
         <t:textedit id="nationalInsuranceNumber" 
@@ -38,22 +37,33 @@
                      hintBefore='<p class="form-hint" id="dateOfBirth_defaultDateContextualHelp">For example, 16 5 1976</p>'
         />
         
-        <t:textedit id="nationality" name="nationality" value="${nationality}" maxLength="35" label="Nationality" errors="${validationErrors}" />
-        
-        <t:yesnofield id="separated" 
-                      name="separated" 
-                      value="${separated}"
-                      label="Have you separated since your claim date?" 
-                      hintBefore="<p class="form-hint">Your claim date is 3 June 2016.</p>"
-                      errors="${validationErrors}" 
+        <t:textedit id="relationship" 
+                    name="relationship" 
+                    value="${relationship}" 
+                    maxLength="35" 
+                    label="What's their relationship to you?" 
+                    errors="${validationErrors}" 
+                    hintBefore='<p class="form-hint">For example, father, mother, son, daughter.</p>'
         />
         
-        <t:yesnofield id="isPartnerPersonYouCareFor" 
-                      name="isPartnerPersonYouCareFor" 
-                      value="${isPartnerPersonYouCareFor}"
-                      label="Is this the person you care for?" 
-                      errors="${validationErrors}" 
-        />
+        <t:yesnofield id="sameAddress" name="sameAddress" value="${sameAddress}" label="Do they live at the same address as you?" errors="${validationErrors}" />
+        
+        <t:hiddenPanel id="addressWrapper" triggerId="sameAddress" triggerValue="no">
+            <t:address id="address" 
+                       nameOne="address_lineOne"
+                       nameTwo="address_lineTwo"
+                       nameThree="address_lineThree"
+                       valueOne="${address_lineOne}"
+                       valueTwo="${address_lineTwo}"
+                       valueThree="${address_lineThree}"
+                       maxlength="35"
+                       label="Address"
+                       errors="${validationErrors}"
+            />
+            
+            <t:textedit id="postcode" name="postcode" value="${postcode}" maxLength="10" label="Postcode" errors="${validationErrors}" />
+            
+        </t:hiddenPanel>
 
 
     </t:pageContent>

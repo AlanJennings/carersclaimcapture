@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.started;
+package uk.gov.dwp.carersallowance.controller.breaks;
 
 import java.util.Map;
 
@@ -15,6 +15,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
+/**
+ * A new empty care break has an index of -1;
+ * Otherwise the care break index is whatever is appropriate
+ * @author drh
+ *
+ */
 @Controller
 public class BreakInCareDetailController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(BreakInCareDetailController.class);

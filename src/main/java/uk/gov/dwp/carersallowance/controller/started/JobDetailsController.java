@@ -85,9 +85,7 @@ public class JobDetailsController extends AbstractFormController {
 
         validateMandatoryFields(fieldValues, "Employer's name", "employerName");
         validateMandatoryFields(fieldValues, "Contact number", "phoneNumber");
-        if(fieldValue_NotBlank(fieldValues, "phoneNumber")) {
-            validateRegexField(fieldValues, "Contact number", "phoneNumber", PHONE_REGEX);
-        }
+        validateRegexField(fieldValues, "Contact number", "phoneNumber", PHONE_REGEX);
         validateMandatoryFields(fieldValues, "Address", "address_lineOne", "address_lineTwo");
         validateMandatoryFields(fieldValues, "Did you start this job before 1 May 2016?", "startJobBeforeClaimDate");
         validateMandatoryFields(fieldValues, "Have you finished this job?", "finishedThisJob");

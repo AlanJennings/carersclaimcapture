@@ -32,9 +32,11 @@
                                  </p>'
         />
 
-        <t:hmtlsection value='<div id="claimDateWarning" class="prompt breaks-prompt validation-summary">
-                                  <p>You can&rsquo;t claim Carer&rsquo;s Allowance more than 3 months in advance.</p>
-                              </div>' />
+        <t:pre>
+            <div id="claimDateWarning" class="prompt breaks-prompt validation-summary">
+                <p>You can't claim Carer's Allowance more than 3 months in advance.</p>
+            </div>
+        </t:pre>
 
         <t:yesnofield id="beforeClaimCaring" 
                       name="beforeClaimCaring" 
@@ -73,12 +75,6 @@
 
     <script type="text/javascript">
         $(function() {
-            window.initEvents("beforeClaimCaring_yes",
-                              "beforeClaimCaring_no",
-                              "beforeClaimCaring_date_day",
-                              "beforeClaimCaring_date_month",
-                              "beforeClaimCaring_date_year");
-
             window.initDateWarning("claimDateWarning",
                                    "dateOfClaim_day",
                                    "dateOfClaim_month",

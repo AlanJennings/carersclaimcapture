@@ -38,17 +38,18 @@
   };
 
   initDateWarningOnChange = function(warningId, day, month, year, text, testMode) {
-    var dayV, futureDate, monthV, showWarningMsg, yearV;
-    dayV = $("#" + day).val();
-    monthV = $("#" + month).val();
-    yearV = $("#" + year).val();
-    showWarningMsg = false;
+    var dayV = $("#" + day).val();
+    var monthV = $("#" + month).val();
+    var yearV = $("#" + year).val();
+    var showWarningMsg = false;
+    
     if (dayV.length > 0 && monthV.length > 0 && yearV.length > 0) {
-      futureDate = new Date(yearV, monthV - 1, dayV);
+      var futureDate = new Date(yearV, monthV - 1, dayV);
       if (isLegalDate(dayV, monthV, yearV) && Date.today().add(3).months().getTime() <= futureDate.getTime()) {
         showWarningMsg = true;
       }
     }
+    
     if (showWarningMsg) {
       $("#" + warningId).slideDown(0);
       if (!testMode) {

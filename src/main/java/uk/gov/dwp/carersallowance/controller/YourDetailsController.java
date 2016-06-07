@@ -17,9 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class YourDetailsController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(YourDetailsController.class);
 
-    private static final String PREVIOUS_PAGE = "/your-claim-date/claim-date";
     private static final String CURRENT_PAGE  = "/about-you/your-details";
-    private static final String NEXT_PAGE     = "/about-you/marital-status";
     private static final String PAGE_TITLE    = "Your details - About you - the carer";
 
     private static final String[] FIELDS = {"title",

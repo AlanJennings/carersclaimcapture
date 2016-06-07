@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.started;
+package uk.gov.dwp.carersallowance.controller;
 
 import java.util.Map;
 
@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import uk.gov.dwp.carersallowance.controller.AbstractFormController;
-
 @Controller
 public class PartnerDetailsController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(PartnerDetailsController.class);
@@ -28,11 +26,11 @@ public class PartnerDetailsController extends AbstractFormController {
                                             "middleName",
                                             "surname",
                                             "otherNames",
-                                            "nationalInsuranceNumber.nino",
+                                            "nationalInsuranceNumber",
                                             "dateOfBirth_day",
                                             "dateOfBirth_month",
                                             "dateOfBirth_year",
-                                            "partner.nationality",
+                                            "nationality",
                                             "separated",
                                             "isPartnerPersonYouCareFor",
                                             };
@@ -69,19 +67,21 @@ public class PartnerDetailsController extends AbstractFormController {
      * @return
      */
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
-        LOG.trace("Starting BenefitsController.validate");
+        LOG.trace("Starting PartnerDetailsController.validate");
 
         validateMandatoryFields(fieldValues, "Have you lived with a partner at any time since your claim date?", "hadPartnerSinceClaimDate");
         if(fieldValue_Equals(fieldValues, "hadPartnerSinceClaimDate", "yes")) {
             validateMandatoryFields(fieldValues, "Title", "title");
             validateMandatoryFields(fieldValues, "First name", "firstName");
             validateMandatoryFields(fieldValues, "Last name", "surname");
+            validateMandatoryFields(fieldValues, "National Insurance number", "nationalInsuranceNumber");
+            validateRegexField(fieldValues,"National Insurance number", "nationalInsuranceNumber", AbstractFormController.ValidationPatterns.NINO_REGEX);
             validateMandatoryDateField(fieldValues, "Date of Birth", "dateOfBirth", new String[]{"dateOfBirth_day", "dateOfBirth_month", "dateOfBirth_year"});
             validateMandatoryFields(fieldValues, "Nationality", "nationality");
             validateMandatoryFields(fieldValues, "Have you separated since your claim date?", "separated");
             validateMandatoryFields(fieldValues, "Is this the person you care for?", "isPartnerPersonYouCareFor");
         }
 
-        LOG.trace("Ending BenefitsController.validate");
+        LOG.trace("Ending PartnerDetailsController.validate");
     }
 }

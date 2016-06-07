@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.started;
+package uk.gov.dwp.carersallowance.controller;
 
 import java.util.Map;
 
@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import uk.gov.dwp.carersallowance.controller.AbstractFormController;
-
 //TODO
 @Controller
 public class NationalityController extends AbstractFormController {
@@ -27,9 +25,11 @@ public class NationalityController extends AbstractFormController {
                                             "actualnationality",
                                             "alwaysLivedInUK",
                                             "liveInUKNow",
+                                            "arrivedInUK",
                                             "arrivedInUKDate_day",
                                             "arrivedInUKDate_month",
                                             "arrivedInUKDate_year",
+                                            "arrivedInUKFrom",
                                             "trip52Weeks",
                                             "tripDetails"};
 
@@ -83,6 +83,7 @@ public class NationalityController extends AbstractFormController {
 
                 if(fieldValue_Equals(fieldValues, "arrivedInUK", "less")) {
                     validateMandatoryDateField(fieldValues, "Date arrived", "arrivedInUKDate", new String[]{"arrivedInUKDate_day", "arrivedInUKDate_month", "arrivedInUKDate_year"});
+                    validateMandatoryFields(fieldValues, "Which country did you live in?", "arrivedInUKFrom");
                 }
             }
         }
