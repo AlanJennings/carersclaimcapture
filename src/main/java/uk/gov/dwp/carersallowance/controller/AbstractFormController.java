@@ -23,8 +23,8 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import uk.gov.dwp.carersallowance.controller.breaks.IllegalFieldValueException;
-import uk.gov.dwp.carersallowance.controller.breaks.InconsistentFieldValuesException;
+import uk.gov.dwp.carersallowance.session.IllegalFieldValueException;
+import uk.gov.dwp.carersallowance.session.InconsistentFieldValuesException;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.session.SessionManager.Session;
 import uk.gov.dwp.carersallowance.utils.CollectionUtils;
