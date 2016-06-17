@@ -8,8 +8,8 @@
     <t:pageContent errors="${validationErrors}" pageTitle="Can you get Carer's Allowance?">
         <t:radiobuttons id="benefitsAnswer" 
                         name="benefitsAnswer" 
-                        optionIds="PIP|DLA|AA|CAA|AFIP|NONE"
-                        optionValues="Personal Independence Payment (PIP) daily living component|
+                        optionValues="PIP|DLA|AA|CAA|AFIP|NONE"
+                        optionLabels="Personal Independence Payment (PIP) daily living component|
                                       Disability Living Allowance (DLA) - middle or highest care rate|
                                       Attendance Allowance (AA)|
                                       Constant Attendance Allowance (CAA)|

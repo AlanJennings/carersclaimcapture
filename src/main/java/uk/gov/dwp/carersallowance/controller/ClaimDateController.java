@@ -7,11 +7,14 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import uk.gov.dwp.carersallowance.session.SessionManager;
 
 //TODO
 @Controller
@@ -28,6 +31,11 @@ public class ClaimDateController extends AbstractFormController {
                                             "beforeClaimCaringDate_year",
                                             "beforeClaimCaringDate_month",
                                             "beforeClaimCaringDate_day"};
+
+    @Autowired
+    public ClaimDateController(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
     @Override
     public String getCurrentPage() {
@@ -52,6 +60,11 @@ public class ClaimDateController extends AbstractFormController {
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
     public String postForm(HttpServletRequest request, HttpSession session, Model model, RedirectAttributes redirectAttrs) {
         return super.postForm(request, session, model, redirectAttrs);
+    }
+
+    @Override
+    public void finalizePostForm(HttpServletRequest request) {
+        saveFormattedDate(request.getSession(), "dateOfClaim", "dd MMMMMMMMMM yyyy", "dateOfClaim_year", "dateOfClaim_month", "dateOfClaim_day");
     }
 
     /**

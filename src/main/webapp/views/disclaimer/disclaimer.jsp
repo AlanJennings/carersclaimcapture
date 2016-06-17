@@ -7,28 +7,32 @@
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" pageTitle="Before you start" nextButtonText="I agree - start my application" backLink="${previousPage}">
-        <t:hmtlsection value='<p>When you claim Carer&rsquo;s Allowance the person you care for may stop getting:</p>'/> 
+        <t:hmtlsection><p>When you claim Carer&rsquo;s Allowance the person you care for may stop getting:</p></t:hmtlsection>
 
-        <t:hmtlsection value='<ul class="list-bullet">
-            <li>a severe disability premium paid with their benefits, if they get one</li>
-            <li>an extra amount for severe disability paid with Pension Credit, if they get one</li>
-            <li>reduced Council Tax, if 
+        <t:hmtlsection> 
+            <ul class="list-bullet">
+                <li>a severe disability premium paid with their benefits, if they get one</li>
+                <li>an extra amount for severe disability paid with Pension Credit, if they get one</li>
+                <li>reduced Council Tax, if 
+                    <a rel="external" 
+                       href="https://www.gov.uk/find-your-local-council" 
+                       target="_blank" 
+                    >their local council</a> 
+                    offers it
+                </li>
+            </ul>
+        </t:hmtlsection>
+
+        <t:hmtlsection>
+            <p>Read more about 
                 <a rel="external" 
-                   href="https://www.gov.uk/find-your-local-council" 
-                   target="_blank" 
-                >their local council</a> 
-                offers it
-            </li>
-        </ul>' />
-
-        <t:hmtlsection value='<p>Read more about 
-            <a rel="external" 
-               href="https://www.gov.uk/carers-allowance/what-youll-get" 
-               target="_blank"
-            >how Carer&rsquo;s Allowance affects other benefits</a>.
-        </p>' />
+                   href="https://www.gov.uk/carers-allowance/what-youll-get" 
+                   target="_blank"
+                >how Carer&rsquo;s Allowance affects other benefits</a>.
+            </p>
+        </t:hmtlsection>
     
-        <t:hmtlsection value='<p>You <b>must</b> tell the person you care for before you claim.</p>' />
+        <t:hmtlsection><p>You <b>must</b> tell the person you care for before you claim.</p></t:hmtlsection>
     </t:pageContent>
 
 

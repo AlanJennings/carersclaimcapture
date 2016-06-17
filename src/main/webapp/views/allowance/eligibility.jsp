@@ -31,8 +31,8 @@
 
         <t:radiobuttons id="originCountry" 
                         name="originCountry" 
-                        optionIds="GB|NI|OTHER"
-                        optionValues="England, Scotland or Wales|Northern Ireland|Another country"
+                        optionValues="GB|NI|OTHER"
+                        optionLabels="England, Scotland or Wales|Northern Ireland|Another country"
                         value="${originCountry}"
                         label="Which country do you live in?" 
                         errors="${validationErrors}" 

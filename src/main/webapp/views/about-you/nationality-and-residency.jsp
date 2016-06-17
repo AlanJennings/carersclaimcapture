@@ -10,8 +10,8 @@
 
         <t:radiobuttons id="nationality" 
                         name="nationality" 
-                        optionIds="British|Another_nationality"
-                        optionValues="British|
+                        optionValues="British|Another_nationality"
+                        optionLabels="British|
                                       Another nationality"
                         value="${nationality}"
                         label="What is your nationality?" 
@@ -40,8 +40,8 @@
             <t:hiddenPanel id="liveInUKNowYesWrap" triggerId="liveInUKNow" triggerValue="yes">
                 <t:radiobuttons id="arrivedInUK" 
                             name="arrivedInUK" 
-                            optionIds="less|more"
-                            optionValues="Less than 3 years ago|
+                            optionValues="less|more"
+                            optionLabels="Less than 3 years ago|
                                           More than 3 years ago"
                             value="${arrivedInUK}"
                             label="When did you arrive in England, Scotland or Wales?" 

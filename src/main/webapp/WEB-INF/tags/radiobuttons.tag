@@ -3,8 +3,8 @@
 
 <%@attribute name="id" required="true" type="java.lang.String"%>
 <%@attribute name="name" required="true" type="java.lang.String"%>
-<%@attribute name="optionIds" required="true" type="java.lang.String"%> <!-- Note optionIds are white-space sensitive -->
-<%@attribute name="optionValues" required="true" type="java.lang.String"%>
+<%@attribute name="optionValues" required="true" type="java.lang.String"%> <!-- Note optionValues are white-space sensitive -->
+<%@attribute name="optionLabels" required="true" type="java.lang.String"%>
 <%@attribute name="value" required="false" type="java.lang.String"%>
 <%@attribute name="label" required="false" type="java.lang.String"%>
 <%@attribute name="hintBefore" required="false" type="java.lang.String"%>
@@ -33,24 +33,24 @@
 
         ${hintBefore}
         <ul class="form-group form-group-compound" id="${id}">
-            <c:forTokens items="${optionIds}" delims="|" var="optionId" varStatus="optionIdIndex">
+            <c:forTokens items="${optionValues}" delims="|" var="optionValue" varStatus="optionValueIndex">
                <li>                
                     <%-- 
                         clicking on a label is the same as clicking on an input (to gain focus probably), so by spanning the control 
                         with a label instead of a div makes the whole control click-able, not just the tiny radio button in the middle 
                     --%>
-                    <label class="block-label" for="${id}_${optionId}">
+                    <label class="block-label" for="${id}_${optionValue}">
                         <input type="radio" 
-                               id="${id}_${optionId}" 
+                               id="${id}_${optionValue}" 
                                name="${name}" 
                                onmousedown=""  
-                               value="${optionId}"  
-                               <c:if test="${value==optionId}">checked</c:if>  
+                               value="${optionValue}"  
+                               <c:if test="${value==optionValue}">checked</c:if>  
                         >
                         <%-- A bit inefficient, but less hacky than the alternatives --%>
-                        <c:forTokens items="${optionValues}" delims="|" var="optionValue" varStatus="optionValueIndex">
-                            <c:if test="${optionIdIndex.index==optionValueIndex.index}">
-                                <span>${optionValue}</span>
+                        <c:forTokens items="${optionLabels}" delims="|" var="optionLabel" varStatus="optionLabelIndex">
+                            <c:if test="${optionValueIndex.index==optionLabelIndex.index}">
+                                <span>${optionLabel}</span>
                             </c:if>
                         </c:forTokens>
                     </label>

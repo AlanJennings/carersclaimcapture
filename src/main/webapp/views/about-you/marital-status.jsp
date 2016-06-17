@@ -9,8 +9,8 @@
     <t:pageContent errors="${validationErrors}" pageTitle="About you - the carer" section="Section 3 of 11" backLink="${previousPage}">
         <t:radiobuttons id="maritalStatus" 
                         name="maritalStatus" 
-                        optionIds="Married or civil partner|Single|Divorced or civil partnership dissolved|Widowed or surviving civil partner|Separated|Living with partner"
-                        optionValues="Married or civil partner|
+                        optionValues="Married or civil partner|Single|Divorced or civil partnership dissolved|Widowed or surviving civil partner|Separated|Living with partner"
+                        optionLabels="Married or civil partner|
                                       Single|
                                       Divorced or civil partnership dissolved|
                                       Widowed or surviving civil partner|

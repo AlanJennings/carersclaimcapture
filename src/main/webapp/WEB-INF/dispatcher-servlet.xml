@@ -16,6 +16,7 @@
     <mvc:annotation-driven />
     
     <context:component-scan base-package="uk.gov.dwp.carersallowance.controller" />
+    <context:component-scan base-package="uk.gov.dwp.carersallowance.session" />    
     
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix"><value>/views/</value></property>

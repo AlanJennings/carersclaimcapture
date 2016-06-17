@@ -1,7 +1,11 @@
 package uk.gov.dwp.carersallowance.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +13,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -18,6 +23,10 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import uk.gov.dwp.carersallowance.controller.breaks.IllegalFieldValueException;
+import uk.gov.dwp.carersallowance.controller.breaks.InconsistentFieldValuesException;
+import uk.gov.dwp.carersallowance.session.SessionManager;
+import uk.gov.dwp.carersallowance.session.SessionManager.Session;
 import uk.gov.dwp.carersallowance.utils.CollectionUtils;
 import uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper;
 import uk.gov.dwp.carersallowance.utils.Parameters;
@@ -64,10 +73,11 @@ public abstract class AbstractFormController {
     public static final String   PHONE_REGEX = "[ 0123456789]{0,20}";       // probably convert to an enum
     public static final String   EMAIL_REGEX = "[ 0123456789]{0,20}";       // probably convert to an enum
 
+    private SessionManager    sessionManager;
     private ValidationSummary validationSummary;
     private List<String>      pageList;
 
-    public AbstractFormController() {
+    public AbstractFormController(SessionManager sessionManager) {
         validationSummary = new ValidationSummary();
         pageList = new ArrayList<>(Arrays.asList(PAGES));
     }
@@ -82,22 +92,30 @@ public abstract class AbstractFormController {
 
     /*********************** END ABSTRACT METHODS ******************************/
 
-    public ValidationSummary getValidationSummary() { return validationSummary; }
+    public Session           getSession(String sessionId)   { return sessionManager.getSession(sessionId); }
+    public ValidationSummary getValidationSummary()         { return validationSummary; }
 
-    public String getPreviousPage() {
+    public String getPreviousPage(HttpServletRequest request) {
         String currentPage = getCurrentPage();
         int index = pageList.indexOf(currentPage);
-        if(index == 0) {
+        if(index == -1 || index == 0) {
+            // not found or first
             return null;
         }
         String previousPage = pageList.get(index - 1);
         return previousPage;
     }
 
-    public String getNextPage() {
+    /**
+     * @param request TODO will almost definitely replace request with a reference to
+     *                     the internalized application state (cf. session)
+     * @return
+     */
+    public String getNextPage(HttpServletRequest request) {
         String currentPage = getCurrentPage();
         int index = pageList.indexOf(currentPage);
-        if(index == (pageList.size() -1)) {
+        if(index == -1 || index == (pageList.size() -1)) {
+            // not found or last
             return null;
         }
         String nextPage = pageList.get(index + 1);
@@ -107,17 +125,23 @@ public abstract class AbstractFormController {
     protected String showForm(HttpServletRequest request, Model model) {
 
         LOG.trace("Starting AbstractFormController.showForm");
-        LOG.debug("model = {}", model);
+        try {
+            LOG.debug("model = {}", model);
 
-        model.addAttribute("previousPage", getPreviousPage());
-        model.addAttribute("currentPage", getCurrentPage());
-        model.addAttribute("nextPage", getNextPage());
-        model.addAttribute("pageTitle", getPageTitle());
+            model.addAttribute("previousPage", getPreviousPage(request));   // not sure if we can use this as the request data is not available yet
+            model.addAttribute("currentPage", getCurrentPage());
+            model.addAttribute("nextPage", getNextPage(request));           // not sure if we can use this as the request data is not available yet
+            model.addAttribute("pageTitle", getPageTitle());
 
-        copyFromSessionToModel(request, getFields(), model);
+            copyFromSessionToModel(request, getFields(), model);
 
-        LOG.trace("Ending AbstractFormController.showForm");
-        return getCurrentPage();        // returns the view name
+            return getCurrentPage();        // returns the view name
+        } catch(RuntimeException e) {
+            LOG.error("Unexpected RuntimeException", e);
+            throw e;
+        } finally {
+            LOG.trace("Ending AbstractFormController.showForm");
+        }
     }
 
     /**
@@ -164,10 +188,22 @@ public abstract class AbstractFormController {
                 return showForm(request, model);
             }
 
-            return "redirect:" + getNextPage();
+            String nextPage = "redirect:" + getNextPage(request);
+            LOG.debug("next page = {}", nextPage);
+
+            finalizePostForm(request);
+
+            return nextPage;
+        } catch(RuntimeException e) {
+            LOG.error("Unexpected RuntimeException", e);
+            throw e;
         } finally {
             LOG.trace("Ending AbstractFormController.postForm");
         }
+    }
+
+    protected void finalizePostForm(HttpServletRequest request) {
+        // do nothing
     }
 
     /**
@@ -222,7 +258,7 @@ public abstract class AbstractFormController {
      * Copy the named values from the model to the session
      */
     protected void copyFromRequestToSession(HttpServletRequest request, String[] fieldNames) {
-        LOG.trace("Started AbstractFormController.syncModelToSession");
+        LOG.trace("Started AbstractFormController.copyFromRequestToSession");
         try {
             Parameters.validateMandatoryArgs(request, "request");
             if(fieldNames == null) {
@@ -243,7 +279,24 @@ public abstract class AbstractFormController {
                 session.setAttribute(fieldName,  fieldValue);
             }
         } finally {
-            LOG.trace("Ending AbstractFormController.syncModelToSession");
+            LOG.trace("Ending AbstractFormController.copyFromRequestToSession");
+        }
+    }
+
+    protected void removeFromSession(HttpSession session, String[] fieldNames) {
+        LOG.trace("Started AbstractFormController.removeFromSession");
+        try {
+            Parameters.validateMandatoryArgs(session, "session");
+            if(fieldNames == null) {
+                return;
+            }
+
+            LOG.debug("fieldNames = {}", Arrays.asList(fieldNames));
+            for(String fieldName: fieldNames) {
+                session.removeAttribute(fieldName);
+            }
+        } finally {
+            LOG.trace("Ending AbstractFormController.removeFromSession");
         }
     }
 
@@ -487,6 +540,231 @@ public abstract class AbstractFormController {
 
     protected boolean hasErrors() {
         return validationSummary.hasFormErrors();
+    }
+
+    protected void logRequest(HttpServletRequest request) {
+        LOG.info("request = {}", request);
+        if(request == null) {
+            return;
+        }
+
+        LOG.debug("\trequest URL = '{}{}'", request.getRequestURL(), request.getQueryString() == null ? "" : "?" + request.getQueryString());
+        LOG.debug("\tmethod = {}, contentType = {}, character encoding = {}, async context = {}", request.getMethod(), request.getContentType(), request.getCharacterEncoding(), request.getAsyncContext());
+
+        List<String> paramNames = Collections.list(request.getParameterNames());
+        LOG.debug("\tparameter names = {}", paramNames);
+        for(String paramName: paramNames) {
+            LOG.debug("\tparameter: '{}' = '{}'", paramName, new LoggingObjectWrapper(request.getParameterValues(paramName)));
+        }
+
+        List<String> attrNames = Collections.list(request.getAttributeNames());
+        LOG.debug("\tattribute names = {}", attrNames);
+        for(String attrName: attrNames) {
+            String attrValueStr = null;
+            Object attrValue = request.getAttribute(attrName);
+            if(attrValue != null) {
+                attrValueStr = attrValue.getClass().getName() + "@" + System.identityHashCode(attrValue);
+            }
+            LOG.debug("\tattribute: '{}' = '{}'", attrName, attrValueStr);
+        }
+
+        List<String> headerNames = Collections.list(request.getHeaderNames());
+        LOG.debug("\theader names = {}", headerNames);
+        for(String header: headerNames) {
+            LOG.debug("\theader: '{}' = '{}'", header, request.getHeader(header));
+        }
+
+        Cookie[] cookies = request.getCookies();
+        for(Cookie cookie: cookies) {
+            LOG.debug("\tcookie: '{}' = '{}'", cookie.getName(), cookie.getValue());  // there are other properties as well
+        }
+    }
+
+    protected void logSession(HttpSession session) {
+        LOG.info("session = {}", session);
+        if(session == null) {
+            return;
+        }
+
+        session.getAttributeNames();
+
+        LOG.debug("\tsession ID = '{}', creation time = {}, last accessed time = {}", session.getId(), session.getCreationTime(), session.getLastAccessedTime());
+
+        List<String> attrNames = Collections.list(session.getAttributeNames());
+        LOG.debug("\tattribute names = {}", attrNames);
+        for(String attrName: attrNames) {
+            String attrValueStr = null;
+            Object attrValue = session.getAttribute(attrName);
+            if(attrValue != null) {
+                attrValueStr = attrValue.getClass().getName() + "@" + System.identityHashCode(attrValue);
+            }
+            LOG.debug("\tattribute: '{}' = {}:'{}'", attrName, attrValueStr, attrValue);
+        }
+    }
+
+    protected List<Map<String, String>> getFieldCollections(HttpSession session, String collectionName) {
+        return getFieldCollections(session, collectionName, false);
+    }
+
+    /**
+     * make the map the field collection
+     * make the list the field collection list? (yuk)
+     */
+    @SuppressWarnings("unchecked")
+    protected List<Map<String, String>> getFieldCollections(HttpSession session, String collectionName, boolean create) {
+        LOG.trace("Started AbstractFormController.getFieldCollections");
+        try {
+            Parameters.validateMandatoryArgs(session, "session");
+            LOG.debug("collectionName = {}, create = {}", collectionName, create);
+
+            if(collectionName == null) {
+                return null;
+            }
+
+            Object value = session.getAttribute(collectionName);
+            LOG.debug("value = {}", value);
+            if(value == null) {
+                if(create) {
+                    LOG.debug("Creating new Field Collection");
+                    List<Map<String, String>>newFieldCollection = new ArrayList<>();
+                    session.setAttribute(collectionName,  newFieldCollection);
+                    return newFieldCollection;
+                } else {
+                    return null;
+                }
+            }
+
+            if(value instanceof List) {
+                return (List<Map<String, String>>)value;
+            }
+
+            throw new IllegalStateException("FieldCollection List not of expected type:" + value.getClass().getName() + ", expecting " + List.class.getName());
+
+        } finally {
+            LOG.trace("Ending AbstractFormController.getFieldCollections");
+        }
+    }
+
+    protected void setFieldCollections(HttpSession session, String collectionName, List<Map<String, String>> values) {
+        Parameters.validateMandatoryArgs(new Object[]{session, collectionName}, new String[]{"session", "collectionName"});
+        session.setAttribute(collectionName,  values);
+    }
+
+    protected Boolean getYesNoBooleanFieldValue(HttpServletRequest request, String fieldName) {
+        return getBooleanFieldValue(request, fieldName, "yes", "no");
+    }
+
+    /**
+     * case-insensitive
+     *
+     * @throws IllegalFieldValueException
+     */
+    protected Boolean getBooleanFieldValue(HttpServletRequest request, String fieldName, String trueValue, String falseValue)
+            throws IllegalFieldValueException {
+
+                Parameters.validateMandatoryArgs(new Object[]{request, fieldName, trueValue, falseValue}, new String[]{"request", "fieldName", "trueValue", "falseValue"});
+                String[] values = request.getParameterValues(fieldName);
+                if(values == null || values.length == 0) {
+                    return null;
+                }
+
+                boolean yes = false;
+                boolean no = false;
+                boolean other = false;
+                for(String value : values) {
+                    if(trueValue.equalsIgnoreCase(value)) {
+                        yes = true;
+                    } else if(falseValue.equalsIgnoreCase(value)) {
+                        no = true;
+                    } else if(StringUtils.isEmpty(value) == false) {
+                        other = true;
+                    }
+                }
+
+                if(other == false && no == false && yes == false) {
+                    return null;
+                }
+
+                if(other == false) {
+                    if(yes == true && no == false) {
+                        return Boolean.TRUE;
+                    } else if(yes == false && no == true) {
+                        return Boolean.FALSE;
+                    }
+                }
+
+                if(other == true) {
+                    throw new IllegalFieldValueException(fieldName, values);
+                }
+                throw new InconsistentFieldValuesException(fieldName, values);
+            }
+
+    protected String getNextIdValue(List<Map<String, String>> fieldCollectionList, String idFieldName) {
+        int value = 0;
+        for(int index = 0; index < fieldCollectionList.size(); index++) {
+            Map<String, String> existingFieldCollection = fieldCollectionList.get(index);
+            String id = existingFieldCollection.get(idFieldName);
+            if(id == null) {
+                LOG.error("Missing ID field: " + idFieldName + " for record(" + index + "): " + existingFieldCollection);
+                throw new IllegalArgumentException("Missing ID field: " + idFieldName + " for record(" + index + ")");
+            }
+            try {
+                int idInt = Integer.parseInt(id.trim());
+                if(idInt > value) {
+                    value = idInt;
+                }
+            } catch(NumberFormatException e) {
+                LOG.error("ID field: " + idFieldName + " value is not an integer(" + id + ")");
+                throw new IllegalArgumentException("ID field: " + idFieldName + " value is not an integer(" + id + ")");
+            }
+        }
+
+        String result = Integer.toString(value + 1);
+        return result;
+    }
+
+    protected void saveFormattedDate(HttpSession session, String dateFieldName, String format, String yearFieldName, String monthFieldName, String dayFieldName) {
+    
+        Parameters.validateMandatoryArgs(new Object[]{session, dateFieldName, format, yearFieldName, monthFieldName, dayFieldName},
+                                         new String[]{"session", "dateFieldName", "format", "yearFieldName", "monthFieldName", "dayFieldName"});
+    
+        Integer day = getSessionInt(session, dayFieldName, "dayFieldName");
+        Integer month = getSessionInt(session, monthFieldName, "monthFieldName");
+        Integer year = getSessionInt(session, yearFieldName, "yearFieldName");
+        if(day == null && month == null && year == null) {
+            session.removeAttribute(dateFieldName);
+        }
+        if(day == null || month == null || year == null) {
+            throw new IllegalArgumentException("All date fields(day:'" + day + "', month:'" + month + "', year:'" + year + "') are not populated");
+        }
+    
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DATE, day);
+        calendar.set(Calendar.MONTH, month + 1);
+        calendar.set(Calendar.YEAR, year);
+        Date date = calendar.getTime();
+    
+        SimpleDateFormat formatter = new SimpleDateFormat(format);
+        String dateString = formatter.format(date);
+        session.setAttribute(dateFieldName, dateString);
+    }
+
+    protected Integer getSessionInt(HttpSession session, String field, String fieldName) {
+        Parameters.validateMandatoryArgs(new Object[]{session, field, fieldName}, new String[]{"session", "field", "fieldName"});
+        Object object = session.getAttribute(field);
+        if(StringUtils.isEmpty(object)) {
+            return null;
+        }
+    
+        if((object instanceof String) == false) {
+            throw new IllegalArgumentException("Expecting a 'String' session value:" + fieldName + " but found a " + object.getClass().getName());
+        }
+        String value = (String)object;
+        try {
+            return Integer.valueOf(value.trim());
+        } catch(NumberFormatException e) {
+            throw new IllegalArgumentException("Expecting a 'numerical' session value:" + fieldName + " but found: '" + value + "'");
+        }
     }
 
     public static class ValidationSummary {

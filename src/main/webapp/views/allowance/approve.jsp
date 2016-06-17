@@ -10,23 +10,21 @@
         <input type="hidden" id="allowedToContinue" name="allowedToContinue" value="true"/>
         <input type="hidden" id="js" name="jsEnabled" value="false">
         
-        <t:hmtlsection id="heading1"
-                       label="Based on your answers, you may get Carer's Allowance if:" 
-                       value='<ul class="list-bullet">
-                                  <li>your income is no more than &pound;110 a week (after tax and certain expenses)</li>
-                                  <li>you study less than 21 hours a week</li>
-                              </ul>' 
-        /> 
+        <t:hmtlsection id="heading1" label="Based on your answers, you may get Carer's Allowance if:"> 
+            <ul class="list-bullet">
+                <li>your income is no more than &pound;110 a week (after tax and certain expenses)</li>
+                <li>you study less than 21 hours a week</li>
+            </ul>
+        </t:hmtlsection> 
         
-        <t:hmtlsection id="headingDocumentation"
-                       label="To make your application you'll need:" 
-                       value='<ul class="list-bullet">
+        <t:hmtlsection id="headingDocumentation" label="To make your application you'll need:">
+            <ul class="list-bullet">
                 <li>your own and your partner&rsquo;s National Insurance number</li>
                 <li>bank details</li>
                 <li>your latest payslip or P45 if you’ve recently finished working</li>
                 <li>the National Insurance number or Disability Living Allowance reference of the person you care for</li>
-            </ul>' 
-        />
+            </ul> 
+        </t:hmtlsection>
 
     </t:pageContent>
     

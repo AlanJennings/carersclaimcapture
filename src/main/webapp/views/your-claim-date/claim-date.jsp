@@ -7,16 +7,18 @@
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" pageTitle="When do you want Carer's Allowance to start?" section="Section 2 of 11" backLink="${previousPage}">
-        <t:hmtlsection value='<p>
-                              Most claims can be backdated 3 months. You may be able to 
-                              <a rel="external" 
-                                 href="/claim-help#1"
-                                 target="_blank"
-                                 onmousedown="trackEvent(&#39;${currentPage}&#39;,&#39;Claim Notes - Backdating Claim Date&#39;);"
-                                 onkeydown="trackEvent(&#39;${currentPage}&#39;,&#39;Claim Notes - Backdating Claim Date&#39;);"
-                              >backdate it further</a> 
-                              if the person you care for was awarded their qualifying benefit in the last 3 months.
-                          </p>' />
+        <t:hmtlsection>
+            <p>
+                Most claims can be backdated 3 months. You may be able to 
+                <a rel="external" 
+                   href="/claim-help#1"
+                   target="_blank"
+                   onmousedown="trackEvent(&#39;${currentPage}&#39;,&#39;Claim Notes - Backdating Claim Date&#39;);"
+                   onkeydown="trackEvent(&#39;${currentPage}&#39;,&#39;Claim Notes - Backdating Claim Date&#39;);"
+                >backdate it further</a> 
+                if the person you care for was awarded their qualifying benefit in the last 3 months.
+            </p>
+        </t:hmtlsection>
         
         <t:datefield id="dateOfClaim" 
                      nameDay="dateOfClaim_day" 

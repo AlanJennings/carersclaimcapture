@@ -10,8 +10,8 @@
         <%--  Note the values have changed from 'yesCarer/noCarer to yes/no --%>
         <t:radiobuttons id="thirdParty" 
                         name="thirdParty" 
-                        optionIds="yes|no"
-                        optionValues="Yes, you're the carer|
+                        optionValues="yes|no"
+                        optionLabels="Yes, you're the carer|
                                       No, you're applying on behalf of the carer"
                         value="${thirdParty}"
                         label="Are you the carer?" 

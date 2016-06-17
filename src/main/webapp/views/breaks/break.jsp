@@ -8,19 +8,21 @@
 
     <t:pageContent errors="${validationErrors}" pageTitle="Breaks from care" section="" backLink="${previousPage}">
 
-        <t:datefield id="start" 
-                     nameDay="start_day" 
-                     nameMonth="start_month" 
-                     nameYear="start_year" 
-                     valueDay="${start_day}" 
-                     valueMonth="${start_month}" 
-                     valueYear="${start_year}" 
+        <input type="hidden" id="break_id" name="break_id" value="${break_id}" >
+        
+        <t:datefield id="startDate" 
+                     nameDay="startDate_day" 
+                     nameMonth="startDate_month" 
+                     nameYear="startDate_year" 
+                     valueDay="${startDate_day}" 
+                     valueMonth="${startDate_month}" 
+                     valueYear="${startDate_year}" 
                      label="When did the break start?" 
                      errors="${validationErrors}" 
                      hintBefore='<p class="form-hint" id="start_defaultDateContextualHelp">For example, 3 5 2016</p>'
         />
         
-        <%-- TODO Should this be a foldout? --%>
+        <%-- visibility controlled by javascript --%>
         <t:textedit id="startTime" 
                     name="startTime" 
                     value="${startTime}" 
@@ -31,21 +33,21 @@
                     outerStyle="display: none;"
         />
         
-        <t:radiobuttons id="wherePerson" 
-                        name="wherePerson" 
-                        optionIds="In hospital|In respite care|On holiday|At home|Somewhere else"
-                        optionValues="in hospital|
+        <t:radiobuttons id="whereCaree" 
+                        name="whereCaree" 
+                        optionValues="In_hospital|In_respite_care|On_holiday|At_home|Somewhere_else"
+                        optionLabels="in hospital|
                                       in respite care|
                                       on holiday|
                                       at home|
                                       somewhere else"
-                        value="${wherePerson}"
+                        value="${whereCaree}"
                         label="Where was the person you care for during the break?"
                         errors="${validationErrors}" 
                         hintBefore='<p class="form-hint">During this time, they were:</p>' 
         />
         
-        <t:hiddenPanel id="wherePersonBreaksInCareWrap" triggerId="wherePerson" triggerValue="somewhere else">
+        <t:hiddenPanel id="wherePersonBreaksInCareWrap" triggerId="whereCaree" triggerValue="Somewhere_else">
             <t:textarea id="whereCareeOtherText"
                         name="whereCareeOtherText"
                         value="${whereCareeOtherText}"
@@ -58,10 +60,10 @@
         <%-- TODO: Why are these in a different order? --%>
         <t:radiobuttons id="whereYou" 
                         name="whereYou" 
-                        optionIds="At home|On holiday|In hospital|Somewhere else"
-                        optionValues="at home
-                                      on holiday
-                                      in hospital
+                        optionValues="At_home|On_holiday|In_hospital|Somewhere_else"
+                        optionLabels="at home|
+                                      on holiday|
+                                      in hospital|
                                       somewhere else"
                         value="${whereYou}"
                         label="Where were you during the break?"
@@ -69,7 +71,7 @@
                         hintBefore='<p class="form-hint">During this time, I was:</p>' 
         />
         
-        <t:hiddenPanel id="whereYouBreaksInCareWrap" triggerId="whereYou" triggerValue="somewhere else">
+        <t:hiddenPanel id="whereYouBreaksInCareWrap" triggerId="whereYou" triggerValue="Somewhere_else">
             <t:textarea id="whereYouOtherText"
                         name="whereYouOtherText"
                         value="${whereYouOtherText}"
@@ -95,7 +97,7 @@
             />
         </t:hiddenPanel>
         
-        <t:yesnofield id="medicalDuringBreak" name="medicalDuringBreak" value="${medicalDuringBreak}" label="Did you or the person you care for get any medical treatment or professional care during this time?" errors="${validationErrors}" />
+        <t:yesnofield id="medicalCareDuringBreak" name="medicalCareDuringBreak" value="${medicalCareDuringBreak}" label="Did you or the person you care for get any medical treatment or professional care during this time?" errors="${validationErrors}" />
 
     </t:pageContent>
 

@@ -7,11 +7,14 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import uk.gov.dwp.carersallowance.session.SessionManager;
 
 @Controller
 public class CareHoursController extends AbstractFormController {
@@ -21,6 +24,11 @@ public class CareHoursController extends AbstractFormController {
     private static final String PAGE_TITLE    = "More about the care you provide - About the person you care for";
 
     private static final String[] FIELDS = {"spent35HoursCaring"};
+
+    @Autowired
+    public CareHoursController(SessionManager sessionManager) {
+        super(sessionManager);
+    }
 
     @Override
     public String getCurrentPage() {

@@ -25,6 +25,32 @@
 
         <!-- Carer's Allowance stylesheet -->
         <link rel="stylesheet" media="screen" href="<c:url value='/assets/stylesheet/app_t.min.css' />" />
+<style>
+    /* See breaks in care etc. */
+    .actions button {
+        background:none!important;
+        border:none; 
+        padding:0!important;
+        font-family:nta, arial, sans-serif; /*input has OS specific font-family*/
+        font-size: 16px;
+        color:#069;
+        text-decoration:underline;
+        cursor:pointer;
+        float: right;
+    }
+    
+    .actions button:first-child {
+        float: left;
+    }
+    
+    .uppercase {
+        text-transform: uppercase!important; 
+    }
+    
+    .lowercase {
+        text-transform: lowercase!important; 
+    }
+</style>
 
         <!-- Print stylesheet -->
         <link href="<c:url value='/assets/stylesheet/print.css' />" media="print" rel="stylesheet" type="text/css">
