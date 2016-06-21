@@ -18,6 +18,25 @@
     <c:set var="errorMessage" value="${errors.getErrorMessage(name)}" />
 </c:if>
 
+
+<c:if test="${not empty hintBefore}">
+    <c:if test="${empty hintBeforeId}">
+        <c:set var="hintBeforeHtml" value="<p class='form-hint'>${hintBefore}</p>" />
+    </c:if>
+    <c:if test="${not empty hintBeforeId}">
+        <c:set var="hintBeforeHtml" value="<p class='form-hint' id='${hintBeforeId}'>${hintBefore}</p>" />
+    </c:if>
+</c:if>
+
+<c:if test="${not empty hintAfterHtml}">
+    <c:if test="${empty hintAfterId}">
+        <c:set var="hintAfterHtml" value="<p class='form-hint'>${hintAfter}</p>" />
+    </c:if>
+    <c:if test="${not empty hintAfterId}">
+        <c:set var="hintAfterHtml" value="<p class='form-hint' id='${hintAfterId}'>${hintAfter}</p>" />
+    </c:if>
+</c:if>
+
 <%-- TODO add track events separately using jquery --%>
 
 <c:if test="${hasError}" >
@@ -31,7 +50,7 @@
     <fieldset class="question-group">
         <legend class="form-label-bold ">${label}</legend>        
 
-        ${hintBefore}
+        ${hintBeforeHtml}
         <ul class="form-group form-group-compound" id="${id}">
             <c:forTokens items="${optionValues}" delims="|" var="optionValue" varStatus="optionValueIndex">
                <li>                
@@ -58,6 +77,6 @@
             </c:forTokens>
 
         </ul>
-        ${hintAfter}
+        ${hintAfterHtml}
     </fieldset>
 </li>

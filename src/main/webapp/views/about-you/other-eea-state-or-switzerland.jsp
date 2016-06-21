@@ -12,7 +12,7 @@
                       name="eeaGuardQuestion" 
                       value="${eeaGuardQuestion}"
                       label="Have you or any of your close family worked abroad or been paid benefits from outside the United Kingdom since your claim date?" 
-                      hintBefore='<p class="form-hint">This means your partner, parents or children and includes state pensions.</p>'
+                      hintBefore="This means your partner, parents or children and includes state pensions."
                       errors="${validationErrors}" 
         />
         
@@ -33,7 +33,7 @@
                       name="benefitsFromEEADetails" 
                       value="${benefitsFromEEADetails}"
                       label="Have you or your close family claimed or been paid any benefits or pensions from any of these countries since your claim date?" 
-                      hintBefore='<p class="form-hint">This means your partner, parents or children.</p>'
+                      hintBefore="This means your partner, parents or children."
                       errors="${validationErrors}" 
             />
             
@@ -44,7 +44,7 @@
                         maxLength="3000"
                         showRemainingChars="true"
                         label="Details of the pension or benefit" 
-                        hintBefore='<p class="form-hint">Include who was paid, the local name of the benefit, the amount and the dates of any payments.</p>'
+                        hintBefore="Include who was paid, the local name of the benefit, the amount and the dates of any payments."
                         errors="${validationErrors}"
                 />
             </t:hiddenPanel>
@@ -53,7 +53,7 @@
                       name="workingForEEADetails" 
                       value="${workingForEEADetails}"
                       label="Have you or your close family worked or paid national insurance in any of these countries since your claim date?" 
-                      hintBefore='<p class="form-hint">This means your partner, parents or children.</p>'
+                      hintBefore="This means your partner, parents or children."
                       errors="${validationErrors}" 
             />
             
@@ -64,7 +64,7 @@
                             maxLength="3000"
                             showRemainingChars="true"
                             label="Details of the overseas work or national insurance paid abroad" 
-                            hintBefore='<p class="form-hint">Include who this applies to, when this happened and which country they worked or paid national insurance in.</p>'
+                            hintBefore="Include who this applies to, when this happened and which country they worked or paid national insurance in."
                             errors="${validationErrors}"
                 />
             </t:hiddenPanel>

@@ -68,7 +68,7 @@
                       name="trip52Weeks" 
                       value="${trip52Weeks}"
                       label="Have you been away from England, Scotland or Wales for more than 52 weeks in the 3 years before your claim date?" 
-                      hintBefore='<p class="form-hint">This could be one trip, or a number of trips adding up to 52 weeks.</p>'
+                      hintBefore="This could be one trip, or a number of trips adding up to 52 weeks."
                       errors="${validationErrors}" 
         />
         <t:hiddenPanel id="trip52WeeksYesWrap" triggerId="trip52Weeks" triggerValue="yes">
@@ -78,7 +78,7 @@
                         maxLength="3000"
                         showRemainingChars="true"
                         label="Tell us about where you've been." 
-                        hintBefore='<p class="form-hint">Include dates you left and returned. We might contact you for further details.</p>'
+                        hintBefore="Include dates you left and returned. We might contact you for further details"
                         errors="${validationErrors}"
             />
             

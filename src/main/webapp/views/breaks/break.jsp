@@ -19,7 +19,8 @@
                      valueYear="${startDate_year}" 
                      label="When did the break start?" 
                      errors="${validationErrors}" 
-                     hintBefore='<p class="form-hint" id="start_defaultDateContextualHelp">For example, 3 5 2016</p>'
+                     hintBefore="For example, 3 5 2016"
+                     hintBeforeId="start_defaultDateContextualHelp"
         />
         
         <%-- visibility controlled by javascript --%>
@@ -29,7 +30,7 @@
                     maxLength="10" 
                     label="Break start time? (optional)" 
                     errors="${validationErrors}" 
-                    hintBefore='<p class="form-hint">For example, 10:00am.</p>'
+                    hintBefore="For example, 10:00am."
                     outerStyle="display: none;"
         />
         
@@ -44,7 +45,7 @@
                         value="${whereCaree}"
                         label="Where was the person you care for during the break?"
                         errors="${validationErrors}" 
-                        hintBefore='<p class="form-hint">During this time, they were:</p>' 
+                        hintBefore="During this time, they were:" 
         />
         
         <t:hiddenPanel id="wherePersonBreaksInCareWrap" triggerId="whereCaree" triggerValue="Somewhere_else">
@@ -68,7 +69,7 @@
                         value="${whereYou}"
                         label="Where were you during the break?"
                         errors="${validationErrors}" 
-                        hintBefore='<p class="form-hint">During this time, I was:</p>' 
+                        hintBefore="During this time, I was:" 
         />
         
         <t:hiddenPanel id="whereYouBreaksInCareWrap" triggerId="whereYou" triggerValue="Somewhere_else">
@@ -93,7 +94,8 @@
                          valueYear="${hasBreakEndedDate_year}" 
                          label="When did the break end?" 
                          errors="${validationErrors}" 
-                         hintBefore='<p class="form-hint" id="hasBreakEnded_date_defaultDateContextualHelp">For example, 10 5 2016</p>'
+                         hintBefore="For example, 10 5 2016"
+                         hintBeforeId="hasBreakEnded_date_defaultDateContextualHelp"
             />
         </t:hiddenPanel>
         

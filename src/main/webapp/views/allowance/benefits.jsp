@@ -17,7 +17,7 @@
                                       None of these benefits"
                         value="${benefitsAnswer}"
                         label="What benefit does the person you care for get?" 
-                        hintBefore='<p class="form-hint">Don&rsquo;t include any benefits they&rsquo;ve applied for if they haven&rsquo;t got a decision yet.</p>'
+                        hintBefore="Don't include any benefits they've applied for if they haven't got a decision yet."
                         errors="${validationErrors}" 
         />
         

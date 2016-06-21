@@ -21,7 +21,7 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class JobDetailsController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(JobDetailsController.class);
 
-    private static final String CURRENT_PAGE  = "/your-income/employment/job-details/"; // parameter to indicate which job index
+    private static final String CURRENT_PAGE  = "/your-income/employment/job-details"; // parameter to indicate which job index
     private static final String PAGE_TITLE    = "Employer details - Your income";
 
     private static final String[] FIELDS = {"employerName",

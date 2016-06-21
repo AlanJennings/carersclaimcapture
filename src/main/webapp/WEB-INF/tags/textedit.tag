@@ -26,6 +26,24 @@
 </c:if>
 <%-- End of the default values --%>
 
+<c:if test="${not empty hintBefore}">
+    <c:if test="${empty hintBeforeId}">
+        <c:set var="hintBeforeHtml" value="<p class='form-hint'>${hintBefore}</p>" />
+    </c:if>
+    <c:if test="${not empty hintBeforeId}">
+        <c:set var="hintBeforeHtml" value="<p class='form-hint' id='${hintBeforeId}'>${hintBefore}</p>" />
+    </c:if>
+</c:if>
+
+<c:if test="${not empty hintAfterHtml}">
+    <c:if test="${empty hintAfterId}">
+        <c:set var="hintAfterHtml" value="<p class='form-hint'>${hintAfter}</p>" />
+    </c:if>
+    <c:if test="${not empty hintAfterId}">
+        <c:set var="hintAfterHtml" value="<p class='form-hint' id='${hintAfterId}'>${hintAfter}</p>" />
+    </c:if>
+</c:if>
+
 <c:if test="${not empty outerStyle}">
     <c:set var='outerStyle' value=' style="${outerStyle}"' />
 </c:if>
@@ -39,8 +57,8 @@
     </c:if>
 
     <label class="form-label-bold" for="${id}"> ${label} </label>
-    ${hintBefore} 
+    ${hintBeforeHtml} 
     <input type="text" class="form-control ${additionalClasses}" id="${id}" name="${name}" value="${value}" maxLength="${maxLength}" autocomplete="off">
-    ${hintAfter}
+    ${hintAfterHtml}
 
 </li>

@@ -16,7 +16,7 @@
                           name="hadPartnerSinceClaimDate" 
                           value="${hadPartnerSinceClaimDate}"
                           label="Have you lived with a partner at any time since your claim date?" 
-                          hintBefore='<div class="prompt">
+                          hintBeforeHtml='<div class="prompt">
                                           <p>Your claim date is 3 June 2016. By partner we mean:</p>
                                           <ul class="list-bullet">
                                               <li>a person you&#39;re married to or live with as if you are married.</li>
@@ -42,8 +42,8 @@
                         label="National Insurance number" 
                         errors="${validationErrors}" 
                         additionalClasses="ni-number"
-                        hintBefore='<p class="form-hint">For example, VO123456D</p>'
-                        hintAfter='<p class="form-hint">This is on your NI number card, benefit letter, payslip or P60.</p>'
+                        hintBefore="For example, VO123456D"
+                        hintAfter="This is on your NI number card, benefit letter, payslip or P60."
             />
             
             <t:datefield id="dateOfBirth" 
@@ -55,7 +55,8 @@
                          valueYear="${dateOfBirth_year}" 
                          label="Date of birth" 
                          errors="${validationErrors}" 
-                         hintBefore='<p class="form-hint" id="dateOfBirth_defaultDateContextualHelp">For example, 16 5 1976</p>'
+                         hintBefore="For example, 16 5 1976"
+                         hintBeforeId="dateOfBirth_defaultDateContextualHelp"
             />
             
             <t:textedit id="nationality" name="nationality" value="${nationality}" maxLength="35" label="Nationality" errors="${validationErrors}" />
@@ -64,7 +65,7 @@
                           name="separated" 
                           value="${separated}"
                           label="Have you separated since your claim date?" 
-                          hintBefore='<p class="form-hint">Your claim date is 3 June 2016.</p>'
+                          hintBefore="Your claim date is 3 June 2016."
                           errors="${validationErrors}" 
             />
             

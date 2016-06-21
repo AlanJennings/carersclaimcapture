@@ -21,8 +21,8 @@
                     label="National Insurance number" 
                     errors="${validationErrors}" 
                     additionalClasses="ni-number"
-                    hintBefore='<p class="form-hint">For example, VO123456D</p>'
-                    hintAfter='<p class="form-hint">This is on your NI number card, benefit letter, payslip or P60.</p>'
+                    hintBefore="For example, VO123456D"
+                    hintAfter="This is on your NI number card, benefit letter, payslip or P60."
         />
         
         <t:datefield id="dateOfBirth" 
@@ -34,7 +34,8 @@
                      valueYear="${dateOfBirth_year}" 
                      label="Date of birth" 
                      errors="${validationErrors}" 
-                     hintBefore='<p class="form-hint" id="dateOfBirth_defaultDateContextualHelp">For example, 16 5 1976</p>'
+                     hintBefore="For example, 16 5 1976"
+                     hintBeforeId="dateOfBirth_defaultDateContextualHelp"
         />
 
     </t:pageContent>

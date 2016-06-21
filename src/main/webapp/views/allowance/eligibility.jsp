@@ -10,7 +10,7 @@
                       name="over35HoursAWeek" 
                       value="${over35HoursAWeek}"
                       label="Do you spend 35 hours or more each week caring for the person you care for?" 
-                      hintBefore='<p class="form-hint">For example, cooking meals, or helping them with their shopping.</p>'
+                      hintBefore="For example, cooking meals, or helping them with their shopping."
                       errors="${validationErrors}" 
         />
         <t:hiddenWarning id="warningover35HoursAWeek_answer" triggerId="over35HoursAWeek" triggerValue="no">

@@ -9,7 +9,11 @@
 <%@attribute name="noLabel" required="false" type="java.lang.String"%>
 
 <%@attribute name="hintBefore" required="false" type="java.lang.String"%>
+<%@attribute name="hintBeforeId" required="false" type="java.lang.String"%>
+<%@attribute name="hintBeforeHtml" required="false" type="java.lang.String"%>
 <%@attribute name="hintAfter" required="false" type="java.lang.String"%>
+<%@attribute name="hintAfterId" required="false" type="java.lang.String"%>
+<%@attribute name="hintAfterHtml" required="false" type="java.lang.String"%>
 
 <%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
 
@@ -19,7 +23,6 @@
 </c:if>
 
 <!-- TODO add track events separately using jquery -->
-<!-- TODO add javascript for the warning text -->
 
 
 <%-- set default values for yes & no labels --%>
@@ -28,6 +31,24 @@
 </c:if>
 <c:if test="${empty noLabel}">
     <c:set var="noLabel" value="No" />
+</c:if>
+
+<c:if test="${not empty hintBefore}">
+    <c:if test="${empty hintBeforeId}">
+        <c:set var="hintBeforeHtml" value="<p class='form-hint'>${hintBefore}</p>" />
+    </c:if>
+    <c:if test="${not empty hintBeforeId}">
+        <c:set var="hintBeforeHtml" value="<p class='form-hint' id='${hintBeforeId}'>${hintBefore}</p>" />
+    </c:if>
+</c:if>
+
+<c:if test="${not empty hintAfterHtml}">
+    <c:if test="${empty hintAfterId}">
+        <c:set var="hintAfterHtml" value="<p class='form-hint'>${hintAfter}</p>" />
+    </c:if>
+    <c:if test="${not empty hintAfterId}">
+        <c:set var="hintAfterHtml" value="<p class='form-hint' id='${hintAfterId}'>${hintAfter}</p>" />
+    </c:if>
 </c:if>
 
 <c:if test="${hasError}" >
@@ -41,7 +62,7 @@
     <fieldset class="question-group">
         <legend class="form-label-bold ">${label}</legend>        
 
-        ${hintBefore}
+        ${hintBeforeHtml}
         <ul class="inline " id="${id}">  
             <li>
                 <%-- 
@@ -75,6 +96,6 @@
                 </label>
             </li>
         </ul>
-        ${hintAfter}
+        ${hintAfterHtml}
     </fieldset>
 </li>

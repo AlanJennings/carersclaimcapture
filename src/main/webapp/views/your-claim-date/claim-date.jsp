@@ -29,9 +29,8 @@
                      valueYear="${dateOfClaim_year}" 
                      label="Claim date" 
                      errors="${validationErrors}" 
-                     hintBefore='<p class="form-hint" id="dateOfClaim_defaultDateContextualHelp">
-                                     This is when you want to claim Carer&rsquo;s Allowance from, eg 16 2 2016.
-                                 </p>'
+                     hintBeforeId="dateOfClaim_defaultDateContextualHelp"
+                     hintBefore="This is when you want to claim Carer&rsquo;s Allowance from, eg 16 2 2016."
         />
 
         <t:pre>
@@ -57,7 +56,8 @@
                          valueYear="${beforeClaimCaringDate_year}" 
                          label="When did you begin caring?" 
                          errors="${validationErrors}" 
-                         hintBefore='<p class="form-hint" id="beforeClaimCaring_date_defaultDateContextualHelp">For example, 16 5 2015</p>'
+                         hintBefore="For example, 16 5 2015"
+                         hintBeforeId="beforeClaimCaring_date_defaultDateContextualHelp"
             />
         </t:hiddenPanel>
     </t:pageContent>

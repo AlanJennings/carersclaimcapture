@@ -10,9 +10,29 @@
 <%@attribute name="valueYear" required="false" type="java.lang.String"%>
 <%@attribute name="label" required="false" type="java.lang.String"%>
 <%@attribute name="hintBefore" required="false" type="java.lang.String"%>
+<%@attribute name="hintBeforeId" required="false" type="java.lang.String"%>
 <%@attribute name="hintAfter" required="false" type="java.lang.String"%>
+<%@attribute name="hintAfterId" required="false" type="java.lang.String"%>
 
 <%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+
+<c:if test="${not empty hintBefore}">
+    <c:if test="${empty hintBeforeId}">
+        <c:set var="hintBeforeHtml" value="<p class='form-hint'>${hintBefore}</p>" />
+    </c:if>
+    <c:if test="${not empty hintBeforeId}">
+        <c:set var="hintBeforeHtml" value="<p class='form-hint' id='${hintBeforeId}'>${hintBefore}</p>" />
+    </c:if>
+</c:if>
+
+<c:if test="${not empty hintAfterHtml}">
+    <c:if test="${empty hintAfterId}">
+        <c:set var="hintAfterHtml" value="<p class='form-hint'>${hintAfter}</p>" />
+    </c:if>
+    <c:if test="${not empty hintAfterId}">
+        <c:set var="hintAfterHtml" value="<p class='form-hint' id='${hintAfterId}'>${hintAfter}</p>" />
+    </c:if>
+</c:if>
 
 <c:if test="${not empty errors}">
     <c:set var="hasError" value="${errors.hasError(id)}" />
@@ -30,7 +50,7 @@
     <!-- TODO: Probably should rearrange these a bit, so label and hints are outside the fieldset -->
     <fieldset class="question-group">
         <legend class="form-label-bold"> ${label} </legend>
-        ${hintBefore}
+        ${hintBeforeHtml}
         <ul class="form-date" id="${id}">
             <li class="form-group">
                 <label for="${id}_day">Day</label>
@@ -68,7 +88,7 @@
                        autocomplete="off">
             </li>
         </ul>
-        ${hintAfter}
+        ${hintAfterHtml}
     </fieldset>
 
 </li>
