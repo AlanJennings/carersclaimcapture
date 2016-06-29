@@ -80,9 +80,9 @@ public class YourIncomeController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 // TODO the dates are from earlier in the claim
-        validateMandatoryFields(fieldValues, "Have you been in employment since 1 December 2015?", "beenEmployedSince6MonthsBeforeClaim");
-        validateMandatoryFields(fieldValues, "Have you been in self-employment since 25 May 2016?", "beenSelfEmployedSince1WeekBeforeClaim");
-        validateMandatoryFields(fieldValues, "Have you had other income since 17 June 2016?", "hadOtherIncomeSinceClaimDate");
+        validateMandatoryField(fieldValues, "beenEmployedSince6MonthsBeforeClaim", "Have you been in employment since 1 December 2015?");
+        validateMandatoryField(fieldValues, "beenSelfEmployedSince1WeekBeforeClaim", "Have you been in self-employment since 25 May 2016?");
+        validateMandatoryField(fieldValues, "hadOtherIncomeSinceClaimDate", "Have you had other income since 17 June 2016?");
 
         LOG.trace("Ending BenefitsController.validate");
     }

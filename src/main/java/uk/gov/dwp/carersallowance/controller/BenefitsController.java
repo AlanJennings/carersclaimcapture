@@ -63,7 +63,7 @@ public class BenefitsController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "What benefit does the person you care for get?", "benefitsAnswer");
+        validateMandatoryField(fieldValues, "benefitsAnswer", "What benefit does the person you care for get?");
 
         LOG.trace("Ending BenefitsController.validate");
     }

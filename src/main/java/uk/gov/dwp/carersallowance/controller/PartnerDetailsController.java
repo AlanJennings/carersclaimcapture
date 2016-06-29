@@ -76,17 +76,17 @@ public class PartnerDetailsController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting PartnerDetailsController.validate");
 
-        validateMandatoryFields(fieldValues, "Have you lived with a partner at any time since your claim date?", "hadPartnerSinceClaimDate");
+        validateMandatoryField(fieldValues, "hadPartnerSinceClaimDate", "Have you lived with a partner at any time since your claim date?");
         if(fieldValue_Equals(fieldValues, "hadPartnerSinceClaimDate", "yes")) {
-            validateMandatoryFields(fieldValues, "Title", "title");
-            validateMandatoryFields(fieldValues, "First name", "firstName");
-            validateMandatoryFields(fieldValues, "Last name", "surname");
-            validateMandatoryFields(fieldValues, "National Insurance number", "nationalInsuranceNumber");
+            validateMandatoryField(fieldValues, "title", "Title");
+            validateMandatoryField(fieldValues, "firstName", "First name");
+            validateMandatoryField(fieldValues, "surname", "Last name");
+            validateMandatoryField(fieldValues, "nationalInsuranceNumber", "National Insurance number");
             validateRegexField(fieldValues,"National Insurance number", "nationalInsuranceNumber", AbstractFormController.ValidationPatterns.NINO_REGEX);
             validateMandatoryDateField(fieldValues, "Date of Birth", "dateOfBirth", new String[]{"dateOfBirth_day", "dateOfBirth_month", "dateOfBirth_year"});
-            validateMandatoryFields(fieldValues, "Nationality", "nationality");
-            validateMandatoryFields(fieldValues, "Have you separated since your claim date?", "separated");
-            validateMandatoryFields(fieldValues, "Is this the person you care for?", "isPartnerPersonYouCareFor");
+            validateMandatoryField(fieldValues, "nationality", "Nationality");
+            validateMandatoryField(fieldValues, "separated", "Have you separated since your claim date?");
+            validateMandatoryField(fieldValues, "isPartnerPersonYouCareFor", "Is this the person you care for?");
         }
 
         LOG.trace("Ending PartnerDetailsController.validate");

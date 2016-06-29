@@ -346,7 +346,22 @@ public abstract class AbstractFormController {
         LOG.trace("Ending AbstractFormController.validateMandatoryDateField");
     }
 
-    protected void validateMandatoryFields(Map<String, String[]> allfieldValues, String fieldTitle, String...fieldNames) {
+    protected void validateMandatoryField(Map<String, String[]> allfieldValues, String fieldName, String fieldTitle) {
+        LOG.trace("Started AbstractFormController.validateMandatoryField");
+        Parameters.validateMandatoryArgs(new Object[]{allfieldValues, fieldTitle, fieldName}, new String[]{"allfieldValues", "fieldTitle", "fieldName"});
+
+        String[] fieldValues = allfieldValues.get(fieldName);
+        LOG.debug("fieldName = {}, fieldValues={}", fieldName, new LoggingObjectWrapper(fieldValues));
+
+        if(isEmpty(fieldValues)) {
+            LOG.debug("missing mandatory field: {}", fieldName);
+            addFormError(fieldName, fieldTitle, "You must complete this section");
+        }
+
+        LOG.trace("Ending AbstractFormController.validateMandatoryField");
+    }
+
+    protected void validateMandatoryFieldGroup(Map<String, String[]> allfieldValues, String id, String fieldTitle, String...fieldNames) {
         LOG.trace("Started AbstractFormController.validateMandatoryField");
         Parameters.validateMandatoryArgs(new Object[]{allfieldValues, fieldTitle}, new String[]{"allfieldValues", "fieldTitle"});
 
@@ -357,7 +372,7 @@ public abstract class AbstractFormController {
 
             if(isEmpty(fieldValues)) {
                 LOG.debug("missing mandatory field: {}", fieldName);
-                addFormError(fieldName, fieldTitle, "You must complete this section");
+                addFormError(id, fieldTitle, "You must complete this section");
                 break;
             }
         }
@@ -913,9 +928,9 @@ public abstract class AbstractFormController {
 
     protected String editFieldCollectionRecord(HttpServletRequest request, String idToChange, String fieldCollectionName, String idField, String editingPage) {
         Parameters.validateMandatoryArgs(new Object[]{idToChange, request}, new String[]{"idToChange", "request"});
-    
+
         getValidationSummary().reset();
-    
+
         // copy the record values into the edit fields in the session
         List<Map<String, String>> records = getFieldCollections(request.getSession(), fieldCollectionName, true);
         Map<String, String> record = FieldCollection.getFieldCollection(records, idField, idToChange);
@@ -925,7 +940,7 @@ public abstract class AbstractFormController {
             String[] fields = record.keySet().toArray(new String[]{});  // TODO instead of BreakInCareDetailController.FIELDS (?)
             copyMapToSession(record, fields, request.getSession());
         }
-    
+
         return "redirect:" + editingPage;
     }
 
@@ -937,7 +952,7 @@ public abstract class AbstractFormController {
         LOG.trace("Starting EmploymentHistoryController.deleteEmployment");
         try {
             Parameters.validateMandatoryArgs(new Object[]{idToDelete, request}, new String[]{"idToDelete", "request"});
-    
+
             Integer foundIndex = null;
             List<Map<String, String>> fieldCollectionList = getFieldCollections(request.getSession(), fieldCollectionName);
             for(int index = 0; index < fieldCollectionList.size(); index++) {
@@ -947,15 +962,15 @@ public abstract class AbstractFormController {
                     break;
                 }
             }
-    
+
             getValidationSummary().reset();
-    
+
             if(foundIndex != null) {
                 fieldCollectionList.remove(foundIndex.intValue());
             } else {
                 throw new UnknownRecordException("Unknown record id: " + idToDelete);
             }
-    
+
             return "redirect:" + getCurrentPage();
         } finally {
             LOG.trace("Ending EmploymentHistoryController.deleteEmployment");

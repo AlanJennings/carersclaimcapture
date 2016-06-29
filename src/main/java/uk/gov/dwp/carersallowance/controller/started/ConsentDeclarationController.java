@@ -65,9 +65,9 @@ public class ConsentDeclarationController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "Do you agree to the Carer's Allowance Unit contacting anyone mentioned in this form?", "tellUsWhyInformation");
+        validateMandatoryField(fieldValues, "tellUsWhyInformation", "Do you agree to the Carer's Allowance Unit contacting anyone mentioned in this form?");
         if(fieldValue_Equals(fieldValues, "tellUsWhyInformation", "no")) {
-            validateMandatoryFields(fieldValues, "List anyone you don't want to be contacted and say why.", "tellUsWhyPerson");
+            validateMandatoryField(fieldValues, "tellUsWhyPerson", "List anyone you don't want to be contacted and say why.");
         }
 
         LOG.trace("Ending BenefitsController.validate");

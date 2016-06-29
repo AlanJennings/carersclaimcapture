@@ -106,23 +106,23 @@ public class BreakInCareDetailController extends AbstractFormController {
         LOG.trace("Starting BenefitsController.validate");
 
         validateMandatoryDateField(fieldValues, "When did the break start?", "startDate", new String[]{"startDate_day", "startDate_month", "startDate_year"});
-        validateMandatoryFields(fieldValues, "Where was the person you care for during the break?", "whereCaree");
-        validateMandatoryFields(fieldValues, "Where were you during the break?", "whereYou");
-        validateMandatoryFields(fieldValues, "Has this break ended?", "hasBreakEnded");
+        validateMandatoryField(fieldValues, "whereCaree", "Where was the person you care for during the break?");
+        validateMandatoryField(fieldValues, "whereYou", "Where were you during the break?");
+        validateMandatoryField(fieldValues, "hasBreakEnded", "Has this break ended?");
 
         if(fieldValue_Equals(fieldValues, "hasBreakEnded", "yes")) {
             validateMandatoryDateField(fieldValues, "When did the break end?", "hasBreakEndedDate", new String[]{"hasBreakEndedDate_day", "hasBreakEndedDate_month", "hasBreakEndedDate_year"});
         }
 
         if(fieldValue_Equals(fieldValues, "whereCaree", "Somewhere_else")) {
-            validateMandatoryFields(fieldValues, "Where was the person you care for during the break?", "whereCareeOtherText");
+            validateMandatoryField(fieldValues, "whereCareeOtherText", "Where was the person you care for during the break?");
         }
 
         if(fieldValue_Equals(fieldValues, "whereYou", "Somewhere_else")) {
-            validateMandatoryFields(fieldValues, "Where were you during the break?", "whereYouOtherText");
+            validateMandatoryField(fieldValues, "whereYouOtherText", "Where were you during the break?");
         }
 
-        validateMandatoryFields(fieldValues, "Did you or the person you care for get any medical treatment or professional care during this time?", "medicalCareDuringBreak");
+        validateMandatoryField(fieldValues, "medicalCareDuringBreak", "Did you or the person you care for get any medical treatment or professional care during this time?");
 
         LOG.trace("Ending BenefitsController.validate");
     }

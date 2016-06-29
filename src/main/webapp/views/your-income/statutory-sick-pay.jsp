@@ -6,7 +6,7 @@
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" pageTitle="Your income - Statutory Sick Pay" section="Section 9 of 11" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" pageTitle="Statutory Sick Pay" section="Section 9 of 11" backLink="${previousPage}">
 
         <t:yesnofield id="stillBeingPaidThisPay" 
                       name="stillBeingPaidThisPay" 

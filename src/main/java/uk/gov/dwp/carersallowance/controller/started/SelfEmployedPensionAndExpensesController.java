@@ -67,14 +67,14 @@ public class SelfEmployedPensionAndExpensesController extends AbstractFormContro
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "Do you pay into a pension?", "payPensionScheme");
+        validateMandatoryField(fieldValues, "payPensionScheme", "Do you pay into a pension?");
         if(fieldValue_Equals(fieldValues, "payPensionScheme", "yes")) {
-            validateMandatoryFields(fieldValues, "Give details of each pension you pay into, including how much and how often you pay.", "payPensionSchemeText");
+            validateMandatoryField(fieldValues, "payPensionSchemeText", "Give details of each pension you pay into, including how much and how often you pay.");
         }
 
-        validateMandatoryFields(fieldValues, "Do you have any care costs because of this work?", "haveExpensesForJob");
+        validateMandatoryField(fieldValues, "haveExpensesForJob", "Do you have any care costs because of this work?");
         if(fieldValue_Equals(fieldValues, "haveExpensesForJob", "yes")) {
-            validateMandatoryFields(fieldValues, "Give details of who you pay and what it costs.", "haveExpensesForJobText");
+            validateMandatoryField(fieldValues, "haveExpensesForJobText", "Give details of who you pay and what it costs.");
         }
 
         LOG.trace("Ending BenefitsController.validate");

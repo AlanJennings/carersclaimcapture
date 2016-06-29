@@ -76,7 +76,7 @@ public class ClaimDateController extends AbstractFormController {
         LOG.trace("Starting BenefitsController.validate");
 
         validateMandatoryDateField(fieldValues, "Claim date", "dateOfClaim", new String[]{"dateOfClaim_day", "dateOfClaim_month", "dateOfClaim_year"});
-        validateMandatoryFields(fieldValues, "Were you caring for the person for more than 35 hours a week before this date?", "beforeClaimCaring");
+        validateMandatoryField(fieldValues, "beforeClaimCaring", "Were you caring for the person for more than 35 hours a week before this date?");
         if(fieldValue_Equals(fieldValues, "beforeClaimCaring", "yes")) {
             validateMandatoryDateField(fieldValues, "When did you begin caring?", "beforeClaimCaringDate", new String[]{"beforeClaimCaringDate_day", "beforeClaimCaringDate_month", "beforeClaimCaringDate_year"});
         }

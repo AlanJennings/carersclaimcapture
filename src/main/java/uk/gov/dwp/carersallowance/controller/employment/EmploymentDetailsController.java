@@ -98,12 +98,12 @@ public class EmploymentDetailsController extends AbstractFormController {
         LOG.trace("Started EmploymentDetailsController.validate");
         // TODO the dates are from earlier in the claim
 
-        validateMandatoryFields(fieldValues, "Employer's name", "employerName");
-        validateMandatoryFields(fieldValues, "Contact number", "phoneNumber");
+        validateMandatoryField(fieldValues, "employerName", "Employer's name");
+        validateMandatoryField(fieldValues, "phoneNumber", "Contact number");
         validateRegexField(fieldValues, "Contact number", "phoneNumber", PHONE_REGEX);
-        validateMandatoryFields(fieldValues, "Address", "address_lineOne", "address_lineTwo");
-        validateMandatoryFields(fieldValues, "Did you start this job before 1 May 2016?", "startJobBeforeClaimDate");
-        validateMandatoryFields(fieldValues, "Have you finished this job?", "finishedThisJob");
+        validateAddressFields(fieldValues, "Address", "address", new String[]{"address_lineOne", "address_lineTwo", "address_lineThree"});
+        validateMandatoryField(fieldValues, "startJobBeforeClaimDate", "Did you start this job before 1 May 2016?");
+        validateMandatoryField(fieldValues, "finishedThisJob", "Have you finished this job?");
 
         if(fieldValue_Equals(fieldValues, "startJobBeforeClaimDate", "no")) {
             validateMandatoryDateField(fieldValues, "Job start date", "jobStartDate", new String[]{"jobStartDate_day", "jobStartDate_month", "jobStartDate_year"});

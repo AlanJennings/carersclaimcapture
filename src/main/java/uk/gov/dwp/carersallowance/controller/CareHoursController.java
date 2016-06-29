@@ -63,7 +63,7 @@ public class CareHoursController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "Do you spend 35 hours or more each week caring for this person?", "spent35HoursCaring");
+        validateMandatoryField(fieldValues, "spent35HoursCaring", "Do you spend 35 hours or more each week caring for this person?");
 
         LOG.trace("Ending BenefitsController.validate");
     }

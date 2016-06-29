@@ -64,7 +64,7 @@ public class OtherIncomeController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "What other income have you had since 1 June 2016?", "otherPaymentsInfo");
+        validateMandatoryField(fieldValues, "otherPaymentsInfo", "What other income have you had since 1 June 2016?");
 
         LOG.trace("Ending BenefitsController.validate");
     }

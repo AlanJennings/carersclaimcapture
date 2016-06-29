@@ -179,7 +179,7 @@ public class EmploymentHistoryController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
         // TODO date comes from earlier in the claim
-        validateMandatoryFields(fieldValues, "Have you had any other jobs since 1 December 2015?", "moreEmployment");
+        validateMandatoryField(fieldValues, "moreEmployment", "Have you had any other jobs since 1 December 2015?");
 
         LOG.trace("Ending BenefitsController.validate");
     }

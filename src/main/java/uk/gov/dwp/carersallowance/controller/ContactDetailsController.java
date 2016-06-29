@@ -72,10 +72,10 @@ public class ContactDetailsController extends AbstractFormController {
         LOG.trace("Starting BenefitsController.validate");
 
         validateAddressFields(fieldValues, "Address", "address", new String[]{"address_lineOne", "address_lineTwo", "address_lineThree"});
-        validateMandatoryFields(fieldValues,"Do you want an email to confirm your application has been received?", "wantsEmailContact");
+        validateMandatoryField(fieldValues,"wantsEmailContact", "Do you want an email to confirm your application has been received?");
 
         if(fieldValue_Equals(fieldValues, "wantsEmailContact", "yes")) {
-            validateMandatoryFields(fieldValues,"Your email address", "mail");
+            validateMandatoryField(fieldValues,"mail", "Your email address");
             validateRegexField(fieldValues,"Your email address", "mail", AbstractFormController.ValidationPatterns.EMAIL_REGEX);
 
             validateMatchingValues(fieldValues,"Your email address", "mail", "Confirm your email address", "mailConfirmation", true);

@@ -213,7 +213,7 @@ public class BreaksInCareController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "Have you had any more breaks from caring for this person since 1 March 2016?", "moreBreaksInCare");
+        validateMandatoryField(fieldValues, "moreBreaksInCare", "Have you had any more breaks from caring for this person since 1 March 2016?");
 
         LOG.trace("Ending BenefitsController.validate");
     }

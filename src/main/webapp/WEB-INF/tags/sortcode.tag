@@ -24,7 +24,6 @@
              label="${label}" 
              errors="${errors}">
 
-    <!-- TODO: Probably should rearrange these a bit, so label and hints are outside the fieldset -->
     <fieldset class="question-group">
         <legend class="form-label-bold"> ${label} </legend>
         <t:hint hintId="${hintBeforeId}" hintText="${hintBefore}" /> 
@@ -41,7 +40,7 @@
                        autocomplete="off">
             </li>
             
-            <li class="form-group month">
+            <li class="form-group">
                 <input type="tel"
                        class="form-control"
                        id="${id}_block2"
@@ -52,14 +51,14 @@
                        autocomplete="off">
             </li>
             
-            <li class="form-group form-group-year">
+            <li class="form-group">
                 <input type="tel"
                        class="form-control"
                        id="${id}_block3"
                        name="${nameBlock3}"
                        title="Must be numbers only"
                        value="${valueBlock3}" 
-                       maxLength="4"
+                       maxLength="2"
                        autocomplete="off">
             </li>
         </ul>

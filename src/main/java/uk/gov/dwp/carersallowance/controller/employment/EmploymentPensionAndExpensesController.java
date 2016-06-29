@@ -86,17 +86,17 @@ public class EmploymentPensionAndExpensesController extends AbstractFormControll
         LOG.trace("Starting BenefitsController.validate");
         // TODO the dates are from earlier in the claim
 
-        validateMandatoryFields(fieldValues, "Do you pay into a pension?", "payPensionScheme");
-        validateMandatoryFields(fieldValues, "Do you pay for things you need to do your job?", "payForThings");
-        validateMandatoryFields(fieldValues, "Do you have any care costs because of this work?", "haveExpensesForJob");
+        validateMandatoryField(fieldValues, "payPensionScheme", "Do you pay into a pension?");
+        validateMandatoryField(fieldValues, "payForThings", "Do you pay for things you need to do your job?");
+        validateMandatoryField(fieldValues, "haveExpensesForJob", "Do you have any care costs because of this work?");
         if(fieldValue_Equals(fieldValues, "payPensionScheme", "yes")) {
-            validateMandatoryFields(fieldValues, "Give details of each pension you pay into, including how much and how often you pay.", "payPensionSchemeText");
+            validateMandatoryField(fieldValues, "payPensionSchemeText", "Give details of each pension you pay into, including how much and how often you pay.");
         }
         if(fieldValue_Equals(fieldValues, "payForThings", "yes")) {
-            validateMandatoryFields(fieldValues, "Give details of what you need to buy, why you need it and how much it costs.", "payForThingsText");
+            validateMandatoryField(fieldValues, "payForThingsText", "Give details of what you need to buy, why you need it and how much it costs.");
         }
         if(fieldValue_Equals(fieldValues, "haveExpensesForJob", "yes")) {
-            validateMandatoryFields(fieldValues, "Give details of who you pay and what it costs.", "haveExpensesForJobText");
+            validateMandatoryField(fieldValues, "haveExpensesForJobText", "Give details of who you pay and what it costs.");
         }
 
         LOG.trace("Ending BenefitsController.validate");

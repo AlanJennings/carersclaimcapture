@@ -63,7 +63,7 @@ public class MaritalStatusController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "Your Status", "maritalStatus");
+        validateMandatoryField(fieldValues, "maritalStatus", "Your Status");
 
         LOG.trace("Ending BenefitsController.validate");
     }

@@ -74,29 +74,29 @@ public class NationalityController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "What is your nationality?", "nationality");
-        validateMandatoryFields(fieldValues, "Have you always lived in England, Scotland or Wales?", "alwaysLivedInUK");
-        validateMandatoryFields(fieldValues, "Have you been away from England, Scotland or Wales for more than 52 weeks in the 3 years before your claim date?","trip52Weeks");
+        validateMandatoryField(fieldValues, "nationality", "What is your nationality?");
+        validateMandatoryField(fieldValues, "alwaysLivedInUK", "Have you always lived in England, Scotland or Wales?");
+        validateMandatoryField(fieldValues, "trip52Weeks","Have you been away from England, Scotland or Wales for more than 52 weeks in the 3 years before your claim date?");
 
         if(fieldValue_Equals(fieldValues, "nationality", "Another_nationality")) {
-            validateMandatoryFields(fieldValues, "Your nationality", "actualnationality");
+            validateMandatoryField(fieldValues, "actualnationality", "Your nationality");
         }
 
         if(fieldValue_Equals(fieldValues, "alwaysLivedInUK", "no")) {
-            validateMandatoryFields(fieldValues, "Do you live in England, Scotland or Wales now?", "liveInUKNow");
+            validateMandatoryField(fieldValues, "liveInUKNow", "Do you live in England, Scotland or Wales now?");
 
             if(fieldValue_Equals(fieldValues, "liveInUKNow", "yes")) {
-                validateMandatoryFields(fieldValues, "When did you arrive in England, Scotland or Wales?", "arrivedInUK");
+                validateMandatoryField(fieldValues, "arrivedInUK", "When did you arrive in England, Scotland or Wales?");
 
                 if(fieldValue_Equals(fieldValues, "arrivedInUK", "less")) {
                     validateMandatoryDateField(fieldValues, "Date arrived", "arrivedInUKDate", new String[]{"arrivedInUKDate_day", "arrivedInUKDate_month", "arrivedInUKDate_year"});
-                    validateMandatoryFields(fieldValues, "Which country did you live in?", "arrivedInUKFrom");
+                    validateMandatoryField(fieldValues, "arrivedInUKFrom", "Which country did you live in?");
                 }
             }
         }
 
         if(fieldValue_Equals(fieldValues, "trip52Weeks", "yes")) {
-            validateMandatoryFields(fieldValues, "Tell us about where you've been.", "tripDetails");
+            validateMandatoryField(fieldValues, "tripDetails", "Tell us about where you've been.");
         }
 
         LOG.trace("Ending BenefitsController.validate");

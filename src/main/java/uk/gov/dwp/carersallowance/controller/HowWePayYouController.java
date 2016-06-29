@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.started;
+package uk.gov.dwp.carersallowance.controller;
 
 import java.util.Map;
 
@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 @Controller
@@ -26,9 +25,9 @@ public class HowWePayYouController extends AbstractFormController {
     private static final String[] FIELDS = {"likeToPay",
                                             "accountHolderName",
                                             "bankFullName",
-                                            "sortCode_sort1",
-                                            "sortCode_sort2",
-                                            "sortCode_sort3",
+                                            "sortcode_1",
+                                            "sortcode_2",
+                                            "sortcode_3",
                                             "accountNumber",
                                             "rollOrReferenceNumber",
                                             "paymentFrequency"};
@@ -72,15 +71,15 @@ public class HowWePayYouController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "Do you have a bank account?", "likeToPay");
+        validateMandatoryField(fieldValues, "likeToPay", "Do you have a bank account?");
         if(fieldValue_Equals(fieldValues, "likeToPay", "yes")) {
-            validateMandatoryFields(fieldValues, "Account holder name", "accountHolderName");
-            validateMandatoryFields(fieldValues, "Name of bank or building society", "bankFullName");
-            validateMandatoryFields(fieldValues, "Sort code", "sortCode_sort1", "sortCode_sort2", "sortCode_sort3");
-            validateMandatoryFields(fieldValues, "Account number", "accountNumber");
+            validateMandatoryField(fieldValues, "accountHolderName", "Account holder name");
+            validateMandatoryField(fieldValues, "bankFullName", "Name of bank or building society");
+            validateMandatoryFieldGroup(fieldValues, "sortcode", "Sort code", "sortcode_1", "sortcode_2", "sortcode_3");
+            validateMandatoryField(fieldValues, "accountNumber", "Account number");
         }
 
-        validateMandatoryFields(fieldValues, "How often do you want to be paid Carer's Allowance?", "paymentFrequency");
+        validateMandatoryField(fieldValues, "paymentFrequency", "How often do you want to be paid Carer's Allowance?");
 
         LOG.trace("Ending BenefitsController.validate");
     }

@@ -80,16 +80,16 @@ public class SelfEmployedDatesController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "Are you still doing this work?", "stillSelfEmployed");
+        validateMandatoryField(fieldValues, "stillSelfEmployed", "Are you still doing this work?");
         if(fieldValue_Equals(fieldValues, "stillSelfEmployed", "no")) {
             validateMandatoryDateField(fieldValues, "When did you start the course?", "finishThisWork", new String[]{"finishThisWork_day", "finishThisWork_month", "finishThisWork_year"});
         }
 
-        validateMandatoryFields(fieldValues, "Did you start this work more than a year ago?", "moreThanYearAgo");
+        validateMandatoryField(fieldValues, "moreThanYearAgo", "Did you start this work more than a year ago?");
         if(fieldValue_Equals(fieldValues, "moreThanYearAgo", "yes")) {
-            validateMandatoryFields(fieldValues, "Do you have accounts?", "haveAccounts");
+            validateMandatoryField(fieldValues, "haveAccounts", "Do you have accounts?");
             if(fieldValue_Equals(fieldValues, "haveAccounts", "no")) {
-                validateMandatoryFields(fieldValues, "Do you know your trading year?", "knowTradingYear");
+                validateMandatoryField(fieldValues, "knowTradingYear", "Do you know your trading year?");
                 if(fieldValue_Equals(fieldValues, "knowTradingYear", "yes")) {
                     validateMandatoryDateField(fieldValues, "Trading year start date", "tradingYearStart", new String[]{"tradingYearStart_day", "tradingYearStart_month", "tradingYearStart_year"});
                 }
@@ -98,7 +98,7 @@ public class SelfEmployedDatesController extends AbstractFormController {
             validateMandatoryDateField(fieldValues, "When did you finish this work?", "startThisWork", new String[]{"startThisWork_day", "startThisWork_month", "startThisWork_year"});
         }
 
-        validateMandatoryFields(fieldValues, "Has your self-employed business been paid any money yet?", "paidMoney");
+        validateMandatoryField(fieldValues, "paidMoney", "Has your self-employed business been paid any money yet?");
         if(fieldValue_Equals(fieldValues, "paidMoney", "yes")) {
             validateMandatoryDateField(fieldValues, "Date money first received by the business", "paidMoneyDate", new String[]{"paidMoneyDate_day", "paidMoneyDate_month", "paidMoneyDate_year"});
         }

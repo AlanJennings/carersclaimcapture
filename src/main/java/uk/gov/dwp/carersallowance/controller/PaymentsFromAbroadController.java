@@ -67,19 +67,19 @@ public class PaymentsFromAbroadController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "Have you or any of your close family worked abroad or been paid benefits from outside the United Kingdom since your claim date?", "eeaGuardQuestion");
+        validateMandatoryField(fieldValues, "eeaGuardQuestion", "Have you or any of your close family worked abroad or been paid benefits from outside the United Kingdom since your claim date?");
 
         if(fieldValue_Equals(fieldValues, "eeaGuardQuestion", "yes")) {
-            validateMandatoryFields(fieldValues, "Have you or your close family claimed or been paid any benefits or pensions from any of these countries since your claim date?", "benefitsFromEEADetails");
-            validateMandatoryFields(fieldValues, "Have you or your close family worked or paid national insurance in any of these countries since your claim date?", "workingForEEADetails");
+            validateMandatoryField(fieldValues, "benefitsFromEEADetails", "Have you or your close family claimed or been paid any benefits or pensions from any of these countries since your claim date?");
+            validateMandatoryField(fieldValues, "workingForEEADetails", "Have you or your close family worked or paid national insurance in any of these countries since your claim date?");
         }
 
         if(fieldValue_Equals(fieldValues, "benefitsFromEEADetails", "yes")) {
-            validateMandatoryFields(fieldValues, "Details of the pension or benefit", "benefitsFromEEADetails_field");
+            validateMandatoryField(fieldValues, "benefitsFromEEADetails_field", "Details of the pension or benefit");
         }
 
         if(fieldValue_Equals(fieldValues, "workingForEEADetails", "yes")) {
-            validateMandatoryFields(fieldValues, "Details of the overseas work or national insurance paid abroad", "workingForEEADetails_field");
+            validateMandatoryField(fieldValues, "workingForEEADetails_field", "Details of the overseas work or national insurance paid abroad");
         }
 
         LOG.trace("Ending BenefitsController.validate");

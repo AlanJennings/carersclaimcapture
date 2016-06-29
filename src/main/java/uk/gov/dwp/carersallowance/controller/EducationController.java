@@ -73,12 +73,12 @@ public class EducationController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "Have you been on a course of education since your claim date?", "beenInEducationSinceClaimDate");
+        validateMandatoryField(fieldValues, "beenInEducationSinceClaimDate", "Have you been on a course of education since your claim date?");
 
         if(fieldValue_Equals(fieldValues, "beenInEducationSinceClaimDate", "yes")) {
-            validateMandatoryFields(fieldValues, "Have you been on a course of education since your claim date?", "courseTitle");
-            validateMandatoryFields(fieldValues, "Have you been on a course of education since your claim date?", "nameOfSchoolCollegeOrUniversity");
-            validateMandatoryFields(fieldValues, "Have you been on a course of education since your claim date?", "nameOfMainTeacherOrTutor");
+            validateMandatoryField(fieldValues, "courseTitle", "Have you been on a course of education since your claim date?");
+            validateMandatoryField(fieldValues, "nameOfSchoolCollegeOrUniversity", "Have you been on a course of education since your claim date?");
+            validateMandatoryField(fieldValues, "nameOfMainTeacherOrTutor", "Have you been on a course of education since your claim date?");
 
             validateMandatoryDateField(fieldValues, "When did you start the course?", "startDate", new String[]{"startDate_day", "startDate_month", "startDate_year"});
             validateMandatoryDateField(fieldValues, "When did the course end or when will you finish?", "expectedEndDate", new String[]{"expectedEndDate_day", "expectedEndDate_month", "expectedEndDate_year"});

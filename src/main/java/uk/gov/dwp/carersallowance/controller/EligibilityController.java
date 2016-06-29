@@ -58,9 +58,9 @@ public class EligibilityController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting EligibilityController.validate");
 
-        validateMandatoryFields(fieldValues, "Do you spend 35 hours or more each week caring for the person you care for?", "over35HoursAWeek");
-        validateMandatoryFields(fieldValues, "Are you aged 16 or over?", "over16YearsOld");
-        validateMandatoryFields(fieldValues, "Which country do you live in?", "originCountry");
+        validateMandatoryField(fieldValues, "over35HoursAWeek", "Do you spend 35 hours or more each week caring for the person you care for?");
+        validateMandatoryField(fieldValues, "over16YearsOld", "Are you aged 16 or over?");
+        validateMandatoryField(fieldValues, "originCountry", "Which country do you live in?");
         LOG.trace("Ending EligibilityController.validate");
     }
 }

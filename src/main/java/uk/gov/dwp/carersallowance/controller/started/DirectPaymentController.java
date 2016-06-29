@@ -71,17 +71,17 @@ public class DirectPaymentController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "Are you still being paid this?", "stillBeingPaidThisPay");
+        validateMandatoryField(fieldValues, "stillBeingPaidThisPay", "Are you still being paid this?");
         if(fieldValue_Equals(fieldValues, "stillBeingPaidThisPay", "no")) {
             validateMandatoryDateField(fieldValues, "When were you last paid?", "whenDidYouLastGetPaid", new String[]{"whenDidYouLastGetPaid_day", "whenDidYouLastGetPaid_month", "whenDidYouLastGetPaid_year"});
         }
 
-        validateMandatoryFields(fieldValues, "Your Status", "whoPaidYouThisPay");
-        validateMandatoryFields(fieldValues, "Your Status", "amountOfThisPay");
+        validateMandatoryField(fieldValues, "whoPaidYouThisPay", "Your Status");
+        validateMandatoryField(fieldValues, "amountOfThisPay", "Your Status");
 
-        validateMandatoryFields(fieldValues, "How often are you paid?", "howOftenPaidThisPay");
+        validateMandatoryField(fieldValues, "howOftenPaidThisPay", "How often are you paid?");
         if(fieldValue_Equals(fieldValues, "howOftenPaidThisPay", "Other")) {
-            validateMandatoryFields(fieldValues, "How often are you paid?", "howOftenPaidThisPayOther");
+            validateMandatoryField(fieldValues, "howOftenPaidThisPayOther", "How often are you paid?");
         }
 
         LOG.trace("Ending BenefitsController.validate");

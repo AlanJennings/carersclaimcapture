@@ -88,11 +88,11 @@ public class EmploymentPaymentController extends AbstractFormController {
         LOG.trace("Starting BenefitsController.validate");
         // TODO the dates are from earlier in the claim
 
-        validateMandatoryFields(fieldValues, "How often are you paid?", "paymentFrequency");
-        validateMandatoryFields(fieldValues, "When do you get paid?", "whenGetPaid");
+        validateMandatoryField(fieldValues, "paymentFrequency", "How often are you paid?");
+        validateMandatoryField(fieldValues, "whenGetPaid", "When do you get paid?");
         validateMandatoryDateField(fieldValues, "When were you last paid?", "lastPaidDate", new String[]{"lastPaidDate_day", "lastPaidDate_month", "lastPaidDate_year"});
-        validateMandatoryFields(fieldValues, "What were you paid in your last wage?", "grossPay");
-        validateMandatoryFields(fieldValues, "Do you get the same amount each time?", "sameAmountEachTime");
+        validateMandatoryField(fieldValues, "grossPay", "What were you paid in your last wage?");
+        validateMandatoryField(fieldValues, "sameAmountEachTime", "Do you get the same amount each time?");
 
         LOG.trace("Ending BenefitsController.validate");
     }

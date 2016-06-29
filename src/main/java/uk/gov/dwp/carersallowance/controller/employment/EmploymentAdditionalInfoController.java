@@ -77,9 +77,9 @@ public class EmploymentAdditionalInfoController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "Do you want to add anything about your work?", "empAdditionalInfo");
+        validateMandatoryField(fieldValues, "empAdditionalInfo", "Do you want to add anything about your work?");
         if(fieldValue_Equals(fieldValues, "empAdditionalInfo", "yes")) {
-            validateMandatoryFields(fieldValues, "Do you want to add anything about your work?", "empAdditionalInfoText");
+            validateMandatoryField(fieldValues, "empAdditionalInfoText", "Do you want to add anything about your work?");
         }
 
         LOG.trace("Ending BenefitsController.validate");

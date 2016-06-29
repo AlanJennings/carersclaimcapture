@@ -73,22 +73,22 @@ public class FosteringAllowanceController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "What type of organisation pays you for Fostering Allowance?", "fosteringAllowancePay");
+        validateMandatoryField(fieldValues, "fosteringAllowancePay", "What type of organisation pays you for Fostering Allowance?");
         if(fieldValue_Equals(fieldValues, "fosteringAllowancePay", "Other")) {
-            validateMandatoryFields(fieldValues, "Who paid you Fostering Allowance?", "fosteringAllowancePayOther");
+            validateMandatoryField(fieldValues, "fosteringAllowancePayOther", "Who paid you Fostering Allowance?");
         }
 
-        validateMandatoryFields(fieldValues, "Are you still being paid this?", "stillBeingPaidThisPay");
+        validateMandatoryField(fieldValues, "stillBeingPaidThisPay", "Are you still being paid this?");
         if(fieldValue_Equals(fieldValues, "stillBeingPaidThisPay", "no")) {
             validateMandatoryDateField(fieldValues, "When did you start the course?", "whenDidYouLastGetPaid", new String[]{"whenDidYouLastGetPaid_day", "whenDidYouLastGetPaid_month", "whenDidYouLastGetPaid_year"});
         }
 
-        validateMandatoryFields(fieldValues, "Who paid you this?", "whoPaidYouThisPay");
-        validateMandatoryFields(fieldValues, "Amount paid", "amountOfThisPay");
+        validateMandatoryField(fieldValues, "whoPaidYouThisPay", "Who paid you this?");
+        validateMandatoryField(fieldValues, "amountOfThisPay", "Amount paid");
 
-        validateMandatoryFields(fieldValues, "How often are you paid?", "howOftenPaidThisPay");
+        validateMandatoryField(fieldValues, "howOftenPaidThisPay", "How often are you paid?");
         if(fieldValue_Equals(fieldValues, "howOftenPaidThisPay", "Other")) {
-            validateMandatoryFields(fieldValues, "How often are you paid?", "howOftenPaidThisPayOther");
+            validateMandatoryField(fieldValues, "howOftenPaidThisPayOther", "How often are you paid?");
         }
 
         LOG.trace("Ending BenefitsController.validate");

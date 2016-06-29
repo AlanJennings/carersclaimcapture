@@ -33,7 +33,7 @@
             </p>
         </t:hiddenWarning>
         
-        <t:hiddenPanel id="empAdditionalInfoWrap" triggerId="empAdditionalInfo" triggerValue="yes">
+        <t:hiddenPanel id="empAdditionalInfoWrap" triggerId="likeToPay" triggerValue="yes">
             
             <t:textedit id="accountHolderName" name="accountHolderName" value="${accountHolderName}" maxLength="60" label="Account holder name" errors="${validationErrors}" />
             <t:textedit id="bankFullName" name="bankFullName" value="${bankFullName}" maxLength="60" label="Name of bank or building society" errors="${validationErrors}" />
@@ -54,11 +54,11 @@
                         value="${accountNumber}" 
                         maxLength="10" 
                         label="Account number" 
-                        hintBefore="If you're using a Post Office card account, your account number isn't the number on your card. 
+                        hintAfter="If you're using a Post Office card account, your account number isn't the number on your card. 
                                     You can find the correct number on any letter you've had from the Post Office about your account."
                         errors="${validationErrors}" />
             
-            <t:textedit id="rollOrReferenceNumber" name="rollOrReferenceNumber" value="${rollOrReferenceNumber}" maxLength="18" label="Account holder name" errors="${validationErrors}" />
+            <t:textedit id="rollOrReferenceNumber" name="rollOrReferenceNumber" value="${rollOrReferenceNumber}" maxLength="18" label="Building society roll or reference number (optional)" errors="${validationErrors}" />
             
         </t:hiddenPanel>
 

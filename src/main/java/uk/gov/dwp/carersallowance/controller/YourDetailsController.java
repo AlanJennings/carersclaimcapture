@@ -70,11 +70,11 @@ public class YourDetailsController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "Title", "title");
-        validateMandatoryFields(fieldValues, "First name", "firstName");
+        validateMandatoryField(fieldValues, "title", "Title");
+        validateMandatoryField(fieldValues, "firstName", "First name");
         // "middleName" is optional,
-        validateMandatoryFields(fieldValues, "Last name","surname");
-        validateMandatoryFields(fieldValues, "National Insurance number", "nationalInsuranceNumber");
+        validateMandatoryField(fieldValues, "surname","Last name");
+        validateMandatoryField(fieldValues, "nationalInsuranceNumber", "National Insurance number");
 
         validateMandatoryDateField(fieldValues, "Date of Birth", "dateOfBirth", new String[]{"dateOfBirth_day", "dateOfBirth_month", "dateOfBirth_year"});
 

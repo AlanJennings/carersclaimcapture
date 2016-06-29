@@ -76,12 +76,12 @@ public class CareeDetailsController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "Title", "title");
-        validateMandatoryFields(fieldValues, "First name", "firstName");
-        validateMandatoryFields(fieldValues, "Last name", "surname");
+        validateMandatoryField(fieldValues, "title", "Title");
+        validateMandatoryField(fieldValues, "firstName", "First name");
+        validateMandatoryField(fieldValues, "surname", "Last name");
         validateMandatoryDateField(fieldValues, "Date of Birth", "dateOfBirth", new String[]{"dateOfBirth_day", "dateOfBirth_month", "dateOfBirth_year"});
-        validateMandatoryFields(fieldValues, "What's their relationship to you?", "relationship");
-        validateMandatoryFields(fieldValues, "Do they live at the same address as you?", "sameAddress");
+        validateMandatoryField(fieldValues, "relationship", "What's their relationship to you?");
+        validateMandatoryField(fieldValues, "sameAddress", "Do they live at the same address as you?");
         // address and postcode are not mandatory
 
         LOG.trace("Ending BenefitsController.validate");

@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.started;
+package uk.gov.dwp.carersallowance.controller;
 
 import java.util.Map;
 
@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 @Controller
@@ -66,12 +65,12 @@ public class AdditionalInfoController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryFields(fieldValues, "Do you want to tell us any additional information about your claim?", "anythingElse");
+        validateMandatoryField(fieldValues, "anythingElse", "Do you want to tell us any additional information about your claim?");
         if(fieldValue_Equals(fieldValues, "anythingElse", "yes")) {
-            validateMandatoryFields(fieldValues, "Tell us anything else you think we should know about your claim", "anythingElseText");
+            validateMandatoryField(fieldValues, "anythingElseText", "Tell us anything else you think we should know about your claim");
         }
 
-        validateMandatoryFields(fieldValues, "Do you live in Wales and want to receive future communications in Welsh?", "maritalStatus");
+        validateMandatoryField(fieldValues, "welshCommunication", "Do you live in Wales and want to receive future communications in Welsh?");
 
         LOG.trace("Ending BenefitsController.validate");
     }
