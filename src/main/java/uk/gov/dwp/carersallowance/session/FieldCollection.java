@@ -3,13 +3,19 @@ package uk.gov.dwp.carersallowance.session;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
 public class FieldCollection {
 
+    /**
+     * return the subset of allFieldValues named by fieldNames, (also map to single values).
+     * @throws MultipleValuesException if a named value is multi-valued.
+     */
     public static Map<String, String> getFieldValues(Map<String, String[]> allFieldValues, String[] fieldNames) {
         Parameters.validateMandatoryArgs(allFieldValues, "allFieldValues");
         if(fieldNames == null) {
@@ -41,6 +47,22 @@ public class FieldCollection {
         }
 
         return null;
+    }
+
+    public static String[] aggregateFieldLists(String[]...fieldArrays) {
+        if(fieldArrays == null) {
+            return null;
+        }
+
+        Set<String> fieldSet = new HashSet<>();
+        for(String[] fields: fieldArrays) {
+            for(String field: fields) {
+                fieldSet.add(field);
+            }
+        }
+
+        String[] allFields = fieldSet.toArray(new String[]{});
+        return allFields;
     }
 
     /**
@@ -109,6 +131,11 @@ public class FieldCollection {
 
             if(first == null) {
                 return -1;
+            }
+
+            // String.compareTo is not null safe
+            if(second == null) {
+                return 1;
             }
 
             return first.compareTo(second);

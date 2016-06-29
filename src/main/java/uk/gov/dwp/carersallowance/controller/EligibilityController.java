@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
@@ -51,8 +50,8 @@ public class EligibilityController extends AbstractFormController {
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
-    public String postForm(HttpServletRequest request, HttpSession session, Model model, RedirectAttributes redirectAttrs) {
-        return super.postForm(request, session, model, redirectAttrs);
+    public String postForm(HttpServletRequest request, HttpSession session, Model model) {
+        return super.postForm(request, session, model);
     }
 
     @Override

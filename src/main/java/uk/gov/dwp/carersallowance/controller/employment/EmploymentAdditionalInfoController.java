@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.started;
+package uk.gov.dwp.carersallowance.controller.employment;
 
 import java.util.Map;
 
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
@@ -22,10 +21,12 @@ public class EmploymentAdditionalInfoController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(EmploymentAdditionalInfoController.class);
 
     private static final String CURRENT_PAGE  = "/your-income/employment/additional-info";
+    private static final String PREVIOUS_PAGE = "?";
+    private static final String NEXT_PAGE     = "/pay-details/how-we-pay-you";
     private static final String PAGE_TITLE    = "Additional Information  Your income";
 
-    private static final String[] FIELDS = {"empAdditionalInfo",
-                                            "empAdditionalInfoText"};
+    public static final String[] FIELDS = {"empAdditionalInfo",
+                                           "empAdditionalInfoText"};
 
     @Autowired
     public EmploymentAdditionalInfoController(SessionManager sessionManager) {
@@ -33,8 +34,18 @@ public class EmploymentAdditionalInfoController extends AbstractFormController {
     }
 
     @Override
+    public String getPreviousPage(HttpServletRequest request) {
+        return PREVIOUS_PAGE;
+    }
+
+    @Override
     public String getCurrentPage() {
         return CURRENT_PAGE;
+    }
+
+    @Override
+    public String getNextPage(HttpServletRequest request) {
+        return NEXT_PAGE;
     }
 
     @Override
@@ -53,8 +64,8 @@ public class EmploymentAdditionalInfoController extends AbstractFormController {
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
-    public String postForm(HttpServletRequest request, HttpSession session, Model model, RedirectAttributes redirectAttrs) {
-        return super.postForm(request, session, model, redirectAttrs);
+    public String postForm(HttpServletRequest request, HttpSession session, Model model) {
+        return super.postForm(request, session, model);
     }
 
     /**

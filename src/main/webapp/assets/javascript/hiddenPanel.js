@@ -3,7 +3,7 @@
 
     window.initPanelState = function(panelId, triggerId, triggerValue) {
         var show = false;
-        $("#" + triggerId + " input").each(function(){
+        $("#" + triggerId + " input").add("select#" + triggerId).each(function(){
             var that = $(this);
             if(that.val() === triggerValue) {
                 if(that.attr('type') === "radio" || that.attr('type') === "checkbox") {
@@ -15,7 +15,7 @@
                 }
             }
         });
-
+        
         if(show === true) {
             $("#" + panelId).show();
         } else {
@@ -24,7 +24,7 @@
     };
 
     window.initPanelEvents = function(panelId, triggerId, triggerValue) {
-        return $("#" + triggerId + " input").on("change", function() {
+        return $("#" + triggerId + " input").add("select#" + triggerId).on("change", function() {
             if ($(this).val() === triggerValue) {
                 $("#" + panelId).show();
                 return $("#" + panelId).css('display', "block");

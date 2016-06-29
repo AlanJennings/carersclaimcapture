@@ -7,9 +7,9 @@
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" pageTitle="Before you start" nextButtonText="I agree - start my application" backLink="${previousPage}">
-        <t:hmtlsection><p>When you claim Carer&rsquo;s Allowance the person you care for may stop getting:</p></t:hmtlsection>
+        <t:htmlsection><p>When you claim Carer&rsquo;s Allowance the person you care for may stop getting:</p></t:htmlsection>
 
-        <t:hmtlsection> 
+        <t:htmlsection> 
             <ul class="list-bullet">
                 <li>a severe disability premium paid with their benefits, if they get one</li>
                 <li>an extra amount for severe disability paid with Pension Credit, if they get one</li>
@@ -21,18 +21,18 @@
                     offers it
                 </li>
             </ul>
-        </t:hmtlsection>
+        </t:htmlsection>
 
-        <t:hmtlsection>
+        <t:htmlsection>
             <p>Read more about 
                 <a rel="external" 
                    href="https://www.gov.uk/carers-allowance/what-youll-get" 
                    target="_blank"
                 >how Carer&rsquo;s Allowance affects other benefits</a>.
             </p>
-        </t:hmtlsection>
+        </t:htmlsection>
     
-        <t:hmtlsection><p>You <b>must</b> tell the person you care for before you claim.</p></t:hmtlsection>
+        <t:htmlsection><p>You <b>must</b> tell the person you care for before you claim.</p></t:htmlsection>
     </t:pageContent>
 
 

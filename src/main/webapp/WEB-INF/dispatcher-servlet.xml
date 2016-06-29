@@ -11,9 +11,9 @@
  http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
     <!-- Deliver anything in /assets directly -->
-    <mvc:resources mapping="/assets/**" location="/assets/" />	
+    <mvc:resources mapping="/assets/**" location="/assets/" />
     <mvc:default-servlet-handler />
-    <mvc:annotation-driven />
+    <mvc:annotation-driven ignore-default-model-on-redirect="true" />
     
     <context:component-scan base-package="uk.gov.dwp.carersallowance.controller" />
     <context:component-scan base-package="uk.gov.dwp.carersallowance.session" />    

@@ -7,7 +7,7 @@
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" pageTitle="When do you want Carer's Allowance to start?" section="Section 2 of 11" backLink="${previousPage}">
-        <t:hmtlsection>
+        <t:htmlsection>
             <p>
                 Most claims can be backdated 3 months. You may be able to 
                 <a rel="external" 
@@ -18,7 +18,7 @@
                 >backdate it further</a> 
                 if the person you care for was awarded their qualifying benefit in the last 3 months.
             </p>
-        </t:hmtlsection>
+        </t:htmlsection>
         
         <t:datefield id="dateOfClaim" 
                      nameDay="dateOfClaim_day" 

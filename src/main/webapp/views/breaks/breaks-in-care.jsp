@@ -13,21 +13,21 @@
         <c:if test="${empty breaks}">
             <c:set var="moreBreaksLabel" value="Have you had any breaks from caring for this person since ${dateOfClaim}?" />
         
-            <t:hmtlsection>
+            <t:htmlsection>
                 <p>
                     A break is any time you spent less than 35 hours a week caring for the other person. 
                     For example when:
                 </p>
-            </t:hmtlsection>
+            </t:htmlsection>
             
-            <t:hmtlsection>
+            <t:htmlsection>
                 <ul class="list-bullet">
                     <li>they were in respite care, hospital or on holiday without you.</li>
                     <li>you were in hospital or on holiday without them.</li>
                 </ul>
-            </t:hmtlsection>
+            </t:htmlsection>
             
-            <t:hmtlsection>
+            <t:htmlsection>
                 <p>
                     You might still get Carer's Allowance for these times. 
                     <a rel="external" 
@@ -37,7 +37,7 @@
                        onkeydown="trackEvent('/breaks/breaks-in-care','Claim Notes - Breaks from Caring');"
                     >Find out more</a>.
                 </p>
-            </t:hmtlsection>
+            </t:htmlsection>
 
         </c:if>
 

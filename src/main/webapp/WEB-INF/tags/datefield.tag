@@ -1,5 +1,6 @@
 <%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <%@attribute name="id" required="true" type="java.lang.String"%>
 <%@attribute name="nameDay" required="true" type="java.lang.String"%>
@@ -16,41 +17,17 @@
 
 <%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
 
-<c:if test="${not empty hintBefore}">
-    <c:if test="${empty hintBeforeId}">
-        <c:set var="hintBeforeHtml" value="<p class='form-hint'>${hintBefore}</p>" />
-    </c:if>
-    <c:if test="${not empty hintBeforeId}">
-        <c:set var="hintBeforeHtml" value="<p class='form-hint' id='${hintBeforeId}'>${hintBefore}</p>" />
-    </c:if>
-</c:if>
-
-<c:if test="${not empty hintAfterHtml}">
-    <c:if test="${empty hintAfterId}">
-        <c:set var="hintAfterHtml" value="<p class='form-hint'>${hintAfter}</p>" />
-    </c:if>
-    <c:if test="${not empty hintAfterId}">
-        <c:set var="hintAfterHtml" value="<p class='form-hint' id='${hintAfterId}'>${hintAfter}</p>" />
-    </c:if>
-</c:if>
-
-<c:if test="${not empty errors}">
-    <c:set var="hasError" value="${errors.hasError(id)}" />
-    <c:set var="errorMessage" value="${errors.getErrorMessage(id)}" />
-</c:if>
-
-<c:if test="${hasError}" >
-    <c:set var="errorClass" value="validation-error" />
-</c:if>
-<li class="form-group <c:out value='${errorClass}'/>">
-    <c:if test="${hasError}" >
-        <p class="validation-message">${errorMessage}</p>
-    </c:if>
+<t:component name="${id}" 
+             id="${id}" 
+             outerClass="${outerClass}" 
+             outerStyle="${outerStyle}" 
+             label="${label}" 
+             errors="${errors}">
 
     <!-- TODO: Probably should rearrange these a bit, so label and hints are outside the fieldset -->
     <fieldset class="question-group">
         <legend class="form-label-bold"> ${label} </legend>
-        ${hintBeforeHtml}
+        <t:hint hintId="${hintBeforeId}" hintText="${hintBefore}" /> 
         <ul class="form-date" id="${id}">
             <li class="form-group">
                 <label for="${id}_day">Day</label>
@@ -88,7 +65,7 @@
                        autocomplete="off">
             </li>
         </ul>
-        ${hintAfterHtml}
+        <t:hint hintId="${hintAfterId}" hintText="${hintAfter}" /> 
     </fieldset>
 
-</li>
+</t:component>

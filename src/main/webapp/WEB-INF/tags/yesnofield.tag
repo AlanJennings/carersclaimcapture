@@ -1,29 +1,23 @@
 <%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <%@attribute name="id" required="true" type="java.lang.String"%>
 <%@attribute name="name" required="true" type="java.lang.String"%>
 <%@attribute name="value" required="false" type="java.lang.String"%>
-<%@attribute name="label" required="false" type="java.lang.String"%>
+
 <%@attribute name="yesLabel" required="false" type="java.lang.String"%>
 <%@attribute name="noLabel" required="false" type="java.lang.String"%>
 
+<%@attribute name="outerClass" required="false" type="java.lang.String"%>
+<%@attribute name="outerStyle" required="false" type="java.lang.String"%>
+<%@attribute name="label" required="false" type="java.lang.String"%>
 <%@attribute name="hintBefore" required="false" type="java.lang.String"%>
 <%@attribute name="hintBeforeId" required="false" type="java.lang.String"%>
-<%@attribute name="hintBeforeHtml" required="false" type="java.lang.String"%>
 <%@attribute name="hintAfter" required="false" type="java.lang.String"%>
 <%@attribute name="hintAfterId" required="false" type="java.lang.String"%>
-<%@attribute name="hintAfterHtml" required="false" type="java.lang.String"%>
 
 <%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
-
-<c:if test="${not empty errors}">
-    <c:set var="hasError" value="${errors.hasError(name)}" />
-    <c:set var="errorMessage" value="${errors.getErrorMessage(name)}" />
-</c:if>
-
-<!-- TODO add track events separately using jquery -->
-
 
 <%-- set default values for yes & no labels --%>
 <c:if test="${empty yesLabel}">
@@ -33,36 +27,21 @@
     <c:set var="noLabel" value="No" />
 </c:if>
 
-<c:if test="${not empty hintBefore}">
-    <c:if test="${empty hintBeforeId}">
-        <c:set var="hintBeforeHtml" value="<p class='form-hint'>${hintBefore}</p>" />
-    </c:if>
-    <c:if test="${not empty hintBeforeId}">
-        <c:set var="hintBeforeHtml" value="<p class='form-hint' id='${hintBeforeId}'>${hintBefore}</p>" />
-    </c:if>
+<c:if test="${empty outerStyle}" >
+    <c:set var="outerStyle" value="margin-bottom: 22px;" />
 </c:if>
 
-<c:if test="${not empty hintAfterHtml}">
-    <c:if test="${empty hintAfterId}">
-        <c:set var="hintAfterHtml" value="<p class='form-hint'>${hintAfter}</p>" />
-    </c:if>
-    <c:if test="${not empty hintAfterId}">
-        <c:set var="hintAfterHtml" value="<p class='form-hint' id='${hintAfterId}'>${hintAfter}</p>" />
-    </c:if>
-</c:if>
-
-<c:if test="${hasError}" >
-    <c:set var="errorClass" value="validation-error" />
-</c:if>
-<li class="form-group <c:out value='${errorClass}'/>" style="margin-bottom: 22px;">
-    <c:if test="${hasError}" >
-        <p class="validation-message">${errorMessage}</p>
-    </c:if>
+<t:component name="${name}" 
+             id="${id}" 
+             outerClass="${outerClass}" 
+             outerStyle="${outerStyle}" 
+             label="${label}" 
+             errors="${errors}">
 
     <fieldset class="question-group">
         <legend class="form-label-bold ">${label}</legend>        
 
-        ${hintBeforeHtml}
+        <t:hint hintId="${hintBeforeId}" hintText="${hintBefore}" /> 
         <ul class="inline " id="${id}">  
             <li>
                 <%-- 
@@ -96,6 +75,7 @@
                 </label>
             </li>
         </ul>
-        ${hintAfterHtml}
+        <t:hint hintId="${hintAfterId}" hintText="${hintAfter}" /> 
     </fieldset>
-</li>
+    
+</t:component>

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -21,12 +22,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import uk.gov.dwp.carersallowance.session.FieldCollection;
 import uk.gov.dwp.carersallowance.session.IllegalFieldValueException;
 import uk.gov.dwp.carersallowance.session.InconsistentFieldValuesException;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.session.SessionManager.Session;
+import uk.gov.dwp.carersallowance.session.UnknownRecordException;
 import uk.gov.dwp.carersallowance.utils.CollectionUtils;
 import uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper;
 import uk.gov.dwp.carersallowance.utils.Parameters;
@@ -123,8 +125,11 @@ public abstract class AbstractFormController {
     }
 
     protected String showForm(HttpServletRequest request, Model model) {
+        return showFormInternal(request, model);
+    }
 
-        LOG.trace("Starting AbstractFormController.showForm");
+    private String showFormInternal(HttpServletRequest request, Model model) {
+        LOG.trace("Starting AbstractFormController.showFormInternal");
         try {
             LOG.debug("model = {}", model);
 
@@ -140,7 +145,7 @@ public abstract class AbstractFormController {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
         } finally {
-            LOG.trace("Ending AbstractFormController.showForm");
+            LOG.trace("Ending AbstractFormController.showFormInternal");
         }
     }
 
@@ -165,14 +170,10 @@ public abstract class AbstractFormController {
      * Including RedirectAttributes is needed if we wish redirects to work at all
      * even if we never use it!!
      */
-    protected String postForm(HttpServletRequest request,
-                              HttpSession session,
-                              Model model,
-                              RedirectAttributes redirectAttrs) {
+    protected String postForm(HttpServletRequest request, HttpSession session, Model model) {
 
         LOG.trace("Starting AbstractFormController.postForm");
         try {
-            LOG.debug("redirectAttrs = {}, model = {}", redirectAttrs, model);
             LOG.debug("session = {}", session);
             LOG.debug("request.getParameterMap() = {}", request.getParameterMap());
 
@@ -188,10 +189,11 @@ public abstract class AbstractFormController {
                 return showForm(request, model);
             }
 
+            finalizePostForm(request);
+
+            // add the fieldCollection id field to the url (if its populated)
             String nextPage = "redirect:" + getNextPage(request);
             LOG.debug("next page = {}", nextPage);
-
-            finalizePostForm(request);
 
             return nextPage;
         } catch(RuntimeException e) {
@@ -206,11 +208,29 @@ public abstract class AbstractFormController {
         // do nothing
     }
 
+    protected void copyMapToSession(Map<String, String> map, String[] fieldNames, HttpSession session) {
+        LOG.trace("Started AbstractFormController.copyMapToSession");
+        try {
+            Parameters.validateMandatoryArgs(new Object[]{map, session}, new String[]{"map", "session"});
+            if(fieldNames == null) {
+                return;
+            }
+
+            for(String fieldName: fieldNames) {
+                String fieldValue = map.get(fieldName);
+                LOG.debug("fieldName = {}, fieldValue = {}", fieldName, fieldValue);
+                session.setAttribute(fieldName, fieldValue);
+            }
+        } finally {
+            LOG.trace("Ending AbstractFormController.copyMapToSession");
+        }
+    }
+
     /**
      * Copy the named values from the session to the model
      */
     protected void copyFromSessionToModel(HttpServletRequest request, String[] fieldNames, Model model) {
-        LOG.trace("Started AbstractFormController.syncSessionToModel");
+        LOG.trace("Started AbstractFormController.copyFromSessionToModel");
         try {
             Parameters.validateMandatoryArgs(new Object[]{request, model}, new String[]{"request", "model"});
             if(fieldNames == null) {
@@ -225,7 +245,7 @@ public abstract class AbstractFormController {
                 model.addAttribute(fieldName, fieldValue);
             }
         } finally {
-            LOG.trace("Ending AbstractFormController.syncSessionToModel");
+            LOG.trace("Ending AbstractFormController.copyFromSessionToModel");
         }
     }
 
@@ -724,10 +744,10 @@ public abstract class AbstractFormController {
     }
 
     protected void saveFormattedDate(HttpSession session, String dateFieldName, String format, String yearFieldName, String monthFieldName, String dayFieldName) {
-    
+
         Parameters.validateMandatoryArgs(new Object[]{session, dateFieldName, format, yearFieldName, monthFieldName, dayFieldName},
                                          new String[]{"session", "dateFieldName", "format", "yearFieldName", "monthFieldName", "dayFieldName"});
-    
+
         Integer day = getSessionInt(session, dayFieldName, "dayFieldName");
         Integer month = getSessionInt(session, monthFieldName, "monthFieldName");
         Integer year = getSessionInt(session, yearFieldName, "yearFieldName");
@@ -737,13 +757,13 @@ public abstract class AbstractFormController {
         if(day == null || month == null || year == null) {
             throw new IllegalArgumentException("All date fields(day:'" + day + "', month:'" + month + "', year:'" + year + "') are not populated");
         }
-    
+
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DATE, day);
         calendar.set(Calendar.MONTH, month + 1);
         calendar.set(Calendar.YEAR, year);
         Date date = calendar.getTime();
-    
+
         SimpleDateFormat formatter = new SimpleDateFormat(format);
         String dateString = formatter.format(date);
         session.setAttribute(dateFieldName, dateString);
@@ -755,7 +775,7 @@ public abstract class AbstractFormController {
         if(StringUtils.isEmpty(object)) {
             return null;
         }
-    
+
         if((object instanceof String) == false) {
             throw new IllegalArgumentException("Expecting a 'String' session value:" + fieldName + " but found a " + object.getClass().getName());
         }
@@ -765,6 +785,211 @@ public abstract class AbstractFormController {
         } catch(NumberFormatException e) {
             throw new IllegalArgumentException("Expecting a 'numerical' session value:" + fieldName + " but found: '" + value + "'");
         }
+    }
+
+//    protected String getFieldCollectionName() {
+//        return null;
+//    }
+
+//    protected String getFieldCollectionIdField() {
+//        return null;
+//    }
+
+    /**
+     * Populate a fieldCollection entry from session field values as identified by the "fields"
+     * parameter with the specific entry being identified by the "idField" value.
+     *
+     * If the value corresponding to idField is blank then its a new record and it is added to
+     * the fieldCollection list, otherwise it is editing an existing record in the fieldCollection
+     * list.  The existing record is completely cleared before being overwritten by the new data.
+     *
+     * If the matching id cannot be found an IllegalArgumentException is thrown (TODO replace
+     * this with a proper exception).
+     *
+     * @throws IllegalArgumentException if the record being edited cannot be found.
+     */
+    protected void populateFieldCollectionEntry(HttpSession session, String fieldCollectionName, String[] fields, String idField) {
+        LOG.trace("Starting AbstractFormController.populateFieldCollectionEntry");
+        try {
+            Parameters.validateMandatoryArgs(session,  "session");
+
+            if(StringUtils.isEmpty(fieldCollectionName)) {
+                LOG.debug("fieldCollectionName empty, nothing to do");
+                return;
+            }
+
+            // get the fieldCollection list from the session (create if needed)
+            List<Map<String, String>> fieldCollection = getFieldCollections(session, fieldCollectionName, true);
+            LOG.debug("fieldCollection before = {}", fieldCollection);
+
+            // get the current fieldCollection values from the request
+            Map<String, String[]> attributes = getSessionStringAttributes(session);
+            Map<String, String> record = FieldCollection.getFieldValues(attributes, fields);
+            LOG.debug("record = {}", record);
+
+            // identify the record id field, and retrieve its value (if it exists)
+            String recordId = record.get(idField);
+
+            // if there is no current recordId, then we are editing a new record, so create a new record id
+            // and update the record, then add the new record to the fieldCollection list.
+            if(StringUtils.isEmpty(recordId)) {
+                LOG.debug("Creating new record");
+                String newRecordId = getNextIdValue(fieldCollection, idField);
+
+                record.put(idField, newRecordId);
+                fieldCollection.add(record);
+
+            // if there is a current recordId, then we are editing an existing record, iterate over the
+            // existing records and match the recordId on match update the existing record, IF the record
+            // ids cannot be matched log and error and throw an exception
+            } else {
+                boolean existingRecordFound = false;
+                if(StringUtils.isEmpty(recordId) == false) {
+                    for(Map<String, String> existingRecord: fieldCollection) {
+                        String existingRecordId = existingRecord.get(idField);
+                        if(recordId.equals(existingRecordId)) {
+                            // copy over the existing record (this assumes a complete record in hand)
+                            existingRecord.clear();
+                            existingRecord.putAll(record);
+                            existingRecordFound = true;
+                            break;
+                        }
+                    }
+                }
+
+                if(existingRecordFound == false) {
+                    LOG.error("Unknown record ID: " + recordId);
+                    throw new IllegalArgumentException("Unknown record ID: " + recordId);
+                }
+            }
+            LOG.debug("fieldCollection after = {}", fieldCollection);
+            LOG.debug("getFieldCollections('<fieldCollectionName>') = {}", getFieldCollections(session, fieldCollectionName, false));
+
+            // remove the item data from the session
+            removeFromSession(session, fields);
+
+        } finally {
+            LOG.trace("Ending AbstractFormController.populateFieldCollectionEntry");
+        }
+    }
+
+    protected String showFormEditFieldCollection(HttpServletRequest request, Model model, String fieldCollectionName, String idField) {
+        LOG.trace("Started EmploymentDetailsController.showForm");
+        try {
+            String destination = showFormInternal(request, model);
+
+            // if the ID field is populated then we are editing an existing record
+            // and we should load the data, but only if we have not failed validation
+            // otherwise it is a new record and everything is already up to date.
+            String editIdValue = request.getParameter(idField);
+            LOG.debug("editIdValue = {}", editIdValue);
+            if(StringUtils.isEmpty(editIdValue) == false && getValidationSummary().hasFormErrors() == false) {
+                LOG.debug("populating edit data");
+                List<Map<String, String>> records = getFieldCollections(request.getSession(), fieldCollectionName, true);
+                Map<String, String> record = FieldCollection.getFieldCollection(records, idField, editIdValue);
+                LOG.debug("record = {}", record);
+                model.addAllAttributes(record);
+            }
+            return destination;
+        } catch(RuntimeException e) {
+            LOG.error("Unexpected RuntimeException", e);
+            throw e;
+        } finally {
+            LOG.trace("Ending EmploymentDetailsController.showForm\n");
+        }
+    }
+
+    protected String urlWithArguments(String url, String argumentName, String argumentValue) {
+        if(StringUtils.isEmpty(url) || StringUtils.isEmpty(argumentName)) {
+            return url;
+        }
+
+        if(url.contains("?")) {
+            return url + "&" + argumentName + "=" + argumentValue;
+        } else {
+            return url + "?" + argumentName + "=" + argumentValue;
+        }
+    }
+
+    protected String editFieldCollectionRecord(HttpServletRequest request, String idToChange, String fieldCollectionName, String idField, String editingPage) {
+        Parameters.validateMandatoryArgs(new Object[]{idToChange, request}, new String[]{"idToChange", "request"});
+    
+        getValidationSummary().reset();
+    
+        // copy the record values into the edit fields in the session
+        List<Map<String, String>> records = getFieldCollections(request.getSession(), fieldCollectionName, true);
+        Map<String, String> record = FieldCollection.getFieldCollection(records, idField, idToChange);
+        if(record == null) {
+            throw new UnknownRecordException("Unknown record id: " + idToChange);
+        } else {
+            String[] fields = record.keySet().toArray(new String[]{});  // TODO instead of BreakInCareDetailController.FIELDS (?)
+            copyMapToSession(record, fields, request.getSession());
+        }
+    
+        return "redirect:" + editingPage;
+    }
+
+    /**
+     * Note: this does not validate the form
+     * @param fieldCollectionName TODO
+     */
+    protected String deleteFieldCollectionRecord(String idToDelete, HttpServletRequest request, String fieldCollectionName, String idField) {
+        LOG.trace("Starting EmploymentHistoryController.deleteEmployment");
+        try {
+            Parameters.validateMandatoryArgs(new Object[]{idToDelete, request}, new String[]{"idToDelete", "request"});
+    
+            Integer foundIndex = null;
+            List<Map<String, String>> fieldCollectionList = getFieldCollections(request.getSession(), fieldCollectionName);
+            for(int index = 0; index < fieldCollectionList.size(); index++) {
+                Map<String, String> map = fieldCollectionList.get(index);
+                if(idToDelete.equals(map.get(idField))) {
+                    foundIndex = Integer.valueOf(index);
+                    break;
+                }
+            }
+    
+            getValidationSummary().reset();
+    
+            if(foundIndex != null) {
+                fieldCollectionList.remove(foundIndex.intValue());
+            } else {
+                throw new UnknownRecordException("Unknown record id: " + idToDelete);
+            }
+    
+            return "redirect:" + getCurrentPage();
+        } finally {
+            LOG.trace("Ending EmploymentHistoryController.deleteEmployment");
+        }
+    }
+
+    public static String getRequestValue(String argumentName, HttpServletRequest request) {
+        String argumentValue = request.getParameter(argumentName);
+        if(StringUtils.isEmpty(argumentValue)) {
+            argumentValue = (String)request.getAttribute(argumentName);
+        }
+        return argumentValue;
+    }
+
+    public static Map<String, String[]> getSessionStringAttributes(HttpSession session) {
+        if(session == null) {
+            return null;
+        }
+
+        Map<String, String[]> map = new HashMap<>();;
+
+        List<String> attrNames = Collections.list(session.getAttributeNames());
+        for(String attrName: attrNames) {
+            Object object = session.getAttribute(attrName);
+            if(object == null || object instanceof String[]) {
+                map.put(attrName, (String[])object);
+            } else if(object instanceof String) {
+                map.put(attrName, new String[]{(String)object});
+            } else {
+                // ignore it
+            }
+        }
+
+        return map;
     }
 
     public static class ValidationSummary {
@@ -867,3 +1092,4 @@ public abstract class AbstractFormController {
         public static String SURNAME_REGEX                  = "^[" + RESTRICTED_CHARS + "]{1," + NAME_MAX_LENGTH + "}$$";
     }
 }
+
