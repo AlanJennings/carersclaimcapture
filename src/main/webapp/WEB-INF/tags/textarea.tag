@@ -27,10 +27,8 @@
 </c:if>
 
 <t:component name="${name}" 
-             id="${id}" 
              outerClass="${outerClass}" 
              outerStyle="${outerStyle}" 
-             label="${label}" 
              errors="${errors}">
 
         <label class="form-label-bold" for="${id}"> ${label} </label>

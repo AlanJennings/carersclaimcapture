@@ -33,50 +33,52 @@
         />
         
         <t:hiddenPanel id="otherIncomeWrap" triggerId="hadOtherIncomeSinceClaimDate" triggerValue="yes">
-            <t:checkbox id="yourIncome_sickpay" 
-                        name="yourIncome_sickpay" 
-                        checkedValue="true" 
-                        value="${yourIncome_sickpay}" 
-                        text="Statutory Sick Pay" 
-                        outerClass="no-class"
-                        errors="${validationErrors}"
-            />
-                        
-            <t:checkbox id="yourIncome_patmatadoppay" 
-                        name="yourIncome_patmatadoppay" 
-                        checkedValue="true" 
-                        value="${yourIncome_patmatadoppay}" 
-                        text="Statutory Paternity, Maternity or Adoption Pay" 
-                        outerClass="no-class"
-                        errors="${validationErrors}"
-            />
-                        
-            <t:checkbox id="yourIncome_fostering" 
-                        name="yourIncome_fostering" 
-                        checkedValue="true" 
-                        value="${yourIncome_fostering}" 
-                        text="Fostering Allowance" 
-                        outerClass="no-class"
-                        errors="${validationErrors}"
-            />
-                        
-            <t:checkbox id="yourIncome_directpay" 
-                        name="yourIncome_directpay" 
-                        checkedValue="true" 
-                        value="${yourIncome_directpay}" 
-                        text="Direct payment for caring for someone" 
-                        outerClass="no-class"
-                        errors="${validationErrors}"
-            />
-                        
-            <t:checkbox id="yourIncome_anyother" 
-                        name="yourIncome_anyother" 
-                        checkedValue="true" 
-                        value="${yourIncome_anyother}" 
-                        text="Any other income, eg rental income" 
-                        outerClass="no-class"
-                        errors="${validationErrors}"
-           />
+            <t:group name="otherIncomeGroup" hintBefore="Choose <b>all</b> that apply to you." errors="${validationErrors}">
+                <t:checkbox id="yourIncome_sickpay" 
+                            name="yourIncome_sickpay" 
+                            checkedValue="true" 
+                            value="${yourIncome_sickpay}" 
+                            text="Statutory Sick Pay" 
+                            outerClass="no-class"
+                            errors="${validationErrors}"
+                />
+                            
+                <t:checkbox id="yourIncome_patmatadoppay" 
+                            name="yourIncome_patmatadoppay" 
+                            checkedValue="true" 
+                            value="${yourIncome_patmatadoppay}" 
+                            text="Statutory Paternity, Maternity or Adoption Pay" 
+                            outerClass="no-class"
+                            errors="${validationErrors}"
+                />
+                            
+                <t:checkbox id="yourIncome_fostering" 
+                            name="yourIncome_fostering" 
+                            checkedValue="true" 
+                            value="${yourIncome_fostering}" 
+                            text="Fostering Allowance" 
+                            outerClass="no-class"
+                            errors="${validationErrors}"
+                />
+                            
+                <t:checkbox id="yourIncome_directpay" 
+                            name="yourIncome_directpay" 
+                            checkedValue="true" 
+                            value="${yourIncome_directpay}" 
+                            text="Direct payment for caring for someone" 
+                            outerClass="no-class"
+                            errors="${validationErrors}"
+                />
+                            
+                <t:checkbox id="yourIncome_anyother" 
+                            name="yourIncome_anyother" 
+                            checkedValue="true" 
+                            value="${yourIncome_anyother}" 
+                            text="Any other income, eg rental income" 
+                            outerClass="no-class"
+                            errors="${validationErrors}"
+               />
+           </t:group>
         </t:hiddenPanel>
 
     </t:pageContent>

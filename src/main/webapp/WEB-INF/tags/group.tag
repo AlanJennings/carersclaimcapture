@@ -4,7 +4,6 @@
 
 <%@attribute name="name" required="true" type="java.lang.String"%>
 
-<%@attribute name="id" required="false" type="java.lang.String"%>
 <%@attribute name="outerClass" required="false" type="java.lang.String"%>
 <%@attribute name="outerStyle" required="false" type="java.lang.String"%>
 <%@attribute name="label" required="false" type="java.lang.String"%>
@@ -14,20 +13,19 @@
 <%@attribute name="hintAfterId" required="false" type="java.lang.String"%>
 <%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
 
-<%@attribute name="value" required="false" type="java.lang.String"%>
-<%@attribute name="maxLength" required="false" type="java.lang.String"%>
-<%@attribute name="additionalClasses" required="false" type="java.lang.String"%>
-
 <t:component name="${name}" 
              outerClass="${outerClass}" 
              outerStyle="${outerStyle}" 
              errors="${errors}">
-    
-    <label class="form-label-bold" for="${id}"> ${label} </label>
-    <t:hint hintId="${hintBeforeId}" hintText="${hintBefore}" />
-    <input type="text" class="form-control ${additionalClasses}" id="${id}" name="${name}" value="${value}" maxLength="${maxLength}" autocomplete="off">
-    <t:hint hintId="${hintAfterId}" hintText="${hintAfter}" />
+             
+    <fieldset class="question-group">
+        <legend class="form-label-bold ">${label}</legend>        
 
+        <t:hint hintId="${hintBeforeId}" hintText="${hintBefore}" /> 
+        <ul class="form-group form-group-compound" id="${id}">
+            <jsp:doBody />
+        </ul>
+        <t:hint hintId="${hintAfterId}" hintText="${hintAfter}" /> 
+    </fieldset>
 </t:component>
-
 

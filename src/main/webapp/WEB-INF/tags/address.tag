@@ -19,10 +19,8 @@
 <%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
 
 <t:component name="${id}" 
-             id="${id}" 
              outerClass="${outerClass}" 
              outerStyle="${outerStyle}" 
-             label="${label}" 
              errors="${errors}">
                 
     <fieldset class="question-group">

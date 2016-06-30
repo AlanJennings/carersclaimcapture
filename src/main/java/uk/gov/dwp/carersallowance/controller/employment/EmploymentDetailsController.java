@@ -1,5 +1,6 @@
 package uk.gov.dwp.carersallowance.controller.employment;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,12 +21,13 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class EmploymentDetailsController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(EmploymentDetailsController.class);
 
-    private static final String PREVIOUS_PAGE         = "/your-income/employment/been-employed";
+    private static final String YOUR_INCOME_PAGE      = "/your-income/your-income";
+    private static final String PARENT_PAGE           = "/your-income/employment/been-employed";
     private static final String CURRENT_PAGE          = "/your-income/employment/job-details"; // parameter to indicate which job index
     private static final String NEXT_PAGE             = "/your-income/employment/last-wage";
     private static final String PAGE_TITLE            = "Employer details - Your income";
 
-    private static final String   FIELD_COLLECTION_NAME = EmploymentHistoryController.FIELD_COLLECTION_NAME;
+    private static final String  FIELD_COLLECTION_NAME = EmploymentHistoryController.FIELD_COLLECTION_NAME;
 
     public static final String   ID_FIELD              = EmploymentHistoryController.ID_FIELD;
     public static final String[] FIELDS = {ID_FIELD,
@@ -55,7 +57,11 @@ public class EmploymentDetailsController extends AbstractFormController {
 
     @Override
     public String getPreviousPage(HttpServletRequest request) {
-        return PREVIOUS_PAGE;
+        List<Map<String, String>> employments = getFieldCollections(request.getSession(), FIELD_COLLECTION_NAME, true);
+        if(employments == null || employments.isEmpty()) {
+            return YOUR_INCOME_PAGE;
+        }
+        return PARENT_PAGE;
     }
 
     @Override

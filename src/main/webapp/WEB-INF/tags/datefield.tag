@@ -18,10 +18,8 @@
 <%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
 
 <t:component name="${id}" 
-             id="${id}" 
              outerClass="${outerClass}" 
              outerStyle="${outerStyle}" 
-             label="${label}" 
              errors="${errors}">
 
     <!-- TODO: Probably should rearrange these a bit, so label and hints are outside the fieldset -->

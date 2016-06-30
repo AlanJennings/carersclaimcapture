@@ -43,6 +43,11 @@ public class HowWePayYouController extends AbstractFormController {
     }
 
     @Override
+    public String getPreviousPage(HttpServletRequest request) {
+        return super.getPreviousPage(request, YourIncomeController.getIncomePageList(request.getSession()));
+    }
+
+    @Override
     public String[] getFields() {
         return FIELDS;
     }
@@ -75,7 +80,7 @@ public class HowWePayYouController extends AbstractFormController {
         if(fieldValue_Equals(fieldValues, "likeToPay", "yes")) {
             validateMandatoryField(fieldValues, "accountHolderName", "Account holder name");
             validateMandatoryField(fieldValues, "bankFullName", "Name of bank or building society");
-            validateMandatoryFieldGroup(fieldValues, "sortcode", "Sort code", "sortcode_1", "sortcode_2", "sortcode_3");
+            validateMandatoryFieldGroup(fieldValues, "sortcode", "Sort code", true, "sortcode_1", "sortcode_2", "sortcode_3");
             validateMandatoryField(fieldValues, "accountNumber", "Account number");
         }
 

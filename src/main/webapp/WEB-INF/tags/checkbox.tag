@@ -24,10 +24,8 @@
 </c:if>
 
 <t:component name="${name}" 
-             id="${id}" 
              outerClass="${outerClass}" 
              outerStyle="${outerStyle}" 
-             label="${label}" 
              errors="${errors}">
 
     <t:hint hintId="${hintBeforeId}" hintText="${hintBefore}" />  

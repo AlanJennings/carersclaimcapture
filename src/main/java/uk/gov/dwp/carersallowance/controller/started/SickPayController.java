@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
+import uk.gov.dwp.carersallowance.controller.YourIncomeController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 @Controller
@@ -38,8 +39,18 @@ public class SickPayController extends AbstractFormController {
     }
 
     @Override
+    public String getPreviousPage(HttpServletRequest request) {
+        return super.getPreviousPage(request, YourIncomeController.getIncomePageList(request.getSession()));
+    }
+
+    @Override
     public String getCurrentPage() {
         return CURRENT_PAGE;
+    }
+
+    @Override
+    public String getNextPage(HttpServletRequest request) {
+        return super.getNextPage(request, YourIncomeController.getIncomePageList(request.getSession()));
     }
 
     @Override

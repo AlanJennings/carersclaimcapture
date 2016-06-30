@@ -32,10 +32,8 @@
 </c:if>
 
 <t:component name="${name}" 
-             id="${id}" 
              outerClass="${outerClass}" 
              outerStyle="${outerStyle}" 
-             label="${label}" 
              errors="${errors}">
 
     <fieldset class="question-group">

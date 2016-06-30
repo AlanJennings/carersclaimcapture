@@ -6,7 +6,6 @@
 <%@attribute name="id" required="false" type="java.lang.String"%>
 <%@attribute name="outerClass" required="false" type="java.lang.String"%>
 <%@attribute name="outerStyle" required="false" type="java.lang.String"%>
-<%@attribute name="label" required="false" type="java.lang.String"%>
 <%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
 
 <%-- Start of the default values --%>

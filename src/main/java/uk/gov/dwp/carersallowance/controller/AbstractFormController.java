@@ -98,29 +98,36 @@ public abstract class AbstractFormController {
     public ValidationSummary getValidationSummary()         { return validationSummary; }
 
     public String getPreviousPage(HttpServletRequest request) {
+        return getPreviousPage(request, pageList);
+    }
+
+    public String getPreviousPage(HttpServletRequest request, List<String> currentPageList) {
         String currentPage = getCurrentPage();
-        int index = pageList.indexOf(currentPage);
+        int index = currentPageList.indexOf(currentPage);
         if(index == -1 || index == 0) {
             // not found or first
             return null;
         }
-        String previousPage = pageList.get(index - 1);
+        String previousPage = currentPageList.get(index - 1);
         return previousPage;
     }
 
+    public String getNextPage(HttpServletRequest request) {
+        return getNextPage(request, pageList);
+    }
     /**
      * @param request TODO will almost definitely replace request with a reference to
      *                     the internalized application state (cf. session)
      * @return
      */
-    public String getNextPage(HttpServletRequest request) {
+    public String getNextPage(HttpServletRequest request, List<String> currentPageList) {
         String currentPage = getCurrentPage();
-        int index = pageList.indexOf(currentPage);
-        if(index == -1 || index == (pageList.size() -1)) {
+        int index = currentPageList.indexOf(currentPage);
+        if(index == -1 || index == (currentPageList.size() -1)) {
             // not found or last
             return null;
         }
-        String nextPage = pageList.get(index + 1);
+        String nextPage = currentPageList.get(index + 1);
         return nextPage;
     }
 
@@ -361,7 +368,10 @@ public abstract class AbstractFormController {
         LOG.trace("Ending AbstractFormController.validateMandatoryField");
     }
 
-    protected void validateMandatoryFieldGroup(Map<String, String[]> allfieldValues, String id, String fieldTitle, String...fieldNames) {
+    /**
+     * @param allMandatory if true all must be populated, if false at least one must be populated
+     */
+    protected void validateMandatoryFieldGroup(Map<String, String[]> allfieldValues, String id, String fieldTitle, boolean allMandatory, String...fieldNames) {
         LOG.trace("Started AbstractFormController.validateMandatoryField");
         Parameters.validateMandatoryArgs(new Object[]{allfieldValues, fieldTitle}, new String[]{"allfieldValues", "fieldTitle"});
 
@@ -685,54 +695,68 @@ public abstract class AbstractFormController {
         session.setAttribute(collectionName,  values);
     }
 
-    protected Boolean getYesNoBooleanFieldValue(HttpServletRequest request, String fieldName) {
-        return getBooleanFieldValue(request, fieldName, "yes", "no");
-    }
-
     /**
      * case-insensitive
      *
      * @throws IllegalFieldValueException
      */
-    protected Boolean getBooleanFieldValue(HttpServletRequest request, String fieldName, String trueValue, String falseValue)
-            throws IllegalFieldValueException {
+    public static Boolean getYesNoBooleanFieldValue(HttpServletRequest request, String fieldName) {
+        return getBooleanFieldValue(fieldName, "yes", "no", request.getParameterValues(fieldName));
+    }
 
-                Parameters.validateMandatoryArgs(new Object[]{request, fieldName, trueValue, falseValue}, new String[]{"request", "fieldName", "trueValue", "falseValue"});
-                String[] values = request.getParameterValues(fieldName);
-                if(values == null || values.length == 0) {
-                    return null;
-                }
+    public static Boolean getYesNoBooleanFieldValue(HttpSession session, String fieldName) {
+        Object object = session.getAttribute(fieldName);
+        if(object == null) {
+            return null;
+        }
 
-                boolean yes = false;
-                boolean no = false;
-                boolean other = false;
-                for(String value : values) {
-                    if(trueValue.equalsIgnoreCase(value)) {
-                        yes = true;
-                    } else if(falseValue.equalsIgnoreCase(value)) {
-                        no = true;
-                    } else if(StringUtils.isEmpty(value) == false) {
-                        other = true;
-                    }
-                }
+        String[] value;
+        if(object instanceof String[]) {
+            value = (String[])object;
+        } else if(object instanceof String) {
+            value = new String[]{(String)object};
+        } else {
+            throw new IllegalFieldValueException("value is not a String or String[] instance, but: " + object.getClass().getName(), null);
+        }
 
-                if(other == false && no == false && yes == false) {
-                    return null;
-                }
+        return getBooleanFieldValue(fieldName, "yes", "no", value);
+    }
 
-                if(other == false) {
-                    if(yes == true && no == false) {
-                        return Boolean.TRUE;
-                    } else if(yes == false && no == true) {
-                        return Boolean.FALSE;
-                    }
-                }
+    public static Boolean getBooleanFieldValue(String fieldName, String trueValue, String falseValue, String[] values) {
+        if(values == null || values.length == 0) {
+            return null;
+        }
 
-                if(other == true) {
-                    throw new IllegalFieldValueException(fieldName, values);
-                }
-                throw new InconsistentFieldValuesException(fieldName, values);
+        boolean yes = false;
+        boolean no = false;
+        boolean other = false;
+        for(String value : values) {
+            if(trueValue.equalsIgnoreCase(value)) {
+                yes = true;
+            } else if(falseValue.equalsIgnoreCase(value)) {
+                no = true;
+            } else if(StringUtils.isEmpty(value) == false) {
+                other = true;
             }
+        }
+
+        if(other == false && no == false && yes == false) {
+            return null;
+        }
+
+        if(other == false) {
+            if(yes == true && no == false) {
+                return Boolean.TRUE;
+            } else if(yes == false && no == true) {
+                return Boolean.FALSE;
+            }
+        }
+
+        if(other == true) {
+            throw new IllegalFieldValueException(fieldName, values);
+        }
+        throw new InconsistentFieldValuesException(fieldName, values);
+    }
 
     protected String getNextIdValue(List<Map<String, String>> fieldCollectionList, String idFieldName) {
         int value = 0;

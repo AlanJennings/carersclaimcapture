@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
+import uk.gov.dwp.carersallowance.controller.YourIncomeController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 @Controller
@@ -21,7 +22,6 @@ public class EmploymentAdditionalInfoController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(EmploymentAdditionalInfoController.class);
 
     private static final String CURRENT_PAGE  = "/your-income/employment/additional-info";
-    private static final String PREVIOUS_PAGE = "?";
     private static final String NEXT_PAGE     = "/pay-details/how-we-pay-you";
     private static final String PAGE_TITLE    = "Additional Information  Your income";
 
@@ -35,7 +35,7 @@ public class EmploymentAdditionalInfoController extends AbstractFormController {
 
     @Override
     public String getPreviousPage(HttpServletRequest request) {
-        return PREVIOUS_PAGE;
+        return super.getPreviousPage(request, YourIncomeController.getIncomePageList(request.getSession()));
     }
 
     @Override
