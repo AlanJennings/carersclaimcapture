@@ -25,7 +25,7 @@
         <t:textedit id="howWeContactYou" name="howWeContactYou" value="${howWeContactYou}" maxLength="20" label="Contact number" errors="${validationErrors}" />
         <t:checkbox id="contactYouByTextphone" 
                     name="contactYouByTextphone" 
-                    checkedValue="true" 
+                    checkedValue="yes" 
                     value="${contactYouByTextphone}"
                     text="This is a textphone for people with hearing difficulties." 
                     additionalClasses="checkbox-single"

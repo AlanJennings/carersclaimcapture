@@ -371,7 +371,7 @@ public abstract class AbstractFormController {
     /**
      * @param allMandatory if true all must be populated, if false at least one must be populated
      */
-    protected void validateMandatoryFieldGroup(Map<String, String[]> allfieldValues, String id, String fieldTitle, boolean allMandatory, String...fieldNames) {
+    protected void validateMandatoryFieldGroupAllFields(Map<String, String[]> allfieldValues, String id, String fieldTitle, String...fieldNames) {
         LOG.trace("Started AbstractFormController.validateMandatoryField");
         Parameters.validateMandatoryArgs(new Object[]{allfieldValues, fieldTitle}, new String[]{"allfieldValues", "fieldTitle"});
 
@@ -386,6 +386,32 @@ public abstract class AbstractFormController {
                 break;
             }
         }
+
+        LOG.trace("Ending AbstractFormController.validateMandatoryField");
+    }
+
+    /**
+     * @param allMandatory if true all must be populated, if false at least one must be populated
+     */
+    protected void validateMandatoryFieldGroupAnyField(Map<String, String[]> allfieldValues, String id, String fieldTitle, String...fieldNames) {
+        LOG.trace("Started AbstractFormController.validateMandatoryField");
+        Parameters.validateMandatoryArgs(new Object[]{allfieldValues, fieldTitle}, new String[]{"allfieldValues", "fieldTitle"});
+
+        LOG.debug("fieldNames = {}", new LoggingObjectWrapper(fieldNames));
+        if(fieldNames == null || fieldNames.length == 0) {
+            return;
+        }
+
+        for(String fieldName: fieldNames) {
+            String[] fieldValues = allfieldValues.get(fieldName);
+            LOG.debug("fieldName = {}, fieldValues={}", fieldName, new LoggingObjectWrapper(fieldValues));
+            if(isEmpty(fieldValues) == false) {
+                return;
+            }
+        }
+
+        LOG.debug("missing mandatory field: {}", id);
+        addFormError(id, fieldTitle, "You must complete this section");
 
         LOG.trace("Ending AbstractFormController.validateMandatoryField");
     }
@@ -695,34 +721,34 @@ public abstract class AbstractFormController {
         session.setAttribute(collectionName,  values);
     }
 
-    /**
-     * case-insensitive
-     *
-     * @throws IllegalFieldValueException
-     */
     public static Boolean getYesNoBooleanFieldValue(HttpServletRequest request, String fieldName) {
         return getBooleanFieldValue(fieldName, "yes", "no", request.getParameterValues(fieldName));
     }
 
     public static Boolean getYesNoBooleanFieldValue(HttpSession session, String fieldName) {
+        return getBooleanFieldValue(fieldName, "yes", "no", getSessionStringAttribute(session, fieldName));
+    }
+
+    public static String[] getSessionStringAttribute(HttpSession session, String fieldName) {
         Object object = session.getAttribute(fieldName);
         if(object == null) {
             return null;
         }
 
-        String[] value;
         if(object instanceof String[]) {
-            value = (String[])object;
+            return (String[])object;
         } else if(object instanceof String) {
-            value = new String[]{(String)object};
+            return new String[]{(String)object};
         } else {
             throw new IllegalFieldValueException("value is not a String or String[] instance, but: " + object.getClass().getName(), null);
         }
-
-        return getBooleanFieldValue(fieldName, "yes", "no", value);
     }
 
+    /**
+     * case-insensitive
+     */
     public static Boolean getBooleanFieldValue(String fieldName, String trueValue, String falseValue, String[] values) {
+        Parameters.validateMandatoryArgs(new Object[]{trueValue, falseValue}, new String[]{"trueValue", "falseValue"});
         if(values == null || values.length == 0) {
             return null;
         }

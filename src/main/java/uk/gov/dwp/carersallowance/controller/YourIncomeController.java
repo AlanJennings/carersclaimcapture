@@ -131,15 +131,14 @@ public class YourIncomeController extends AbstractFormController {
         validateMandatoryField(fieldValues, BEEN_SELF_EMPLOYED_SINCE1_WEEK_BEFORE_CLAIM, "Have you been in self-employment since 25 May 2016?");
         validateMandatoryField(fieldValues, HAD_OTHER_INCOME_SINCE_CLAIM_DATE, "Have you had other income since 17 June 2016?");
         if(fieldValue_Equals(fieldValues, HAD_OTHER_INCOME_SINCE_CLAIM_DATE, "yes")) {
-            validateMandatoryFieldGroup(fieldValues,
-                                        "otherIncomeGroup",
-                                        "Have you had other income since 17 June 2016?",
-                                        false,
-                                        YOUR_INCOME_SICKPAY,
-                                        YOUR_INCOME_PATMATADOPPAY,
-                                        YOUR_INCOME_FOSTERING,
-                                        YOUR_INCOME_DIRECTPAY,
-                                        YOUR_INCOME_ANYOTHER);
+            validateMandatoryFieldGroupAnyField(fieldValues,
+                                                "otherIncomeGroup",
+                                                "Have you had other income since 17 June 2016?",
+                                                YOUR_INCOME_SICKPAY,
+                                                YOUR_INCOME_PATMATADOPPAY,
+                                                YOUR_INCOME_FOSTERING,
+                                                YOUR_INCOME_DIRECTPAY,
+                                                YOUR_INCOME_ANYOTHER);
         }
         LOG.trace("Ending BenefitsController.validate");
     }

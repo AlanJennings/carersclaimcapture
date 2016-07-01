@@ -80,7 +80,7 @@ public class HowWePayYouController extends AbstractFormController {
         if(fieldValue_Equals(fieldValues, "likeToPay", "yes")) {
             validateMandatoryField(fieldValues, "accountHolderName", "Account holder name");
             validateMandatoryField(fieldValues, "bankFullName", "Name of bank or building society");
-            validateMandatoryFieldGroup(fieldValues, "sortcode", "Sort code", true, "sortcode_1", "sortcode_2", "sortcode_3");
+            validateMandatoryFieldGroupAllFields(fieldValues, "sortcode", "Sort code", "sortcode_1", "sortcode_2", "sortcode_3");
             validateMandatoryField(fieldValues, "accountNumber", "Account number");
         }
 

@@ -44,6 +44,10 @@ public class IllegalFieldValueException extends RuntimeException {
     public String[] getFieldValues() { return fieldValues; }
 
     public String getMessage() {
+        String superGetMessage = super.getMessage();
+        if(superGetMessage == null) {
+            superGetMessage = "";
+        }
         return super.getMessage() + " fieldName = " + fieldName + " values = " + (fieldValues == null ? null : Arrays.asList(fieldValues));
     }
 }
