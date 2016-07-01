@@ -43,11 +43,9 @@
                       errors="${validationErrors}" 
             />
             
-            <t:hiddenPanel id="haveAccountsWrapYes" triggerId="haveAccounts" triggerValue="yes" >
-                <t:htmlsection id="accountsinstruction">
-                    You must send a copy of your most recent accounts to the Carer's Allowance Unit.
-                </t:htmlsection>
-            </t:hiddenPanel>
+            <t:hiddenWarning id="haveAccountsWrapYes" triggerId="haveAccounts" triggerValue="yes" >
+                <p>You must send a copy of your most recent accounts to the Carer's Allowance Unit.</p>
+            </t:hiddenWarning>
             
             <t:hiddenPanel id="haveAccountsWrapNo" triggerId="haveAccounts" triggerValue="no" >
                 <t:yesnofield id="knowTradingYear" 
@@ -96,7 +94,7 @@
                           errors="${validationErrors}" 
              />
              
-             <t:hiddenPanel id="paidMoneyWrap" triggerId="moreThanYearAgo" triggerValue="yes" >
+             <t:hiddenPanel id="paidMoneyWrap" triggerId="paidMoney" triggerValue="yes" >
              
                 <t:datefield id="paidMoneyDate" 
                              nameDay="paidMoneyDate_day" 

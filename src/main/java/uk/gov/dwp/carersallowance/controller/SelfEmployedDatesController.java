@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.started;
+package uk.gov.dwp.carersallowance.controller;
 
 import java.util.Map;
 
@@ -13,8 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import uk.gov.dwp.carersallowance.controller.AbstractFormController;
-import uk.gov.dwp.carersallowance.controller.YourIncomeController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 @Controller
@@ -25,22 +23,22 @@ public class SelfEmployedDatesController extends AbstractFormController {
     private static final String PAGE_TITLE    = "Your job Self-employment";
 
     private static final String[] FIELDS = {"stillSelfEmployed",
-                                            "finishThisWork.day",
-                                            "finishThisWork.month",
-                                            "finishThisWork.year",
+                                            "finishThisWork_day",
+                                            "finishThisWork_month",
+                                            "finishThisWork_year",
                                             "moreThanYearAgo",
                                             "haveAccounts",
                                             "knowTradingYear",
-                                            "tradingYearStart.day",
-                                            "tradingYearStart.month",
-                                            "tradingYearStart.year",
-                                            "startThisWork.day",
-                                            "startThisWork.month",
-                                            "startThisWork.year",
+                                            "tradingYearStart_day",
+                                            "tradingYearStart_month",
+                                            "tradingYearStart_year",
+                                            "startThisWork_day",
+                                            "startThisWork_month",
+                                            "startThisWork_year",
                                             "paidMoney",
-                                            "paidMoneyDate.day",
-                                            "paidMoneyDate.month",
-                                            "paidMoneyDate.year"};
+                                            "paidMoneyDate_day",
+                                            "paidMoneyDate_month",
+                                            "paidMoneyDate_year"};
 
     @Autowired
     public SelfEmployedDatesController(SessionManager sessionManager) {
@@ -107,11 +105,11 @@ public class SelfEmployedDatesController extends AbstractFormController {
             }
         } else if(fieldValue_Equals(fieldValues, "moreThanYearAgo", "no")) {
             validateMandatoryDateField(fieldValues, "When did you finish this work?", "startThisWork", new String[]{"startThisWork_day", "startThisWork_month", "startThisWork_year"});
-        }
 
-        validateMandatoryField(fieldValues, "paidMoney", "Has your self-employed business been paid any money yet?");
-        if(fieldValue_Equals(fieldValues, "paidMoney", "yes")) {
-            validateMandatoryDateField(fieldValues, "Date money first received by the business", "paidMoneyDate", new String[]{"paidMoneyDate_day", "paidMoneyDate_month", "paidMoneyDate_year"});
+            validateMandatoryField(fieldValues, "paidMoney", "Has your self-employed business been paid any money yet?");
+            if(fieldValue_Equals(fieldValues, "paidMoney", "yes")) {
+                validateMandatoryDateField(fieldValues, "Date money first received by the business", "paidMoneyDate", new String[]{"paidMoneyDate_day", "paidMoneyDate_month", "paidMoneyDate_year"});
+            }
         }
 
         LOG.trace("Ending BenefitsController.validate");

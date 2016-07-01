@@ -1,44 +1,42 @@
 (function() {
-  var checkValidCharacters, executeEvent;
+    var checkValidCharacters, executeEvent;
 
-  executeEvent = function(selector, maxChars) {
-    var elem, helper, num, text;
-    elem = $(selector);
-    checkValidCharacters(elem, maxChars);
-    helper = elem.parent().find(".countdown");
-    text = helper.html();
-    num = maxChars - elem.val().replace(/\r(?!\n)|\n(?!\r)/g, "\r\n").length;
-    if ((text !== void 0) && (text.length > 0)) {
-      return helper.html(text.replace(/-?([0-9]+)/, num));
-    }
-  };
+    executeEvent = function(selector, maxChars) {
+        var elem = $(selector);
+        checkValidCharacters(elem, maxChars);
 
-  checkValidCharacters = function(elem, maxChars) {
-    var newElem, newMaxChars;
-    newElem = elem.val().replace(/\r(?!\n)|\n(?!\r)/g, "\r\n");
-    newMaxChars = maxChars;
-    if (newElem.lastIndexOf("\r\n") === maxChars - 1) {
-      newMaxChars = maxChars - 1;
-    }
-    return elem.val(elem.val().replace(/\r(?!\n)|\n(?!\r)/g, "\r\n").substr(0, newMaxChars));
-  };
+        var helper = elem.parent().find(".countdown");
+        var text = helper.html();
+        var num = maxChars - elem.val().replace(/\r(?!\n)|\n(?!\r)/g, "\r\n").length;
 
-  window.areaCounter = function(textarea) {
-    var selector;
-    selector = "#" + textarea.selector;
-    if ($(selector).length > 0) {
-      $(selector).on("click", function() {
-        return executeEvent(selector, textarea.maxChars);
-      });
-      $(selector).on("blur", function() {
-        return executeEvent(selector, textarea.maxChars);
-      });
-      return $(selector).on("keyup", function() {
-        return executeEvent(selector, textarea.maxChars);
-      });
-    }
-  };
+        if ((text !== void 0) && (text.length > 0)) {
+            return helper.html(text.replace(/-?([0-9]+)/, num));
+        }
+    };
+
+    checkValidCharacters = function(elem, maxChars) {
+        var newElem = elem.val().replace(/\r(?!\n)|\n(?!\r)/g, "\r\n");
+        var newMaxChars = maxChars;
+        if (newElem.lastIndexOf("\r\n") === maxChars - 1) {
+            newMaxChars = maxChars - 1;
+        }
+        return elem.val(elem.val().replace(/\r(?!\n)|\n(?!\r)/g, "\r\n").substr(0, newMaxChars));
+    };
+
+    window.areaCounter = function(id, maxChars) {
+        var selector = $("#" + id);
+        if (selector.length > 0) {
+            selector.on("click", function() {
+                return executeEvent("#" + id, maxChars);
+            });
+            selector.on("blur", function() {
+                return executeEvent("#" + id, maxChars);
+            });
+            return selector.on("keyup", function() {
+                return executeEvent("#" + id, maxChars);
+            });
+        }
+    };
 
 }).call(this);
 
-//# sourceMappingURL=textAreaCounter.js.map

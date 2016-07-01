@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.started;
+package uk.gov.dwp.carersallowance.controller;
 
 import java.util.Map;
 
@@ -13,20 +13,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import uk.gov.dwp.carersallowance.controller.AbstractFormController;
-import uk.gov.dwp.carersallowance.controller.YourIncomeController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 @Controller
-public class FosteringAllowanceController extends AbstractFormController {
-    private static final Logger LOG = LoggerFactory.getLogger(FosteringAllowanceController.class);
+public class DirectPaymentController extends AbstractFormController {
+    private static final Logger LOG = LoggerFactory.getLogger(DirectPaymentController.class);
 
-    private static final String CURRENT_PAGE  = "/your-income/fostering-allowance";
-    private static final String PAGE_TITLE    = "Your income Fostering Allowance";
+    private static final String CURRENT_PAGE  = "/your-income/direct-payment";
+    private static final String PAGE_TITLE    = "Your income direct payments for caring for people";
 
-    private static final String[] FIELDS = {"fosteringAllowancePay",
-                                            "fosteringAllowancePayOther",
-                                            "stillBeingPaidThisPay",
+    private static final String[] FIELDS = {"stillBeingPaidThisPay",
                                             "whenDidYouLastGetPaid_day",
                                             "whenDidYouLastGetPaid_month",
                                             "whenDidYouLastGetPaid_year",
@@ -36,7 +32,7 @@ public class FosteringAllowanceController extends AbstractFormController {
                                             "howOftenPaidThisPayOther"};
 
     @Autowired
-    public FosteringAllowanceController(SessionManager sessionManager) {
+    public DirectPaymentController(SessionManager sessionManager) {
         super(sessionManager);
     }
 
@@ -84,18 +80,13 @@ public class FosteringAllowanceController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "fosteringAllowancePay", "What type of organisation pays you for Fostering Allowance?");
-        if(fieldValue_Equals(fieldValues, "fosteringAllowancePay", "Other")) {
-            validateMandatoryField(fieldValues, "fosteringAllowancePayOther", "Who paid you Fostering Allowance?");
-        }
-
         validateMandatoryField(fieldValues, "stillBeingPaidThisPay", "Are you still being paid this?");
         if(fieldValue_Equals(fieldValues, "stillBeingPaidThisPay", "no")) {
-            validateMandatoryDateField(fieldValues, "When did you start the course?", "whenDidYouLastGetPaid", new String[]{"whenDidYouLastGetPaid_day", "whenDidYouLastGetPaid_month", "whenDidYouLastGetPaid_year"});
+            validateMandatoryDateField(fieldValues, "When were you last paid?", "whenDidYouLastGetPaid", new String[]{"whenDidYouLastGetPaid_day", "whenDidYouLastGetPaid_month", "whenDidYouLastGetPaid_year"});
         }
 
-        validateMandatoryField(fieldValues, "whoPaidYouThisPay", "Who paid you this?");
-        validateMandatoryField(fieldValues, "amountOfThisPay", "Amount paid");
+        validateMandatoryField(fieldValues, "whoPaidYouThisPay", "Your Status");
+        validateMandatoryField(fieldValues, "amountOfThisPay", "Your Status");
 
         validateMandatoryField(fieldValues, "howOftenPaidThisPay", "How often are you paid?");
         if(fieldValue_Equals(fieldValues, "howOftenPaidThisPay", "Other")) {

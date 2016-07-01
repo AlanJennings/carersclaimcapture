@@ -16,7 +16,7 @@
                           name="hadPartnerSinceClaimDate" 
                           value="${hadPartnerSinceClaimDate}"
                           label="Have you lived with a partner at any time since your claim date?" 
-                          hintBeforeHtml='<div class="prompt">
+                          hintBefore='<div class="prompt">
                                           <p>Your claim date is 3 June 2016. By partner we mean:</p>
                                           <ul class="list-bullet">
                                               <li>a person you&#39;re married to or live with as if you are married.</li>

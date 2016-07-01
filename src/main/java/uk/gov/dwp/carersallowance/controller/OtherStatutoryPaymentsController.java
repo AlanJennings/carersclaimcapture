@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.started;
+package uk.gov.dwp.carersallowance.controller;
 
 import java.util.Map;
 
@@ -13,8 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import uk.gov.dwp.carersallowance.controller.AbstractFormController;
-import uk.gov.dwp.carersallowance.controller.YourIncomeController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 @Controller
@@ -26,9 +24,9 @@ public class OtherStatutoryPaymentsController extends AbstractFormController {
 
     private static final String[] FIELDS = {"paymentTypesForThisPay",
                                             "stillBeingPaidThisPay",
-                                            "whenDidYouLastGetPaid.day",
-                                            "whenDidYouLastGetPaid.month",
-                                            "whenDidYouLastGetPaid.year",
+                                            "whenDidYouLastGetPaid_day",
+                                            "whenDidYouLastGetPaid_month",
+                                            "whenDidYouLastGetPaid_year",
                                             "whoPaidYouThisPay",
                                             "amountOfThisPay",
                                             "howOftenPaidThisPay",

@@ -10,7 +10,7 @@
 
         <t:radiobuttons id="nationality" 
                         name="nationality" 
-                        optionValues="British|Another_nationality"
+                        optionValues="British|Another nationality"
                         optionLabels="British|
                                       Another nationality"
                         value="${nationality}"
@@ -18,7 +18,7 @@
                         errors="${validationErrors}" 
         />
         
-        <t:hiddenPanel id="actualNationalityWrap" triggerId="nationality" triggerValue="Another_nationality">
+        <t:hiddenPanel id="actualNationalityWrap" triggerId="nationality" triggerValue="Another nationality">
             <t:textedit id="actualnationality" name="actualnationality" value="${actualnationality}" maxLength="35" label="Your nationality" errors="${validationErrors}" />
         </t:hiddenPanel>
         
@@ -85,38 +85,5 @@
         </t:hiddenPanel>
         
     </t:pageContent>
-    
-    <script type="text/javascript" src="<c:url value='/assets/javascript/textAreaCounter.js' />"></script>
-    <script type="text/javascript" src="<c:url value='/assets/javascript/s_about_you/g_nationalityAndResidency.js' />"></script>
-    
-    <script type="text/javascript">
-        $(function(){
-            window.areaCounter({selector:"tripDetails",maxChars:3000});
-            window.initNationalityEvents(
-                "nationality_British",
-                "nationality_Another_nationality",
-                "actualnationality",
-                "actualNationalityWrap",
-                
-                "alwaysLivedInUK_yes",
-                "alwaysLivedInUK_no",
-                "alwaysLivedInUKNoWrap",
-                
-                "liveInUKNow_yes",
-                "liveInUKNow_no",
-                "liveInUKNowYesWrap",
-                
-                "arrivedInUK_less",
-                "arrivedInUK_more",
-                "arrivedInUKRecentWrap",
-                
-                "trip52Weeks_yes",
-                "trip52Weeks_no",
-                "trip52WeeksYesWrap",
-                
-                "tripDetails"
-            );
-        });
-    </script>
     
 </t:mainPage>    

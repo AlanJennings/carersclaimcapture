@@ -34,19 +34,5 @@
                 trackEvent("${currentPage}", "Eligibility - Continue")
         }
     </script>
-
-    <script type="text/javascript" src="<c:url value='/assets/javascript/s_eligibility/g_approve.js' />" ></script>
-
-    <script type="text/javascript">
-        $(function(){
-        window.initialButtonState("answer_yes",
-        "answer_no");
-        });
-
-        $(function(){
-        window.answer("answer_yes",
-        "answer_no");
-        });
-    </script>
                 
 </t:mainPage>

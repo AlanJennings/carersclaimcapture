@@ -5,6 +5,7 @@
 
 <%@attribute name="id" required="true" type="java.lang.String"%>
 <%@attribute name="name" required="true" type="java.lang.String"%>
+
 <%@attribute name="value" required="false" type="java.lang.String"%>
 <%@attribute name="maxLength" required="false" type="java.lang.String"%>
 <%@attribute name="additionalClasses" required="false" type="java.lang.String"%>
@@ -16,6 +17,8 @@
 <%@attribute name="hintAfter" required="false" type="java.lang.String"%>
 
 <%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+
+<script type="text/javascript" src="<c:url value='/assets/javascript/textAreaCounter.js' />" ></script>
 
 <c:if test="${empty showRemainingChars}" >
     <c:set var="showRemainingChars" value="false" />
@@ -41,3 +44,10 @@
         <t:hint hintId="${hintAfterId}" hintText="${hintAfter}" />
 
 </t:component>
+
+<c:if test="${(not empty showRemainingChars)}" >
+    <script type="text/javascript">
+        window.areaCounter("${id}", Number("${maxLength}"));
+    </script>
+</c:if>
+

@@ -8,9 +8,6 @@
 
     <t:pageContent errors="${validationErrors}" pageTitle="Self-employment" section="Section 9 of 11" backLink="${previousPage}">
 
-                                            "payPensionSchemeText",
-                                            "haveExpensesForJob",
-                                            "haveExpensesForJobText
         <t:yesnofield id="payPensionScheme" 
                       name="payPensionScheme" 
                       value="${payPensionScheme}"

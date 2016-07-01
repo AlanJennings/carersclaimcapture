@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.started;
+package uk.gov.dwp.carersallowance.controller;
 
 import java.util.Map;
 
@@ -13,28 +13,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import uk.gov.dwp.carersallowance.controller.AbstractFormController;
-import uk.gov.dwp.carersallowance.controller.YourIncomeController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 @Controller
-public class DirectPaymentController extends AbstractFormController {
-    private static final Logger LOG = LoggerFactory.getLogger(DirectPaymentController.class);
+public class OtherIncomeController extends AbstractFormController {
+    private static final Logger LOG = LoggerFactory.getLogger(OtherIncomeController.class);
 
-    private static final String CURRENT_PAGE  = "/your-income/direct-payment";
-    private static final String PAGE_TITLE    = "Your income direct payments for caring for people";
+    private static final String CURRENT_PAGE  = "/your-income/other-income";
+    private static final String PAGE_TITLE    = "Your income other income";
 
-    private static final String[] FIELDS = {"stillBeingPaidThisPay",
-                                            "whenDidYouLastGetPaid_day",
-                                            "whenDidYouLastGetPaid_month",
-                                            "whenDidYouLastGetPaid_year",
-                                            "whoPaidYouThisPay",
-                                            "amountOfThisPay",
-                                            "howOftenPaidThisPay",
-                                            "howOftenPaidThisPayOther"};
+    private static final String[] FIELDS = {"otherPaymentsInfo"};
 
     @Autowired
-    public DirectPaymentController(SessionManager sessionManager) {
+    public OtherIncomeController(SessionManager sessionManager) {
         super(sessionManager);
     }
 
@@ -82,18 +73,7 @@ public class DirectPaymentController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "stillBeingPaidThisPay", "Are you still being paid this?");
-        if(fieldValue_Equals(fieldValues, "stillBeingPaidThisPay", "no")) {
-            validateMandatoryDateField(fieldValues, "When were you last paid?", "whenDidYouLastGetPaid", new String[]{"whenDidYouLastGetPaid_day", "whenDidYouLastGetPaid_month", "whenDidYouLastGetPaid_year"});
-        }
-
-        validateMandatoryField(fieldValues, "whoPaidYouThisPay", "Your Status");
-        validateMandatoryField(fieldValues, "amountOfThisPay", "Your Status");
-
-        validateMandatoryField(fieldValues, "howOftenPaidThisPay", "How often are you paid?");
-        if(fieldValue_Equals(fieldValues, "howOftenPaidThisPay", "Other")) {
-            validateMandatoryField(fieldValues, "howOftenPaidThisPayOther", "How often are you paid?");
-        }
+        validateMandatoryField(fieldValues, "otherPaymentsInfo", "What other income have you had since 1 June 2016?");
 
         LOG.trace("Ending BenefitsController.validate");
     }

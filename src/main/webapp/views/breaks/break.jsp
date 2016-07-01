@@ -36,7 +36,7 @@
         
         <t:radiobuttons id="whereCaree" 
                         name="whereCaree" 
-                        optionValues="In_hospital|In_respite_care|On_holiday|At_home|Somewhere_else"
+                        optionValues="in hospital|in respite care|on holiday|at home|somewhere else"
                         optionLabels="in hospital|
                                       in respite care|
                                       on holiday|
@@ -61,7 +61,7 @@
         <%-- TODO: Why are these in a different order? --%>
         <t:radiobuttons id="whereYou" 
                         name="whereYou" 
-                        optionValues="At_home|On_holiday|In_hospital|Somewhere_else"
+                        optionValues="at home|on holiday|in hospital|somewhere else"                        
                         optionLabels="at home|
                                       on holiday|
                                       in hospital|

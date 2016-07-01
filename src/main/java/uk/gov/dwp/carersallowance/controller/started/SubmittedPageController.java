@@ -21,7 +21,7 @@ public class SubmittedPageController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(SubmittedPageController.class);
 
     private static final String CURRENT_PAGE  = "/thankyou/apply-carers";
-    private static final String PAGE_TITLE    = "?";
+    private static final String PAGE_TITLE    = null;
 
     private static final String[] FIELDS = {};
 
@@ -31,8 +31,18 @@ public class SubmittedPageController extends AbstractFormController {
     }
 
     @Override
+    public String getPreviousPage(HttpServletRequest request) {
+        return null;
+    }
+
+    @Override
     public String getCurrentPage() {
         return CURRENT_PAGE;
+    }
+
+    @Override
+    public String getNextPage(HttpServletRequest request) {
+        return null;
     }
 
     @Override

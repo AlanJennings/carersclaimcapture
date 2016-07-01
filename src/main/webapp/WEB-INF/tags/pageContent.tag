@@ -28,7 +28,6 @@
     
         <div class="grid-row main-grid">
 
-            <!-- <c:out value="${errors}"/> -->
             <article class="column-three-quarters main-content eligible">
                 
                 <c:if test="${not empty backLink}">

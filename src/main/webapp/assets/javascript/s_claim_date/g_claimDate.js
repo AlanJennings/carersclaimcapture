@@ -1,29 +1,5 @@
 (function() {
   var daysInMonth, hideCareStartDateWrap, initDateWarningOnChange, isLeapYear, isLegalDate, showCareStartDateWrap;
-/*
-  window.initEvents = function(spent35HoursCaringBeforeClaimY, spent35HoursCaringBeforeClaimN, day, month, year) {
-    if (!$("#" + spent35HoursCaringBeforeClaimY).prop('checked')) {
-      hideCareStartDateWrap(day, month, year);
-    }
-    $("#" + spent35HoursCaringBeforeClaimY).on("click", function() {
-      return showCareStartDateWrap();
-    });
-    return $("#" + spent35HoursCaringBeforeClaimN).on("click", function() {
-      return hideCareStartDateWrap(day, month, year);
-    });
-  };
-
-  showCareStartDateWrap = function() {
-    return $("#careStartDateWrap").slideDown(0).attr('aria-hidden', 'false');
-  };
-
-  hideCareStartDateWrap = function(day, month, year) {
-    $("#careStartDateWrap").slideUp(0).attr('aria-hidden', 'true');
-    $("#" + day).val("");
-    $("#" + month).val("");
-    return $("#" + year).val("");
-  };
-*/
   window.initDateWarning = function(warningId, day, month, year, text, testMode) {
     $("#" + day).on("change keyup", function() {
       return initDateWarningOnChange(warningId, day, month, year, text, testMode);

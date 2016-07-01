@@ -30,6 +30,7 @@
                     text="This is a textphone for people with hearing difficulties." 
                     additionalClasses="checkbox-single"
                     outerClass="form-group checkbox-single" 
+                    blockLabel="false"
                     errors="${validationErrors}"
         />
         

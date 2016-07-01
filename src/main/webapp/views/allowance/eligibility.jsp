@@ -47,23 +47,4 @@
         
     </t:pageContent>
     
-<%--     <script type="text/javascript" src="<c:url value='/assets/javascript/s_eligibility/answerNoMessage.js' />" ></script>--%>
-<%--
-        <script type="text/javascript">
-            $(function () {
-                // window.initEvents(id, answer_yes, answer_no)
-/*                 window.initEvents("warningover35HoursAWeek_answer","over35HoursAWeek_yes", "over35HoursAWeek_no");
-                window.initEvents("warningover16_answer","over16YearsOld_yes", "over16YearsOld_no");
-                window.originWarning("originCountry_GB", "originCountry_NI", "originCountry_OTHER", "warningOriginCountry_answer");
-                window.gaEvents("origin_GB", "origin_NI", "origin_OTHER");
- */            
-                // trigger a ga event when errors are shown (not currently working)
-                var hoursId = 'hours_answer';
-                var res = $('#'+hoursId).parents('li.form-group').find('.validation-summary a').click(
-                    function(){
-                        trackEvent('allowance/eligibility','carers-credit','clicked');
-                    });
-            });
-        </script>
---%>
 </t:mainPage>
