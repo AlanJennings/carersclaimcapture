@@ -22,14 +22,14 @@ public class SickPayController extends AbstractFormController {
     private static final String CURRENT_PAGE  = "/your-income/statutory-sick-pay";
     private static final String PAGE_TITLE    = "Your income Statutory Sick Pay";
 
-    private static final String[] FIELDS = {"stillBeingPaidThisPay",
-                                            "whenDidYouLastGetPaid_day",
-                                            "whenDidYouLastGetPaid_month",
-                                            "whenDidYouLastGetPaid_year",
-                                            "whoPaidYouThisPay",
-                                            "amountOfThisPay",
-                                            "howOftenPaidThisPay",
-                                            "howOftenPaidThisPayOther"};
+    private static final String[] FIELDS = {"sickPayStillBeingPaidThisPay",
+                                            "sickPayWhenDidYouLastGetPaid_day",
+                                            "sickPayWhenDidYouLastGetPaid_month",
+                                            "sickPayWhenDidYouLastGetPaid_year",
+                                            "sickPayWhoPaidYouThisPay",
+                                            "sickPayAmountOfThisPay",
+                                            "sickPayHowOftenPaidThisPay",
+                                            "sickPayHowOftenPaidThisPayOther"};
 
     @Autowired
     public SickPayController(SessionManager sessionManager) {
@@ -80,17 +80,17 @@ public class SickPayController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "stillBeingPaidThisPay", "Are you still being paid Statutory Sick Pay?");
-        if(fieldValue_Equals(fieldValues, "stillBeingPaidThisPay", "no")) {
-            validateMandatoryDateField(fieldValues, "When were you last paid?", "whenDidYouLastGetPaid", new String[]{"whenDidYouLastGetPaid_day", "whenDidYouLastGetPaid_month", "whenDidYouLastGetPaid_year"});
+        validateMandatoryField(fieldValues, "sickPayStillBeingPaidThisPay", "Are you still being paid Statutory Sick Pay?");
+        if(fieldValue_Equals(fieldValues, "sickPayStillBeingPaidThisPay", "no")) {
+            validateMandatoryDateField(fieldValues, "When were you last paid?", "sickPayWhenDidYouLastGetPaid", new String[]{"sickPayWhenDidYouLastGetPaid_day", "sickPayWhenDidYouLastGetPaid_month", "sickPayWhenDidYouLastGetPaid_year"});
         }
 
-        validateMandatoryField(fieldValues, "whoPaidYouThisPay", "Who paid you Statutory Sick Pay?");
-        validateMandatoryField(fieldValues, "amountOfThisPay", "Amount paid");
+        validateMandatoryField(fieldValues, "sickPayWhoPaidYouThisPay", "Who paid you Statutory Sick Pay?");
+        validateMandatoryField(fieldValues, "sickPayAmountOfThisPay", "Amount paid");
 
-        validateMandatoryField(fieldValues, "howOftenPaidThisPay", "How often are you paid?");
-        if(fieldValue_Equals(fieldValues, "howOftenPaidThisPay", "Other")) {
-            validateMandatoryField(fieldValues, "howOftenPaidThisPayOther", "How often are you paid?");
+        validateMandatoryField(fieldValues, "sickPayHowOftenPaidThisPay", "How often are you paid?");
+        if(fieldValue_Equals(fieldValues, "sickPayHowOftenPaidThisPay", "Other")) {
+            validateMandatoryField(fieldValues, "sickPayHowOftenPaidThisPayOther", "How often are you paid?");
         }
 
         LOG.trace("Ending BenefitsController.validate");

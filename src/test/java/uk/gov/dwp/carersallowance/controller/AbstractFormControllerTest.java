@@ -3,12 +3,17 @@ package uk.gov.dwp.carersallowance.controller;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
+
+import uk.gov.dwp.carersallowance.session.SessionManager;
 
 public class AbstractFormControllerTest {
     /**
@@ -19,7 +24,7 @@ public class AbstractFormControllerTest {
      */
     @Test
     public void uniqueFieldNameTest() {
-        File dir = new File("/Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/src/main/java/uk/gov/dwp/carersallowance/controller");
+        File dir = new File("/Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/target/classes/uk/gov/dwp/carersallowance/controller");
         String packageRoot = "uk.gov.dwp.carersallowance.controller";
 
         // field vs Controller
@@ -47,8 +52,13 @@ public class AbstractFormControllerTest {
                         String shortClassName = filename.substring(0, filename.length() - ".CLASS".length());
                         String className = packageName + "." + shortClassName;
                         Class<?> classObj = Class.forName(className);
+                        if(Modifier.isAbstract(classObj.getModifiers())) {
+                            continue;
+                        }
+
                         if(AbstractFormController.class.isAssignableFrom(classObj)) {
-                            AbstractFormController controller = (AbstractFormController)classObj.newInstance();
+                            Constructor<?> constructor = classObj.getConstructor(SessionManager.class);
+                            AbstractFormController controller = (AbstractFormController)constructor.newInstance((SessionManager)null);
                             String[] controllerFields = controller.getFields();
                             for(String controllerField: controllerFields) {
                                 String oldShortClassName = fields.put(controllerField, className);
@@ -58,7 +68,7 @@ public class AbstractFormControllerTest {
                             }
                         }
                     }
-                } catch(RuntimeException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                } catch(RuntimeException | ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                     errors.add("ERROR Failed to check " + filename + ": " + e.getMessage());
                     e.printStackTrace();
                 }

@@ -10,13 +10,13 @@
 
         <input type="hidden" id="break_id" name="break_id" value="${break_id}" >
         
-        <t:datefield id="startDate" 
-                     nameDay="startDate_day" 
-                     nameMonth="startDate_month" 
-                     nameYear="startDate_year" 
-                     valueDay="${startDate_day}" 
-                     valueMonth="${startDate_month}" 
-                     valueYear="${startDate_year}" 
+        <t:datefield id="breakbreakStartDate" 
+                     nameDay="breakStartDate_day" 
+                     nameMonth="breakStartDate_month" 
+                     nameYear="breakStartDate_year" 
+                     valueDay="${breakStartDate_day}" 
+                     valueMonth="${breakStartDate_month}" 
+                     valueYear="${breakStartDate_year}" 
                      label="When did the break start?" 
                      errors="${validationErrors}" 
                      hintBefore="For example, 3 5 2016"
@@ -24,9 +24,9 @@
         />
         
         <%-- visibility controlled by javascript --%>
-        <t:textedit id="startTime" 
-                    name="startTime" 
-                    value="${startTime}" 
+        <t:textedit id="breakStartTime" 
+                    name="breakStartTime" 
+                    value="${breakStartTime}" 
                     maxLength="10" 
                     label="Break start time? (optional)" 
                     errors="${validationErrors}" 
@@ -34,24 +34,24 @@
                     outerStyle="display: none;"
         />
         
-        <t:radiobuttons id="whereCaree" 
-                        name="whereCaree" 
+        <t:radiobuttons id="breakWhereCaree" 
+                        name="breakWhereCaree" 
                         optionValues="in hospital|in respite care|on holiday|at home|somewhere else"
                         optionLabels="in hospital|
                                       in respite care|
                                       on holiday|
                                       at home|
                                       somewhere else"
-                        value="${whereCaree}"
+                        value="${breakWhereCaree}"
                         label="Where was the person you care for during the break?"
                         errors="${validationErrors}" 
                         hintBefore="During this time, they were:" 
         />
         
-        <t:hiddenPanel id="wherePersonBreaksInCareWrap" triggerId="whereCaree" triggerValue="Somewhere_else">
-            <t:textarea id="whereCareeOtherText"
-                        name="whereCareeOtherText"
-                        value="${whereCareeOtherText}"
+        <t:hiddenPanel id="wherePersonBreaksInCareWrap" triggerId="breakWhereCaree" triggerValue="somewhere else">
+            <t:textarea id="breakWhereCareeOtherText"
+                        name="breakWhereCareeOtherText"
+                        value="${breakWhereCareeOtherText}"
                         maxLength="60"
                         showRemainingChars="true"
                         errors="${validationErrors}"
@@ -59,39 +59,39 @@
         </t:hiddenPanel>
 
         <%-- TODO: Why are these in a different order? --%>
-        <t:radiobuttons id="whereYou" 
-                        name="whereYou" 
+        <t:radiobuttons id="breakWhereYou" 
+                        name="breakWhereYou" 
                         optionValues="at home|on holiday|in hospital|somewhere else"                        
                         optionLabels="at home|
                                       on holiday|
                                       in hospital|
                                       somewhere else"
-                        value="${whereYou}"
+                        value="${breakWhereYou}"
                         label="Where were you during the break?"
                         errors="${validationErrors}" 
                         hintBefore="During this time, I was:" 
         />
         
-        <t:hiddenPanel id="whereYouBreaksInCareWrap" triggerId="whereYou" triggerValue="Somewhere_else">
-            <t:textarea id="whereYouOtherText"
-                        name="whereYouOtherText"
-                        value="${whereYouOtherText}"
+        <t:hiddenPanel id="whereYouBreaksInCareWrap" triggerId="breakWhereYou" triggerValue="somewhere else">
+            <t:textarea id="breakWhereYouOtherText"
+                        name="breakWhereYouOtherText"
+                        value="${breakWhereYouOtherText}"
                         maxLength="60"
                         showRemainingChars="true"
                         errors="${validationErrors}"
             />
         </t:hiddenPanel>
         
-        <t:yesnofield id="hasBreakEnded" name="hasBreakEnded" value="${hasBreakEnded}" label="Has this break ended?" errors="${validationErrors}" />
+        <t:yesnofield id="breakHasBreakEnded" name="breakHasBreakEnded" value="${breakHasBreakEnded}" label="Has this break ended?" errors="${validationErrors}" />
         
-        <t:hiddenPanel id="hasBreakEndedWrap" triggerId="hasBreakEnded" triggerValue="yes">
-            <t:datefield id="hasBreakEndedDate" 
-                         nameDay="hasBreakEndedDate_day" 
-                         nameMonth="hasBreakEndedDate_month" 
-                         nameYear="hasBreakEndedDate_year" 
-                         valueDay="${hasBreakEndedDate_day}" 
-                         valueMonth="${hasBreakEndedDate_month}" 
-                         valueYear="${hasBreakEndedDate_year}" 
+        <t:hiddenPanel id="hasBreakEndedWrap" triggerId="breakHasBreakEnded" triggerValue="yes">
+            <t:datefield id="breakbreakHasBreakEndedDate" 
+                         nameDay="breakHasBreakEndedDate_day" 
+                         nameMonth="breakHasBreakEndedDate_month" 
+                         nameYear="breakHasBreakEndedDate_year" 
+                         valueDay="${breakHasBreakEndedDate_day}" 
+                         valueMonth="${breakHasBreakEndedDate_month}" 
+                         valueYear="${breakHasBreakEndedDate_year}" 
                          label="When did the break end?" 
                          errors="${validationErrors}" 
                          hintBefore="For example, 10 5 2016"
@@ -99,7 +99,7 @@
             />
         </t:hiddenPanel>
         
-        <t:yesnofield id="medicalCareDuringBreak" name="medicalCareDuringBreak" value="${medicalCareDuringBreak}" label="Did you or the person you care for get any medical treatment or professional care during this time?" errors="${validationErrors}" />
+        <t:yesnofield id="breakMedicalCareDuringBreak" name="breakMedicalCareDuringBreak" value="${breakMedicalCareDuringBreak}" label="Did you or the person you care for get any medical treatment or professional care during this time?" errors="${validationErrors}" />
 
     </t:pageContent>
 

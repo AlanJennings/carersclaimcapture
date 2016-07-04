@@ -19,7 +19,6 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
  * A new empty care break has an index of -1;
  * Otherwise the care break index is whatever is appropriate
  * @author drh
- *
  */
 @Controller
 public class BreakInCareDetailController extends AbstractFormController {
@@ -32,21 +31,20 @@ public class BreakInCareDetailController extends AbstractFormController {
 
     public static final String   ID_FIELD = "break_id";
     public static final String[] FIELDS = {ID_FIELD,
-                                            "startDate_day",
-                                            "startDate_month",
-                                            "startDate_year",
-                                            "startTime",
-                                            "whereCaree",
-                                            "whereCareeOtherText",
-                                            "whereYou",
-                                            "whereYouOtherText",
-                                            "hasBreakEnded",
-                                            "hasBreakEndedDate_day",
-                                            "hasBreakEndedDate_month",
-                                            "hasBreakEndedDate_year",
-                                            "endTime",
-                                            "medicalCareDuringBreak"};
-
+                                            "breakStartDate_day",
+                                            "breakStartDate_month",
+                                            "breakStartDate_year",
+                                            "breakStartTime",
+                                            "breakWhereCaree",
+                                            "breakWhereCareeOtherText",
+                                            "breakWhereYou",
+                                            "breakWhereYouOtherText",
+                                            "breakHasBreakEnded",
+                                            "breakHasBreakEndedDate_day",
+                                            "breakHasBreakEndedDate_month",
+                                            "breakHasBreakEndedDate_year",
+                                            "breakEndTime",
+                                            "breakMedicalCareDuringBreak"};
 
     @Autowired
     public BreakInCareDetailController(SessionManager sessionManager) {
@@ -105,24 +103,24 @@ public class BreakInCareDetailController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryDateField(fieldValues, "When did the break start?", "startDate", new String[]{"startDate_day", "startDate_month", "startDate_year"});
-        validateMandatoryField(fieldValues, "whereCaree", "Where was the person you care for during the break?");
-        validateMandatoryField(fieldValues, "whereYou", "Where were you during the break?");
-        validateMandatoryField(fieldValues, "hasBreakEnded", "Has this break ended?");
+        validateMandatoryDateField(fieldValues, "When did the break start?", "breakStartDate", new String[]{"startDate_day", "startDate_month", "startDate_year"});
+        validateMandatoryField(fieldValues, "breakWhereCaree", "Where was the person you care for during the break?");
+        validateMandatoryField(fieldValues, "breakWhereYou", "Where were you during the break?");
+        validateMandatoryField(fieldValues, "breakHasBreakEnded", "Has this break ended?");
 
-        if(fieldValue_Equals(fieldValues, "hasBreakEnded", "yes")) {
-            validateMandatoryDateField(fieldValues, "When did the break end?", "hasBreakEndedDate", new String[]{"hasBreakEndedDate_day", "hasBreakEndedDate_month", "hasBreakEndedDate_year"});
+        if(fieldValue_Equals(fieldValues, "breakHasBreakEnded", "yes")) {
+            validateMandatoryDateField(fieldValues, "When did the break end?", "breakHasBreakEndedDate", new String[]{"breakHasBreakEndedDate_day", "breakHasBreakEndedDate_month", "breakHasBreakEndedDate_year"});
         }
 
-        if(fieldValue_Equals(fieldValues, "whereCaree", "Somewhere_else")) {
-            validateMandatoryField(fieldValues, "whereCareeOtherText", "Where was the person you care for during the break?");
+        if(fieldValue_Equals(fieldValues, "breakWhereCaree", "somewhere else")) {
+            validateMandatoryField(fieldValues, "breakWhereCareeOtherText", "Where was the person you care for during the break?");
         }
 
-        if(fieldValue_Equals(fieldValues, "whereYou", "Somewhere_else")) {
-            validateMandatoryField(fieldValues, "whereYouOtherText", "Where were you during the break?");
+        if(fieldValue_Equals(fieldValues, "breakWhereYou", "somewhere else")) {
+            validateMandatoryField(fieldValues, "breakWhereYouOtherText", "Where were you during the break?");
         }
 
-        validateMandatoryField(fieldValues, "medicalCareDuringBreak", "Did you or the person you care for get any medical treatment or professional care during this time?");
+        validateMandatoryField(fieldValues, "breakMedicalCareDuringBreak", "Did you or the person you care for get any medical treatment or professional care during this time?");
 
         LOG.trace("Ending BenefitsController.validate");
     }

@@ -22,14 +22,14 @@ public class DirectPaymentController extends AbstractFormController {
     private static final String CURRENT_PAGE  = "/your-income/direct-payment";
     private static final String PAGE_TITLE    = "Your income direct payments for caring for people";
 
-    private static final String[] FIELDS = {"stillBeingPaidThisPay",
-                                            "whenDidYouLastGetPaid_day",
-                                            "whenDidYouLastGetPaid_month",
-                                            "whenDidYouLastGetPaid_year",
-                                            "whoPaidYouThisPay",
-                                            "amountOfThisPay",
-                                            "howOftenPaidThisPay",
-                                            "howOftenPaidThisPayOther"};
+    private static final String[] FIELDS = {"directPaymentStillBeingPaidThisPay",
+                                            "directPaymentWhenDidYouLastGetPaid_day",
+                                            "directPaymentWhenDidYouLastGetPaid_month",
+                                            "directPaymentWhenDidYouLastGetPaid_year",
+                                            "directPaymentWhoPaidYouThisPay",
+                                            "directPaymentAmountOfThisPay",
+                                            "directPaymentHowOftenPaidThisPay",
+                                            "directPaymentHowOftenPaidThisPayOther"};
 
     @Autowired
     public DirectPaymentController(SessionManager sessionManager) {
@@ -80,17 +80,17 @@ public class DirectPaymentController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "stillBeingPaidThisPay", "Are you still being paid this?");
-        if(fieldValue_Equals(fieldValues, "stillBeingPaidThisPay", "no")) {
-            validateMandatoryDateField(fieldValues, "When were you last paid?", "whenDidYouLastGetPaid", new String[]{"whenDidYouLastGetPaid_day", "whenDidYouLastGetPaid_month", "whenDidYouLastGetPaid_year"});
+        validateMandatoryField(fieldValues, "directPaymentStillBeingPaidThisPay", "Are you still being paid this?");
+        if(fieldValue_Equals(fieldValues, "directPaymentStillBeingPaidThisPay", "no")) {
+            validateMandatoryDateField(fieldValues, "When were you last paid?", "directPaymentWhenDidYouLastGetPaid", new String[]{"directPaymentWhenDidYouLastGetPaid_day", "directPaymentWhenDidYouLastGetPaid_month", "directPaymentWhenDidYouLastGetPaid_year"});
         }
 
-        validateMandatoryField(fieldValues, "whoPaidYouThisPay", "Your Status");
-        validateMandatoryField(fieldValues, "amountOfThisPay", "Your Status");
+        validateMandatoryField(fieldValues, "directPaymentWhoPaidYouThisPay", "Your Status");
+        validateMandatoryField(fieldValues, "directPaymentAmountOfThisPay", "Your Status");
 
-        validateMandatoryField(fieldValues, "howOftenPaidThisPay", "How often are you paid?");
-        if(fieldValue_Equals(fieldValues, "howOftenPaidThisPay", "Other")) {
-            validateMandatoryField(fieldValues, "howOftenPaidThisPayOther", "How often are you paid?");
+        validateMandatoryField(fieldValues, "directPaymentHowOftenPaidThisPay", "How often are you paid?");
+        if(fieldValue_Equals(fieldValues, "directPaymentHowOftenPaidThisPay", "Other")) {
+            validateMandatoryField(fieldValues, "directPaymentHowOftenPaidThisPayOther", "How often are you paid?");
         }
 
         LOG.trace("Ending BenefitsController.validate");

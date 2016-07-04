@@ -27,12 +27,12 @@ public class EducationController extends AbstractFormController {
                                             "nameOfSchoolCollegeOrUniversity",
                                             "nameOfMainTeacherOrTutor",
                                             "courseContactNumber",
-                                            "startDate_day",
-                                            "startDate_month",
-                                            "startDate_year",
-                                            "expectedEndDate_day",
-                                            "expectedEndDate_month",
-                                            "expectedEndDate_year"};
+                                            "educationStartDate_day",
+                                            "educationStartDate_month",
+                                            "educationStartDate_year",
+                                            "educationExpectedEndDate_day",
+                                            "educationExpectedEndDate_month",
+                                            "educationExpectedEndDate_year"};
 
     @Autowired
     public EducationController(SessionManager sessionManager) {
@@ -80,8 +80,8 @@ public class EducationController extends AbstractFormController {
             validateMandatoryField(fieldValues, "nameOfSchoolCollegeOrUniversity", "Have you been on a course of education since your claim date?");
             validateMandatoryField(fieldValues, "nameOfMainTeacherOrTutor", "Have you been on a course of education since your claim date?");
 
-            validateMandatoryDateField(fieldValues, "When did you start the course?", "startDate", new String[]{"startDate_day", "startDate_month", "startDate_year"});
-            validateMandatoryDateField(fieldValues, "When did the course end or when will you finish?", "expectedEndDate", new String[]{"expectedEndDate_day", "expectedEndDate_month", "expectedEndDate_year"});
+            validateMandatoryDateField(fieldValues, "When did you start the course?", "educationStartDate", new String[]{"educationStartDate_day", "educationStartDate_month", "educationStartDate_year"});
+            validateMandatoryDateField(fieldValues, "When did the course end or when will you finish?", "educationeducationExpectedEndDate", new String[]{"educationExpectedEndDate_day", "educationExpectedEndDate_month", "educationExpectedEndDate_year"});
         }
 
         LOG.trace("Ending BenefitsController.validate");

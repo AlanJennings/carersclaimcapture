@@ -97,6 +97,10 @@ public abstract class AbstractFormController {
     public Session           getSession(String sessionId)   { return sessionManager.getSession(sessionId); }
     public ValidationSummary getValidationSummary()         { return validationSummary; }
 
+    public String[] getReadOnlyFields() {
+        return null;
+    }
+
     public String getPreviousPage(HttpServletRequest request) {
         return getPreviousPage(request, pageList);
     }
@@ -146,6 +150,7 @@ public abstract class AbstractFormController {
             model.addAttribute("pageTitle", getPageTitle());
 
             copyFromSessionToModel(request, getFields(), model);
+            copyFromSessionToModel(request, getReadOnlyFields(), model);
 
             return getCurrentPage();        // returns the view name
         } catch(RuntimeException e) {

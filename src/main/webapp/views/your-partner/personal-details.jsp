@@ -28,16 +28,16 @@
         
         <t:hiddenPanel id="partnerDetailsWrap" triggerId="hadPartnerSinceClaimDate" triggerValue="yes">
 
-            <t:textedit id="title" name="title" value="${title}" maxLength="20" label="Title" errors="${validationErrors}" /> 
-            <t:textedit id="firstName" name="firstName" value="${firstName}" maxLength="17" label="First name" errors="${validationErrors}" />
-            <t:textedit id="middleName" name="middleName" value="${middleName}" maxLength="17" label="Middle name(s)" errors="${validationErrors}" />
-            <t:textedit id="surname" name="surname" value="${surname}" maxLength="35" label="Last name" errors="${validationErrors}" />
-            <t:textedit id="otherNames" name="otherNames" value="${otherNames}" maxLength="35" label="Other surname or maiden name (optional)" errors="${validationErrors}" />
+            <t:textedit id="partnerDetailsTitle" name="partnerDetailsTitle" value="${partnerDetailsTitle}" maxLength="20" label="Title" errors="${validationErrors}" /> 
+            <t:textedit id="partnerDetailsFirstName" name="partnerDetailsFirstName" value="${partnerDetailsFirstName}" maxLength="17" label="First name" errors="${validationErrors}" />
+            <t:textedit id="partnerDetailsMiddleName" name="partnerDetailsMiddleName" value="${partnerDetailsMiddleName}" maxLength="17" label="Middle name(s)" errors="${validationErrors}" />
+            <t:textedit id="partnerDetailsSurname" name="partnerDetailsSurname" value="${partnerDetailsSurname}" maxLength="35" label="Last name" errors="${validationErrors}" />
+            <t:textedit id="partnerDetailsOtherNames" name="partnerDetailsOtherNames" value="${partnerDetailsOtherNames}" maxLength="35" label="Other surname or maiden name (optional)" errors="${validationErrors}" />
             
             <!-- We accept a possible space around each character with 9 max in nino ie. AB010203D so 9*2+1 ==> 19 chars max -->
-            <t:textedit id="nationalInsuranceNumber" 
-                        name="nationalInsuranceNumber" 
-                        value="${nationalInsuranceNumber}" 
+            <t:textedit id="partnerDetailsNationalInsuranceNumber" 
+                        name="partnerDetailsNationalInsuranceNumber" 
+                        value="${partnerDetailsNationalInsuranceNumber}" 
                         maxLength="19" 
                         label="National Insurance number" 
                         errors="${validationErrors}" 
@@ -46,24 +46,24 @@
                         hintAfter="This is on your NI number card, benefit letter, payslip or P60."
             />
             
-            <t:datefield id="dateOfBirth" 
-                         nameDay="dateOfBirth_day" 
-                         nameMonth="dateOfBirth_month" 
-                         nameYear="dateOfBirth_year" 
-                         valueDay="${dateOfBirth_day}" 
-                         valueMonth="${dateOfBirth_month}" 
-                         valueYear="${dateOfBirth_year}" 
+            <t:datefield id="partnerDetailsDateOfBirth" 
+                         nameDay="partnerDetailsDateOfBirth_day" 
+                         nameMonth="partnerDetailsDateOfBirth_month" 
+                         nameYear="partnerDetailsDateOfBirth_year" 
+                         valueDay="${partnerDetailsDateOfBirth_day}" 
+                         valueMonth="${partnerDetailsDateOfBirth_month}" 
+                         valueYear="${partnerDetailsDateOfBirth_year}" 
                          label="Date of birth" 
                          errors="${validationErrors}" 
                          hintBefore="For example, 16 5 1976"
-                         hintBeforeId="dateOfBirth_defaultDateContextualHelp"
+                         hintBeforeId="partnerDetailsDateOfBirth_defaultDateContextualHelp"
             />
             
-            <t:textedit id="nationality" name="nationality" value="${nationality}" maxLength="35" label="Nationality" errors="${validationErrors}" />
+            <t:textedit id="partnerDetailsNationality" name="partnerDetailsNationality" value="${partnerDetailsNationality}" maxLength="35" label="Nationality" errors="${validationErrors}" />
             
-            <t:yesnofield id="separated" 
-                          name="separated" 
-                          value="${separated}"
+            <t:yesnofield id="partnerDetailsSeparated" 
+                          name="partnerDetailsSeparated" 
+                          value="${partnerDetailsSeparated}"
                           label="Have you separated since your claim date?" 
                           hintBefore="Your claim date is 3 June 2016."
                           errors="${validationErrors}" 
@@ -78,7 +78,5 @@
         </t:hiddenPanel>
 
     </t:pageContent>
-    
-    
 
 </t:mainPage>    

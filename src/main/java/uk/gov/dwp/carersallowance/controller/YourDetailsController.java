@@ -22,14 +22,14 @@ public class YourDetailsController extends AbstractFormController {
     private static final String CURRENT_PAGE  = "/about-you/your-details";
     private static final String PAGE_TITLE    = "Your details - About you - the carer";
 
-    private static final String[] FIELDS = {"title",
-                                            "firstName",
-                                            "middleName",
-                                            "surname",
-                                            "nationalInsuranceNumber",
-                                            "dateOfBirth_day",
-                                            "dateOfBirth_month",
-                                            "dateOfBirth_year"};
+    private static final String[] FIELDS = {"carerTitle",
+                                            "carerFirstName",
+                                            "carerMiddleName",
+                                            "carerSurname",
+                                            "carerNationalInsuranceNumber",
+                                            "carerDateOfBirth_day",
+                                            "carerDateOfBirth_month",
+                                            "carerDateOfBirth_year"};
 
     @Autowired
     public YourDetailsController(SessionManager sessionManager) {
@@ -70,13 +70,13 @@ public class YourDetailsController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "title", "Title");
-        validateMandatoryField(fieldValues, "firstName", "First name");
+        validateMandatoryField(fieldValues, "carerTitle", "Title");
+        validateMandatoryField(fieldValues, "carerFirstName", "First name");
         // "middleName" is optional,
-        validateMandatoryField(fieldValues, "surname","Last name");
-        validateMandatoryField(fieldValues, "nationalInsuranceNumber", "National Insurance number");
+        validateMandatoryField(fieldValues, "carerSurname","Last name");
+        validateMandatoryField(fieldValues, "carerNationalInsuranceNumber", "National Insurance number");
 
-        validateMandatoryDateField(fieldValues, "Date of Birth", "dateOfBirth", new String[]{"dateOfBirth_day", "dateOfBirth_month", "dateOfBirth_year"});
+        validateMandatoryDateField(fieldValues, "Date of Birth", "carerDateOfBirth", new String[]{"carerDateOfBirth_day", "carerDateOfBirth_month", "carerDateOfBirth_year"});
 
         LOG.trace("Ending BenefitsController.validate");
     }

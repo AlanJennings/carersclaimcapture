@@ -22,15 +22,25 @@ public class ContactDetailsController extends AbstractFormController {
     private static final String CURRENT_PAGE  = "/about-you/contact-details";
     private static final String PAGE_TITLE    = "Your Contact Details - About you - the carer";
 
-    private static final String[] FIELDS = {"address_lineOne",
-                                            "address_lineTwo",
-                                            "address_lineThree",
-                                            "postcode",
-                                            "howWeContactYou",
-                                            "contactYouByTelephone",
-                                            "wantsEmailContact",
-                                            "mail",
-                                            "mailConfirmation"};
+    public static final String CARER_ADDRESS_LINE_ONE           = "carerAddressLineOne";
+    public static final String CARER_ADDRESS_LINE_TWO           = "carerAddressLineTwo";
+    public static final String CARER_ADDRESS_LINE_THREE         = "carerAddressLineThree";
+    public static final String CARER_POSTCODE                   = "carerPostcode";
+    public static final String CARER_HOW_WE_CONTACT_YOU         = "carerHowWeContactYou";
+    public static final String CARER_HONTACT_YOU_BY_TELEPHONE   = "carerContactYouByTelephone";
+    public static final String CARER_WANTS_EMAIL_CONTACT        = "carerWantsEmailContact";
+    public static final String CARER_MAIL                       = "carerMail";
+    public static final String CARER_MAIL_CONFIRMATION          = "carerMailConfirmation";
+
+    private static final String[] FIELDS = {CARER_ADDRESS_LINE_ONE,
+                                            CARER_ADDRESS_LINE_TWO,
+                                            CARER_ADDRESS_LINE_THREE,
+                                            CARER_POSTCODE,
+                                            CARER_HOW_WE_CONTACT_YOU,
+                                            CARER_HONTACT_YOU_BY_TELEPHONE,
+                                            CARER_WANTS_EMAIL_CONTACT,
+                                            CARER_MAIL,
+                                            CARER_MAIL_CONFIRMATION};
 
     @Autowired
     public ContactDetailsController(SessionManager sessionManager) {
@@ -71,14 +81,14 @@ public class ContactDetailsController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateAddressFields(fieldValues, "Address", "address", new String[]{"address_lineOne", "address_lineTwo", "address_lineThree"});
+        validateAddressFields(fieldValues, "Address", "address", new String[]{CARER_ADDRESS_LINE_ONE, CARER_ADDRESS_LINE_TWO, CARER_ADDRESS_LINE_THREE});
         validateMandatoryField(fieldValues,"wantsEmailContact", "Do you want an email to confirm your application has been received?");
 
-        if(fieldValue_Equals(fieldValues, "wantsEmailContact", "yes")) {
-            validateMandatoryField(fieldValues,"mail", "Your email address");
-            validateRegexField(fieldValues,"Your email address", "mail", AbstractFormController.ValidationPatterns.EMAIL_REGEX);
+        if(fieldValue_Equals(fieldValues, CARER_WANTS_EMAIL_CONTACT, "yes")) {
+            validateMandatoryField(fieldValues,CARER_MAIL, "Your email address");
+            validateRegexField(fieldValues,"Your email address", CARER_MAIL, AbstractFormController.ValidationPatterns.EMAIL_REGEX);
 
-            validateMatchingValues(fieldValues,"Your email address", "mail", "Confirm your email address", "mailConfirmation", true);
+            validateMatchingValues(fieldValues,"Your email address", CARER_MAIL, "Confirm your email address", CARER_MAIL_CONFIRMATION, true);
         }
 
         LOG.trace("Ending BenefitsController.validate");

@@ -10,24 +10,22 @@
 
         <t:pre><p>These details are used to contact your employer.</p></t:pre>
         
-        <input type="hidden" id="employment_id" name="employment_id" value="${employment_id}" >
-        
         <t:textedit id="employerName" name="employerName" value="${employerName}" maxLength="60" label="Employer's name" errors="${validationErrors}" />
-        <t:textedit id="phoneNumber" name="phoneNumber" value="${phoneNumber}" maxLength="20" label="Contact number" errors="${validationErrors}" />
-        
-        <t:address id="address" 
-                   nameOne="address_lineOne"
-                   nameTwo="address_lineTwo"
-                   nameThree="address_lineThree"
-                   valueOne="${address_lineOne}"
-                   valueTwo="${address_lineTwo}"
-                   valueThree="${address_lineThree}"
+        <t:textedit id="employmentPhoneNumber" name="employmentPhoneNumber" value="${employmentPhoneNumber}" maxLength="20" label="Contact number" errors="${validationErrors}" />
+
+        <t:address id="employerAddress" 
+                   nameOne="employmentAddressLineOne"
+                   nameTwo="employmentAddressLineTwo"
+                   nameThree="employmentAddressLineThree"
+                   valueOne="${employmentAddressLineOne}"
+                   valueTwo="${employmentAddressLineTwo}"
+                   valueThree="${employmentAddressLineThree}"
                    maxlength="35"
                    label="Address"
                    errors="${validationErrors}"
         />
         
-        <t:textedit id="postcode" name="postcode" value="${postcode}" maxLength="10" label="Postcode (optional)" errors="${validationErrors}" />
+        <t:textedit id="employmentPostcode" name="employmentPostcode" value="${employmentPostcode}" maxLength="10" label="Postcode (optional)" errors="${validationErrors}" />
         
         <t:yesnofield id="startJobBeforeClaimDate" 
                       name="startJobBeforeClaimDate" 
@@ -84,7 +82,7 @@
             />
         </t:hiddenPanel>
 
-        <t:textedit id="hoursPerWeek" name="hoursPerWeek" value="${hoursPerWeek}" maxLength="5" label="How many hours a week did you normally work?(optional)" errors="${validationErrors}" />
+        <t:textedit id="employmentHoursPerWeek" name="employmentHoursPerWeek" value="${employmentHoursPerWeek}" maxLength="5" label="How many hours a week did you normally work?(optional)" errors="${validationErrors}" />
         
     </t:pageContent>
 

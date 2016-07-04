@@ -22,20 +22,20 @@ public class CareeDetailsController extends AbstractFormController {
     private static final String CURRENT_PAGE  = "/care-you-provide/their-personal-details";
     private static final String PAGE_TITLE    = "Details of the person you care for - About the person you care for";
 
-    private static final String[] FIELDS = {"title",
-                                            "firstName",
-                                            "middleName",
-                                            "surname",
-                                            "nationalInsuranceNumber",
-                                            "dateOfBirth_day",
-                                            "dateOfBirth_month",
-                                            "dateOfBirth_year",
-                                            "relationship",
-                                            "sameAddress",
-                                            "address_lineOne",
-                                            "address_lineTwo",
-                                            "address_lineThree",
-                                            "postcode"};
+    private static final String[] FIELDS = {"careeTitle",
+                                            "careeFirstName",
+                                            "careeMiddleName",
+                                            "careeSurname",
+                                            "careeNationalInsuranceNumber",
+                                            "careeDateOfBirth_day",
+                                            "careeDateOfBirth_month",
+                                            "careeDateOfBirth_year",
+                                            "careeRelationship",
+                                            "careeSameAddress",
+                                            "careeAddressLineOne",
+                                            "careeAddressLineTwo",
+                                            "careeAddressLineThree",
+                                            "careePostcode"};
 
     @Autowired
     public CareeDetailsController(SessionManager sessionManager) {
@@ -76,12 +76,12 @@ public class CareeDetailsController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "title", "Title");
-        validateMandatoryField(fieldValues, "firstName", "First name");
-        validateMandatoryField(fieldValues, "surname", "Last name");
-        validateMandatoryDateField(fieldValues, "Date of Birth", "dateOfBirth", new String[]{"dateOfBirth_day", "dateOfBirth_month", "dateOfBirth_year"});
-        validateMandatoryField(fieldValues, "relationship", "What's their relationship to you?");
-        validateMandatoryField(fieldValues, "sameAddress", "Do they live at the same address as you?");
+        validateMandatoryField(fieldValues, "careeTitle", "Title");
+        validateMandatoryField(fieldValues, "careeFirstName", "First name");
+        validateMandatoryField(fieldValues, "careeSurname", "Last name");
+        validateMandatoryDateField(fieldValues, "Date of Birth", "careeDateOfBirth", new String[]{"dateOfBirth_day", "dateOfBirth_month", "dateOfBirth_year"});
+        validateMandatoryField(fieldValues, "careeRelationship", "What's their relationship to you?");
+        validateMandatoryField(fieldValues, "careeSameAddress", "Do they live at the same address as you?");
         // address and postcode are not mandatory
 
         LOG.trace("Ending BenefitsController.validate");

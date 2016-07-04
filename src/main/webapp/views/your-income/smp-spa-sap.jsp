@@ -8,60 +8,60 @@
 
     <t:pageContent errors="${validationErrors}" pageTitle="Statutory Pay" section="Section 9 of 11" backLink="${previousPage}">
         
-        <t:radiobuttons id="paymentTypesForThisPay" 
-                        name="paymentTypesForThisPay" 
+        <t:radiobuttons id="otherStatPaymentPaymentTypesForThisPay" 
+                        name="otherStatPaymentPaymentTypesForThisPay" 
                         optionValues="MaternityOrPaternityPay|AdoptionPay"
                         optionLabels="Maternity or Paternity Pay|Adoption Pay"
-                        value="${paymentTypesForThisPay}"
+                        value="${otherStatPaymentPaymentTypesForThisPay}"
                         label="Which are you paid?" 
                         errors="${validationErrors}" 
         />
         
-        <t:yesnofield id="stillBeingPaidThisPay" 
-                      name="stillBeingPaidThisPay" 
-                      value="${stillBeingPaidThisPay}"
+        <t:yesnofield id="otherStatPaymentStillBeingPaidThisPay" 
+                      name="otherStatPaymentStillBeingPaidThisPay" 
+                      value="${otherStatPaymentStillBeingPaidThisPay}"
                       label="Are you still being paid this?" 
                       errors="${validationErrors}" 
         />
         
-        <t:hiddenPanel id="stillBeingPaidThisPayWrap" triggerId="stillBeingPaidThisPay" triggerValue="no">
-            <t:datefield id="whenDidYouLastGetPaid" 
-                         nameDay="whenDidYouLastGetPaid_day" 
-                         nameMonth="whenDidYouLastGetPaid_month" 
-                         nameYear="whenDidYouLastGetPaid_year" 
-                         valueDay="${whenDidYouLastGetPaid_day}" 
-                         valueMonth="${whenDidYouLastGetPaid_month}" 
-                         valueYear="${whenDidYouLastGetPaid_year}" 
+        <t:hiddenPanel id="otherStatPaymentStillBeingPaidThisPayWrap" triggerId="otherStatPaymentStillBeingPaidThisPay" triggerValue="no">
+            <t:datefield id="otherStatPaymentWhenDidYouLastGetPaid" 
+                         nameDay="otherStatPaymentWhenDidYouLastGetPaid_day" 
+                         nameMonth="otherStatPaymentWhenDidYouLastGetPaid_month" 
+                         nameYear="otherStatPaymentWhenDidYouLastGetPaid_year" 
+                         valueDay="${otherStatPaymentWhenDidYouLastGetPaid_day}" 
+                         valueMonth="${otherStatPaymentWhenDidYouLastGetPaid_month}" 
+                         valueYear="${otherStatPaymentWhenDidYouLastGetPaid_year}" 
                          label="When were you last paid?" 
                          errors="${validationErrors}" 
             />
         </t:hiddenPanel>
         
-        <t:textedit id="whoPaidYouThisPay" name="whoPaidYouThisPay" value="${whoPaidYouThisPay}" maxLength="60" label="Who paid you this?" errors="${validationErrors}" /> 
-        <t:textedit id="amountOfThisPay" 
-                    name="amountOfThisPay" 
-                    value="${amountOfThisPay}" 
+        <t:textedit id="otherStatPaymentWhoPaidYouThisPay" name="otherStatPaymentWhoPaidYouThisPay" value="${otherStatPaymentWhoPaidYouThisPay}" maxLength="60" label="Who paid you this?" errors="${validationErrors}" /> 
+        <t:textedit id="otherStatPaymentAmountOfThisPay" 
+                    name="otherStatPaymentAmountOfThisPay" 
+                    value="${otherStatPaymentAmountOfThisPay}" 
                     maxLength="12" 
                     label="Amount paid" 
                     outerClass="short-field"
                     errors="${validationErrors}" 
          />
          
-         <t:radiobuttons id="howOftenPaidThisPay" 
-                         name="howOftenPaidThisPay" 
+         <t:radiobuttons id="otherStatPaymentHowOftenPaidThisPay" 
+                         name="otherStatPaymentHowOftenPaidThisPay" 
                          optionValues="Weekly|Fortnightly|Four-weekly|Monthly|Other"
                          optionLabels="Weekly|
                                        Fortnightly|
                                        Four-weekly|
                                        Monthly|
                                        It varies"
-                         value="${howOftenPaidThisPay}"
+                         value="${otherStatPaymentHowOftenPaidThisPay}"
                          label="How often are you paid?" 
                          errors="${validationErrors}" 
         />
         
-        <t:hiddenPanel id="howOftenPaidThisPayWrap" triggerId="howOftenPaidThisPay" triggerValue="Other">
-            <t:textedit id="howOftenPaidThisPayOther" name="howOftenPaidThisPayOther" value="${howOftenPaidThisPayOther}" maxLength="60" label="How often are you paid?" errors="${validationErrors}" /> 
+        <t:hiddenPanel id="otherStatPaymentHowOftenPaidThisPayWrap" triggerId="otherStatPaymentHowOftenPaidThisPay" triggerValue="Other">
+            <t:textedit id="otherStatPaymentHowOftenPaidThisPayOther" name="otherStatPaymentHowOftenPaidThisPayOther" value="${otherStatPaymentHowOftenPaidThisPayOther}" maxLength="60" label="How often are you paid?" errors="${validationErrors}" /> 
         </t:hiddenPanel>
 
     </t:pageContent>

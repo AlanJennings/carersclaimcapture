@@ -22,10 +22,10 @@ public class SelfEmployedPensionAndExpensesController extends AbstractFormContro
     private static final String CURRENT_PAGE  = "/your-income/self-employment/pensions-and-expenses";
     private static final String PAGE_TITLE    = "Pensions and expenses Self-employment";
 
-    private static final String[] FIELDS = {"payPensionScheme",
-                                            "payPensionSchemeText",
-                                            "haveExpensesForJob",
-                                            "haveExpensesForJobText"};
+    private static final String[] FIELDS = {"selfEmployedPayPensionScheme",
+                                            "selfEmployedPayPensionSchemeText",
+                                            "selfEmployedHaveExpensesForJob",
+                                            "selfEmployedHaveExpensesForJobText"};
 
     @Autowired
     public SelfEmployedPensionAndExpensesController(SessionManager sessionManager) {
@@ -76,14 +76,14 @@ public class SelfEmployedPensionAndExpensesController extends AbstractFormContro
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "payPensionScheme", "Do you pay into a pension?");
-        if(fieldValue_Equals(fieldValues, "payPensionScheme", "yes")) {
-            validateMandatoryField(fieldValues, "payPensionSchemeText", "Give details of each pension you pay into, including how much and how often you pay.");
+        validateMandatoryField(fieldValues, "selfEmployedPayPensionScheme", "Do you pay into a pension?");
+        if(fieldValue_Equals(fieldValues, "selfEmployedPayPensionScheme", "yes")) {
+            validateMandatoryField(fieldValues, "selfEmployedPayPensionSchemeText", "Give details of each pension you pay into, including how much and how often you pay.");
         }
 
-        validateMandatoryField(fieldValues, "haveExpensesForJob", "Do you have any care costs because of this work?");
-        if(fieldValue_Equals(fieldValues, "haveExpensesForJob", "yes")) {
-            validateMandatoryField(fieldValues, "haveExpensesForJobText", "Give details of who you pay and what it costs.");
+        validateMandatoryField(fieldValues, "selfEmployedHaveExpensesForJob", "Do you have any care costs because of this work?");
+        if(fieldValue_Equals(fieldValues, "selfEmployedHaveExpensesForJob", "yes")) {
+            validateMandatoryField(fieldValues, "selfEmployedHaveExpensesForJobText", "Give details of who you pay and what it costs.");
         }
 
         LOG.trace("Ending BenefitsController.validate");

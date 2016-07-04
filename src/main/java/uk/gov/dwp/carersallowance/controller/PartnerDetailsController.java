@@ -23,17 +23,17 @@ public class PartnerDetailsController extends AbstractFormController {
     private static final String PAGE_TITLE    = "Partner details - About your partner";
 
     private static final String[] FIELDS = {"hadPartnerSinceClaimDate",
-                                            "title",
-                                            "firstName",
-                                            "middleName",
-                                            "surname",
-                                            "otherNames",
-                                            "nationalInsuranceNumber",
-                                            "dateOfBirth_day",
-                                            "dateOfBirth_month",
-                                            "dateOfBirth_year",
-                                            "nationality",
-                                            "separated",
+                                            "partnerTitle",
+                                            "partnerFirstName",
+                                            "partnerMiddleName",
+                                            "partnerSurname",
+                                            "partnerOtherNames",
+                                            "partnerNationalInsuranceNumber",
+                                            "partnerDateOfBirth_day",
+                                            "partnerDateOfBirth_month",
+                                            "partnerDateOfBirth_year",
+                                            "partnerNationality",
+                                            "partnerSeparated",
                                             "isPartnerPersonYouCareFor",
                                             };
 
@@ -78,14 +78,14 @@ public class PartnerDetailsController extends AbstractFormController {
 
         validateMandatoryField(fieldValues, "hadPartnerSinceClaimDate", "Have you lived with a partner at any time since your claim date?");
         if(fieldValue_Equals(fieldValues, "hadPartnerSinceClaimDate", "yes")) {
-            validateMandatoryField(fieldValues, "title", "Title");
-            validateMandatoryField(fieldValues, "firstName", "First name");
-            validateMandatoryField(fieldValues, "surname", "Last name");
-            validateMandatoryField(fieldValues, "nationalInsuranceNumber", "National Insurance number");
-            validateRegexField(fieldValues,"National Insurance number", "nationalInsuranceNumber", AbstractFormController.ValidationPatterns.NINO_REGEX);
-            validateMandatoryDateField(fieldValues, "Date of Birth", "dateOfBirth", new String[]{"dateOfBirth_day", "dateOfBirth_month", "dateOfBirth_year"});
-            validateMandatoryField(fieldValues, "nationality", "Nationality");
-            validateMandatoryField(fieldValues, "separated", "Have you separated since your claim date?");
+            validateMandatoryField(fieldValues, "partnerTitle", "Title");
+            validateMandatoryField(fieldValues, "partnerFirstName", "First name");
+            validateMandatoryField(fieldValues, "partnerSurname", "Last name");
+            validateMandatoryField(fieldValues, "partnerNatioNalInsuranceNumber", "National Insurance number");
+            validateRegexField(fieldValues,"National Insurance number", "partnernatioNalInsuranceNumber", AbstractFormController.ValidationPatterns.NINO_REGEX);
+            validateMandatoryDateField(fieldValues, "Date of Birth", "partnerDateOfBirth", new String[]{"partnerDateOfBirth_day", "partnerDateOfBirth_month", "partnerDateOfBirth_year"});
+            validateMandatoryField(fieldValues, "partnerNationality", "Nationality");
+            validateMandatoryField(fieldValues, "partnerSeparated", "Have you separated since your claim date?");
             validateMandatoryField(fieldValues, "isPartnerPersonYouCareFor", "Is this the person you care for?");
         }
 

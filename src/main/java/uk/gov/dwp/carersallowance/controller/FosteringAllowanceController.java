@@ -24,14 +24,14 @@ public class FosteringAllowanceController extends AbstractFormController {
 
     private static final String[] FIELDS = {"fosteringAllowancePay",
                                             "fosteringAllowancePayOther",
-                                            "stillBeingPaidThisPay",
-                                            "whenDidYouLastGetPaid_day",
-                                            "whenDidYouLastGetPaid_month",
-                                            "whenDidYouLastGetPaid_year",
-                                            "whoPaidYouThisPay",
-                                            "amountOfThisPay",
-                                            "howOftenPaidThisPay",
-                                            "howOftenPaidThisPayOther"};
+                                            "fosteringAllowanceStillBeingPaidThisPay",
+                                            "fosteringAllowanceWhenDidYouLastGetPaid_day",
+                                            "fosteringAllowanceWhenDidYouLastGetPaid_month",
+                                            "fosteringAllowanceWhenDidYouLastGetPaid_year",
+                                            "fosteringAllowanceWhoPaidYouThisPay",
+                                            "fosteringAllowanceAmountOfThisPay",
+                                            "fosteringAllowanceHowOftenPaidThisPay",
+                                            "fosteringAllowanceHowOftenPaidThisPayOther"};
 
     @Autowired
     public FosteringAllowanceController(SessionManager sessionManager) {
@@ -87,17 +87,17 @@ public class FosteringAllowanceController extends AbstractFormController {
             validateMandatoryField(fieldValues, "fosteringAllowancePayOther", "Who paid you Fostering Allowance?");
         }
 
-        validateMandatoryField(fieldValues, "stillBeingPaidThisPay", "Are you still being paid this?");
-        if(fieldValue_Equals(fieldValues, "stillBeingPaidThisPay", "no")) {
-            validateMandatoryDateField(fieldValues, "When did you start the course?", "whenDidYouLastGetPaid", new String[]{"whenDidYouLastGetPaid_day", "whenDidYouLastGetPaid_month", "whenDidYouLastGetPaid_year"});
+        validateMandatoryField(fieldValues, "fosteringAllowanceStillBeingPaidThisPay", "Are you still being paid this?");
+        if(fieldValue_Equals(fieldValues, "fosteringAllowanceStillBeingPaidThisPay", "no")) {
+            validateMandatoryDateField(fieldValues, "When did you start the course?", "fosteringAllowanceWhenDidYouLastGetPaid", new String[]{"fosteringAllowanceWhenDidYouLastGetPaid_day", "fosteringAllowanceWhenDidYouLastGetPaid_month", "fosteringAllowanceWhenDidYouLastGetPaid_year"});
         }
 
-        validateMandatoryField(fieldValues, "whoPaidYouThisPay", "Who paid you this?");
-        validateMandatoryField(fieldValues, "amountOfThisPay", "Amount paid");
+        validateMandatoryField(fieldValues, "fosteringAllowanceWhoPaidYouThisPay", "Who paid you this?");
+        validateMandatoryField(fieldValues, "fosteringAllowanceAmountOfThisPay", "Amount paid");
 
-        validateMandatoryField(fieldValues, "howOftenPaidThisPay", "How often are you paid?");
-        if(fieldValue_Equals(fieldValues, "howOftenPaidThisPay", "Other")) {
-            validateMandatoryField(fieldValues, "howOftenPaidThisPayOther", "How often are you paid?");
+        validateMandatoryField(fieldValues, "fosteringAllowanceHowOftenPaidThisPay", "How often are you paid?");
+        if(fieldValue_Equals(fieldValues, "fosteringAllowanceHowOftenPaidThisPay", "Other")) {
+            validateMandatoryField(fieldValues, "fosteringAllowanceHowOftenPaidThisPayOther", "How often are you paid?");
         }
 
         LOG.trace("Ending BenefitsController.validate");

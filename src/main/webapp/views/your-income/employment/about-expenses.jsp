@@ -7,9 +7,6 @@
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" pageTitle="${employerName}" section="Section 9 of 11" backLink="${previousPage}">
-        <input type="hidden" id="employment_id" name="employment_id" value="${employment_id}" >
-        <input type="hidden" id="employerName" name="employerName" value="${employerName}" >
-        
         <t:yesnofield id="payPensionScheme" 
                       name="payPensionScheme" 
                       value="${payPensionScheme}"

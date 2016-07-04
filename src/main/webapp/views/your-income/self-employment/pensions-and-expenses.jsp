@@ -8,17 +8,17 @@
 
     <t:pageContent errors="${validationErrors}" pageTitle="Self-employment" section="Section 9 of 11" backLink="${previousPage}">
 
-        <t:yesnofield id="payPensionScheme" 
-                      name="payPensionScheme" 
-                      value="${payPensionScheme}"
+        <t:yesnofield id="selfEmployedPayPensionScheme" 
+                      name="selfEmployedPayPensionScheme" 
+                      value="${selfEmployedPayPensionScheme}"
                       label="Did you pay into a pension?" 
                       errors="${validationErrors}" 
         />
         
-        <t:hiddenPanel id="payPensionSchemeTextWrap" triggerId="payPensionScheme" triggerValue="yes" >
-            <t:textarea id="payPensionSchemeText" 
-                        name="payPensionSchemeText" 
-                        value="${payPensionSchemeText}" 
+        <t:hiddenPanel id="selfEmployedPayPensionSchemeTextWrap" triggerId="selfEmployedPayPensionScheme" triggerValue="yes" >
+            <t:textarea id="selfEmployedPayPensionSchemeText" 
+                        name="selfEmployedPayPensionSchemeText" 
+                        value="${selfEmployedPayPensionSchemeText}" 
                         maxLength="300" 
                         showRemainingChars="true"
                         label="Give details of each pension you paid into, including how much and how often you paid into them."
@@ -26,18 +26,18 @@
             />
         </t:hiddenPanel>
 
-        <t:yesnofield id="haveExpensesForJob" 
-                      name="haveExpensesForJob" 
-                      value="${haveExpensesForJob}"
+        <t:yesnofield id="selfEmployedHaveExpensesForJob" 
+                      name="selfEmployedHaveExpensesForJob" 
+                      value="${selfEmployedHaveExpensesForJob}"
                       label="Did you have any care costs because of this work?" 
                       hintBefore="This includes childcare costs as well as costs for looking after the person you care for."
                       errors="${validationErrors}" 
         />
         
-        <t:hiddenPanel id="haveExpensesForJobTextWrap" triggerId="haveExpensesForJob" triggerValue="yes" >
-            <t:textarea id="haveExpensesForJobText" 
-                        name="haveExpensesForJobText" 
-                        value="${haveExpensesForJobText}" 
+        <t:hiddenPanel id="selfEmployedHaveExpensesForJobTextWrap" triggerId="selfEmployedHaveExpensesForJob" triggerValue="yes" >
+            <t:textarea id="selfEmployedHaveExpensesForJobText" 
+                        name="selfEmployedHaveExpensesForJobText" 
+                        value="${selfEmployedHaveExpensesForJobText}" 
                         maxLength="300" 
                         showRemainingChars="true"
                         label="Give details of who you paid and what it cost."

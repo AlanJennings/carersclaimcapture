@@ -22,15 +22,15 @@ public class OtherStatutoryPaymentsController extends AbstractFormController {
     private static final String CURRENT_PAGE  = "/your-income/smp-spa-sap";
     private static final String PAGE_TITLE    = "Your income Statutory Pay";
 
-    private static final String[] FIELDS = {"paymentTypesForThisPay",
-                                            "stillBeingPaidThisPay",
-                                            "whenDidYouLastGetPaid_day",
-                                            "whenDidYouLastGetPaid_month",
-                                            "whenDidYouLastGetPaid_year",
-                                            "whoPaidYouThisPay",
-                                            "amountOfThisPay",
-                                            "howOftenPaidThisPay",
-                                            "howOftenPaidThisPayOther"};
+    private static final String[] FIELDS = {"otherStatPaymentPaymentTypesForThisPay",
+                                            "otherStatPaymentStillBeingPaidThisPay",
+                                            "otherStatPaymentWhenDidYouLastGetPaid_day",
+                                            "otherStatPaymentWhenDidYouLastGetPaid_month",
+                                            "otherStatPaymentWhenDidYouLastGetPaid_year",
+                                            "otherStatPaymentWhoPaidYouThisPay",
+                                            "otherStatPaymentAmountOfThisPay",
+                                            "otherStatPaymentHowOftenPaidThisPay",
+                                            "otherStatPaymentHowOftenPaidThisPayOther"};
 
     @Autowired
     public OtherStatutoryPaymentsController(SessionManager sessionManager) {
@@ -81,17 +81,17 @@ public class OtherStatutoryPaymentsController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "paymentTypesForThisPay", "Which are you paid?");
-        validateMandatoryField(fieldValues, "stillBeingPaidThisPay", "Are you still being paid this?");
-        if(fieldValue_Equals(fieldValues, "beenInEducationSinceClaimDate", "yes")) {
-            validateMandatoryDateField(fieldValues, "When were you last paid?", "whenDidYouLastGetPaid", new String[]{"whenDidYouLastGetPaid_day", "whenDidYouLastGetPaid_month", "whenDidYouLastGetPaid_year"});
+        validateMandatoryField(fieldValues, "otherStatPaymentPaymentTypesForThisPay", "Which are you paid?");
+        validateMandatoryField(fieldValues, "otherStatPaymentStillBeingPaidThisPay", "Are you still being paid this?");
+        if(fieldValue_Equals(fieldValues, "otherStatPaymentBeenInEducationSinceClaimDate", "yes")) {
+            validateMandatoryDateField(fieldValues, "When were you last paid?", "otherStatPaymentWhenDidYouLastGetPaid", new String[]{"otherStatPaymentWhenDidYouLastGetPaid_day", "otherStatPaymentWhenDidYouLastGetPaid_month", "otherStatPaymentWhenDidYouLastGetPaid_year"});
         }
 
-        validateMandatoryField(fieldValues, "whoPaidYouThisPay", "Who paid you this?");
-        validateMandatoryField(fieldValues, "amountOfThisPay", "Amount paid");
-        validateMandatoryField(fieldValues, "howOftenPaidThisPay", "How often are you paid?");
-        if(fieldValue_Equals(fieldValues, "howOftenPaidThisPay", "Other")) {
-            validateMandatoryField(fieldValues, "howOftenPaidThisPayOther", "How often are you paid?");
+        validateMandatoryField(fieldValues, "otherStatPaymentWhoPaidYouThisPay", "Who paid you this?");
+        validateMandatoryField(fieldValues, "otherStatPaymentAmountOfThisPay", "Amount paid");
+        validateMandatoryField(fieldValues, "otherStatPaymentHowOftenPaidThisPay", "How often are you paid?");
+        if(fieldValue_Equals(fieldValues, "otherStatPaymentHowOftenPaidThisPay", "Other")) {
+            validateMandatoryField(fieldValues, "otherStatPaymentHowOftenPaidThisPayOther", "How often are you paid?");
         }
 
         LOG.trace("Ending BenefitsController.validate");

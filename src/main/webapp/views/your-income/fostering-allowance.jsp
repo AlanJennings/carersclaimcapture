@@ -21,52 +21,52 @@
             <t:textedit id="fosteringAllowancePayOther" name="fosteringAllowancePayOther" value="${fosteringAllowancePayOther}" maxLength="60" label="Who paid you Fostering Allowance?" errors="${validationErrors}" /> 
         </t:hiddenPanel>
         
-        <t:yesnofield id="stillBeingPaidThisPay" 
-                      name="stillBeingPaidThisPay" 
-                      value="${stillBeingPaidThisPay}"
+        <t:yesnofield id="fosteringAllowanceStillBeingPaidThisPay" 
+                      name="fosteringAllowanceStillBeingPaidThisPay" 
+                      value="${fosteringAllowanceStillBeingPaidThisPay}"
                       label="Are you still being paid this?" 
                       errors="${validationErrors}" 
         />
         
-        <t:hiddenPanel id="stillBeingPaidThisPayWrap" triggerId="stillBeingPaidThisPay" triggerValue="no">
-            <t:datefield id="whenDidYouLastGetPaid" 
-                         nameDay="whenDidYouLastGetPaid_day" 
-                         nameMonth="whenDidYouLastGetPaid_month" 
-                         nameYear="whenDidYouLastGetPaid_year" 
-                         valueDay="${whenDidYouLastGetPaid_day}" 
-                         valueMonth="${whenDidYouLastGetPaid_month}" 
-                         valueYear="${whenDidYouLastGetPaid_year}" 
+        <t:hiddenPanel id="fosteringAllowanceStillBeingPaidThisPayWrap" triggerId="fosteringAllowanceStillBeingPaidThisPay" triggerValue="no">
+            <t:datefield id="fosteringAllowanceWhenDidYouLastGetPaid" 
+                         nameDay="fosteringAllowanceWhenDidYouLastGetPaid_day" 
+                         nameMonth="fosteringAllowanceWhenDidYouLastGetPaid_month" 
+                         nameYear="fosteringAllowanceWhenDidYouLastGetPaid_year" 
+                         valueDay="${fosteringAllowanceWhenDidYouLastGetPaid_day}" 
+                         valueMonth="${fosteringAllowanceWhenDidYouLastGetPaid_month}" 
+                         valueYear="${fosteringAllowanceWhenDidYouLastGetPaid_year}" 
                          label="When were you last paid?" 
                          errors="${validationErrors}" 
             />
         </t:hiddenPanel>
         
-        <t:textedit id="whoPaidYouThisPay" name="whoPaidYouThisPay" value="${whoPaidYouThisPay}" maxLength="60" label="Who paid you this?" errors="${validationErrors}" /> 
+        <t:textedit id="fosteringAllowanceWhoPaidYouThisPay" name="fosteringAllowanceWhoPaidYouThisPay" value="${fosteringAllowanceWhoPaidYouThisPay}" maxLength="60" label="Who paid you this?" errors="${validationErrors}" /> 
         
-        <t:textedit id="amountOfThisPay" 
-                    name="amountOfThisPay" 
-                    value="${amountOfThisPay}" 
+        <t:textedit id="fosteringAllowanceAmountOfThisPay" 
+                    name="fosteringAllowanceAmountOfThisPay" 
+                    value="${fosteringAllowanceAmountOfThisPay}" 
                     maxLength="12" 
                     label="Amount paid" 
                     outerClass="short-field"
                     errors="${validationErrors}" 
          />
          
-         <t:radiobuttons id="howOftenPaidThisPay" 
-                         name="howOftenPaidThisPay" 
+         <t:radiobuttons id="fosteringAllowanceHowOftenPaidThisPay" 
+                         name="fosteringAllowanceHowOftenPaidThisPay" 
                          optionValues="Weekly|Fortnightly|Four-weekly|Monthly|Other"
                          optionLabels="Weekly|
                                        Fortnightly|
                                        Four-weekly|
                                        Monthly|
                                        It varies"
-                         value="${howOftenPaidThisPay}"
+                         value="${fosteringAllowanceHowOftenPaidThisPay}"
                          label="How often are you paid?" 
                          errors="${validationErrors}" 
         />
         
-        <t:hiddenPanel id="howOftenPaidThisPayWrap" triggerId="howOftenPaidThisPay" triggerValue="Other">
-            <t:textedit id="howOftenPaidThisPayOther" name="howOftenPaidThisPayOther" value="${howOftenPaidThisPayOther}" maxLength="60" label="How often are you paid?" errors="${validationErrors}" /> 
+        <t:hiddenPanel id="fosteringAllowanceHowOftenPaidThisPayWrap" triggerId="fosteringAllowanceHowOftenPaidThisPay" triggerValue="Other">
+            <t:textedit id="fosteringAllowanceHowOftenPaidThisPayOther" name="fosteringAllowanceHowOftenPaidThisPayOther" value="${fosteringAllowanceHowOftenPaidThisPayOther}" maxLength="60" label="How often are you paid?" errors="${validationErrors}" /> 
         </t:hiddenPanel>
 
     </t:pageContent>
