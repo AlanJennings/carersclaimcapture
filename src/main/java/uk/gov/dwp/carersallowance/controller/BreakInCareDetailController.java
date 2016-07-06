@@ -103,7 +103,7 @@ public class BreakInCareDetailController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryDateField(fieldValues, "When did the break start?", "breakStartDate", new String[]{"startDate_day", "startDate_month", "startDate_year"});
+        validateMandatoryDateField(fieldValues, "When did the break start?", "breakStartDate", new String[]{"breakStartDate_day", "breakStartDate_month", "breakStartDate_year"});
         validateMandatoryField(fieldValues, "breakWhereCaree", "Where was the person you care for during the break?");
         validateMandatoryField(fieldValues, "breakWhereYou", "Where were you during the break?");
         validateMandatoryField(fieldValues, "breakHasBreakEnded", "Has this break ended?");

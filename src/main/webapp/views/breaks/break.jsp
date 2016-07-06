@@ -10,7 +10,7 @@
 
         <input type="hidden" id="break_id" name="break_id" value="${break_id}" >
         
-        <t:datefield id="breakbreakStartDate" 
+        <t:datefield id="breakStartDate" 
                      nameDay="breakStartDate_day" 
                      nameMonth="breakStartDate_month" 
                      nameYear="breakStartDate_year" 
