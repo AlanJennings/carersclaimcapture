@@ -22,7 +22,11 @@ public class CareHoursController extends AbstractFormController {
     private static final String CURRENT_PAGE  = "/care-you-provide/more-about-the-care";
     private static final String PAGE_TITLE    = "More about the care you provide - About the person you care for";
 
-    private static final String[] FIELDS = {"spent35HoursCaring"};
+    private static final String[] FIELDS = {"spent35HoursCaring",
+                                            "otherResidence_hospital",
+                                            "otherResidence_respite",
+                                            "otherResidence_none",
+                                            "weeksNotCaring"};
 
     @Autowired
     public CareHoursController(SessionManager sessionManager) {
@@ -63,7 +67,16 @@ public class CareHoursController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "spent35HoursCaring", "Do you spend 35 hours or more each week caring for this person?");
+        validateMandatoryField(fieldValues, "spent35HoursCaring", "Do you spend 35 hours or more each week caring for John Smith?");
+        validateMandatoryFieldGroupAnyField(fieldValues,
+                                            "otherResidenceGroup",
+                                            "Since 16 October 2015, have you or John Smith been in any of the following for at least a week",
+                                            "otherResidence_hospital",
+                                            "otherResidence_respite",
+                                            "otherResidence_none",
+                                            "weeksNotCaring");
+
+        validateMandatoryField(fieldValues, "weeksNotCaring", "Have there been any other weeks you've not provided care for John Smith for 35 hours a week");
 
         LOG.trace("Ending BenefitsController.validate");
     }

@@ -21,8 +21,8 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
  * @author drh
  */
 @Controller
-public class BreakInCareDetailController extends AbstractFormController {
-    public static final Logger LOG = LoggerFactory.getLogger(BreakInCareDetailController.class);
+public class BreakSomewhereElseController extends AbstractFormController {
+    public static final Logger LOG = LoggerFactory.getLogger(BreakSomewhereElseController.class);
 
     private static final String CURRENT_PAGE  = "/breaks/break";    // this has an argument
     private static final String NEXT_PAGE     = "/breaks/breaks-in-care/update";
@@ -47,7 +47,7 @@ public class BreakInCareDetailController extends AbstractFormController {
                                             "breakMedicalCareDuringBreak"};
 
     @Autowired
-    public BreakInCareDetailController(SessionManager sessionManager) {
+    public BreakSomewhereElseController(SessionManager sessionManager) {
         super(sessionManager);
     }
 

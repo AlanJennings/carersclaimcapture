@@ -49,6 +49,11 @@ public class EmploymentHistoryController extends AbstractFormController {
         return CURRENT_PAGE;
     }
 
+    /**
+     * If moreEmployment is yes, then go to the employment detail page (i.e. start a new employment item)
+     * otherwise, sort the current records and display the next page according to the choices entered
+     * in YourIncome (currently self employment, statutory pay or onto bank details)
+     */
     @Override
     public String getNextPage(HttpServletRequest request) {
         LOG.trace("Started EmploymentHistoryController.getNextPage");
@@ -91,6 +96,10 @@ public class EmploymentHistoryController extends AbstractFormController {
         return PAGE_TITLE;
     }
 
+    /**
+     * if there are no employment items already skip straight to entering a new one
+     * otherwise show the summary form as normal.
+     */
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
     public String showForm(HttpServletRequest request, Model model) {
         LOG.trace("Started EmploymentHistoryController.showForm");
@@ -109,8 +118,8 @@ public class EmploymentHistoryController extends AbstractFormController {
     }
 
     /**
-     * Save the individual break fields into a break entry in the fieldCollection list
-     * either a new one (if break_id is not populated), or an existing one (if it is)
+     * Save the individual employment fields into a employment entry in the fieldCollection list
+     * either a new one (if employment_id is not populated), or an existing one (if it is)
      * and then cleanup the session by removing the individual fields values.
      *
      * Then redirect to the showForm page (i.e. post, redirect, get)
@@ -146,6 +155,9 @@ public class EmploymentHistoryController extends AbstractFormController {
         return postFormFieldCollection(request, idToChange, idToDelete, session, model);
     }
 
+    /**
+     * handle the action choices (edit entry, delete entry or create new entry)
+     */
     protected String postFormFieldCollection(HttpServletRequest request, String idToChange, String idToDelete, HttpSession session, Model model) {
         LOG.trace("Started EmploymentHistoryController.postForm");
         try {

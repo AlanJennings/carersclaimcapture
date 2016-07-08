@@ -3,44 +3,13 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="t"  tagdir="/WEB-INF/tags" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" pageTitle="Breaks from care" section="Section 7 of 11" backLink="${previousPage}">
         
         <!-- breaksInCare = '<c:out value="${breaks}" />' -->
-        <c:if test="${empty breaks}">
-            <c:set var="moreBreaksLabel" value="Have you had any breaks from caring for this person since ${dateOfClaim}?" />
-        
-            <t:htmlsection>
-                <p>
-                    A break is any time you spent less than 35 hours a week caring for the other person. 
-                    For example when:
-                </p>
-            </t:htmlsection>
-            
-            <t:htmlsection>
-                <ul class="list-bullet">
-                    <li>they were in respite care, hospital or on holiday without you.</li>
-                    <li>you were in hospital or on holiday without them.</li>
-                </ul>
-            </t:htmlsection>
-            
-            <t:htmlsection>
-                <p>
-                    You might still get Carer's Allowance for these times. 
-                    <a rel="external" 
-                       href="/claim-help#3"
-                       target="_blank"
-                       onmousedown="trackEvent('/breaks/breaks-in-care','Claim Notes - Breaks from Caring');"
-                       onkeydown="trackEvent('/breaks/breaks-in-care','Claim Notes - Breaks from Caring');"
-                    >Find out more</a>.
-                </p>
-            </t:htmlsection>
-
-        </c:if>
-
         <c:if test="${not empty breaks}">
             <c:set var="moreBreaksLabel" value="Have you had any more breaks from caring for this person since ${dateOfClaim}?" />
             <t:panel id="breaks" label="Breaks already added">
@@ -64,14 +33,30 @@
             </t:panel>
         </c:if>
 
-        <t:panel id="moreBreaks" label="Breaks from care">
-            <t:yesnofield id="moreBreaksInCare" 
-                          name="moreBreaksInCare" 
-                          value="${moreBreaksInCare}"
-                          label="${moreBreaksLabel}" 
-                          errors="${validationErrors}" 
+
+        <t:yesnofield id="moreBreaksInCare" 
+                      name="moreBreaksInCare" 
+                      value="${moreBreaksInCare}"
+                      label="Since 16th October 2016, were there any other times you or John Smith have 
+                             been in hospital, respite or a care home, where 35 hours of care hasn't taken 
+                             place?" 
+                      errors="${validationErrors}" 
+        />
+        
+        <t:hiddenPanel id="moreBreaksInCareWrap" triggerId="moreBreaksInCare" triggerValue="yes">
+            
+            <t:radiobuttons id="moreBreaksInCareResidence" 
+                            name="moreBreaksInCareResidence" 
+                            optionValues="hospital|respite|somewhere else"                        
+                            optionLabels="One of you was in hospital|
+                                          Respite or care home|
+                                          Time you've not cared for 35 hours"
+                            value="${moreBreaksInCareResidence}"
+                            label="What do you want to add?"
+                            errors="${validationErrors}" 
             />
-        </t:panel>
+        
+        </t:hiddenPanel>
         
     </t:pageContent>
     
