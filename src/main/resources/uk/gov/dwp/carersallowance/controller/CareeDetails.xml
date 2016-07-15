@@ -28,27 +28,22 @@
 
             <textedit name="careeTitle" >
                 <maxLength>20</maxLength>
-                <label>Title</label>
             </textedit>
         
             <textedit name="careeFirstName" >
                 <maxLength>17</maxLength>
-                <label>First name</label>
             </textedit> 
 
             <textedit name="careeMiddleName" >
                 <maxLength>17</maxLength>
-                <label>Middle name(s)</label>
             </textedit> 
 
             <textedit name="careeMiddleName" >
                 <maxLength>17</maxLength>
-                <label>Middle name(s)</label>
             </textedit> 
             
             <textedit name="careeSurname" >
                 <maxLength>35</maxLength>
-                <label>Last name</label>
             </textedit> 
 
         

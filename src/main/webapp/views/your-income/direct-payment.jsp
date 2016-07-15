@@ -6,53 +6,20 @@
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" pageTitle="Direct payments for caring for people" section="Section 9 of 11" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" page="page.direct-payment" backLink="${previousPage}">
 
-        <t:yesnofield id="directPaymentStillBeingPaidThisPay" 
-                      name="directPaymentStillBeingPaidThisPay" 
-                      value="${directPaymentStillBeingPaidThisPay}"
-                      label="Are you still being paid this?" 
-                      errors="${validationErrors}" 
-        />
-        
+        <t:yesnofield name="directPaymentStillBeingPaidThisPay" />
+
         <t:hiddenPanel id="directPaymentStillBeingPaidThisPayWrap" triggerId="directPaymentStillBeingPaidThisPay" triggerValue="no">
-            <t:datefield id="directPaymentWhenDidYouLastGetPaid" 
-                         nameDay="directPaymentWhenDidYouLastGetPaid_day" 
-                         nameMonth="directPaymentWhenDidYouLastGetPaid_month" 
-                         nameYear="directPaymentWhenDidYouLastGetPaid_year" 
-                         valueDay="${directPaymentWhenDidYouLastGetPaid_day}" 
-                         valueMonth="${directPaymentWhenDidYouLastGetPaid_month}" 
-                         valueYear="${directPaymentWhenDidYouLastGetPaid_year}" 
-                         label="When were you last paid?" 
-                         errors="${validationErrors}" 
-            />
+            <t:datefield name="directPaymentWhenDidYouLastGetPaid" />
         </t:hiddenPanel>
-        
-        <t:textedit id="directPaymentWhoPaidYouThisPay" name="directPaymentWhoPaidYouThisPay" value="${whoPaidYouThisPay}" maxLength="60" label="Who paid you this?" errors="${validationErrors}" /> 
-        <t:textedit id="directPaymentAmountOfThisPay" 
-                    name="directPaymentAmountOfThisPay" 
-                    value="${directPaymentAmountOfThisPay}" 
-                    maxLength="12" 
-                    label="Amount paid" 
-                    outerClass="short-field"
-                    errors="${validationErrors}" 
-         />
-         
-         <t:radiobuttons id="directPaymentHowOftenPaidThisPay" 
-                         name="directPaymentHowOftenPaidThisPay" 
-                         optionValues="Weekly|Fortnightly|Four-weekly|Monthly|Other"
-                         optionLabels="Weekly|
-                                       Fortnightly|
-                                       Four-weekly|
-                                       Monthly|
-                                       It varies"
-                         value="${directPaymentHowOftenPaidThisPay}"
-                         label="How often are you paid?" 
-                         errors="${validationErrors}" 
-        />
-        
+
+        <t:textedit name="directPaymentWhoPaidYouThisPay" maxLength="60" /> 
+        <t:textedit name="directPaymentAmountOfThisPay" maxLength="12" />
+        <t:radiobuttons name="directPaymentHowOftenPaidThisPay" optionValues="Weekly|Fortnightly|Four-weekly|Monthly|Other" />
+
         <t:hiddenPanel id="directPaymentHowOftenPaidThisPayWrap" triggerId="directPaymentHowOftenPaidThisPay" triggerValue="Other">
-            <t:textedit id="directPaymentHowOftenPaidThisPayOther" name="directPaymentHowOftenPaidThisPayOther" value="${directPaymentHowOftenPaidThisPayOther}" maxLength="60" label="How often are you paid?" errors="${validationErrors}" /> 
+            <t:textedit name="directPaymentHowOftenPaidThisPayOther" maxLength="60" /> 
         </t:hiddenPanel>
 
     </t:pageContent>

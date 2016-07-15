@@ -6,47 +6,20 @@
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" pageTitle="Statutory Sick Pay" section="Section 9 of 11" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" page="page.statutory-sick-pay" backLink="${previousPage}">
 
-        <t:yesnofield id="stillBeingPaidThisPay" 
-                      name="stillBeingPaidThisPay" 
-                      value="${stillBeingPaidThisPay}"
-                      label="Are you still being paid Statutory Sick Pay?" 
-                      errors="${validationErrors}" 
-        />
+        <t:yesnofield name="stillBeingPaidThisPay" />
         
         <t:hiddenPanel id="stillBeingPaidThisPayWrap" triggerId="stillBeingPaidThisPay" triggerValue="no">
-            <t:datefield id="whenDidYouLastGetPaid" 
-                         nameDay="whenDidYouLastGetPaid_day" 
-                         nameMonth="whenDidYouLastGetPaid_month" 
-                         nameYear="whenDidYouLastGetPaid_year" 
-                         valueDay="${whenDidYouLastGetPaid_day}" 
-                         valueMonth="${whenDidYouLastGetPaid_month}" 
-                         valueYear="${whenDidYouLastGetPaid_year}" 
-                         label="When were you last paid?" 
-                         errors="${validationErrors}" 
-            />
+            <t:datefield name="whenDidYouLastGetPaid" />
         </t:hiddenPanel>
-        
-        <t:textedit id="whoPaidYouThisPay" name="whoPaidYouThisPay" value="${whoPaidYouThisPay}" maxLength="60" label="Who paid you Statutory Sick Pay?" errors="${validationErrors}" />
-        
-        <t:textedit id="amountOfThisPay" name="amountOfThisPay" value="${amountOfThisPay}" maxLength="12" label="Amount paid" errors="${validationErrors}" />
-        
-        <t:radiobuttons id="howOftenPaidThisPay" 
-                        name="howOftenPaidThisPay" 
-                        optionValues="Weekly|Fortnightly|Four-Weekly|Monthly|Other"
-                        optionLabels="Weekly|
-                                      Fortnightly|
-                                      Four-weekly|
-                                      Monthly|
-                                      It varies"
-                        value="${howOftenPaidThisPay}"
-                        label="How often are you paid?" 
-                        errors="${validationErrors}" 
-        />
-        
+
+        <t:textedit name="whoPaidYouThisPay" maxLength="60" />
+        <t:textedit name="amountOfThisPay" maxLength="12" />
+        <t:radiobuttons name="howOftenPaidThisPay" optionValues="Weekly|Fortnightly|Four-Weekly|Monthly|Other" />
+
         <t:hiddenPanel id="howOftenPaidThisPayWrap" triggerId="howOftenPaidThisPay" triggerValue="Other">
-            <t:textedit id="howOftenPaidThisPayOther" name="howOftenPaidThisPayOther" value="${howOftenPaidThisPayOther}" maxLength="60" label="How often are you paid?" errors="${validationErrors}" />
+            <t:textedit name="howOftenPaidThisPayOther" maxLength="60" />
         </t:hiddenPanel>
         
     </t:pageContent>

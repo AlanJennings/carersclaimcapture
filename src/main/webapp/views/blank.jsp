@@ -6,7 +6,7 @@
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" pageTitle="" section="" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" page="" backLink="${previousPage}">
 
     </t:pageContent>
 

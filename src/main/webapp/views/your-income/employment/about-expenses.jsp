@@ -6,62 +6,23 @@
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" pageTitle="${employerName}" section="Section 9 of 11" backLink="${previousPage}">
-        <t:yesnofield id="payPensionScheme" 
-                      name="payPensionScheme" 
-                      value="${payPensionScheme}"
-                      label="Do you pay into a pension?" 
-                      errors="${validationErrors}" 
-        />
-        
+    <t:pageContent errors="${validationErrors}" page="page.pensions-and-expenses" pageTitle="${employerName}" backLink="${previousPage}">
+        <t:yesnofield name="payPensionScheme" />
+
         <t:hiddenPanel id="payPensionSchemeTextWrap" triggerId="payPensionScheme" triggerValue="yes">
-            <t:textarea id="payPensionSchemeText" 
-                        name="payPensionSchemeText" 
-                        value="${payPensionSchemeText}" 
-                        maxLength="300" 
-                        showRemainingChars="true"
-                        label="Give details of each pension you pay into, including how much and how often you pay." 
-                        errors="${validationErrors}"
-           />
+            <t:textarea name="payPensionSchemeText" maxLength="300" showRemainingChars="true" />
         </t:hiddenPanel>
 
-        <t:yesnofield id="payForThings" 
-                      name="payForThings" 
-                      value="${payForThings}"
-                      label="Do you pay for things you need to do your job?"
-                      hintBefore="This means anything you have to pay for yourself - not expenses your company pays."
-                      errors="${validationErrors}" 
-        />
-        
+        <t:yesnofield name="payForThings" />
+
         <t:hiddenPanel id="payForThingsTextWrap" triggerId="payForThings" triggerValue="yes">
-            <t:textarea id="payForThingsText" 
-                        name="payForThingsText" 
-                        value="${payForThingsText}" 
-                        maxLength="300" 
-                        showRemainingChars="true"
-                        label="Give details of what you need to buy, why you need it and how much it costs." 
-                        errors="${validationErrors}"
-           />
+            <t:textarea name="payForThingsText" maxLength="300" showRemainingChars="true" />
         </t:hiddenPanel>
 
-        <t:yesnofield id="haveExpensesForJob" 
-                      name="haveExpensesForJob" 
-                      value="${haveExpensesForJob}"
-                      label="Do you have any care costs because of this work?" 
-                      hintBefore="This includes childcare costs as well as costs for looking after the person you care for."
-                      errors="${validationErrors}" 
-        />
-        
+        <t:yesnofield name="haveExpensesForJob" />
+
         <t:hiddenPanel id="haveExpensesForJobTextWrap" triggerId="haveExpensesForJob" triggerValue="yes">
-            <t:textarea id="haveExpensesForJobText" 
-                        name="haveExpensesForJobText" 
-                        value="${haveExpensesForJobText}" 
-                        maxLength="300" 
-                        showRemainingChars="true"
-                        label="Give details of who you pay and what it costs." 
-                        hintBefore="If you pay a family member let us know their relationship to you and the person you care for."
-                        errors="${validationErrors}"
-           />
+            <t:textarea name="haveExpensesForJobText" maxLength="300" showRemainingChars="true" />
         </t:hiddenPanel>
 
     </t:pageContent>

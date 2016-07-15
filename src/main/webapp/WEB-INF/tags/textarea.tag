@@ -3,51 +3,52 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<%@attribute name="id" required="true" type="java.lang.String"%>
-<%@attribute name="name" required="true" type="java.lang.String"%>
+<%@attribute name="name" required="true" %>
 
-<%@attribute name="value" required="false" type="java.lang.String"%>
-<%@attribute name="maxLength" required="false" type="java.lang.String"%>
-<%@attribute name="additionalClasses" required="false" type="java.lang.String"%>
-<%@attribute name="showRemainingChars" required="false" type="java.lang.String"%>
+<%@attribute name="id" %>
+<%@attribute name="value" %>
+<%@attribute name="maxLength" %>
+<%@attribute name="additionalClasses" %>
+<%@attribute name="showRemainingChars" %>
+<%@attribute name="outerClass" %>
+<%@attribute name="labelKey" %>
+<%@attribute name="hintBeforeKey" %>
+<%@attribute name="hintAfterKey" %>
 
-<%@attribute name="outerClass" required="false" type="java.lang.String"%>
-<%@attribute name="label" required="false" type="java.lang.String"%>
-<%@attribute name="hintBefore" required="false" type="java.lang.String"%>
-<%@attribute name="hintAfter" required="false" type="java.lang.String"%>
-
-<%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+<%@attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
 
 <script type="text/javascript" src="<c:url value='/assets/javascript/textAreaCounter.js' />" ></script>
 
-<c:if test="${empty showRemainingChars}" >
-    <c:set var="showRemainingChars" value="false" />
+<t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
+<t:defaultValue value="${pageScope.labelKey}" defaultValue="${pageScope.name}.label" var="labelKey" />
+<t:defaultValue value="${pageScope.useRawValue}" defaultValue="false" var="useRawValue" />
+<t:defaultValue value="${pageScope.showRemainingChars}" defaultValue="false" var="showRemainingChars" />
+<t:defaultValue value="${pageScope.maxLength}" defaultValue="false" var="showRemainingChars" />
+
+<%-- If not using raw values, then use the name attribute to locate the value --%>
+<c:if test="${pageScope.useRawValue!='true'}" >
+    <c:set var="value" value="${requestScope[pageScope.name]}" />
 </c:if>
 
-<%-- Override showRemainingChars if no maxlength has been set --%>
-<c:if test="${empty maxLength}" >
-    <c:set var="showRemainingChars" value="false" />
-</c:if>
+<t:component name="${pageScope.name}" 
+             outerClass="${pageScope.outerClass}" 
+             outerStyle="${pageScope.outerStyle}" 
+             errors="${pageScope.errors}">
 
-<t:component name="${name}" 
-             outerClass="${outerClass}" 
-             outerStyle="${outerStyle}" 
-             errors="${errors}">
-
-        <label class="form-label-bold" for="${id}"> ${label} </label>
-        <t:hint hintId="${hintBeforeId}" hintText="${hintBefore}" /> 
-        <textarea class="form-control ${additionalClasses}" id="${id}" name="${name}" maxLength="${maxLength}" >${value}</textarea>
-        <c:if test="${showRemainingChars=='true'}" >
-            <c:set var="remainingChars" value="${maxLength - fn:length(value)}" />
-            <p class="form-hint countdown">${remainingChars} characters left</p>
+        <label class="form-label-bold" for="${pageScope.id}"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label"/> </label>
+        <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/> 
+        <textarea class="form-control ${pageScope.additionalClasses}" id="${pageScope.id}" name="${pageScope.name}" maxLength="${pageScope.maxLength}" >${pageScope.value}</textarea>
+        <c:if test="${pageScope.showRemainingChars=='true'}" >
+            <c:set var="remainingChars" value="${pageScope.maxLength - fn:length(pageScope.value)}" />
+            <p class="form-hint countdown">${pageScope.remainingChars} characters left</p>
         </c:if>
-        <t:hint hintId="${hintAfterId}" hintText="${hintAfter}" />
+        <t:hint hintTextKey="${pageScope.hintAfterKey}" parentName="${pageScope.name}" element="hintAfter"/>
 
 </t:component>
 
-<c:if test="${(not empty showRemainingChars)}" >
+<c:if test="${pageScope.showRemainingChars=='true'}" >    
     <script type="text/javascript">
-        window.areaCounter("${id}", Number("${maxLength}"));
+        window.areaCounter("${id}", Number("${pageScope.maxLength}"));
     </script>
 </c:if>
 

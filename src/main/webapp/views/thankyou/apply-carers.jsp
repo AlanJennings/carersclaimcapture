@@ -5,33 +5,38 @@
 <!DOCTYPE html>
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+
         <main class="container" role="main" id="main">
             <div class="carers-allowance clearfix">
-<%--    
+<%--
                 <section class="js-message">
                     <h2>Javascript is currently disabled</h2>
                     <p>For full functionality of this website it is necessary to enable JavaScript, not doing so will result in a reduced user experience.</p>
                 </section>
---%>            
+--%>
                 <article class="column-three-quarters main-content finish-statement">
                     <div style="height: 50px;" ></div>
-        
-                    <section class="app-complete">
-                        <h1 class="form-title heading-large compound">Your claim has been sent</h1>
-                        <p class="nino-title">Your reference is your National Insurance number.</p>
+
+                    <section id="app-complete" class="app-complete">
+                        <h1 class="form-title heading-large compound"><t:message code="finish-statement.line1" /></h1>
+                        <p class="nino-title"><t:message code="finish-statement.line2" /></p>
                     </section>
-        
-                    <p class="hide-desktops">What did you think of this service?</p>
-        
+
+                    <p class="hide-desktops"><t:message code="finish-statement.line3" /></p>
+
                     <div class="finish-info">
-                        <h2 class="heading-medium">What happens next</h2>
-                            <p>You don't have to do anything else - you'll usually get a decision within 4 weeks.</p>
+                        <h2 class="heading-medium"><t:message code="finish-statement.line4" /></h2>
+                            <p><t:message code="finish-statement.line5" /></p>
                     </div>
-        
+
                     <br>
-        
-                    <p><a rel="external" href="https://www.gov.uk/carers-allowance-report-change" target="_blank">Report a change in your circumstances.</a></p>
-        
+
+                    <p>
+                        <a rel="external" href="https://www.gov.uk/carers-allowance-report-change" target="_blank">
+                            <t:message code="finish-statement.line6" />
+                        </a>
+                    </p>
+
                     <div class="finish-button">
                         <a href="https://www.gov.uk/done/apply-carers-allowance" 
                            rel="external" 
@@ -39,11 +44,11 @@
                            class="secondary" 
                            onmousedown="trackEvent('/thankyou/apply-carers','Feedback');" 
                            onkeydown="trackEvent('/thankyou/apply-carers','Feedback');"
-                        >What did you think of this service?</a>
-                        (Takes 30 seconds.)
+                        ><t:message code="finish-statement.line7" /></a>
+                        <t:message code="finish-statement.line8" />
                     </div>
                     <div style="height: 50px;" ></div>
-                </article>                
+                </article>
             </div>
         </main>
 </t:mainPage>

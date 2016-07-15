@@ -2,68 +2,87 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<%@attribute name="id" required="true" type="java.lang.String"%>
-<%@attribute name="nameDay" required="true" type="java.lang.String"%>
-<%@attribute name="nameMonth" required="true" type="java.lang.String"%>
-<%@attribute name="nameYear" required="true" type="java.lang.String"%>
-<%@attribute name="valueDay" required="false" type="java.lang.String"%>
-<%@attribute name="valueMonth" required="false" type="java.lang.String"%>
-<%@attribute name="valueYear" required="false" type="java.lang.String"%>
-<%@attribute name="label" required="false" type="java.lang.String"%>
-<%@attribute name="hintBefore" required="false" type="java.lang.String"%>
-<%@attribute name="hintBeforeId" required="false" type="java.lang.String"%>
-<%@attribute name="hintAfter" required="false" type="java.lang.String"%>
-<%@attribute name="hintAfterId" required="false" type="java.lang.String"%>
+<%@ attribute name="name" required="true" %>
+    
+<%@ attribute name="id" %>
+<%@ attribute name="nameDay" %>
+<%@ attribute name="nameMonth" %>
+<%@ attribute name="nameYear" %>
+<%@ attribute name="valueDay" %>
+<%@ attribute name="valueMonth" %>
+<%@ attribute name="valueYear" %>
+<%@ attribute name="labelKey" %>
+<%@ attribute name="hintBeforeKey" %>
+<%@ attribute name="hintAfterKey" %>
+    
+<%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
 
-<%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+<t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
+<t:defaultValue value="${pageScope.labelKey}" defaultValue="${pageScope.name}.label" var="labelKey" />
+<t:defaultValue value="${pageScope.useRawValue}" defaultValue="false" var="useRawValue" />
 
-<t:component name="${id}" 
-             outerClass="${outerClass}" 
-             outerStyle="${outerStyle}" 
-             errors="${errors}">
+<%-- If not using raw values, then use the name attribute to locate the value --%>
+<c:if test="${empty pageScope.nameDay}">
+    <c:set var="nameDay" value="${pageScope.name}_day" />
+    <c:set var="nameMonth" value="${pageScope.name}_month" />
+    <c:set var="nameYear" value="${pageScope.name}_year" />
+</c:if>
+
+<c:if test="${pageScope.useRawValue!='true'}" >
+    <c:set var="valueDay" value="${requestScope[pageScope.nameDay]}" />
+    <c:set var="valueMonth" value="${requestScope[pageScope.nameMonth]}" />
+    <c:set var="valueYear" value="${requestScope[pageScope.nameYear]}" />
+</c:if>
+
+<c:set var="numbersWarning"><t:message code='warning.numbers.only' /></c:set>
+
+<t:component name="${pageScope.name}" 
+             outerClass="${pageScope.outerClass}" 
+             outerStyle="${pageScope.outerStyle}" 
+             errors="${pageScope.errors}">
 
     <!-- TODO: Probably should rearrange these a bit, so label and hints are outside the fieldset -->
     <fieldset class="question-group">
-        <legend class="form-label-bold"> ${label} </legend>
-        <t:hint hintId="${hintBeforeId}" hintText="${hintBefore}" /> 
-        <ul class="form-date" id="${id}">
+        <legend class="form-label-bold"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label"/> </legend>
+        <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore" />
+        <ul class="form-date" id="${pageScope.id}">
             <li class="form-group">
-                <label for="${id}_day">Day</label>
+                <label for="${pageScope.id}_day"><t:message code="day" /></label>
                 <input type="tel" 
                        class="form-control"
-                       id="${id}_day"
-                       name="${nameDay}"
-                       title="Must be numbers only" 
-                       value="${valueDay}" 
+                       id="${pageScope.id}_day"
+                       name="${pageScope.nameDay}"
+                       title="${pageScope.numbersWarning}" 
+                       value="${pageScope.valueDay}" 
                        maxLength="2" 
                        autocomplete="off">
             </li>
             
             <li class="form-group month">
-                <label for="${id}_month">Month</label>
+                <label for="${pageScope.id}_month"><t:message code="month" /></label>
                 <input type="tel"
                        class="form-control"
-                       id="${id}_month"
-                       name="${nameMonth}"
-                       title="Must be numbers only"
-                       value="${valueMonth}" 
+                       id="${pageScope.id}_month"
+                       name="${pageScope.nameMonth}"
+                       title="${pageScope.numbersWarning}"
+                       value="${pageScope.valueMonth}" 
                        maxLength="2"
                        autocomplete="off">
             </li>
             
             <li class="form-group form-group-year">
-                <label for="${id}_year">Year</label>
+                <label for="${pageScope.id}_year"><t:message code="year" /></label>
                 <input type="tel"
                        class="form-control"
-                       id="${id}_year"
-                       name="${nameYear}"
-                       title="Must be numbers only"
-                       value="${valueYear}" 
+                       id="${pageScope.id}_year"
+                       name="${pageScope.nameYear}"
+                       title="${pageScope.numbersWarning}"
+                       value="${pageScope.valueYear}" 
                        maxLength="4"
                        autocomplete="off">
             </li>
         </ul>
-        <t:hint hintId="${hintAfterId}" hintText="${hintAfter}" /> 
+        <t:hint hintTextKey="${pageScope.hintAfterKey}" parentName="${pageScope.name}" element="hintAfter" />
     </fieldset>
 
 </t:component>

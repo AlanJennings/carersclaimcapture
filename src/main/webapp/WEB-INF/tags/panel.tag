@@ -2,19 +2,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<%@attribute name="id" required="true" type="java.lang.String"%>
-<%@attribute name="label" required="false" type="java.lang.String"%>
-<%@attribute name="innerClass" required="false" type="java.lang.String"%>
+<%@ attribute name="id" required="true" %>
 
-<c:if test="${empty innerClass}">
-    <c:set var="innerClass" value="break-data" />
-</c:if>
+<%@ attribute name="labelKey" %>
+<%@ attribute name="innerClass" %>
 
+<t:defaultValue value="${pageScope.innerClass}" defaultValue="break-data" var="innerClass" />
 
-<fieldset id="${id}" class="form-elements results-detail">
-    <legend class="heading-medium form-class-bold">${label}</legend>
+<fieldset id="${pageScope.id}" class="form-elements results-detail">
+    <legend class="heading-medium form-class-bold"><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label"/></legend>
     <div class="data-table">
-        <ul class="${innerClass}">
+        <ul class="${pageScope.innerClass}">
             <jsp:doBody/>
         </ul>
     </div>

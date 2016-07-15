@@ -2,42 +2,55 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<%@attribute name="id" required="true" type="java.lang.String"%>
-<%@attribute name="name" required="true" type="java.lang.String"%>
-<%@attribute name="checkedValue" required="true" type="java.lang.String"%>
-<%@attribute name="value" required="false" type="java.lang.String"%>
-<%@attribute name="text" required="false" type="java.lang.String"%>
-<%@attribute name="additionalClasses" required="false" type="java.lang.String"%>
-<%@attribute name="outerClass" required="false" type="java.lang.String"%>
-<%@attribute name="label" required="false" type="java.lang.String"%>
-<%@attribute name="blockLabel" required="false" type="java.lang.String"%>
-<%@attribute name="hintBefore" required="false" type="java.lang.String"%>
-<%@attribute name="hintBeforeId" required="false" type="java.lang.String"%>
-<%@attribute name="hintAfter" required="false" type="java.lang.String"%>
-<%@attribute name="hintAfterId" required="false" type="java.lang.String"%>
+<%@ attribute name="name" required="true" %>
 
-<%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+<%@ attribute name="id" %>
+<%@ attribute name="checkedValue" %>
+<%@ attribute name="useRawValue" %>
+<%@ attribute name="value" %>
+<%@ attribute name="textKey" %>
+<%@ attribute name="additionalClasses" %>
+<%@ attribute name="outerStyle" %>
+<%@ attribute name="outerClass" %>
+<%@ attribute name="labelKey" %>
+<%@ attribute name="blockLabel" %>
+<%@ attribute name="hintBeforeKey" %>
+<%@ attribute name="hintAfterKey" %>
+
+<%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+
+<t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
+<t:defaultValue value="${pageScope.labelKey}" defaultValue="${pageScope.name}.label" var="labelKey" />
+<t:defaultValue value="${pageScope.useRawValue}" defaultValue="false" var="useRawValue" />
+<t:defaultValue value="${pageScope.checkedValue}" defaultValue="yes" var="checkedValue" />
+<t:defaultValue value="${pageScope.textKey}" defaultValue="${pageScope.name}.text" var="textKey" />
 
 <%-- default, unless specifically turned off --%>
-<c:if test="${blockLabel != 'false'}">
+<c:if test="${pageScope.blockLabel != 'false'}">
     <c:set var="labelClass" value=" block-label" />
 </c:if>
 
-<t:component name="${name}" 
-             outerClass="${outerClass}" 
-             outerStyle="${outerStyle}" 
-             errors="${errors}">
+<%-- If not using raw values, then use the name attribute to locate the value --%>
+<c:if test="${pageScope.useRawValue!='true'}" >
+    <c:set var="value" value="${requestScope[pageScope.name]}" />
+</c:if>
 
-    <t:hint hintId="${hintBeforeId}" hintText="${hintBefore}" />  
+<t:component name="${pageScope.name}" 
+             outerClass="${pageScope.outerClass}" 
+             outerStyle="${pageScope.outerStyle}" 
+             errors="${pageScope.errors}">
+
+    <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
     
-    <c:if test="${value==checkedValue}" >
+    <c:if test="${pageScope.value==pageScope.checkedValue}" >
         <c:set var="checked" value="checked" />
     </c:if>
-    <label for="${id}" class="${labelClass}"> 
-        <span class="form-label-bold">${label}</span>
-        <input type="checkbox" id="${id}" name="${name}" class="${additionalClasses}" value="${checkedValue}" ${checked} style="top: 24px;">
-        <span>${text}</span>
+    
+    <label for="${pageScope.id}" class="${pageScope.labelClass}"> 
+        <span class="form-label-bold"><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" /></span>
+        <input type="checkbox" id="${pageScope.id}" name="${pageScope.name}" class="${pageScope.additionalClasses}" value="${pageScope.checkedValue}" ${pageScope.checked} style="top: 24px;">
+        <span><t:message code="${pageScope.textKey}" /></span>
     </label>
     
-    <t:hint hintId="${hintAfterId}" hintText="${hintAfter}" /> 
+    <t:hint hintTextKey="${pageScope.hintAfterKey}" parentName="${pageScope.name}" element="hintAfter"/>
 </t:component>

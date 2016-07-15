@@ -2,10 +2,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<%@attribute name="pageTitle" required="true" type="java.lang.String"%>
-<%@attribute name="currentPage" required="true" type="java.lang.String"%>
+<%@ attribute name="pageTitle" %>
+<%@ attribute name="pageTitleKey" %>
+<%@ attribute name="currentPage" %>
+<%@ attribute name="analytics" %>   
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%-- TODO can we send analytics from the server side as well? might be able to add useful information --%>
+<t:defaultValue value="${pageScope.analytics}" defaultValue="true" var="analytics" />
+
+<c:if test="${empty pageTitle}" >
+    <c:set var="pageTitle"><t:message parentName="${pageScope.pageTitleKey}" /></c:set>
+</c:if>
+
+<!DOCTYPE html>
 
     <!--[if IE 6]>         <html class="ie ie6" lang="en"> <![endif]-->
     <!--[if IE 7]>         <html class="ie ie7" lang="en"> <![endif]-->
@@ -14,9 +23,9 @@
     <!--[if gt IE 9]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 
     <head>
-        <!-- current page = <c:out value='${currentPage}' /> -->
+        <!-- current page = <c:out value='${pageScope.currentPage}' /> -->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title><c:out value='${pageTitle}' /></title>
+        <title>${pageScope.pageTitle}</title>
 
         <!-- Styles for old Internet Explorer Browsers -->
         <!--[if IE 6]><link href="/assets/stylesheet/header-footer-only-ie6.css" media="screen" rel="stylesheet" type="text/css"><![endif]-->
@@ -143,8 +152,8 @@
                 <a rel="external"
                    target="_blank" 
                    href="/cookies/en" 
-                   onmousedown="trackEvent(&#x27;<c:out value='${currentPage}' />&#x27;,&#x27;Cookies - from banner&#x27;);" 
-                   onkeydown="trackEvent(&#x27;<c:out value='${currentPage}' />&#x27;,&#x27;Cookies - from banner&#x27;);"
+                   onmousedown="trackEvent(&#x27;<c:out value='${pageScope.currentPage}' />&#x27;,&#x27;Cookies - from banner&#x27;);" 
+                   onkeydown="trackEvent(&#x27;<c:out value='${pageScope.currentPage}' />&#x27;,&#x27;Cookies - from banner&#x27;);"
                 >Find out more</a>
             </p>
         </div>
@@ -160,7 +169,7 @@
         
         <jsp:doBody/>
         
-        <t:footer currentPage="${currentPage}" />
+        <t:footer currentPage="${pageScope.currentPage}" />
         
         <div id="global-app-error" class="app-error hidden"></div>            
     </body>

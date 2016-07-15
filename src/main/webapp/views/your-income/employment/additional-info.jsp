@@ -6,23 +6,11 @@
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" pageTitle="Employment" section="Section 9 of 11" backLink="${previousPage}">
-        <t:yesnofield id="empAdditionalInfo" 
-                          name="empAdditionalInfo" 
-                          value="${empAdditionalInfo}"
-                          label="Do you want to add anything about your work?" 
-                          hintBefore="Don't include any information about your pension, if you get one."
-                          errors="${validationErrors}" 
-        />
-        
+    <t:pageContent errors="${validationErrors}" page="page.employment-additional-info" backLink="${previousPage}">
+        <t:yesnofield name="empAdditionalInfo" />
+
         <t:hiddenPanel id="empAdditionalInfoWrap" triggerId="empAdditionalInfo" triggerValue="yes">
-            <t:textarea id="empAdditionalInfoText" 
-                        name="empAdditionalInfoText" 
-                        value="${empAdditionalInfoText}" 
-                        maxLength="3000" 
-                        showRemainingChars="true"
-                        errors="${validationErrors}"
-            />
+            <t:textarea name="empAdditionalInfoText" maxLength="3000" showRemainingChars="true" />
         </t:hiddenPanel>
     </t:pageContent>
 

@@ -2,36 +2,53 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<%@attribute name="id" required="true" type="java.lang.String"%>
-<%@attribute name="nameOne" required="true" type="java.lang.String"%>
-<%@attribute name="nameTwo" required="true" type="java.lang.String"%>
-<%@attribute name="nameThree" required="true" type="java.lang.String"%>
-<%@attribute name="valueOne" required="false" type="java.lang.String"%>
-<%@attribute name="valueTwo" required="false" type="java.lang.String"%>
-<%@attribute name="valueThree" required="false" type="java.lang.String"%>
-<%@attribute name="maxlength" required="false" type="java.lang.String"%>
-<%@attribute name="label" required="false" type="java.lang.String"%>
-<%@attribute name="hintBefore" required="false" type="java.lang.String"%>
-<%@attribute name="hintBeforeId" required="false" type="java.lang.String"%>
-<%@attribute name="hintAfter" required="false" type="java.lang.String"%>
-<%@attribute name="hintAfterId" required="false" type="java.lang.String"%>
+<%@ attribute name="name" required="true" %>
 
-<%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+<%@ attribute name="id" %>
+<%@ attribute name="nameOne" %>
+<%@ attribute name="nameTwo" %>
+<%@ attribute name="nameThree" %>
+<%@ attribute name="valueOne" %>
+<%@ attribute name="valueTwo" %>
+<%@ attribute name="valueThree" %>
+<%@ attribute name="useRawValue" %>
+<%@ attribute name="maxlength" %>
+<%@ attribute name="labelKey" %>
+<%@ attribute name="hintBeforeKey" %>
+<%@ attribute name="hintAfterKey" %>
 
-<t:component name="${id}" 
-             outerClass="${outerClass}" 
-             outerStyle="${outerStyle}" 
-             errors="${errors}">
+<%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+
+<t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
+<t:defaultValue value="${pageScope.labelKey}" defaultValue="${pageScope.name}.label" var="labelKey" />
+<t:defaultValue value="${pageScope.useRawValue}" defaultValue="false" var="useRawValue" />
+
+<c:if test="${empty pageScope.nameOne}">
+    <c:set var="nameOne" value="${pageScope.name}LineOne" />
+    <c:set var="nameTwo" value="${pageScope.name}LineTwo" />
+    <c:set var="nameThree" value="${pageScope.name}LineThree" />
+</c:if>
+
+<c:if test="${pageScope.useRawValue!='true'}" >
+    <c:set var="valueOne" value="${requestScope[pageScope.nameOne]}" />
+    <c:set var="valueTwo" value="${requestScope[pageScope.nameTwo]}" />
+    <c:set var="valueThree" value="${requestScope[pageScope.nameThree]}" />
+</c:if>
+
+<t:component name="${pageScope.id}" 
+             outerClass="${pageScope.outerClass}" 
+             outerStyle="${pageScope.outerStyle}" 
+             errors="${pageScope.errors}">
                 
     <fieldset class="question-group">
-        <legend class="form-label-bold">${label}</legend>
-        <t:hint hintId="${hintBeforeId}" hintText="${hintBefore}" /> 
-        <ul id="${id}">  
-            <t:textedit id="${id}_lineOne" name="${nameOne}" outerClass="form-group-compound" value="${valueOne}" maxLength="${maxLength}" /> 
-            <t:textedit id="${id}_lineTwo" name="${nameTwo}" outerClass="form-group-compound" value="${valueTwo}" maxLength="${maxLength}" />
-            <t:textedit id="${id}_lineThree" name="${nameThree}" outerClass="form-group-compound" value="${valueThree}" maxLength="${maxLength}" />
+        <legend class="form-label-bold"><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label"/></legend>
+        <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
+        <ul id="${pageScope.id}">  
+            <t:textedit id="${pageScope.id}_lineOne" name="${pageScope.nameOne}" outerClass="form-group-compound" value="${pageScope.valueOne}" maxLength="${pageScope.maxLength}" /> 
+            <t:textedit id="${pageScope.id}_lineTwo" name="${pageScope.nameTwo}" outerClass="form-group-compound" value="${pageScope.valueTwo}" maxLength="${pageScope.maxLength}" />
+            <t:textedit id="${pageScope.id}_lineThree" name="${pageScope.nameThree}" outerClass="form-group-compound" value="${pageScope.valueThree}" maxLength="${pageScope.maxLength}" />
         </ul>
-        <t:hint hintId="${hintAfterId}" hintText="${hintAfter}" /> 
+        <t:hint hintTextKey="${pageScope.hintAfterKey}" parentName="${pageScope.name}" element="hintAfter" />
     </fieldset>
 </t:component>
         

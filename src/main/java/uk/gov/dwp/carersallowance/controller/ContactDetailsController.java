@@ -27,7 +27,7 @@ public class ContactDetailsController extends AbstractFormController {
     public static final String CARER_ADDRESS_LINE_THREE         = "carerAddressLineThree";
     public static final String CARER_POSTCODE                   = "carerPostcode";
     public static final String CARER_HOW_WE_CONTACT_YOU         = "carerHowWeContactYou";
-    public static final String CARER_HONTACT_YOU_BY_TELEPHONE   = "carerContactYouByTelephone";
+    public static final String CARER_HONTACT_YOU_BY_TELEPHONE   = "carerContactYouByTextPhone";
     public static final String CARER_WANTS_EMAIL_CONTACT        = "carerWantsEmailContact";
     public static final String CARER_MAIL                       = "carerMail";
     public static final String CARER_MAIL_CONFIRMATION          = "carerMailConfirmation";
@@ -81,8 +81,8 @@ public class ContactDetailsController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateAddressFields(fieldValues, "Address", "address", new String[]{CARER_ADDRESS_LINE_ONE, CARER_ADDRESS_LINE_TWO, CARER_ADDRESS_LINE_THREE});
-        validateMandatoryField(fieldValues,"wantsEmailContact", "Do you want an email to confirm your application has been received?");
+        validateAddressFields(fieldValues, "Address", "carerAddress", new String[]{CARER_ADDRESS_LINE_ONE, CARER_ADDRESS_LINE_TWO, CARER_ADDRESS_LINE_THREE});
+        validateMandatoryField(fieldValues,CARER_WANTS_EMAIL_CONTACT, "Do you want an email to confirm your application has been received?");
 
         if(fieldValue_Equals(fieldValues, CARER_WANTS_EMAIL_CONTACT, "yes")) {
             validateMandatoryField(fieldValues,CARER_MAIL, "Your email address");

@@ -6,19 +6,19 @@
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" pageTitle="Employment" section="Section 9 of 11" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" page="page.been-employed" backLink="${previousPage}">
 
         <c:if test="${not empty employment}">
-            <t:panel id="employment" label="Breaks already added">
+            <t:panel id="employment">
                 
                 <c:forEach items="${employment}" var="employmentPosition">
                     <!-- employmentPosition = '<c:out value="${employmentPosition}" />'  -->
                     <li id="employment_${employmentPosition['employment_id']}">
                         <h3 class="heading-small">${employmentPosition['employerName']}</h3>
                         <dl>
-                            <dt>Start Date</dt>
+                            <dt><t:message code="employment.columnName.startDate" /></dt>
                             <c:if test="${empty employmentPosition['jobStartDate_day'] || employmentPosition['jobStartDate_day'] == ''}">
-                                <dd class="lowercase">Before ${dateOfClaim_day}/${dateOfClaim_month}/${dateOfClaim_year}</dd>
+                                <dd class="lowercase"><t:message code="employment.text.before" /> ${dateOfClaim_day}/${dateOfClaim_month}/${dateOfClaim_year}</dd>
                             </c:if>
                             <c:if test="${not empty employmentPosition['jobStartDate_day'] && employmentPosition['jobStartDate_day'] != ''}">
                                 <dd class="lowercase">${employmentPosition['jobStartDate_day']}/${employmentPosition['jobStartDate_month']}/${employmentPosition['jobStartDate_year']}</dd>
@@ -34,14 +34,8 @@
             </t:panel>
         </c:if>
 
-        <t:panel id="moreEmploymentPanel" label="Your employment history" innerClass="noClass">
-            <t:yesnofield id="moreEmployment" 
-                          name="moreEmployment" 
-                          value="${moreEmployment}"
-                          label="Have you had any other jobs since 24 December 2015?" 
-                          hintBefore="This is six months before your claim date."
-                          errors="${validationErrors}" 
-            />
+        <t:panel id="moreEmploymentPanel" innerClass="noClass">
+            <t:yesnofield name="moreEmployment" />
         </t:panel>
         
     </t:pageContent>

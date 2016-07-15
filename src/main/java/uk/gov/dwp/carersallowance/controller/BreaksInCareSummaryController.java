@@ -25,23 +25,24 @@ import uk.gov.dwp.carersallowance.session.UnknownRecordException;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
 @Controller
-public class BreaksInCareController extends AbstractFormController {
+public class BreaksInCareSummaryController extends AbstractFormController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(BreaksInCareController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BreaksInCareSummaryController.class);
 
     private static final String BREAKS_IN_CARE_DETAIL = "/breaks/break";
     private static final String CURRENT_PAGE          = "/breaks/breaks-in-care";
-    private static final String EDITING_PAGE          = BREAKS_IN_CARE_DETAIL;
     private static final String SAVE_EDITED_PAGE      = CURRENT_PAGE + "/update";
+    private static final String EDITING_PAGE          = BREAKS_IN_CARE_DETAIL;
     private static final String PAGE_TITLE            = "Breaks from care - About the person you care for";
 
-    private static final String   FIELD_COLLECTION_NAME = "breaks";
     private static final String[] FIELDS                = {"moreBreaksInCare"};
     private static final String[] SORTING_FIELDS        = {"startDate_year", "startDate_month", "startDate_day"};
+
+    private static final String   FIELD_COLLECTION_NAME = "breaks";
     private static final String   ID_FIELD              = "break_id";
 
     @Autowired
-    public BreaksInCareController(SessionManager sessionManager) {
+    public BreaksInCareSummaryController(SessionManager sessionManager) {
         super(sessionManager);
     }
 
@@ -71,6 +72,7 @@ public class BreaksInCareController extends AbstractFormController {
                 Collections.sort(breaks, comparator);
             }
 
+//            return super.getNextPage(request, YourIncomeController.getIncomePageList(request.getSession()));
             return super.getNextPage(request);
         } finally {
             LOG.trace("Ending BreaksInCareController.getNextPage");
@@ -114,7 +116,9 @@ public class BreaksInCareController extends AbstractFormController {
     public String saveFieldCollection(HttpServletRequest request, HttpSession session, Model model) {
         LOG.trace("Started BreaksInCareController.saveFieldCollection");
         try {
-            String[] fieldCollectionFields = FieldCollection.aggregateFieldLists(BreakInCareDetailController.FIELDS);
+            String[] fieldCollectionFields = FieldCollection.aggregateFieldLists(BreakInHospitalController.FIELDS,
+                                                                                 BreakInRespiteCareController.FIELDS,
+                                                                                 BreakSomewhereElseController.FIELDS);
             populateFieldCollectionEntry(session, FIELD_COLLECTION_NAME, fieldCollectionFields, ID_FIELD);
 
             return "redirect:" + getCurrentPage();
@@ -126,6 +130,9 @@ public class BreaksInCareController extends AbstractFormController {
         }
     }
 
+    /**
+     * TODO probably change this: see {@link EmploymentSummaryController}
+     */
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
     public String postForm(HttpServletRequest request,
                            @ModelAttribute("changeBreak") String idToChange,

@@ -6,45 +6,37 @@
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" pageTitle="Before you start" nextButtonText="I agree - start my application" backLink="${previousPage}">
-        <t:htmlsection><p>When you claim Carer&rsquo;s Allowance the person you care for may stop getting:</p></t:htmlsection>
+    <t:pageContent errors="${validationErrors}" page="page.eligibility" nextButtonTextKey="page.eligibility.nextButtonText" backLink="${previousPage}">
+        
+        <t:htmlsection name="disclaimer.section1">
+            <p><t:message code="disclaimer.section1.line1" /></p>
+        </t:htmlsection>
 
-        <t:htmlsection> 
+        <t:htmlsection name="disclaimer.section2"> 
             <ul class="list-bullet">
-                <li>a severe disability premium paid with their benefits, if they get one</li>
-                <li>an extra amount for severe disability paid with Pension Credit, if they get one</li>
-                <li>reduced Council Tax, if 
+                <li><t:message code="disclaimer.section2.line1" /></li>
+                <li><t:message code="disclaimer.section2.line2" /></li>
+                <li><t:message code="disclaimer.section2.line3" />
                     <a rel="external" 
                        href="https://www.gov.uk/find-your-local-council" 
                        target="_blank" 
-                    >their local council</a> 
-                    offers it
+                    ><t:message code="disclaimer.section2.line4" /></a> 
+                    <t:message code="disclaimer.section2.line5" />
                 </li>
             </ul>
         </t:htmlsection>
 
-        <t:htmlsection>
-            <p>Read more about 
+        <t:htmlsection name="disclaimer.section3">
+            <p><t:message code="disclaimer.section3.line1" />
                 <a rel="external" 
                    href="https://www.gov.uk/carers-allowance/what-youll-get" 
                    target="_blank"
-                >how Carer&rsquo;s Allowance affects other benefits</a>.
+                ><t:message code="disclaimer.section3.line2" /></a>.
             </p>
         </t:htmlsection>
     
-        <t:htmlsection><p>You <b>must</b> tell the person you care for before you claim.</p></t:htmlsection>
+        <t:htmlsection name="disclaimer.section4"><p><t:message code="disclaimer.section4.line1" /></p></t:htmlsection>
+    
     </t:pageContent>
-
-
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $("#save").click(function(){
-                var saveurl=$(this).attr("href");
-                var saveurl=$(this).attr("href");
-                $("form").attr( "action", saveurl );
-                $("form").submit()
-            });
-        });
-    </script>
 
 </t:mainPage>                

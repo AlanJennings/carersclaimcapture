@@ -26,7 +26,7 @@ public class EmploymentDetailsController extends AbstractFormController {
     private static final String NEXT_PAGE             = "/your-income/employment/last-wage";
     private static final String PAGE_TITLE            = "Employer details - Your income";
 
-    private static final String  FIELD_COLLECTION_NAME = EmploymentHistoryController.FIELD_COLLECTION_NAME;
+    private static final String  FIELD_COLLECTION_NAME = EmploymentSummaryController.FIELD_COLLECTION_NAME;
 
     public static final String[] FIELDS = {"employerName",
                                            "employmentPhoneNumber",

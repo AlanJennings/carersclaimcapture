@@ -23,8 +23,8 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.session.UnknownRecordException;
 
 @Controller
-public class EmploymentHistoryController extends AbstractFormController {
-    private static final Logger LOG = LoggerFactory.getLogger(EmploymentHistoryController.class);
+public class EmploymentSummaryController extends AbstractFormController {
+    private static final Logger LOG = LoggerFactory.getLogger(EmploymentSummaryController.class);
 
     private static final String EMPLOYMENT_DETAIL     = "/your-income/employment/job-details";
     private static final String CURRENT_PAGE          = "/your-income/employment/been-employed";
@@ -40,7 +40,7 @@ public class EmploymentHistoryController extends AbstractFormController {
     public static final String   ID_FIELD              = "employment_id";
 
     @Autowired
-    public EmploymentHistoryController(SessionManager sessionManager) {
+    public EmploymentSummaryController(SessionManager sessionManager) {
         super(sessionManager);
     }
 
@@ -56,7 +56,7 @@ public class EmploymentHistoryController extends AbstractFormController {
      */
     @Override
     public String getNextPage(HttpServletRequest request) {
-        LOG.trace("Started EmploymentHistoryController.getNextPage");
+        LOG.trace("Started EmploymentSummaryController.getNextPage");
         try {
             Boolean moreEmployment = getYesNoBooleanFieldValue(request, "moreEmployment");
             LOG.debug("moreEmployment = {}", moreEmployment);
@@ -77,7 +77,7 @@ public class EmploymentHistoryController extends AbstractFormController {
 
             return super.getNextPage(request, YourIncomeController.getIncomePageList(request.getSession()));
         } finally {
-            LOG.trace("Ending EmploymentHistoryController.getNextPage");
+            LOG.trace("Ending EmploymentSummaryController.getNextPage");
         }
     }
 
@@ -102,7 +102,7 @@ public class EmploymentHistoryController extends AbstractFormController {
      */
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
     public String showForm(HttpServletRequest request, Model model) {
-        LOG.trace("Started EmploymentHistoryController.showForm");
+        LOG.trace("Started EmploymentSummaryController.showForm");
         try {
             List<Map<String, String>> employments = getFieldCollections(request.getSession(), FIELD_COLLECTION_NAME);
             if(employments == null || employments.size() == 0) {
@@ -113,7 +113,7 @@ public class EmploymentHistoryController extends AbstractFormController {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
         } finally {
-            LOG.trace("Ending EmploymentHistoryController.showForm\n");
+            LOG.trace("Ending EmploymentSummaryController.showForm\n");
         }
     }
 
@@ -129,7 +129,7 @@ public class EmploymentHistoryController extends AbstractFormController {
      */
     @RequestMapping(value=SAVE_EDITED_PAGE, method = RequestMethod.GET)
     public String saveFieldCollection(HttpSession session) {
-        LOG.trace("Started EmploymentHistoryController.saveFieldCollection");
+        LOG.trace("Started EmploymentSummaryController.saveFieldCollection");
         try {
             String[] fieldCollectionFields = FieldCollection.aggregateFieldLists(EmploymentDetailsController.FIELDS,
                                                                                  EmploymentPaymentController.FIELDS,
@@ -141,7 +141,7 @@ public class EmploymentHistoryController extends AbstractFormController {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
         } finally {
-            LOG.trace("Ending EmploymentHistoryController.saveFieldCollection\n");
+            LOG.trace("Ending EmploymentSummaryController.saveFieldCollection\n");
         }
     }
 
@@ -159,7 +159,7 @@ public class EmploymentHistoryController extends AbstractFormController {
      * handle the action choices (edit entry, delete entry or create new entry)
      */
     protected String postFormFieldCollection(HttpServletRequest request, String idToChange, String idToDelete, HttpSession session, Model model) {
-        LOG.trace("Started EmploymentHistoryController.postForm");
+        LOG.trace("Started EmploymentSummaryController.postForm");
         try {
             if(StringUtils.isEmpty(idToChange) == false) {
                 try {
@@ -183,7 +183,7 @@ public class EmploymentHistoryController extends AbstractFormController {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
         } finally {
-            LOG.trace("Ending EmploymentHistoryController.postForm\n");
+            LOG.trace("Ending EmploymentSummaryController.postForm\n");
         }
     }
 

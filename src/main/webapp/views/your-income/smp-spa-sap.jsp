@@ -6,62 +6,21 @@
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" pageTitle="Statutory Pay" section="Section 9 of 11" backLink="${previousPage}">
-        
-        <t:radiobuttons id="otherStatPaymentPaymentTypesForThisPay" 
-                        name="otherStatPaymentPaymentTypesForThisPay" 
-                        optionValues="MaternityOrPaternityPay|AdoptionPay"
-                        optionLabels="Maternity or Paternity Pay|Adoption Pay"
-                        value="${otherStatPaymentPaymentTypesForThisPay}"
-                        label="Which are you paid?" 
-                        errors="${validationErrors}" 
-        />
-        
-        <t:yesnofield id="otherStatPaymentStillBeingPaidThisPay" 
-                      name="otherStatPaymentStillBeingPaidThisPay" 
-                      value="${otherStatPaymentStillBeingPaidThisPay}"
-                      label="Are you still being paid this?" 
-                      errors="${validationErrors}" 
-        />
-        
+    <t:pageContent errors="${validationErrors}" page="page.smp-spa-sap" backLink="${previousPage}">
+
+        <t:radiobuttons name="otherStatPaymentPaymentTypesForThisPay" optionValues="MaternityOrPaternityPay|AdoptionPay" />
+        <t:yesnofield name="otherStatPaymentStillBeingPaidThisPay" />
+
         <t:hiddenPanel id="otherStatPaymentStillBeingPaidThisPayWrap" triggerId="otherStatPaymentStillBeingPaidThisPay" triggerValue="no">
-            <t:datefield id="otherStatPaymentWhenDidYouLastGetPaid" 
-                         nameDay="otherStatPaymentWhenDidYouLastGetPaid_day" 
-                         nameMonth="otherStatPaymentWhenDidYouLastGetPaid_month" 
-                         nameYear="otherStatPaymentWhenDidYouLastGetPaid_year" 
-                         valueDay="${otherStatPaymentWhenDidYouLastGetPaid_day}" 
-                         valueMonth="${otherStatPaymentWhenDidYouLastGetPaid_month}" 
-                         valueYear="${otherStatPaymentWhenDidYouLastGetPaid_year}" 
-                         label="When were you last paid?" 
-                         errors="${validationErrors}" 
-            />
+            <t:datefield name="otherStatPaymentWhenDidYouLastGetPaid" />
         </t:hiddenPanel>
-        
-        <t:textedit id="otherStatPaymentWhoPaidYouThisPay" name="otherStatPaymentWhoPaidYouThisPay" value="${otherStatPaymentWhoPaidYouThisPay}" maxLength="60" label="Who paid you this?" errors="${validationErrors}" /> 
-        <t:textedit id="otherStatPaymentAmountOfThisPay" 
-                    name="otherStatPaymentAmountOfThisPay" 
-                    value="${otherStatPaymentAmountOfThisPay}" 
-                    maxLength="12" 
-                    label="Amount paid" 
-                    outerClass="short-field"
-                    errors="${validationErrors}" 
-         />
-         
-         <t:radiobuttons id="otherStatPaymentHowOftenPaidThisPay" 
-                         name="otherStatPaymentHowOftenPaidThisPay" 
-                         optionValues="Weekly|Fortnightly|Four-weekly|Monthly|Other"
-                         optionLabels="Weekly|
-                                       Fortnightly|
-                                       Four-weekly|
-                                       Monthly|
-                                       It varies"
-                         value="${otherStatPaymentHowOftenPaidThisPay}"
-                         label="How often are you paid?" 
-                         errors="${validationErrors}" 
-        />
-        
+
+        <t:textedit name="otherStatPaymentWhoPaidYouThisPay" maxLength="60" /> 
+        <t:textedit name="otherStatPaymentAmountOfThisPay" maxLength="12" outerClass="short-field" />
+        <t:radiobuttons name="otherStatPaymentHowOftenPaidThisPay" optionValues="Weekly|Fortnightly|Four-weekly|Monthly|Other" />
+
         <t:hiddenPanel id="otherStatPaymentHowOftenPaidThisPayWrap" triggerId="otherStatPaymentHowOftenPaidThisPay" triggerValue="Other">
-            <t:textedit id="otherStatPaymentHowOftenPaidThisPayOther" name="otherStatPaymentHowOftenPaidThisPayOther" value="${otherStatPaymentHowOftenPaidThisPayOther}" maxLength="60" label="How often are you paid?" errors="${validationErrors}" /> 
+            <t:textedit name="otherStatPaymentHowOftenPaidThisPayOther" maxLength="60" /> 
         </t:hiddenPanel>
 
     </t:pageContent>

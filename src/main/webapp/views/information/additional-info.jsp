@@ -6,34 +6,16 @@
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" pageTitle="Additional information" section="Section 11 of 11" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" page="page.additional-info" backLink="${previousPage}">
 
-        <t:yesnofield id="anythingElse" 
-                          name="anythingElse" 
-                          value="${anythingElse}"
-                          label="Do you want to tell us any additional information about your claim?" 
-                          hintBefore="Don't include any medical information or details about care."
-                          errors="${validationErrors}" 
-        />
-        
+        <t:yesnofield name="anythingElse" />
+
         <t:hiddenPanel id="anythingElseWrap" triggerId="anythingElse" triggerValue="yes">
-            <t:textarea id="anythingElseText" 
-                        name="anythingElseText" 
-                        value="${anythingElseText}" 
-                        maxLength="3000" 
-                        showRemainingChars="true"
-                        label="Tell us anything else you think we should know about your claim" 
-                        errors="${validationErrors}"
-            />
+            <t:textarea name="anythingElseText" maxLength="3000" />
         </t:hiddenPanel>
 
-        <t:yesnofield id="welshCommunication" 
-                          name="welshCommunication" 
-                          value="${welshCommunication}"
-                          label="Do you live in Wales and want to receive future communications in Welsh?" 
-                          errors="${validationErrors}" 
-        />
-        
+        <t:yesnofield name="welshCommunication" />
+
     </t:pageContent>
 
 </t:mainPage>    

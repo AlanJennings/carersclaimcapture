@@ -7,12 +7,13 @@
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" pageTitle="Breaks from care" section="Section 7 of 11" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" page="breaks-in-care" backLink="${previousPage}">
         
         <!-- breaksInCare = '<c:out value="${breaks}" />' -->
         <c:if test="${not empty breaks}">
             <c:set var="moreBreaksLabel" value="Have you had any more breaks from caring for this person since ${dateOfClaim}?" />
-            <t:panel id="breaks" label="Breaks already added">
+            
+            <t:panel id="breaks">
                 
                 <c:forEach items="${breaks}" var="careBreak">
                     <!-- careBreak = '<c:out value="${careBreak}" />'  -->
@@ -34,28 +35,10 @@
         </c:if>
 
 
-        <t:yesnofield id="moreBreaksInCare" 
-                      name="moreBreaksInCare" 
-                      value="${moreBreaksInCare}"
-                      label="Since 16th October 2016, were there any other times you or John Smith have 
-                             been in hospital, respite or a care home, where 35 hours of care hasn't taken 
-                             place?" 
-                      errors="${validationErrors}" 
-        />
+        <t:yesnofield name="moreBreaksInCare" />
         
         <t:hiddenPanel id="moreBreaksInCareWrap" triggerId="moreBreaksInCare" triggerValue="yes">
-            
-            <t:radiobuttons id="moreBreaksInCareResidence" 
-                            name="moreBreaksInCareResidence" 
-                            optionValues="hospital|respite|somewhere else"                        
-                            optionLabels="One of you was in hospital|
-                                          Respite or care home|
-                                          Time you've not cared for 35 hours"
-                            value="${moreBreaksInCareResidence}"
-                            label="What do you want to add?"
-                            errors="${validationErrors}" 
-            />
-        
+            <t:radiobuttons name="moreBreaksInCareResidence" optionValues="hospital|respite|somewhere else" optionLabelKeys="hospital|respite|elsewhere" />
         </t:hiddenPanel>
         
     </t:pageContent>

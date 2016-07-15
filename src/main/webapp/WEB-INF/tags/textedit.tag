@@ -1,32 +1,41 @@
-<%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8"%>
+<%-- See http://docs.oracle.com/javaee/5/tutorial/doc/bnamu.html --%>
+<%@ tag description="Text Edit box Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<%@attribute name="name" required="true" type="java.lang.String"%>
-
-<%@attribute name="id" required="false" type="java.lang.String"%>
-<%@attribute name="outerClass" required="false" type="java.lang.String"%>
-<%@attribute name="outerStyle" required="false" type="java.lang.String"%>
-<%@attribute name="label" required="false" type="java.lang.String"%>
-<%@attribute name="hintBefore" required="false" type="java.lang.String"%>
-<%@attribute name="hintBeforeId" required="false" type="java.lang.String"%>
-<%@attribute name="hintAfter" required="false" type="java.lang.String"%>
-<%@attribute name="hintAfterId" required="false" type="java.lang.String"%>
-<%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
-
-<%@attribute name="value" required="false" type="java.lang.String"%>
-<%@attribute name="maxLength" required="false" type="java.lang.String"%>
-<%@attribute name="additionalClasses" required="false" type="java.lang.String"%>
-
-<t:component name="${name}" 
-             outerClass="${outerClass}" 
-             outerStyle="${outerStyle}" 
-             errors="${errors}">
+<%@ attribute name="name" required="true"%>
     
-    <label class="form-label-bold" for="${id}"> ${label} </label>
-    <t:hint hintId="${hintBeforeId}" hintText="${hintBefore}" />
-    <input type="text" class="form-control ${additionalClasses}" id="${id}" name="${name}" value="${value}" maxLength="${maxLength}" autocomplete="off">
-    <t:hint hintId="${hintAfterId}" hintText="${hintAfter}" />
+<%@ attribute name="id"%>
+<%@ attribute name="outerClass"%>
+<%@ attribute name="outerStyle"%>
+<%@ attribute name="labelKey"%>
+<%@ attribute name="hintBeforeKey"%>
+<%@ attribute name="hintAfterKey"%>
+<%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+    
+<%@ attribute name="value"%>
+<%@ attribute name="useRawValue"%>
+<%@ attribute name="maxLength"%>
+<%@ attribute name="additionalClasses"%>
+
+<t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
+<t:defaultValue value="${pageScope.labelKey}" defaultValue="${pageScope.name}.label" var="labelKey" />
+<t:defaultValue value="${pageScope.useRawValue}" defaultValue="false" var="useRawValue" />
+
+<%-- If not using raw values, then use the name attribute to locate the value --%>
+<c:if test="${pageScope.useRawValue!='true'}" >
+    <c:set var="value" value="${requestScope[pageScope.name]}" />
+</c:if>
+
+<t:component name="${pageScope.name}" 
+             outerClass="${pageScope.outerClass}" 
+             outerStyle="${pageScope.outerStyle}" 
+             errors="${pageScope.errors}">
+
+    <label class="form-label-bold" for="${pageScope.id}"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label"/> </label>
+    <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
+    <input type="text" class="form-control ${pageScope.additionalClasses}" id="${pageScope.id}" name="${pageScope.name}" value="${pageScope.value}" maxLength="${pageScope.maxLength}" autocomplete="off">
+    <t:hint hintTextKey="${pageScope.hintAfterKey}" parentName="${pageScope.name}" element="hintAfter" />
 
 </t:component>
 

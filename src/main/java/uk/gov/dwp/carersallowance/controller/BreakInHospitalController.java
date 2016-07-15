@@ -24,29 +24,29 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class BreakInHospitalController extends AbstractFormController {
     public static final Logger LOG = LoggerFactory.getLogger(BreakInHospitalController.class);
 
-    private static final String CURRENT_PAGE  = "/breaks/break";    // this has an argument
+    private static final String CURRENT_PAGE  = "/breaks/break-in-hospital";    // this has an argument
     private static final String NEXT_PAGE     = "/breaks/breaks-in-care/update";
     private static final String PARENT_PAGE   = "/breaks/breaks-in-care";
     private static final String PAGE_TITLE    = "Break - About the care you provide";
 
-    public static final String[] FIELDS = {"whoInHospital",
-                                           "carerHospitalStartDate_day",
-                                           "carerHospitalStartDate_month",
-                                           "carerHospitalStartDate_year",
-                                           "carerHospitalEndDate_day",
-                                           "carerHospitalEndDate_month",
-                                           "carerHospitalEndDate_year",
-                                           "carerInHospitalCareeLocation",
-                                           "carerInHospitalCareeLocationText",
-                                           "careeHospitalStartDate_day",
-                                           "careeHospitalStartDate_month",
-                                           "careeHospitalStartDate_year",
-                                           "careeHospitalStayEnded",
-                                           "careeHospitalEndDate_day",
-                                           "careeHospitalEndDate_month",
-                                           "careeHospitalEndDate_year",
-                                           "careeHospitalCarerStillCaring",
-                                           "weeksNotCaring" };
+    public static final String[] FIELDS = {"hospitalBreakWhoInHospital",
+                                           "hospitalBreakCarerHospitalStartDate_day",
+                                           "hospitalBreakCarerHospitalStartDate_month",
+                                           "hospitalBreakCarerHospitalStartDate_year",
+                                           "hospitalBreakCarerHospitalEndDate_day",
+                                           "hospitalBreakCarerHospitalEndDate_month",
+                                           "hospitalBreakCarerHospitalEndDate_year",
+                                           "hospitalBreakCarerInHospitalCareeLocation",
+                                           "hospitalBreakCarerInHospitalCareeLocationText",
+                                           "hospitalBreakCareeHospitalStartDate_day",
+                                           "hospitalBreakCareeHospitalStartDate_month",
+                                           "hospitalBreakCareeHospitalStartDate_year",
+                                           "hospitalBreakCareeHospitalStayEnded",
+                                           "hospitalBreakCareeHospitalEndDate_day",
+                                           "hospitalBreakCareeHospitalEndDate_month",
+                                           "hospitalBreakCareeHospitalEndDate_year",
+                                           "hospitalBreakCareeHospitalCarerStillCaring",
+                                           "hospitalBreakWeeksNotCaring" };
 
     @Autowired
     public BreakInHospitalController(SessionManager sessionManager) {
@@ -105,33 +105,33 @@ public class BreakInHospitalController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "whoInHospital", "Who was in hospital?");
+        validateMandatoryField(fieldValues, "hospitalBreakWhoInHospital", "Who was in hospital?");
 
-        if(fieldValue_Equals(fieldValues, "whoInHospital", "Carer")) {
-            validateMandatoryDateField(fieldValues, "When were you admitted?", "carerHospitalStartDate", new String[]{"carerHospitalStartDate_day", "carerHospitalStartDate_month", "carerHospitalStartDate_year"});
-            validateMandatoryField(fieldValues, "carerHospitalStayEnded", "Has the hospital stay ended?");
+        if(fieldValue_Equals(fieldValues, "hospitalBreakWhoInHospital", "Carer")) {
+            validateMandatoryDateField(fieldValues, "When were you admitted?", "hospitalBreakCarerHospitalStartDate", new String[]{"hospitalBreakCarerHospitalStartDate_day", "hospitalBreakCarerHospitalStartDate_month", "hospitalBreakCarerHospitalStartDate_year"});
+            validateMandatoryField(fieldValues, "hospitalBreakCarerHospitalStayEnded", "Has the hospital stay ended?");
 
-            if(fieldValue_Equals(fieldValues, "carerHospitalStayEnded", "yes")) {
-                validateMandatoryDateField(fieldValues, "When did your hospital stay end?", "carerHospitalEndDate", new String[]{"carerHospitalEndDate_day", "carerHospitalEndDate_month", "carerHospitalEndDate_year"});
-                validateMandatoryField(fieldValues, "carerInHospitalCareeLocation", "Where was John Smith during this break?");
+            if(fieldValue_Equals(fieldValues, "hospitalBreakCarerHospitalStayEnded", "yes")) {
+                validateMandatoryDateField(fieldValues, "When did your hospital stay end?", "hospitalBreakCarerHospitalEndDate", new String[]{"hospitalBreakCarerHospitalEndDate_day", "hospitalBreakCarerHospitalEndDate_month", "hospitalBreakCarerHospitalEndDate_year"});
+                validateMandatoryField(fieldValues, "hospitalBreakCarerInHospitalCareeLocation", "Where was John Smith during this break?");
 
-                if(fieldValue_Equals(fieldValues, "carerInHospitalCareeLocation", "Somewhere else")) {
-                    validateMandatoryField(fieldValues, "carerInHospitalCareeLocationText", "Where was John Smith during this break?");
+                if(fieldValue_Equals(fieldValues, "hospitalBreakCarerInHospitalCareeLocation", "Somewhere else")) {
+                    validateMandatoryField(fieldValues, "hospitalBreakCarerInHospitalCareeLocationText", "Where was John Smith during this break?");
                 }
             }
         }
 
-        if(fieldValue_Equals(fieldValues, "whoInHospital", "Caree")) {
-            validateMandatoryDateField(fieldValues, "When were they admitted?", "careeHospitalStartDate", new String[]{"careeHospitalStartDate_day", "careeHospitalStartDate_month", "careeHospitalStartDate_year"});
-            validateMandatoryField(fieldValues, "careeHospitalStayEnded", "Has the hospital stay ended?");
+        if(fieldValue_Equals(fieldValues, "hospitalBreakWhoInHospital", "Caree")) {
+            validateMandatoryDateField(fieldValues, "When were they admitted?", "hospitalBreakCareeHospitalStartDate", new String[]{"hospitalBreakCareeHospitalStartDate_day", "hospitalBreakCareeHospitalStartDate_month", "hospitalBreakCareeHospitalStartDate_year"});
+            validateMandatoryField(fieldValues, "hospitalBreakCareeHospitalStayEnded", "Has the hospital stay ended?");
 
-            if(fieldValue_Equals(fieldValues, "careeHospitalStayEnded", "yes")) {
-                validateMandatoryDateField(fieldValues, "When did their hospital stay end?", "careeHospitalEndDate", new String[]{"careeHospitalEndDate_day", "careeHospitalEndDate_month", "careeHospitalEndDate_year"});
-                validateMandatoryField(fieldValues, "careeHospitalCarerStillCaring", "During this time in hospital were you still providing care for John Smith for 35 hours a week?");
+            if(fieldValue_Equals(fieldValues, "hospitalBreakCareeHospitalStayEnded", "yes")) {
+                validateMandatoryDateField(fieldValues, "When did their hospital stay end?", "hospitalBreakCareeHospitalEndDate", new String[]{"hospitalBreakCareeHospitalEndDate_day", "hospitalBreakCareeHospitalEndDate_month", "hospitalBreakCareeHospitalEndDate_year"});
+                validateMandatoryField(fieldValues, "hospitalBreakCareeHospitalCarerStillCaring", "During this time in hospital were you still providing care for John Smith for 35 hours a week?");
             }
         }
 
-        validateMandatoryField(fieldValues, "weeksNotCaring", "Have there been any other weeks you've not provided care for John Smith for 35 hours or more each week");
+        validateMandatoryField(fieldValues, "hospitalBreakweeksNotCaring", "Have there been any other weeks you've not provided care for John Smith for 35 hours or more each week");
 
         LOG.trace("Ending BenefitsController.validate");
     }

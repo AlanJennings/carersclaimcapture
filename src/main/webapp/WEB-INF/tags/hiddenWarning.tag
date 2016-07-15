@@ -2,28 +2,27 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<%@attribute name="id" required="true" type="java.lang.String"%>
-<%@attribute name="triggerId" required="false" type="java.lang.String"%>
-<%@attribute name="triggerValue" required="false" type="java.lang.String"%>
-<%@attribute name="outerClass" required="false" type="java.lang.String"%>
+<%@ attribute name="id" required="true"%>
+    
+<%@ attribute name="triggerId" %>
+<%@ attribute name="triggerValue" %>
+<%@ attribute name="outerClass" %>
 
 <script type="text/javascript" src="<c:url value='/assets/javascript/hiddenPanel.js' />" ></script>
 
-<c:if test="${empty outerClass}" >
-    <c:set var="outerClass" value="validation-summary" />
-</c:if>
+<t:defaultValue value="${pageScope.outerClass}" defaultValue="validation-summary" var="outerClass" />
 
 <%-- 
     The default for a hidden panel should be block, so that it shows for JavaScript disabled browsers
     the JavaScript then initially hides the panel before any trigger events occur 
 --%>
-<div id="${id}" class="${outerClass}" style="display: none; margin-top: -20px;">
+<div id="${pageScope.id}" class="${pageScope.outerClass}" style="display: none; margin-top: -20px;">
     <jsp:doBody/>
 </div>
 
-<c:if test="${(not empty triggerId) && (not empty triggerValue)}" >
+<c:if test="${(not empty pageScope.triggerId) && (not empty pageScope.triggerValue)}" >
     <script type="text/javascript">
-        window.initPanelState("${id}", "${triggerId}", "${triggerValue}");
-        window.initPanelEvents("${id}", "${triggerId}", "${triggerValue}");
+        window.initPanelState("${pageScope.id}", "${pageScope.triggerId}", "${pageScope.triggerValue}");
+        window.initPanelEvents("${pageScope.id}", "${pageScope.triggerId}", "${pageScope.triggerValue}");
     </script>
 </c:if>

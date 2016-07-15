@@ -6,16 +6,8 @@
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" pageTitle="Other income" section="Section 9 of 11" backLink="${previousPage}">
-        <t:textarea id="otherPaymentsInfo" 
-                    name="otherPaymentsInfo"
-                    value="${otherPaymentsInfo}" 
-                    maxLength="3000" 
-                    showRemainingChars="true" 
-                    label="What other income have you had since 1 July 2016?" 
-                    hintBefore="Give full details of how often and how much you're paid." 
-                    errors="${validationErrors}">
-        </t:textarea>
+    <t:pageContent errors="${validationErrors}" page="page.other-income" backLink="${previousPage}">
+        <t:textarea name="otherPaymentsInfo" maxLength="3000" showRemainingChars="true" />
     </t:pageContent>
 
 </t:mainPage>

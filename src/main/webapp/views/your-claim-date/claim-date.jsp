@@ -6,72 +6,31 @@
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" pageTitle="When do you want Carer's Allowance to start?" section="Section 2 of 11" backLink="${previousPage}">
-        <t:htmlsection>
+    <t:pageContent errors="${validationErrors}" page="page.claim-date" backLink="${previousPage}">
+
+        <t:htmlsection name="claimDateIntro">
             <p>
-                Most claims can be backdated 3 months. You may be able to 
-                <a rel="external" 
-                   href="/claim-help#1"
-                   target="_blank"
-                   onmousedown="trackEvent(&#39;${currentPage}&#39;,&#39;Claim Notes - Backdating Claim Date&#39;);"
-                   onkeydown="trackEvent(&#39;${currentPage}&#39;,&#39;Claim Notes - Backdating Claim Date&#39;);"
-                >backdate it further</a> 
-                if the person you care for was awarded their qualifying benefit in the last 3 months.
+                <t:message code="claimDateIntro.line1" />
+                <a rel="external" href="/claim-help#1" target="_blank"><t:message code="claimDateIntro.line2" /></a> 
+                <t:message code="claimDateIntro.line3" />
             </p>
         </t:htmlsection>
-        
-        <t:datefield id="dateOfClaim" 
-                     nameDay="dateOfClaim_day" 
-                     nameMonth="dateOfClaim_month" 
-                     nameYear="dateOfClaim_year" 
-                     valueDay="${dateOfClaim_day}" 
-                     valueMonth="${dateOfClaim_month}" 
-                     valueYear="${dateOfClaim_year}" 
-                     label="Claim date" 
-                     errors="${validationErrors}" 
-                     hintBeforeId="dateOfClaim_defaultDateContextualHelp"
-                     hintBefore="This is when you want to claim Carer&rsquo;s Allowance from, eg 16 2 2016."
-        />
 
+        <t:datefield name="dateOfClaim" />
+
+        <%-- TODO can we replace the warning with the warning component? --%>
         <t:pre>
             <div id="claimDateWarning" class="prompt breaks-prompt validation-summary">
-                <p>You can't claim Carer's Allowance more than 3 months in advance.</p>
+                <p><t:message code="claimDateWarning.line1" /></p>
             </div>
         </t:pre>
 
-        <t:yesnofield id="beforeClaimCaring" 
-                      name="beforeClaimCaring" 
-                      value="${beforeClaimCaring}"
-                      label="Were you caring for the person for more than 35 hours a week before this date?" 
-                      errors="${validationErrors}" 
-        />
+        <t:yesnofield name="beforeClaimCaring" />
 
         <t:hiddenPanel id="careStartDateWrap" triggerId="beforeClaimCaring" triggerValue="yes" >
-            <t:datefield id="beforeClaimCaringDate" 
-                         nameDay="beforeClaimCaringDate_day" 
-                         nameMonth="beforeClaimCaringDate_month" 
-                         nameYear="beforeClaimCaringDate_year" 
-                         valueDay="${beforeClaimCaringDate_day}" 
-                         valueMonth="${beforeClaimCaringDate_month}" 
-                         valueYear="${beforeClaimCaringDate_year}" 
-                         label="When did you begin caring?" 
-                         errors="${validationErrors}" 
-                         hintBefore="For example, 16 5 2015"
-                         hintBeforeId="beforeClaimCaring_date_defaultDateContextualHelp"
-            />
+            <t:datefield name="beforeClaimCaringDate" />
         </t:hiddenPanel>
     </t:pageContent>
-
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $("#save").click(function(){
-                var saveurl=$(this).attr("href");
-                var saveurl=$(this).attr("href");
-                $("form").attr( "action", saveurl );
-                $("form").submit()
-            });
-        });
-    </script>
 
     <script type="text/javascript" src="<c:url value='/assets/javascript/s_claim_date/g_claimDate.js' />"></script>
 

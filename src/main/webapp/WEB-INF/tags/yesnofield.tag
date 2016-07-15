@@ -2,45 +2,42 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<%@attribute name="id" required="true" type="java.lang.String"%>
 <%@attribute name="name" required="true" type="java.lang.String"%>
-<%@attribute name="value" required="false" type="java.lang.String"%>
 
-<%@attribute name="yesLabel" required="false" type="java.lang.String"%>
-<%@attribute name="noLabel" required="false" type="java.lang.String"%>
+<%@attribute name="id" %>
+<%@attribute name="value"%>
+<%@attribute name="yesLabelKey"%>
+<%@attribute name="noLabelKey"%>
 
-<%@attribute name="outerClass" required="false" type="java.lang.String"%>
-<%@attribute name="outerStyle" required="false" type="java.lang.String"%>
-<%@attribute name="label" required="false" type="java.lang.String"%>
-<%@attribute name="hintBefore" required="false" type="java.lang.String"%>
-<%@attribute name="hintBeforeId" required="false" type="java.lang.String"%>
-<%@attribute name="hintAfter" required="false" type="java.lang.String"%>
-<%@attribute name="hintAfterId" required="false" type="java.lang.String"%>
+<%@attribute name="outerClass"%>
+<%@attribute name="outerStyle"%>
+<%@attribute name="labelKey"%>
+<%@attribute name="hintBeforeKey"%>
+<%@attribute name="hintAfterKey"%>
 
-<%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+<%@attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
 
-<%-- set default values for yes & no labels --%>
-<c:if test="${empty yesLabel}">
-    <c:set var="yesLabel" value="Yes" />
-</c:if>
-<c:if test="${empty noLabel}">
-    <c:set var="noLabel" value="No" />
-</c:if>
+<t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
+<t:defaultValue value="${pageScope.labelKey}" defaultValue="${pageScope.name}.label" var="labelKey" />
+<t:defaultValue value="${pageScope.yesLabelKey}" defaultValue="yes" var="yesLabelKey" />
+<t:defaultValue value="${pageScope.noLabelKey}" defaultValue="no" var="noLabelKey" />
+<t:defaultValue value="${pageScope.outerStyle}" defaultValue="margin-bottom: 22px;" var="outerStyle" />
 
-<c:if test="${empty outerStyle}" >
-    <c:set var="outerStyle" value="margin-bottom: 22px;" />
+<%-- If not using raw values, then use the name attribute to locate the value --%>
+<c:if test="${pageScope.useRawValue!='true'}" >
+    <c:set var="value" value="${requestScope[pageScope.name]}" />
 </c:if>
 
-<t:component name="${name}" 
-             outerClass="${outerClass}" 
-             outerStyle="${outerStyle}" 
-             errors="${errors}">
+<t:component name="${pageScope.name}" 
+             outerClass="${pageScope.outerClass}" 
+             outerStyle="${pageScope.outerStyle}" 
+             errors="${pageScope.errors}">
 
     <fieldset class="question-group">
-        <legend class="form-label-bold ">${label}</legend>        
+        <legend class="form-label-bold "><t:message code="${pageScope.labelKey}" /></legend>        
 
-        <t:hint hintId="${hintBeforeId}" hintText="${hintBefore}" /> 
-        <ul class="inline " id="${id}">  
+        <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
+        <ul class="inline " id="${pageScope.id}">  
             <li>
                 <%-- 
                     clicking on a label is the same as clicking on an input (to gain focus probably), so by spanning the control with a label
@@ -48,12 +45,12 @@
                 --%>
                 <label class="block-label">
                     <input type="radio" 
-                           id="${id}_yes" 
-                           name="${name}" 
+                           id="${pageScope.id}_yes" 
+                           name="${pageScope.name}" 
                            value="yes"  
-                           <c:if test="${value=='yes'}">checked</c:if>  
+                           <c:if test="${pageScope.value=='yes'}">checked</c:if>  
                     />
-                    <span><c:out value="${yesLabel}" /></span>
+                    <span><t:message code="${pageScope.yesLabelKey}" /></span>
                 </label>
             </li>
                 
@@ -64,16 +61,16 @@
                 --%>            
                 <label class="block-label">
                     <input type="radio" 
-                           id="${id}_no" 
-                           name="${name}" 
+                           id="${pageScope.id}_no" 
+                           name="${pageScope.name}" 
                            value="no"  
-                           <c:if test="${value=='no'}">checked</c:if>  
+                           <c:if test="${pageScope.value=='no'}">checked</c:if>  
                     />
-                    <span><c:out value="${noLabel}" /></span>
+                    <span><t:message code="${pageScope.noLabelKey}" /></span>
                 </label>
             </li>
         </ul>
-        <t:hint hintId="${hintAfterId}" hintText="${hintAfter}" /> 
+        <t:hint hintTextKey="${pageScope.hintAfterKey}" parentName="${pageScope.name}" element="hintAfter"/>
     </fieldset>
     
 </t:component>

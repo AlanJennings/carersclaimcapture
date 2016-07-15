@@ -24,27 +24,27 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class BreakSomewhereElseController extends AbstractFormController {
     public static final Logger LOG = LoggerFactory.getLogger(BreakSomewhereElseController.class);
 
-    private static final String CURRENT_PAGE  = "/breaks/break";    // this has an argument
+    private static final String CURRENT_PAGE  = "/breaks/break-somewhere-else";    // this has an argument
     private static final String NEXT_PAGE     = "/breaks/breaks-in-care/update";
     private static final String PARENT_PAGE   = "/breaks/breaks-in-care";
     private static final String PAGE_TITLE    = "Break - About the care you provide";
 
     public static final String   ID_FIELD = "break_id";
     public static final String[] FIELDS = {ID_FIELD,
-                                            "breakStartDate_day",
-                                            "breakStartDate_month",
-                                            "breakStartDate_year",
-                                            "breakStartTime",
-                                            "breakWhereCaree",
-                                            "breakWhereCareeOtherText",
-                                            "breakWhereYou",
-                                            "breakWhereYouOtherText",
-                                            "breakHasBreakEnded",
-                                            "breakHasBreakEndedDate_day",
-                                            "breakHasBreakEndedDate_month",
-                                            "breakHasBreakEndedDate_year",
-                                            "breakEndTime",
-                                            "breakMedicalCareDuringBreak"};
+                                            "breakOtherBreakStartDate_day",
+                                            "breakOtherBreakStartDate_month",
+                                            "breakOtherBreakStartDate_year",
+                                            "breakOtherBreakStartTime",
+                                            "breakOtherBreakWhereCaree",
+                                            "breakOtherBreakWhereCareeOtherText",
+                                            "breakOtherBreakWhereYou",
+                                            "breakOtherBreakWhereYouOtherText",
+                                            "breakOtherBreakHasBreakEnded",
+                                            "breakOtherBreakHasBreakEndedDate_day",
+                                            "breakOtherBreakHasBreakEndedDate_month",
+                                            "breakOtherBreakHasBreakEndedDate_year",
+                                            "breakOtherBreakEndTime",
+                                            "breakOtherBreakMedicalCareDuringBreak"};
 
     @Autowired
     public BreakSomewhereElseController(SessionManager sessionManager) {
@@ -102,25 +102,25 @@ public class BreakSomewhereElseController extends AbstractFormController {
      */
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
-
-        validateMandatoryDateField(fieldValues, "When did the break start?", "breakStartDate", new String[]{"breakStartDate_day", "breakStartDate_month", "breakStartDate_year"});
-        validateMandatoryField(fieldValues, "breakWhereCaree", "Where was the person you care for during the break?");
-        validateMandatoryField(fieldValues, "breakWhereYou", "Where were you during the break?");
-        validateMandatoryField(fieldValues, "breakHasBreakEnded", "Has this break ended?");
-
-        if(fieldValue_Equals(fieldValues, "breakHasBreakEnded", "yes")) {
-            validateMandatoryDateField(fieldValues, "When did the break end?", "breakHasBreakEndedDate", new String[]{"breakHasBreakEndedDate_day", "breakHasBreakEndedDate_month", "breakHasBreakEndedDate_year"});
-        }
-
-        if(fieldValue_Equals(fieldValues, "breakWhereCaree", "somewhere else")) {
-            validateMandatoryField(fieldValues, "breakWhereCareeOtherText", "Where was the person you care for during the break?");
-        }
-
-        if(fieldValue_Equals(fieldValues, "breakWhereYou", "somewhere else")) {
-            validateMandatoryField(fieldValues, "breakWhereYouOtherText", "Where were you during the break?");
-        }
-
-        validateMandatoryField(fieldValues, "breakMedicalCareDuringBreak", "Did you or the person you care for get any medical treatment or professional care during this time?");
+//TODO
+//        validateMandatoryDateField(fieldValues, "When did the break start?", "breakStartDate", new String[]{"breakStartDate_day", "breakStartDate_month", "breakStartDate_year"});
+//        validateMandatoryField(fieldValues, "breakWhereCaree", "Where was the person you care for during the break?");
+//        validateMandatoryField(fieldValues, "breakWhereYou", "Where were you during the break?");
+//        validateMandatoryField(fieldValues, "breakHasBreakEnded", "Has this break ended?");
+//
+//        if(fieldValue_Equals(fieldValues, "breakHasBreakEnded", "yes")) {
+//            validateMandatoryDateField(fieldValues, "When did the break end?", "breakHasBreakEndedDate", new String[]{"breakHasBreakEndedDate_day", "breakHasBreakEndedDate_month", "breakHasBreakEndedDate_year"});
+//        }
+//
+//        if(fieldValue_Equals(fieldValues, "breakWhereCaree", "somewhere else")) {
+//            validateMandatoryField(fieldValues, "breakWhereCareeOtherText", "Where was the person you care for during the break?");
+//        }
+//
+//        if(fieldValue_Equals(fieldValues, "breakWhereYou", "somewhere else")) {
+//            validateMandatoryField(fieldValues, "breakWhereYouOtherText", "Where were you during the break?");
+//        }
+//
+//        validateMandatoryField(fieldValues, "breakMedicalCareDuringBreak", "Did you or the person you care for get any medical treatment or professional care during this time?");
 
         LOG.trace("Ending BenefitsController.validate");
     }

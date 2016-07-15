@@ -1,34 +1,36 @@
 <%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<%@attribute name="name" required="true" type="java.lang.String"%>
+<%@ attribute name="name" required="true" %>
+    
+<%@ attribute name="id" %>
+<%@ attribute name="outerClass" %>
+<%@ attribute name="outerStyle" %>
+<%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
 
-<%@attribute name="id" required="false" type="java.lang.String"%>
-<%@attribute name="outerClass" required="false" type="java.lang.String"%>
-<%@attribute name="outerStyle" required="false" type="java.lang.String"%>
-<%@attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+<t:defaultValue value='${pageScope.outerClass}' defaultValue='form-group' var='outerClass' />
 
-<%-- Start of the default values --%>
-<c:if test="${not empty errors}">
-    <c:set var="hasError" value="${errors.hasError(name)}" />
-    <c:set var="errorMessage" value="${errors.getErrorMessage(name)}" />
+<%-- this inherits the errors attribute of the enclosing pageContent tag --%>
+<c:if test="${empty pageScope.errors}">
+    <c:set var="errors" value="${requestScope.pageContent.errors}" />
 </c:if>
 
-<c:if test="${empty outerClass}" >
-    <c:set var="outerClass" value="form-group" />
-</c:if>
-<%-- End of the default values --%>
-
-<c:if test="${not empty outerStyle}">
-    <c:set var='outerStyle' value=' style="${outerStyle}"' />
+<c:if test="${not empty pageScope.errors}">
+    <c:set var="hasError" value="${pageScope.errors.hasError(name)}" />
+    <c:set var="errorMessage" value="${pageScope.errors.getErrorMessage(name)}" />
 </c:if>
 
-<c:if test="${hasError}" >
+<c:if test="${not empty pageScope.outerStyle}">
+    <c:set var='outerStyle' value=' style="${pageScope.outerStyle}"' />
+</c:if>
+
+<c:if test="${pageScope.hasError}" >
     <c:set var="errorClass" value="validation-error" />
 </c:if>
-<li class="<c:out value='${outerClass}'/> <c:out value='${errorClass}'/> <c:out value='${outerStyle}'/>">
-    <c:if test="${hasError}" >
-        <p class="validation-message">${errorMessage}</p>
+<li class="<c:out value='${pageScope.outerClass}'/> <c:out value='${pageScope.errorClass}'/>" <c:out value='${pageScope.outerStyle}'/>>
+    <c:if test="${pageScope.hasError}" >
+        <p class="validation-message">${pageScope.errorMessage}</p>
     </c:if>
 
     <jsp:doBody />
