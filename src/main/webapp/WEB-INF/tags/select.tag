@@ -7,6 +7,7 @@
     
 <%@ attribute name="id" required="false" type="java.lang.String"%>
 <%@ attribute name="labelKey" required="false" type="java.lang.String"%>
+<%@ attribute name="labelKeyArgs" %>
 <%@ attribute name="hintBeforeKey" required="false" type="java.lang.String"%>
 <%@ attribute name="hintAfterKey" required="false" type="java.lang.String"%>
 <%@ attribute name="additionalClasses" required="false" type="java.lang.String"%>
@@ -17,7 +18,6 @@
 <%@ attribute name="value" required="false" type="java.lang.String"%>
     
 <t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
-<t:defaultValue value="${pageScope.labelKey}" defaultValue="${pageScope.name}.label" var="labelKey" />
 <t:defaultValue value="${pageScope.useRawValue}" defaultValue="false" var="useRawValue" />
 <t:defaultValue value="${pageScope.optionLabelKeys}" defaultValue="${pageScope.optionValues}" var="optionLabelKeys" />
 
@@ -31,7 +31,7 @@
              outerStyle="${pageScope.outerStyle}" 
              errors="${pageScope.errors}">
     
-    <label class="form-label-bold" for="${pageScope.id}"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label"/> </label>
+    <label class="form-label-bold" for="${pageScope.id}"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </label>
     <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
     
     <select id="${pageScope.id}" name="${pageScope.name}" class="form-control ${pageScope.additionalClasses}">

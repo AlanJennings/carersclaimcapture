@@ -7,6 +7,7 @@
     
 <%@ attribute name="id" %>
 <%@ attribute name="labelKey" %>
+<%@ attribute name="labelKeyArgs" %>
 <%@ attribute name="optionLabelKeys" %>
 <%@ attribute name="hintBeforeKey" %>
 <%@ attribute name="hintAfterKey" %>
@@ -18,7 +19,6 @@
 <%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
 
 <t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
-<t:defaultValue value="${pageScope.labelKey}" defaultValue="${pageScope.name}.label" var="labelKey" />
 <t:defaultValue value="${pageScope.useRawValue}" defaultValue="false" var="useRawValue" />
 <t:defaultValue value="${pageScope.optionLabelKeys}" defaultValue="${pageScope.optionValues}" var="optionLabelKeys" />
 
@@ -33,7 +33,7 @@
              errors="${pageScope.errors}">
              
     <fieldset class="question-group">
-        <legend class="form-label-bold "><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label"/></legend>        
+        <legend class="form-label-bold "><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /></legend>        
 
         <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
         <ul class="form-group form-group-compound" id="${pageScope.id}">

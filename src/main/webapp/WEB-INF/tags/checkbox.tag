@@ -13,6 +13,7 @@
 <%@ attribute name="outerStyle" %>
 <%@ attribute name="outerClass" %>
 <%@ attribute name="labelKey" %>
+<%@ attribute name="labelKeyArgs" %>
 <%@ attribute name="blockLabel" %>
 <%@ attribute name="hintBeforeKey" %>
 <%@ attribute name="hintAfterKey" %>
@@ -20,7 +21,6 @@
 <%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
 
 <t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
-<t:defaultValue value="${pageScope.labelKey}" defaultValue="${pageScope.name}.label" var="labelKey" />
 <t:defaultValue value="${pageScope.useRawValue}" defaultValue="false" var="useRawValue" />
 <t:defaultValue value="${pageScope.checkedValue}" defaultValue="yes" var="checkedValue" />
 <t:defaultValue value="${pageScope.textKey}" defaultValue="${pageScope.name}.text" var="textKey" />

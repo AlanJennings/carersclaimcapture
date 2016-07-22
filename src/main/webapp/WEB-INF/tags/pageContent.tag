@@ -4,24 +4,20 @@
 
 <%@ attribute name="page" required="true" %>
     
-<%@ attribute name="pageTitleKey" %>
 <%@ attribute name="pageTitle" %>
+<%@ attribute name="pageTitleKey" %>
 <%@ attribute name="pageSectionKey" %>
 <%@ attribute name="backLink" %>
 <%@ attribute name="nextButtonTextKey" %>
     
 <%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
-
 <t:defaultValue value="${pageScope.nextButtonTextKey}" defaultValue="next" var="nextButtonTextKey" />
-
 <t:defaultValue value="${pageScope.pageTitleKey}" defaultValue="${page}.pageTitle" var="pageTitleKey" />
-<t:defaultValue value="${pageScope.pageSectionKey}" defaultValue="${page}.section" var="defaultPageSectionKey" />
-<c:if test="not empty pageScope.defaultPageSectionKey">
-    <c:set var="pageSectionKey" value="${pageScope.defaultPageSectionKey}" />
-</c:if>
 
-<c:if test="not empty pageScope.pageTitleKey">
-    <c:set var="pageTitle"><t:message code="${pageScope.pageTitleKey}" parentName="${pageScope.page}" element="pageTitle" /></c:set>
+<c:set var="pageSection"><t:message code="${pageScope.pageSectionKey}" parentName="${pageScope.page}" element="section" /></c:set>
+
+<c:if test="${not empty pageScope.pageTitleKey}">
+    <c:set var='pageTitle' ><t:message code="${pageScope.pageTitleKey}" parentName="${pageScope.page}" element="pageTitle" /></c:set>
 </c:if>
 
 <%-- ************************** start 'pageContent' context object ************************************ --%>
@@ -60,8 +56,8 @@
                 </c:if>
                 
                 <h1 class="form-title heading-large">
-                    <c:if test="${not empty pageScope.pageSectionKey}">
-                        <span class="section-progress"><t:message code="${pageScope.pageSectionKey}" /></span>
+                    <c:if test="${not empty pageScope.pageSection}">
+                        <span class="section-progress">${pageScope.pageSection}</span>
                     </c:if>
                     ${pageScope.pageTitle}
                 </h1>

@@ -1,24 +1,24 @@
 <%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+    
+<%@ attribute name="name" required="true" %>
+    
+<%@ attribute name="id" %>
+<%@ attribute name="nameBlock1" %>
+<%@ attribute name="nameBlock2" %>
+<%@ attribute name="nameBlock3" %>
+<%@ attribute name="valueBlock1" %>
+<%@ attribute name="valueBlock2" %>
+<%@ attribute name="valueBlock3" %>
+<%@ attribute name="labelKey" %>
+<%@ attribute name="labelKeyArgs" %>
+<%@ attribute name="hintBeforeKey" %>
+<%@ attribute name="hintAfterKey" %>
 
-<%@attribute name="name" required="true" %>
-
-<%@attribute name="id" %>
-<%@attribute name="nameBlock1" %>
-<%@attribute name="nameBlock2" %>
-<%@attribute name="nameBlock3" %>
-<%@attribute name="valueBlock1" %>
-<%@attribute name="valueBlock2" %>
-<%@attribute name="valueBlock3" %>
-<%@attribute name="labelKey" %>
-<%@attribute name="hintBeforeKey" %>
-<%@attribute name="hintAfterKey" %>
-
-<%@attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+<%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
 
 <t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
-<t:defaultValue value="${pageScope.labelKey}" defaultValue="${pageScope.name}.label" var="labelKey" />
 <t:defaultValue value="${pageScope.useRawValue}" defaultValue="false" var="useRawValue" />
 
 <%-- If not using raw values, then use the name attribute to locate the value --%>
@@ -42,7 +42,7 @@
              errors="${pageScope.errors}">
 
     <fieldset class="question-group">
-        <legend class="form-label-bold"> ${pageScope.label} </legend>
+        <legend class="form-label-bold"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </legend>
         <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
         <%-- sort-code is just a marker class there are no styles for it --%>
         <ul class="form-date sort-code" id="${pageScope.id}">

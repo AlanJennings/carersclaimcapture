@@ -7,6 +7,7 @@
 <%@ attribute name="outerClass" %>
 <%@ attribute name="outerStyle" %>
 <%@ attribute name="labelKey" %>
+<%@ attribute name="labelKeyArgs" %>
 <%@ attribute name="hintBeforeKey" %>
 <%@ attribute name="hintAfterKey" %>
 
@@ -19,7 +20,7 @@
              
     <fieldset class="question-group">
         
-        <legend class="form-label-bold "><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label"/></legend>        
+        <legend class="form-label-bold "><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /></legend>        
         <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
         <ul class="form-group form-group-compound" id="${pageScope.id}">
             <jsp:doBody />

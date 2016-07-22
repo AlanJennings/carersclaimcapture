@@ -9,11 +9,12 @@
 --%><%@ attribute name="code" required="false" type="java.lang.String"%><%-- 
 --%><%@ attribute name="parentName" required="false" type="java.lang.String"%><%--
 --%><%@ attribute name="element" required="false" type="java.lang.String"%><%--
+--%><%@ attribute name="args" required="false" type="java.lang.String"%><%--
 --%><c:if test="${not empty pageScope.code}"><%--
-    --%><spring:message code="${pageScope.code}" text="\${${pageScope.code}}" var="messageText" /><%--
+    --%><spring:message code="${pageScope.code}" text="\${${pageScope.code}}" var="messageText" arguments="${pageScope.args}" argumentSeparator="|" /><%--
 --%></c:if><%-- 
 --%><c:if test="${empty pageScope.message && not empty pageScope.parentName && not empty pageScope.element}"><%-- 
-    --%><spring:message code="${pageScope.parentName}.${pageScope.element}" text="" var="messageText"/><%-- 
+    --%><spring:message code="${pageScope.parentName}.${pageScope.element}" text="" var="messageText" arguments="${pageScope.args}" argumentSeparator="|" /><%-- 
 --%></c:if><%-- 
 --%><%-- 
     Don't use c:out as it escapes html, and sometimes we watn to use html

@@ -5,12 +5,13 @@
 <%@ attribute name="id" required="true" %>
 
 <%@ attribute name="labelKey" %>
+<%@ attribute name="labelKeyArgs" %>
 <%@ attribute name="innerClass" %>
 
 <t:defaultValue value="${pageScope.innerClass}" defaultValue="break-data" var="innerClass" />
 
 <fieldset id="${pageScope.id}" class="form-elements results-detail">
-    <legend class="heading-medium form-class-bold"><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label"/></legend>
+    <legend class="heading-medium form-class-bold"><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /></legend>
     <div class="data-table">
         <ul class="${pageScope.innerClass}">
             <jsp:doBody/>

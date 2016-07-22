@@ -2,20 +2,20 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<%@attribute name="name" required="true" type="java.lang.String"%>
+<%@ attribute name="name" required="true" type="java.lang.String"%>
+    
+<%@ attribute name="id" %>
+<%@ attribute name="value" %>
+<%@ attribute name="yesLabelKey" %>
+<%@ attribute name="noLabelKey" %>
+    
+<%@ attribute name="outerClass" %>
+<%@ attribute name="outerStyle" %>
+<%@ attribute name="labelKey" %>
+c<%@ attribute name="hintBeforeKey" %>
+<%@ attribute name="hintAfterKey" %>
 
-<%@attribute name="id" %>
-<%@attribute name="value"%>
-<%@attribute name="yesLabelKey"%>
-<%@attribute name="noLabelKey"%>
-
-<%@attribute name="outerClass"%>
-<%@attribute name="outerStyle"%>
-<%@attribute name="labelKey"%>
-<%@attribute name="hintBeforeKey"%>
-<%@attribute name="hintAfterKey"%>
-
-<%@attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+<%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary" %>
 
 <t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
 <t:defaultValue value="${pageScope.labelKey}" defaultValue="${pageScope.name}.label" var="labelKey" />
@@ -34,7 +34,7 @@
              errors="${pageScope.errors}">
 
     <fieldset class="question-group">
-        <legend class="form-label-bold "><t:message code="${pageScope.labelKey}" /></legend>        
+        <legend class="form-label-bold "><t:message code="${pageScope.labelKey}" args="${pageScope.labelKeyArgs}" /></legend>        
 
         <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
         <ul class="inline " id="${pageScope.id}">  

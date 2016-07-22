@@ -9,6 +9,7 @@
 <%@ attribute name="outerClass"%>
 <%@ attribute name="outerStyle"%>
 <%@ attribute name="labelKey"%>
+<%@ attribute name="labelKeyArgs" %>
 <%@ attribute name="hintBeforeKey"%>
 <%@ attribute name="hintAfterKey"%>
 <%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
@@ -19,7 +20,6 @@
 <%@ attribute name="additionalClasses"%>
 
 <t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
-<t:defaultValue value="${pageScope.labelKey}" defaultValue="${pageScope.name}.label" var="labelKey" />
 <t:defaultValue value="${pageScope.useRawValue}" defaultValue="false" var="useRawValue" />
 
 <%-- If not using raw values, then use the name attribute to locate the value --%>
@@ -32,7 +32,7 @@
              outerStyle="${pageScope.outerStyle}" 
              errors="${pageScope.errors}">
 
-    <label class="form-label-bold" for="${pageScope.id}"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label"/> </label>
+    <label class="form-label-bold" for="${pageScope.id}"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </label>
     <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
     <input type="text" class="form-control ${pageScope.additionalClasses}" id="${pageScope.id}" name="${pageScope.name}" value="${pageScope.value}" maxLength="${pageScope.maxLength}" autocomplete="off">
     <t:hint hintTextKey="${pageScope.hintAfterKey}" parentName="${pageScope.name}" element="hintAfter" />

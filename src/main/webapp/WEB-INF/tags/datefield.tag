@@ -12,13 +12,13 @@
 <%@ attribute name="valueMonth" %>
 <%@ attribute name="valueYear" %>
 <%@ attribute name="labelKey" %>
+<%@ attribute name="labelKeyArgs" %>
 <%@ attribute name="hintBeforeKey" %>
 <%@ attribute name="hintAfterKey" %>
     
 <%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
 
 <t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
-<t:defaultValue value="${pageScope.labelKey}" defaultValue="${pageScope.name}.label" var="labelKey" />
 <t:defaultValue value="${pageScope.useRawValue}" defaultValue="false" var="useRawValue" />
 
 <%-- If not using raw values, then use the name attribute to locate the value --%>
@@ -43,7 +43,7 @@
 
     <!-- TODO: Probably should rearrange these a bit, so label and hints are outside the fieldset -->
     <fieldset class="question-group">
-        <legend class="form-label-bold"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label"/> </legend>
+        <legend class="form-label-bold"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </legend>
         <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore" />
         <ul class="form-date" id="${pageScope.id}">
             <li class="form-group">

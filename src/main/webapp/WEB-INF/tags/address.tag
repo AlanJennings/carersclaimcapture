@@ -14,13 +14,13 @@
 <%@ attribute name="useRawValue" %>
 <%@ attribute name="maxlength" %>
 <%@ attribute name="labelKey" %>
+<%@ attribute name="labelKeyArgs" %>
 <%@ attribute name="hintBeforeKey" %>
 <%@ attribute name="hintAfterKey" %>
 
 <%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
 
 <t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
-<t:defaultValue value="${pageScope.labelKey}" defaultValue="${pageScope.name}.label" var="labelKey" />
 <t:defaultValue value="${pageScope.useRawValue}" defaultValue="false" var="useRawValue" />
 
 <c:if test="${empty pageScope.nameOne}">
@@ -41,7 +41,7 @@
              errors="${pageScope.errors}">
                 
     <fieldset class="question-group">
-        <legend class="form-label-bold"><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label"/></legend>
+        <legend class="form-label-bold"><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /></legend>
         <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
         <ul id="${pageScope.id}">  
             <t:textedit id="${pageScope.id}_lineOne" name="${pageScope.nameOne}" outerClass="form-group-compound" value="${pageScope.valueOne}" maxLength="${pageScope.maxLength}" /> 
