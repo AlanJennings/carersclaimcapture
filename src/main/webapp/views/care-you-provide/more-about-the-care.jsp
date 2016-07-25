@@ -6,7 +6,7 @@
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" page="more-about-the-care" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" page="page.more-about-the-care" backLink="${previousPage}">
         <t:yesnofield name="spent35HoursCaring" />
 
         <t:group name="otherResidenceGroup" >

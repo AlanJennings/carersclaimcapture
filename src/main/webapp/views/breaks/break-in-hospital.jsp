@@ -6,47 +6,50 @@
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" page="break-in-hospital" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" page="page.break-in-hospital" backLink="${previousPage}">
 
         <t:htmlsection name="breakInHospitalIntro">
             <p>You told us that you or the person you care for have been in hospital.  You could still be paid Carer's Allowance for this time</p>
         </t:htmlsection>
 
-        <t:radiobuttons name="whoInHospital" optionValues="Carer|Caree" />
+        <t:radiobuttons name="hospitalBreakWhoInHospital" optionValues="Carer|Caree" />
 
-        <t:hiddenPanel id="whoInHospitalWrapCarer" triggerId="whoInHospital" triggerValue="Carer">
+        <t:hiddenPanel id="hospitalBreakWhoInHospitalWrapCarer" triggerId="hospitalBreakWhoInHospital" triggerValue="Carer">
 
-            <t:datefield name="carerHospitalStartDate" />
-            <t:yesnofield name="carerHospitalStayEnded" />
+            <t:datefield name="hospitalBreakCarerHospitalStartDate" />
+            <t:yesnofield name="hospitalBreakCarerHospitalStayEnded" />
 
-            <t:hiddenPanel id="carerHospitalStayEndedWrap" triggerId="carerHospitalStayEnded" triggerValue="You">
+            <t:hiddenPanel id="hospitalBreakCarerHospitalStayEndedWrap" triggerId="hospitalBreakCarerHospitalStayEnded" triggerValue="yes">
 
-                <t:datefield name="carerHospitalEndDate" />
-                <t:radiobuttons name="carerInHospitalCareeLocation" optionValues="In hospital|In respite care|Somewhere else" optionLabelKeys="hospital|respite|elsewhere" />
+                <t:datefield name="hospitalBreakCarerHospitalEndDate" />
+                <t:radiobuttons name="hospitalBreakCarerInHospitalCareeLocation" 
+                                optionValues="In hospital|In respite care|Somewhere else" 
+                                optionLabelKeys="hospital|respite|elsewhere" 
+                                labelKeyArgs="${careeFirstName} ${careeSurname}"/>
 
-                <t:hiddenPanel id="carerInHospitalCareeLocationWrap" triggerId="carerInHospitalCareeLocation" triggerValue="Somewhere else">
-                    <t:textedit name="carerInHospitalCareeLocationText" maxLength="30" />
+                <t:hiddenPanel id="hospitalBreakCarerInHospitalCareeLocationWrap" triggerId="hospitalBreakCarerInHospitalCareeLocation" triggerValue="Somewhere else">
+                    <t:textedit name="hospitalBreakCarerInHospitalCareeLocationText" maxLength="30" />
                 </t:hiddenPanel>
 
             </t:hiddenPanel>
 
         </t:hiddenPanel>
 
-        <t:hiddenPanel id="whoInHospitalWrapCaree" triggerId="whoInHospital" triggerValue="Caree">
+        <t:hiddenPanel id="hospitalBreakWhoInHospitalWrapCaree" triggerId="hospitalBreakWhoInHospital" triggerValue="Caree">
 
-            <t:datefield name="careeHospitalStartDate" />
-            <t:yesnofield name="careeHospitalStayEnded" />
+            <t:datefield name="hospitalBreakCareeHospitalStartDate" />
+            <t:yesnofield name="hospitalBreakCareeHospitalStayEnded" />
 
-            <t:hiddenPanel id="careeHospitalStayEnded" triggerId="careeHospitalStayEnded" triggerValue="You">
+            <t:hiddenPanel id="hospitalBreakCareeHospitalStayEndedWrap" triggerId="hospitalBreakCareeHospitalStayEnded" triggerValue="yes">
 
-                <t:datefield name="careeHospitalEndDate" />
-                <t:yesnofield name="careeHospitalCarerStillCaring" />
+                <t:datefield name="hospitalBreakCareeHospitalEndDate" />
+                <t:yesnofield name="hospitalBreakCareeHospitalCarerStillCaring" />
 
             </t:hiddenPanel>
             
         </t:hiddenPanel>
        
-        <t:yesnofield name="weeksNotCaring" />
+        <t:yesnofield name="hospitalBreakWeeksNotCaring" labelKeyArgs="${careeFirstName} ${careeSurname}" />
         
     </t:pageContent>
 

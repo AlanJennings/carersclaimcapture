@@ -79,7 +79,7 @@ public class CareeDetailsController extends AbstractFormController {
         validateMandatoryField(fieldValues, "careeTitle", "Title");
         validateMandatoryField(fieldValues, "careeFirstName", "First name");
         validateMandatoryField(fieldValues, "careeSurname", "Last name");
-        validateMandatoryDateField(fieldValues, "Date of Birth", "careeDateOfBirth", new String[]{"dateOfBirth_day", "dateOfBirth_month", "dateOfBirth_year"});
+        validateMandatoryDateField(fieldValues, "Date of Birth", "careeDateOfBirth", new String[]{"careeDateOfBirth_day", "careeDateOfBirth_month", "careeDateOfBirth_year"});
         validateMandatoryField(fieldValues, "careeRelationship", "What's their relationship to you?");
         validateMandatoryField(fieldValues, "careeSameAddress", "Do they live at the same address as you?");
         // address and postcode are not mandatory

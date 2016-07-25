@@ -6,7 +6,7 @@
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}" analytics="true">
 
-    <t:pageContent errors="${validationErrors}" page="your-course-details" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" page="page.your-course-details" backLink="${previousPage}">
 
         <t:yesnofield name="beenInEducationSinceClaimDate" />
 

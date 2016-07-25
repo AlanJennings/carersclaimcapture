@@ -6,7 +6,7 @@
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" page="declaration" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" page="page.declaration" backLink="${previousPage}">
         
         <t:yesnofield name="tellUsWhyInformation" />
         

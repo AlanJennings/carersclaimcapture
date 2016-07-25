@@ -12,7 +12,8 @@
 <%@ attribute name="outerClass" %>
 <%@ attribute name="outerStyle" %>
 <%@ attribute name="labelKey" %>
-c<%@ attribute name="hintBeforeKey" %>
+<%@ attribute name="labelKeyArgs" %>
+<%@ attribute name="hintBeforeKey" %>
 <%@ attribute name="hintAfterKey" %>
 
 <%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary" %>

@@ -1,5 +1,6 @@
 package uk.gov.dwp.carersallowance.controller;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import uk.gov.dwp.carersallowance.session.FieldCollection;
 import uk.gov.dwp.carersallowance.session.FieldCollection.FieldCollectionComparator;
@@ -29,11 +29,14 @@ public class BreaksInCareSummaryController extends AbstractFormController {
 
     private static final Logger LOG = LoggerFactory.getLogger(BreaksInCareSummaryController.class);
 
-    private static final String BREAKS_IN_CARE_DETAIL = "/breaks/break";
     private static final String CURRENT_PAGE          = "/breaks/breaks-in-care";
-    private static final String SAVE_EDITED_PAGE      = CURRENT_PAGE + "/update";
-    private static final String EDITING_PAGE          = BREAKS_IN_CARE_DETAIL;
     private static final String PAGE_TITLE            = "Breaks from care - About the person you care for";
+
+    private static final String BREAKS_IN_HOSPITAL    = "/breaks/break-in-hospital";
+    private static final String BREAKS_IN_RESPITE     = "/breaks/break-in-respite-care";
+    private static final String BREAKS_IN_OTHER       = "/breaks/break-somewhere-else";
+
+    private static final String SAVE_EDITED_PAGE      = CURRENT_PAGE + "/update";
 
     private static final String[] FIELDS                = {"moreBreaksInCare"};
     private static final String[] SORTING_FIELDS        = {"startDate_year", "startDate_month", "startDate_day"};
@@ -60,8 +63,22 @@ public class BreaksInCareSummaryController extends AbstractFormController {
             if(Boolean.TRUE.equals(moreBreaksInCare)) {
                 // reset the moreBreaksInCare question
                 request.getSession().removeAttribute("moreBreaksInCare");
-                LOG.debug("redirecting to breaks in care detail page: {}.", BREAKS_IN_CARE_DETAIL);
-                return BREAKS_IN_CARE_DETAIL;
+                String breakType = getRequestValue("moreBreaksInCareResidence", request);
+                LOG.debug("breakType = {}", breakType);
+
+                switch(breakType) {
+                    case "hospital":
+                        LOG.debug("redirecting to breaks in care detail page: {}.", BREAKS_IN_HOSPITAL);
+                        return BREAKS_IN_HOSPITAL;
+                    case "respite":
+                        LOG.debug("redirecting to breaks in care detail page: {}.", BREAKS_IN_RESPITE);
+                        return BREAKS_IN_RESPITE;
+                    case "somewhere else":
+                        LOG.debug("redirecting to breaks in care detail page: {}.", BREAKS_IN_OTHER);
+                        return BREAKS_IN_OTHER;
+                    default:
+                        throw new IllegalArgumentException("Unknown break type: " + breakType + ", expecting one of: 'hospital', 'respite' or 'somewhere else'");
+                }
             }
 
             // sort the breaks here, so they are sorted when we revisit this page, but
@@ -72,8 +89,7 @@ public class BreaksInCareSummaryController extends AbstractFormController {
                 Collections.sort(breaks, comparator);
             }
 
-//            return super.getNextPage(request, YourIncomeController.getIncomePageList(request.getSession()));
-            return super.getNextPage(request);
+            return super.getNextPage(request);  // this will be education
         } finally {
             LOG.trace("Ending BreaksInCareController.getNextPage");
         }
@@ -119,6 +135,7 @@ public class BreaksInCareSummaryController extends AbstractFormController {
             String[] fieldCollectionFields = FieldCollection.aggregateFieldLists(BreakInHospitalController.FIELDS,
                                                                                  BreakInRespiteCareController.FIELDS,
                                                                                  BreakSomewhereElseController.FIELDS);
+            LOG.debug("fieldCollectionFields = {}", Arrays.asList(fieldCollectionFields));
             populateFieldCollectionEntry(session, FIELD_COLLECTION_NAME, fieldCollectionFields, ID_FIELD);
 
             return "redirect:" + getCurrentPage();
@@ -130,44 +147,48 @@ public class BreaksInCareSummaryController extends AbstractFormController {
         }
     }
 
-    /**
-     * TODO probably change this: see {@link EmploymentSummaryController}
-     */
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
     public String postForm(HttpServletRequest request,
-                           @ModelAttribute("changeBreak") String idToChange,
-                           @ModelAttribute("deleteBreak") String idToDelete,
+                           @ModelAttribute("changeEmployment") String idToChange,
+                           @ModelAttribute("deleteEmployment") String idToDelete,
                            HttpSession session,
-                           Model model,
-                           RedirectAttributes redirectAttributes) {
-        LOG.trace("Started BreaksInCareController.postForm");
+                           Model model) {
+        LOG.trace("Started EmploymentSummaryController.postForm");
         try {
             if(StringUtils.isEmpty(idToChange) == false) {
-                return editCareBreak(idToChange, request, model);
+                try {
+                    return editFieldCollectionRecord(request, idToChange, FIELD_COLLECTION_NAME, ID_FIELD);
+                } catch(UnknownRecordException e) {
+                    addFormError(idToChange, "break from care", "Unable to edit item");
+                }
             }
 
             if(StringUtils.isEmpty(idToDelete) == false) {
-                return deleteCareBreak(idToDelete, request, model);
+                try {
+                    return deleteFieldCollectionRecord(idToDelete, request, FIELD_COLLECTION_NAME, ID_FIELD);
+                } catch(UnknownRecordException e) {
+                    addFormError(idToDelete, "break from care", "Unable to delete item");
+                }
             }
 
-            // handling of the "moreBreaksInCare" question is handled in getNextPage()
+            // handling of the "moreEmployment" question is handled in getNextPage()
             return super.postForm(request, session, model);
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
         } finally {
-            LOG.trace("Ending BreaksInCareController.postForm\n");
+            LOG.trace("Ending EmploymentSummaryController.postForm\n");
         }
     }
 
-    public String editCareBreak(String idToChange, HttpServletRequest request, Model model) {
-        Parameters.validateMandatoryArgs(new Object[]{idToChange, request, model}, new String[]{"idToDelete", "request", "model"});
+    protected String editFieldCollectionRecord(HttpServletRequest request, String idToChange, String fieldCollectionName, String idField) {
+        Parameters.validateMandatoryArgs(new Object[]{idToChange, request}, new String[]{"idToChange", "request"});
 
         getValidationSummary().reset();
 
         // copy the record values into the edit fields in the session
-        List<Map<String, String>> records = getFieldCollections(request.getSession(), FIELD_COLLECTION_NAME, true);
-        Map<String, String> record = FieldCollection.getFieldCollection(records, ID_FIELD, idToChange);
+        List<Map<String, String>> records = getFieldCollections(request.getSession(), fieldCollectionName, true);
+        Map<String, String> record = FieldCollection.getFieldCollection(records, idField, idToChange);
         if(record == null) {
             throw new UnknownRecordException("Unknown record id: " + idToChange);
         } else {
@@ -175,41 +196,60 @@ public class BreaksInCareSummaryController extends AbstractFormController {
             copyMapToSession(record, fields, request.getSession());
         }
 
-        return "redirect:" + EDITING_PAGE;
+        return "redirect:" + "need to work out to send to either hospital, respite or other";
     }
 
-    /**
-     * Note: this does not validate the form
-     */
-    public String deleteCareBreak(String idToDelete, HttpServletRequest request, Model model) {
-        LOG.trace("Starting BenefitsController.deleteCareBreak");
-        try {
-            Parameters.validateMandatoryArgs(new Object[]{idToDelete, request, model}, new String[]{"idToDelete", "request", "model"});
 
-            Integer foundIndex = null;
-            List<Map<String, String>> breaks = getFieldCollections(request.getSession(), FIELD_COLLECTION_NAME);
-            for(int index = 0; index < breaks.size(); index++) {
-                Map<String, String> map = breaks.get(index);
-                if(idToDelete.equals(map.get(ID_FIELD))) {
-                    foundIndex = Integer.valueOf(index);
-                    break;
-                }
-            }
-
-            getValidationSummary().reset();
-            model.addAttribute("validationErrors", getValidationSummary());
-
-            if(foundIndex != null) {
-                breaks.remove(foundIndex.intValue());
-            } else {
-                addFormError(idToDelete, "break from care", "Unable to delete item");
-            }
-
-            return showForm(request, model);
-        } finally {
-            LOG.trace("Ending BenefitsController.deleteCareBreak");
-        }
-    }
+//    public String editCareBreak(String idToChange, HttpServletRequest request, Model model) {
+//        Parameters.validateMandatoryArgs(new Object[]{idToChange, request, model}, new String[]{"idToDelete", "request", "model"});
+//
+//        getValidationSummary().reset();
+//
+//        // copy the record values into the edit fields in the session
+//        List<Map<String, String>> records = getFieldCollections(request.getSession(), FIELD_COLLECTION_NAME, true);
+//        Map<String, String> record = FieldCollection.getFieldCollection(records, ID_FIELD, idToChange);
+//        if(record == null) {
+//            throw new UnknownRecordException("Unknown record id: " + idToChange);
+//        } else {
+//            String[] fields = record.keySet().toArray(new String[]{});  // TODO instead of BreakInCareDetailController.FIELDS (?)
+//            copyMapToSession(record, fields, request.getSession());
+//        }
+//
+//        return "redirect:" + EDITING_PAGE;
+//    }
+//
+//    /**
+//     * Note: this does not validate the form
+//     */
+//    public String deleteCareBreak(String idToDelete, HttpServletRequest request, Model model) {
+//        LOG.trace("Starting BenefitsController.deleteCareBreak");
+//        try {
+//            Parameters.validateMandatoryArgs(new Object[]{idToDelete, request, model}, new String[]{"idToDelete", "request", "model"});
+//
+//            Integer foundIndex = null;
+//            List<Map<String, String>> breaks = getFieldCollections(request.getSession(), FIELD_COLLECTION_NAME);
+//            for(int index = 0; index < breaks.size(); index++) {
+//                Map<String, String> map = breaks.get(index);
+//                if(idToDelete.equals(map.get(ID_FIELD))) {
+//                    foundIndex = Integer.valueOf(index);
+//                    break;
+//                }
+//            }
+//
+//            getValidationSummary().reset();
+//            model.addAttribute("validationErrors", getValidationSummary());
+//
+//            if(foundIndex != null) {
+//                breaks.remove(foundIndex.intValue());
+//            } else {
+//                addFormError(idToDelete, "break from care", "Unable to delete item");
+//            }
+//
+//            return showForm(request, model);
+//        } finally {
+//            LOG.trace("Ending BenefitsController.deleteCareBreak");
+//        }
+//    }
 
     /**
      * Might use BindingResult, and spring Validator, not sure yet

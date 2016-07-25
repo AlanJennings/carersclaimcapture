@@ -6,7 +6,7 @@
 
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" page="break-somewhere-else" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" page="page.break-somewhere-else" backLink="${previousPage}">
 
         <t:htmlsection name="breakSomewhereElseIntro">
             <p><t:message code="breakSomewhereElseIntro.text"/></p>

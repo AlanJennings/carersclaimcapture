@@ -33,6 +33,7 @@ public class BreakInHospitalController extends AbstractFormController {
                                            "hospitalBreakCarerHospitalStartDate_day",
                                            "hospitalBreakCarerHospitalStartDate_month",
                                            "hospitalBreakCarerHospitalStartDate_year",
+                                           "hospitalBreakCarerHospitalStayEnded",
                                            "hospitalBreakCarerHospitalEndDate_day",
                                            "hospitalBreakCarerHospitalEndDate_month",
                                            "hospitalBreakCarerHospitalEndDate_year",
@@ -131,7 +132,7 @@ public class BreakInHospitalController extends AbstractFormController {
             }
         }
 
-        validateMandatoryField(fieldValues, "hospitalBreakweeksNotCaring", "Have there been any other weeks you've not provided care for John Smith for 35 hours or more each week");
+        validateMandatoryField(fieldValues, "hospitalBreakWeeksNotCaring", "Have there been any other weeks you've not provided care for John Smith for 35 hours or more each week");
 
         LOG.trace("Ending BenefitsController.validate");
     }

@@ -29,22 +29,15 @@ public class BreakSomewhereElseController extends AbstractFormController {
     private static final String PARENT_PAGE   = "/breaks/breaks-in-care";
     private static final String PAGE_TITLE    = "Break - About the care you provide";
 
-    public static final String   ID_FIELD = "break_id";
-    public static final String[] FIELDS = {ID_FIELD,
-                                            "breakOtherBreakStartDate_day",
-                                            "breakOtherBreakStartDate_month",
-                                            "breakOtherBreakStartDate_year",
-                                            "breakOtherBreakStartTime",
-                                            "breakOtherBreakWhereCaree",
-                                            "breakOtherBreakWhereCareeOtherText",
-                                            "breakOtherBreakWhereYou",
-                                            "breakOtherBreakWhereYouOtherText",
-                                            "breakOtherBreakHasBreakEnded",
-                                            "breakOtherBreakHasBreakEndedDate_day",
-                                            "breakOtherBreakHasBreakEndedDate_month",
-                                            "breakOtherBreakHasBreakEndedDate_year",
-                                            "breakOtherBreakEndTime",
-                                            "breakOtherBreakMedicalCareDuringBreak"};
+    public static final String[] FIELDS = {"careeSomewhereElseStartDate",
+                                           "careeSomewhereElseStartTime",
+                                           "careeSomewhereElseEndedTime",
+                                           "careeSomewhereElseEndDate",
+                                           "careeSomewhereElseEndTime",
+                                           "carerSomewhereElseWhereYou",
+                                           "carerSomewhereElseWhereYouOtherText",
+                                           "carerSomewhereElseWhereCaree",
+                                           "carerSomewhereElseWhereCareeOtherText"};
 
     @Autowired
     public BreakSomewhereElseController(SessionManager sessionManager) {

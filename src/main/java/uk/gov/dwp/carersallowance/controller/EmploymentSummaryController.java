@@ -145,20 +145,15 @@ public class EmploymentSummaryController extends AbstractFormController {
         }
     }
 
+    /**
+     * handle the action choices (edit entry, delete entry or create new entry)
+     */
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
     public String postForm(HttpServletRequest request,
                            @ModelAttribute("changeEmployment") String idToChange,
                            @ModelAttribute("deleteEmployment") String idToDelete,
                            HttpSession session,
                            Model model) {
-
-        return postFormFieldCollection(request, idToChange, idToDelete, session, model);
-    }
-
-    /**
-     * handle the action choices (edit entry, delete entry or create new entry)
-     */
-    protected String postFormFieldCollection(HttpServletRequest request, String idToChange, String idToDelete, HttpSession session, Model model) {
         LOG.trace("Started EmploymentSummaryController.postForm");
         try {
             if(StringUtils.isEmpty(idToChange) == false) {
