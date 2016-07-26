@@ -29,10 +29,16 @@ public class BreakSomewhereElseController extends AbstractFormController {
     private static final String PARENT_PAGE   = "/breaks/breaks-in-care";
     private static final String PAGE_TITLE    = "Break - About the care you provide";
 
-    public static final String[] FIELDS = {"careeSomewhereElseStartDate",
+    public static final String[] SHARED_FIELDS = {"break_id", "breakInCareType"};
+
+    public static final String[] FIELDS = {"careeSomewhereElseStartDate_day",
+                                           "careeSomewhereElseStartDate_month",
+                                           "careeSomewhereElseStartDate_year",
                                            "careeSomewhereElseStartTime",
                                            "careeSomewhereElseEndedTime",
-                                           "careeSomewhereElseEndDate",
+                                           "careeSomewhereElseEndDate_day",
+                                           "careeSomewhereElseEndDate_month",
+                                           "careeSomewhereElseEndDate_year",
                                            "careeSomewhereElseEndTime",
                                            "carerSomewhereElseWhereYou",
                                            "carerSomewhereElseWhereYouOtherText",
@@ -57,6 +63,11 @@ public class BreakSomewhereElseController extends AbstractFormController {
     @Override
     public String getPreviousPage(HttpServletRequest request) {
         return PARENT_PAGE;
+    }
+
+    @Override
+    public String[] getSharedFields() {
+        return SHARED_FIELDS;
     }
 
     @Override
@@ -95,25 +106,22 @@ public class BreakSomewhereElseController extends AbstractFormController {
      */
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
-//TODO
-//        validateMandatoryDateField(fieldValues, "When did the break start?", "breakStartDate", new String[]{"breakStartDate_day", "breakStartDate_month", "breakStartDate_year"});
-//        validateMandatoryField(fieldValues, "breakWhereCaree", "Where was the person you care for during the break?");
-//        validateMandatoryField(fieldValues, "breakWhereYou", "Where were you during the break?");
-//        validateMandatoryField(fieldValues, "breakHasBreakEnded", "Has this break ended?");
-//
-//        if(fieldValue_Equals(fieldValues, "breakHasBreakEnded", "yes")) {
-//            validateMandatoryDateField(fieldValues, "When did the break end?", "breakHasBreakEndedDate", new String[]{"breakHasBreakEndedDate_day", "breakHasBreakEndedDate_month", "breakHasBreakEndedDate_year"});
-//        }
-//
-//        if(fieldValue_Equals(fieldValues, "breakWhereCaree", "somewhere else")) {
-//            validateMandatoryField(fieldValues, "breakWhereCareeOtherText", "Where was the person you care for during the break?");
-//        }
-//
-//        if(fieldValue_Equals(fieldValues, "breakWhereYou", "somewhere else")) {
-//            validateMandatoryField(fieldValues, "breakWhereYouOtherText", "Where were you during the break?");
-//        }
-//
-//        validateMandatoryField(fieldValues, "breakMedicalCareDuringBreak", "Did you or the person you care for get any medical treatment or professional care during this time?");
+
+        validateMandatoryDateField(fieldValues, "careeSomewhereElseStartDate", "When did the break start?");
+        validateMandatoryField(fieldValues, "careeSomewhereElseEndedTime", "Have you started providing care again?");
+        if(fieldValue_Equals(fieldValues, "careeSomewhereElseEndedTime", "yes")) {
+            validateMandatoryDateField(fieldValues, "careeSomewhereElseEndDate", "Date Started");
+        }
+
+        validateMandatoryField(fieldValues, "carerSomewhereElseWhereYou", "Where were you during this time?");
+        if(fieldValue_Equals(fieldValues, "carerSomewhereElseWhereYou", "elsewhere")) {
+            validateMandatoryField(fieldValues, "carerSomewhereElseWhereYouOtherText", "Tell us where");
+        }
+
+        validateMandatoryField(fieldValues, "carerSomewhereElseWhereCaree", "Where was the person you care for during the break?");
+        if(fieldValue_Equals(fieldValues, "carerSomewhereElseWhereCaree", "elsewhere")) {
+            validateMandatoryField(fieldValues, "carerSomewhereElseWhereCareeOtherText", "Tell us where");
+        }
 
         LOG.trace("Ending BenefitsController.validate");
     }

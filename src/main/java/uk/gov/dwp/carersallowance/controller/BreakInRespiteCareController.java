@@ -29,24 +29,26 @@ public class BreakInRespiteCareController extends AbstractFormController {
     private static final String PARENT_PAGE   = "/breaks/breaks-in-care";
     private static final String PAGE_TITLE    = "Break - About the care you provide";
 
-    public static final String[] FIELDS = {"respiteBreakWhoInHospital",
-                                           "respiteBreakCarerHospitalStartDate_day",
-                                           "respiteBreakCarerHospitalStartDate_month",
-                                           "respiteBreakCarerHospitalStartDate_year",
-                                           "respiteBreakCarerHospitalEndDate_day",
-                                           "respiteBreakCarerHospitalEndDate_month",
-                                           "respiteBreakCarerHospitalEndDate_year",
-                                           "respiteBreakCarerInHospitalCareeLocation",
-                                           "respiteBreakCarerInHospitalCareeLocationText",
-                                           "respiteBreakCareeHospitalStartDate_day",
-                                           "respiteBreakCareeHospitalStartDate_month",
-                                           "respiteBreakCareeHospitalStartDate_year",
-                                           "respiteBreakCareeHospitalStayEnded",
-                                           "respiteBreakCareeHospitalEndDate_day",
-                                           "respiteBreakCareeHospitalEndDate_month",
-                                           "respiteBreakCareeHospitalEndDate_year",
-                                           "respiteBreakCareeHospitalCarerStillCaring",
-                                           "respiteBreakWeeksNotCaring" };
+    public static final String[] SHARED_FIELDS = {"break_id", "breakInCareType"};
+
+    public static final String[] FIELDS = {"respiteBreakWhoInRespite",
+                                           "respiteBreakCarerRespiteStartDate_day",
+                                           "respiteBreakCarerRespiteStartDate_month",
+                                           "respiteBreakCarerRespiteStartDate_year",
+                                           "respiteBreakCarerRespiteStayEnded",
+                                           "respiteBreakCarerRespiteEndDate_day",
+                                           "respiteBreakCarerRespiteEndDate_month",
+                                           "respiteBreakCarerRespiteEndDate_year",
+                                           "respiteBreakCarerRespiteStayMedicalCare",
+                                           "respiteBreakCareeRespiteStartDate_day",
+                                           "respiteBreakCareeRespiteStartDate_month",
+                                           "respiteBreakCareeRespiteStartDate_year",
+                                           "respiteBreakCareeRespiteStayEnded",
+                                           "respiteBreakCareeRespiteEndDate_day",
+                                           "respiteBreakCareeRespiteEndDate_month",
+                                           "respiteBreakCareeRespiteEndDate_year",
+                                           "respiteBreakCareeRespiteStayMedicalCare",
+                                           "respiteBreakCareeRespiteCarerStillCaring" };
 
     @Autowired
     public BreakInRespiteCareController(SessionManager sessionManager) {
@@ -66,6 +68,11 @@ public class BreakInRespiteCareController extends AbstractFormController {
     @Override
     public String getPreviousPage(HttpServletRequest request) {
         return PARENT_PAGE;
+    }
+
+    @Override
+    public String[] getSharedFields() {
+        return SHARED_FIELDS;
     }
 
     @Override
@@ -105,25 +112,27 @@ public class BreakInRespiteCareController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-//        TODO
-//        validateMandatoryDateField(fieldValues, "When did the break start?", "respiteBreakBreakStartDate", new String[]{"respiteBreakBreakStartDate_day", "respiteBreakBreakStartDate_month", "respiteBreakBreakStartDate_year"});
-//        validateMandatoryField(fieldValues, "respiteBreakBreakWhereCaree", "Where was the person you care for during the break?");
-//        validateMandatoryField(fieldValues, "respiteBreakBreakWhereYou", "Where were you during the break?");
-//        validateMandatoryField(fieldValues, "respiteBreakBreakHasBreakEnded", "Has this break ended?");
-//
-//        if(fieldValue_Equals(fieldValues, "respiteBreakBreakHasBreakEnded", "yes")) {
-//            validateMandatoryDateField(fieldValues, "When did the break end?", "respiteBreakBreakHasBreakEndedDate", new String[]{"respiteBreakBreakHasBreakEndedDate_day", "respiteBreakBreakHasBreakEndedDate_month", "respiteBreakBreakHasBreakEndedDate_year"});
-//        }
-//
-//        if(fieldValue_Equals(fieldValues, "respiteBreakBreakWhereCaree", "somewhere else")) {
-//            validateMandatoryField(fieldValues, "respiteBreakBreakWhereCareeOtherText", "Where was the person you care for during the break?");
-//        }
-//
-//        if(fieldValue_Equals(fieldValues, "respiteBreakBreakWhereYou", "somewhere else")) {
-//            validateMandatoryField(fieldValues, "respiteBreakBreakWhereYouOtherText", "Where were you during the break?");
-//        }
-//
-//        validateMandatoryField(fieldValues, "respiteBreakBreakMedicalCareDuringBreak", "Did you or the person you care for get any medical treatment or professional care during this time?");
+        validateMandatoryField(fieldValues, "respiteBreakWhoInRespite", "Who was in respite care or a care home");
+        if(fieldValue_Equals(fieldValues, "respiteBreakWhoInRespite", "Carer")) {
+            validateMandatoryDateField(fieldValues, "respiteBreakCarerRespiteStartDate", "When were you admitted?");
+            validateMandatoryField(fieldValues, "respiteBreakCarerRespiteStayEnded", "Has the respite or care home stay ended");
+
+            if(fieldValue_Equals(fieldValues, "respiteBreakCarerRespiteStayEnded", "yes")) {
+                validateMandatoryDateField(fieldValues, "respiteBreakCarerRespiteEndDate", "When did your respite or care home stay end?");
+                validateMandatoryField(fieldValues, "respiteBreakCarerRespiteStayMedicalCare", "Did you or the person being looked after receive care from a medical professional during this time?");
+            }
+        }
+
+        if(fieldValue_Equals(fieldValues, "respiteBreakWhoInRespite", "Caree")) {
+            validateMandatoryDateField(fieldValues, "respiteBreakCareeRespiteStartDate", "When were they admitted?");
+            validateMandatoryField(fieldValues, "respiteBreakCareeRespiteStayEnded", "Has the respite or care home stay ended");
+
+            if(fieldValue_Equals(fieldValues, "respiteBreakCareeRespiteStayEnded", "yes")) {
+                validateMandatoryDateField(fieldValues, "respiteBreakCareeRespiteEndDate", "When did their respite or care home stay end?");
+                validateMandatoryField(fieldValues, "respiteBreakCareeRespiteStayMedicalCare", "Did you or the person being looked after receive care from a medical professional during this time?");
+                validateMandatoryField(fieldValues, "respiteBreakCareeRespiteCarerStillCaring", "During this time in respite or a care home, were you still providing care for John Smith for 35 hours a week?");
+            }
+        }
 
         LOG.trace("Ending BenefitsController.validate");
     }

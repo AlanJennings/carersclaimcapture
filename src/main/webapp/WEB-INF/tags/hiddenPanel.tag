@@ -7,9 +7,11 @@
 <%@ attribute name="triggerId" %>
 <%@ attribute name="triggerValue" %>
 <%@ attribute name="outerClass" %>
+<%@ attribute name="clearOnHide" %>
 
 <script type="text/javascript" src="<c:url value='/assets/javascript/hiddenPanel.js' />" ></script>
 
+<t:defaultValue value="${pageScope.clearOnHide}" defaultValue="true" var="clearOnHide" />
 <t:defaultValue value="${pageScope.outerClass}" defaultValue="form-group" var="outerClass" />
 
 <%-- 
@@ -24,7 +26,7 @@
 
 <c:if test="${(not empty pageScope.triggerId) && (not empty pageScope.triggerValue)}" >
     <script type="text/javascript">
-        window.initPanelState("${pageScope.id}", "${pageScope.triggerId}", "${pageScope.triggerValue}");
-        window.initPanelEvents("${pageScope.id}", "${pageScope.triggerId}", "${pageScope.triggerValue}");
+        window.initPanelState("${pageScope.id}", "${pageScope.triggerId}", "${pageScope.triggerValue}", "${clearOnHide}");
+        window.initPanelEvents("${pageScope.id}", "${pageScope.triggerId}", "${pageScope.triggerValue}", "${clearOnHide}");
     </script>
 </c:if>

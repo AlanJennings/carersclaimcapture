@@ -7,6 +7,8 @@
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" page="page.break-in-hospital" backLink="${previousPage}">
+        <input type="hidden" name="break_id" value="${break_id}" >
+        <input type="hidden" name="breakInCareType" value="hospital" >
 
         <t:htmlsection name="breakInHospitalIntro">
             <p>You told us that you or the person you care for have been in hospital.  You could still be paid Carer's Allowance for this time</p>
@@ -20,17 +22,7 @@
             <t:yesnofield name="hospitalBreakCarerHospitalStayEnded" />
 
             <t:hiddenPanel id="hospitalBreakCarerHospitalStayEndedWrap" triggerId="hospitalBreakCarerHospitalStayEnded" triggerValue="yes">
-
                 <t:datefield name="hospitalBreakCarerHospitalEndDate" />
-                <t:radiobuttons name="hospitalBreakCarerInHospitalCareeLocation" 
-                                optionValues="In hospital|In respite care|Somewhere else" 
-                                optionLabelKeys="hospital|respite|elsewhere" 
-                                labelKeyArgs="${careeFirstName} ${careeSurname}"/>
-
-                <t:hiddenPanel id="hospitalBreakCarerInHospitalCareeLocationWrap" triggerId="hospitalBreakCarerInHospitalCareeLocation" triggerValue="Somewhere else">
-                    <t:textedit name="hospitalBreakCarerInHospitalCareeLocationText" maxLength="30" />
-                </t:hiddenPanel>
-
             </t:hiddenPanel>
 
         </t:hiddenPanel>
@@ -43,14 +35,12 @@
             <t:hiddenPanel id="hospitalBreakCareeHospitalStayEndedWrap" triggerId="hospitalBreakCareeHospitalStayEnded" triggerValue="yes">
 
                 <t:datefield name="hospitalBreakCareeHospitalEndDate" />
-                <t:yesnofield name="hospitalBreakCareeHospitalCarerStillCaring" />
+                <t:yesnofield name="hospitalBreakCareeHospitalCarerStillCaring" labelKeyArgs="${careeFirstName} ${careeSurname}"/>
 
             </t:hiddenPanel>
             
         </t:hiddenPanel>
        
-        <t:yesnofield name="hospitalBreakWeeksNotCaring" labelKeyArgs="${careeFirstName} ${careeSurname}" />
-        
     </t:pageContent>
 
 </t:mainPage>    

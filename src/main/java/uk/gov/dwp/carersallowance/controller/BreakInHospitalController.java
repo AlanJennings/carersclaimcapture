@@ -29,6 +29,8 @@ public class BreakInHospitalController extends AbstractFormController {
     private static final String PARENT_PAGE   = "/breaks/breaks-in-care";
     private static final String PAGE_TITLE    = "Break - About the care you provide";
 
+    public static final String[] SHARED_FIELDS = {"break_id", "breakInCareType"};
+
     public static final String[] FIELDS = {"hospitalBreakWhoInHospital",
                                            "hospitalBreakCarerHospitalStartDate_day",
                                            "hospitalBreakCarerHospitalStartDate_month",
@@ -37,8 +39,6 @@ public class BreakInHospitalController extends AbstractFormController {
                                            "hospitalBreakCarerHospitalEndDate_day",
                                            "hospitalBreakCarerHospitalEndDate_month",
                                            "hospitalBreakCarerHospitalEndDate_year",
-                                           "hospitalBreakCarerInHospitalCareeLocation",
-                                           "hospitalBreakCarerInHospitalCareeLocationText",
                                            "hospitalBreakCareeHospitalStartDate_day",
                                            "hospitalBreakCareeHospitalStartDate_month",
                                            "hospitalBreakCareeHospitalStartDate_year",
@@ -46,9 +46,7 @@ public class BreakInHospitalController extends AbstractFormController {
                                            "hospitalBreakCareeHospitalEndDate_day",
                                            "hospitalBreakCareeHospitalEndDate_month",
                                            "hospitalBreakCareeHospitalEndDate_year",
-                                           "hospitalBreakCareeHospitalCarerStillCaring",
-                                           "hospitalBreakWeeksNotCaring" };
-
+                                           "hospitalBreakCareeHospitalCarerStillCaring"};
     @Autowired
     public BreakInHospitalController(SessionManager sessionManager) {
         super(sessionManager);
@@ -67,6 +65,11 @@ public class BreakInHospitalController extends AbstractFormController {
     @Override
     public String getPreviousPage(HttpServletRequest request) {
         return PARENT_PAGE;
+    }
+
+    @Override
+    public String[] getSharedFields() {
+        return SHARED_FIELDS;
     }
 
     @Override
@@ -109,30 +112,23 @@ public class BreakInHospitalController extends AbstractFormController {
         validateMandatoryField(fieldValues, "hospitalBreakWhoInHospital", "Who was in hospital?");
 
         if(fieldValue_Equals(fieldValues, "hospitalBreakWhoInHospital", "Carer")) {
-            validateMandatoryDateField(fieldValues, "When were you admitted?", "hospitalBreakCarerHospitalStartDate", new String[]{"hospitalBreakCarerHospitalStartDate_day", "hospitalBreakCarerHospitalStartDate_month", "hospitalBreakCarerHospitalStartDate_year"});
+            validateMandatoryDateField(fieldValues, "hospitalBreakCarerHospitalStartDate", "When were you admitted?");
             validateMandatoryField(fieldValues, "hospitalBreakCarerHospitalStayEnded", "Has the hospital stay ended?");
 
             if(fieldValue_Equals(fieldValues, "hospitalBreakCarerHospitalStayEnded", "yes")) {
-                validateMandatoryDateField(fieldValues, "When did your hospital stay end?", "hospitalBreakCarerHospitalEndDate", new String[]{"hospitalBreakCarerHospitalEndDate_day", "hospitalBreakCarerHospitalEndDate_month", "hospitalBreakCarerHospitalEndDate_year"});
-                validateMandatoryField(fieldValues, "hospitalBreakCarerInHospitalCareeLocation", "Where was John Smith during this break?");
-
-                if(fieldValue_Equals(fieldValues, "hospitalBreakCarerInHospitalCareeLocation", "Somewhere else")) {
-                    validateMandatoryField(fieldValues, "hospitalBreakCarerInHospitalCareeLocationText", "Where was John Smith during this break?");
-                }
+                validateMandatoryDateField(fieldValues, "hospitalBreakCarerHospitalEndDate", "When did your hospital stay end?");
             }
         }
 
         if(fieldValue_Equals(fieldValues, "hospitalBreakWhoInHospital", "Caree")) {
-            validateMandatoryDateField(fieldValues, "When were they admitted?", "hospitalBreakCareeHospitalStartDate", new String[]{"hospitalBreakCareeHospitalStartDate_day", "hospitalBreakCareeHospitalStartDate_month", "hospitalBreakCareeHospitalStartDate_year"});
+            validateMandatoryDateField(fieldValues, "hospitalBreakCareeHospitalStartDate", "When were they admitted?");
             validateMandatoryField(fieldValues, "hospitalBreakCareeHospitalStayEnded", "Has the hospital stay ended?");
 
             if(fieldValue_Equals(fieldValues, "hospitalBreakCareeHospitalStayEnded", "yes")) {
-                validateMandatoryDateField(fieldValues, "When did their hospital stay end?", "hospitalBreakCareeHospitalEndDate", new String[]{"hospitalBreakCareeHospitalEndDate_day", "hospitalBreakCareeHospitalEndDate_month", "hospitalBreakCareeHospitalEndDate_year"});
+                validateMandatoryDateField(fieldValues, "hospitalBreakCareeHospitalEndDate", "When did their hospital stay end?");
                 validateMandatoryField(fieldValues, "hospitalBreakCareeHospitalCarerStillCaring", "During this time in hospital were you still providing care for John Smith for 35 hours a week?");
             }
         }
-
-        validateMandatoryField(fieldValues, "hospitalBreakWeeksNotCaring", "Have there been any other weeks you've not provided care for John Smith for 35 hours or more each week");
 
         LOG.trace("Ending BenefitsController.validate");
     }

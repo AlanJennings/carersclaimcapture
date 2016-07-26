@@ -97,6 +97,10 @@ public abstract class AbstractFormController {
     public Session           getSession(String sessionId)   { return sessionManager.getSession(sessionId); }
     public ValidationSummary getValidationSummary()         { return validationSummary; }
 
+    public String[] getSharedFields() {
+        return null;
+    }
+
     public String[] getReadOnlyFields() {
         return null;
     }
@@ -150,6 +154,7 @@ public abstract class AbstractFormController {
             model.addAttribute("pageTitle", getPageTitle());
 
             copyFromSessionToModel(request, getFields(), model);
+            copyFromSessionToModel(request, getSharedFields(), model);
             copyFromSessionToModel(request, getReadOnlyFields(), model);
 
             return getCurrentPage();        // returns the view name
@@ -190,6 +195,7 @@ public abstract class AbstractFormController {
             LOG.debug("request.getParameterMap() = {}", request.getParameterMap());
 
             copyFromRequestToSession(request, getFields());
+            copyFromRequestToSession(request, getSharedFields());
 
             getValidationSummary().reset();
             validate(request.getParameterMap(), getFields());
@@ -197,6 +203,7 @@ public abstract class AbstractFormController {
             if(hasErrors()) {
                 LOG.info("there are validation errors, re-showing form");
                 copyFromRequestToModel(request, getFields(), model);
+                copyFromRequestToModel(request, getSharedFields(), model);
                 model.addAttribute("validationErrors", getValidationSummary());
                 return showForm(request, model);
             }
@@ -332,6 +339,19 @@ public abstract class AbstractFormController {
         }
     }
 
+    protected void validateMandatoryDateField(Map<String, String[]> allfieldValues, String id, String fieldTitle) {
+        LOG.trace("Started AbstractFormController.validateMandatoryDateField");
+        Parameters.validateMandatoryArgs(new Object[]{allfieldValues, id, fieldTitle}, new String[]{"allfieldValues", "id", "fieldTitle"});
+
+        String[] dateFieldNames = new String[]{id + "_day", id + "_month", id + "_year"};
+        validateMandatoryDateField(allfieldValues, fieldTitle, id, dateFieldNames);
+
+        LOG.trace("Ending AbstractFormController.validateMandatoryDateField");
+    }
+
+    /**
+     * @deprecated use {@link AbstractFormController#validateMandatoryDateField}
+     */
     protected void validateMandatoryDateField(Map<String, String[]> allfieldValues, String fieldTitle, String id, String[] dateFieldNames) {
         LOG.trace("Started AbstractFormController.validateMandatoryDateField");
         Parameters.validateMandatoryArgs(new Object[]{allfieldValues, id, dateFieldNames, fieldTitle}, new String[]{"allfieldValues", "id", "dateFieldNames", "fieldTitle"});
@@ -698,14 +718,17 @@ public abstract class AbstractFormController {
             }
 
             Object value = session.getAttribute(collectionName);
-            LOG.debug("value = {}", value);
-            if(value == null) {
+            if(value != null) {
+                LOG.debug("found collection({}) = {}", collectionName, value);
+            } else {
+                LOG.debug("No collection found");
                 if(create) {
                     LOG.debug("Creating new Field Collection");
                     List<Map<String, String>>newFieldCollection = new ArrayList<>();
                     session.setAttribute(collectionName,  newFieldCollection);
                     return newFieldCollection;
                 } else {
+                    LOG.debug("returning null");
                     return null;
                 }
             }
@@ -892,8 +915,9 @@ public abstract class AbstractFormController {
             List<Map<String, String>> fieldCollection = getFieldCollections(session, fieldCollectionName, true);
             LOG.debug("fieldCollection before = {}", fieldCollection);
 
-            // get the current fieldCollection values from the request
+            // get ALL field values from the session
             Map<String, String[]> attributes = getSessionStringAttributes(session);
+            // and filter them to only these keys we are interested in
             Map<String, String> record = FieldCollection.getFieldValues(attributes, fields);
             LOG.debug("record = {}", record);
 
@@ -910,7 +934,7 @@ public abstract class AbstractFormController {
                 fieldCollection.add(record);
 
             // if there is a current recordId, then we are editing an existing record, iterate over the
-            // existing records and match the recordId on match update the existing record, IF the record
+            // existing records and match the recordId. On match, update the existing record, IF the record
             // ids cannot be matched log and error and throw an exception
             } else {
                 boolean existingRecordFound = false;
@@ -935,7 +959,7 @@ public abstract class AbstractFormController {
             LOG.debug("fieldCollection after = {}", fieldCollection);
             LOG.debug("getFieldCollections('<fieldCollectionName>') = {}", getFieldCollections(session, fieldCollectionName, false));
 
-            // remove the item data from the session
+            // clean up the session by removing the individual field values for the item create/edit screens
             removeFromSession(session, fields);
 
         } finally {
@@ -1040,6 +1064,11 @@ public abstract class AbstractFormController {
         return argumentValue;
     }
 
+    /**
+     * Get the session attributes as if they were a request parameter map, i.e.
+     * return those that have String or String[] values along with their keys in a map.
+     * @return return a map of values or null if session is null
+     */
     public static Map<String, String[]> getSessionStringAttributes(HttpSession session) {
         if(session == null) {
             return null;

@@ -27,6 +27,8 @@ import uk.gov.dwp.carersallowance.utils.Parameters;
 @Controller
 public class BreaksInCareSummaryController extends AbstractFormController {
 
+    private static final String BREAK_IN_CARE_TYPE = "breakInCareType";
+
     private static final Logger LOG = LoggerFactory.getLogger(BreaksInCareSummaryController.class);
 
     private static final String CURRENT_PAGE          = "/breaks/breaks-in-care";
@@ -38,6 +40,8 @@ public class BreaksInCareSummaryController extends AbstractFormController {
 
     private static final String SAVE_EDITED_PAGE      = CURRENT_PAGE + "/update";
 
+
+    private static final String[] READONLY_FIELDS       = {"carerFirstName", "carerSurname", "careeFirstName", "careeSurname"};
     private static final String[] FIELDS                = {"moreBreaksInCare"};
     private static final String[] SORTING_FIELDS        = {"startDate_year", "startDate_month", "startDate_day"};
 
@@ -96,6 +100,11 @@ public class BreaksInCareSummaryController extends AbstractFormController {
     }
 
     @Override
+    public String[] getReadOnlyFields() {
+        return READONLY_FIELDS;
+    }
+
+    @Override
     public String[] getFields() {
         return FIELDS;
     }
@@ -132,9 +141,8 @@ public class BreaksInCareSummaryController extends AbstractFormController {
     public String saveFieldCollection(HttpServletRequest request, HttpSession session, Model model) {
         LOG.trace("Started BreaksInCareController.saveFieldCollection");
         try {
-            String[] fieldCollectionFields = FieldCollection.aggregateFieldLists(BreakInHospitalController.FIELDS,
-                                                                                 BreakInRespiteCareController.FIELDS,
-                                                                                 BreakSomewhereElseController.FIELDS);
+            // put the type in the session (so we can get it back)
+            String[] fieldCollectionFields = getFieldCollectionFields();
             LOG.debug("fieldCollectionFields = {}", Arrays.asList(fieldCollectionFields));
             populateFieldCollectionEntry(session, FIELD_COLLECTION_NAME, fieldCollectionFields, ID_FIELD);
 
@@ -147,10 +155,18 @@ public class BreaksInCareSummaryController extends AbstractFormController {
         }
     }
 
+    private String[] getFieldCollectionFields() {
+        String[] fieldCollectionFields = FieldCollection.aggregateFieldLists(new String[]{ID_FIELD, BREAK_IN_CARE_TYPE},
+                                                                             BreakInHospitalController.FIELDS,
+                                                                             BreakInRespiteCareController.FIELDS,
+                                                                             BreakSomewhereElseController.FIELDS);
+        return fieldCollectionFields;
+    }
+
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
     public String postForm(HttpServletRequest request,
-                           @ModelAttribute("changeEmployment") String idToChange,
-                           @ModelAttribute("deleteEmployment") String idToDelete,
+                           @ModelAttribute("changeBreak") String idToChange,
+                           @ModelAttribute("deleteBreak") String idToDelete,
                            HttpSession session,
                            Model model) {
         LOG.trace("Started EmploymentSummaryController.postForm");
@@ -192,11 +208,27 @@ public class BreaksInCareSummaryController extends AbstractFormController {
         if(record == null) {
             throw new UnknownRecordException("Unknown record id: " + idToChange);
         } else {
-            String[] fields = record.keySet().toArray(new String[]{});  // TODO instead of BreakInCareDetailController.FIELDS (?)
-            copyMapToSession(record, fields, request.getSession());
+            LOG.debug("found record, for id: {}", idToChange);
+//            String[] fields = record.keySet().toArray(new String[]{});  // TODO instead of BreakInCareDetailController.FIELDS (?)
+            copyMapToSession(record, getFieldCollectionFields(), request.getSession());
         }
 
-        return "redirect:" + "need to work out to send to either hospital, respite or other";
+        String breakType = record.get(BREAK_IN_CARE_TYPE);
+        LOG.debug("breakType = {}", breakType);
+
+        switch(breakType) {
+            case "hospital":
+                LOG.debug("redirecting to breaks in care detail page: {}.", BREAKS_IN_HOSPITAL);
+                return "redirect:" + BREAKS_IN_HOSPITAL;
+            case "respite":
+                LOG.debug("redirecting to breaks in care detail page: {}.", BREAKS_IN_RESPITE);
+                return "redirect:" + BREAKS_IN_RESPITE;
+            case "elsewhere":
+                LOG.debug("redirecting to breaks in care detail page: {}.", BREAKS_IN_OTHER);
+                return "redirect:" + BREAKS_IN_OTHER;
+            default:
+                throw new IllegalArgumentException("Unknown break type: " + breakType + ", expecting one of: 'hospital', 'respite' or 'elsewhere'");
+        }
     }
 
 
@@ -218,39 +250,6 @@ public class BreaksInCareSummaryController extends AbstractFormController {
 //        return "redirect:" + EDITING_PAGE;
 //    }
 //
-//    /**
-//     * Note: this does not validate the form
-//     */
-//    public String deleteCareBreak(String idToDelete, HttpServletRequest request, Model model) {
-//        LOG.trace("Starting BenefitsController.deleteCareBreak");
-//        try {
-//            Parameters.validateMandatoryArgs(new Object[]{idToDelete, request, model}, new String[]{"idToDelete", "request", "model"});
-//
-//            Integer foundIndex = null;
-//            List<Map<String, String>> breaks = getFieldCollections(request.getSession(), FIELD_COLLECTION_NAME);
-//            for(int index = 0; index < breaks.size(); index++) {
-//                Map<String, String> map = breaks.get(index);
-//                if(idToDelete.equals(map.get(ID_FIELD))) {
-//                    foundIndex = Integer.valueOf(index);
-//                    break;
-//                }
-//            }
-//
-//            getValidationSummary().reset();
-//            model.addAttribute("validationErrors", getValidationSummary());
-//
-//            if(foundIndex != null) {
-//                breaks.remove(foundIndex.intValue());
-//            } else {
-//                addFormError(idToDelete, "break from care", "Unable to delete item");
-//            }
-//
-//            return showForm(request, model);
-//        } finally {
-//            LOG.trace("Ending BenefitsController.deleteCareBreak");
-//        }
-//    }
-
     /**
      * Might use BindingResult, and spring Validator, not sure yet
      * don't want to perform type conversion prior to controller as we have no control

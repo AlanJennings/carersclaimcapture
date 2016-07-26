@@ -7,19 +7,21 @@
 <t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" page="page.break-in-respite-care" backLink="${previousPage}">
-
+        <input type="hidden" name="break_id" value="${break_id}" >
+        <input type="hidden" name="breakInCareType" value="respite" >
+        
         <t:htmlsection name="breakInRespiteIntro">
             <p><t:message code="breakInRespiteIntro.text"/></p>
         </t:htmlsection>
 
         <t:radiobuttons name="respiteBreakWhoInRespite" optionValues="Carer|Caree" />
-
+        
         <t:hiddenPanel id="respiteBreakWhoInRespiteWrapCarer" triggerId="respiteBreakWhoInRespite" triggerValue="Carer">
 
             <t:datefield name="respiteBreakCarerRespiteStartDate" />
             <t:yesnofield name="respiteBreakCarerRespiteStayEnded" />
 
-            <t:hiddenPanel id="respiteBreakCarerRespiteStayEnded" triggerId="respiteBreakCarerRespiteStayEnded" triggerValue="You">
+            <t:hiddenPanel id="respiteBreakCarerRespiteStayEndedWrap" triggerId="respiteBreakCarerRespiteStayEnded" triggerValue="yes">
                 <t:datefield name="respiteBreakCarerRespiteEndDate" />
                 <t:yesnofield name="respiteBreakCarerRespiteStayMedicalCare" />
             </t:hiddenPanel>
@@ -31,15 +33,13 @@
             <t:datefield name="respiteBreakCareeRespiteStartDate" />
             <t:yesnofield name="respiteBreakCareeRespiteStayEnded" />
 
-            <t:hiddenPanel id="respiteBreakCareeRespiteStayEnded" triggerId="respiteBreakCareeRespiteStayEnded" triggerValue="You">
+            <t:hiddenPanel id="respiteBreakCareeRespiteStayEndedWrap" triggerId="respiteBreakCareeRespiteStayEnded" triggerValue="yes">
                 <t:datefield name="respiteBreakCareeRespiteEndDate" />
                 <t:yesnofield name="respiteBreakCareeRespiteStayMedicalCare" />
                 <t:yesnofield name="respiteBreakCareeRespiteCarerStillCaring" />
             </t:hiddenPanel>
 
         </t:hiddenPanel>
-
-        <t:yesnofield name="respiteBreakWeeksNotCaring" />
 
     </t:pageContent>
 
