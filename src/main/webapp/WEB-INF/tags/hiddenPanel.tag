@@ -18,7 +18,7 @@
     The default for a hidden panel should be block, so that it shows for JavaScript disabled browsers
     the JavaScript then initially hides the panel before any trigger events occur 
 --%>
-<li id="${pageScope.id}" class="${pageScope.outerClass}" aria-hidden="false" style="display: block;" >
+<li data-tag-type="hiddenPanel" id="${pageScope.id}" class="${pageScope.outerClass}" aria-hidden="false" style="display: block;" >
     <ul class="extra-group">
         <jsp:doBody/>
     </ul>

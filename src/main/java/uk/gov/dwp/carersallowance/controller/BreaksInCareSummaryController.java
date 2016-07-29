@@ -231,25 +231,6 @@ public class BreaksInCareSummaryController extends AbstractFormController {
         }
     }
 
-
-//    public String editCareBreak(String idToChange, HttpServletRequest request, Model model) {
-//        Parameters.validateMandatoryArgs(new Object[]{idToChange, request, model}, new String[]{"idToDelete", "request", "model"});
-//
-//        getValidationSummary().reset();
-//
-//        // copy the record values into the edit fields in the session
-//        List<Map<String, String>> records = getFieldCollections(request.getSession(), FIELD_COLLECTION_NAME, true);
-//        Map<String, String> record = FieldCollection.getFieldCollection(records, ID_FIELD, idToChange);
-//        if(record == null) {
-//            throw new UnknownRecordException("Unknown record id: " + idToChange);
-//        } else {
-//            String[] fields = record.keySet().toArray(new String[]{});  // TODO instead of BreakInCareDetailController.FIELDS (?)
-//            copyMapToSession(record, fields, request.getSession());
-//        }
-//
-//        return "redirect:" + EDITING_PAGE;
-//    }
-//
     /**
      * Might use BindingResult, and spring Validator, not sure yet
      * don't want to perform type conversion prior to controller as we have no control

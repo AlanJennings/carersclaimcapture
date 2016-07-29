@@ -13,7 +13,8 @@
 
 <%@ attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
 
-<t:component name="${pageScope.name}" 
+<t:component tagType="group"
+             name="${pageScope.name}" 
              outerClass="${pageScope.outerClass}" 
              outerStyle="${pageScope.outerStyle}" 
              errors="${pageScope.errors}">

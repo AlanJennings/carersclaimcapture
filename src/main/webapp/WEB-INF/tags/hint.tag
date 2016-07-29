@@ -2,10 +2,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<%@ attribute name="hintText" required="false" type="java.lang.String"%>
-<%@ attribute name="hintTextKey" required="false" type="java.lang.String"%>
-<%@ attribute name="parentName" required="false" type="java.lang.String"%>
-<%@ attribute name="element" required="false" type="java.lang.String"%>
+<%@ attribute name="tagNested" %>
+<%@ attribute name="hintText" %>
+<%@ attribute name="hintTextKey" %>
+<%@ attribute name="parentName" %>
+<%@ attribute name="element" %>
+
+<t:defaultValue value='${pageScope.tagNested}' defaultValue='true' var='tagNested' />
+
+<c:if test="${pageScope.tagNested=='true'}">
+    <c:set var='dataTagNestedAttr' value='data-tag-nested="true"' />
+</c:if>
 
 <%--TODO need to add support for args here --%>
 <c:if test="${empty pageScope.hintText}">
@@ -19,6 +26,6 @@
 
 <c:if test="${not empty pageScope.hintText}">
     <%-- Don't use c:out hintText sometimes contains HTML --%>
-    <p class='form-hint'>${hintText}</p>
+    <p data-tag-type="hint" ${pageScope.dataTagNestedAttr} class='form-hint'>${hintText}</p>
 </c:if>
 

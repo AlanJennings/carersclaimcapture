@@ -35,7 +35,8 @@
     <c:set var="valueThree" value="${requestScope[pageScope.nameThree]}" />
 </c:if>
 
-<t:component name="${pageScope.id}" 
+<t:component tagType="address"
+             name="${pageScope.id}" 
              outerClass="${pageScope.outerClass}" 
              outerStyle="${pageScope.outerStyle}" 
              errors="${pageScope.errors}">
@@ -44,9 +45,9 @@
         <legend class="form-label-bold"><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /></legend>
         <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
         <ul id="${pageScope.id}">  
-            <t:textedit id="${pageScope.id}_lineOne" name="${pageScope.nameOne}" outerClass="form-group-compound" value="${pageScope.valueOne}" maxLength="${pageScope.maxLength}" /> 
-            <t:textedit id="${pageScope.id}_lineTwo" name="${pageScope.nameTwo}" outerClass="form-group-compound" value="${pageScope.valueTwo}" maxLength="${pageScope.maxLength}" />
-            <t:textedit id="${pageScope.id}_lineThree" name="${pageScope.nameThree}" outerClass="form-group-compound" value="${pageScope.valueThree}" maxLength="${pageScope.maxLength}" />
+            <t:textedit id="${pageScope.id}_lineOne" name="${pageScope.nameOne}" outerClass="form-group-compound" value="${pageScope.valueOne}" maxLength="${pageScope.maxLength}" tagNested="true" /> 
+            <t:textedit id="${pageScope.id}_lineTwo" name="${pageScope.nameTwo}" outerClass="form-group-compound" value="${pageScope.valueTwo}" maxLength="${pageScope.maxLength}" tagNested="true" />
+            <t:textedit id="${pageScope.id}_lineThree" name="${pageScope.nameThree}" outerClass="form-group-compound" value="${pageScope.valueThree}" maxLength="${pageScope.maxLength}" tagNested="true" />
         </ul>
         <t:hint hintTextKey="${pageScope.hintAfterKey}" parentName="${pageScope.name}" element="hintAfter" />
     </fieldset>

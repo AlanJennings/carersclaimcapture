@@ -36,7 +36,8 @@
 
 <c:set var="numbersWarning"><t:message code='warning.numbers.only' /></c:set>
 
-<t:component name="${pageScope.name}" 
+<t:component tagType="sortcode"
+             name="${pageScope.name}" 
              outerClass="${pageScope.outerClass}" 
              outerStyle="${pageScope.outerStyle}" 
              errors="${pageScope.errors}">

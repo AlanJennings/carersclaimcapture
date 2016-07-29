@@ -10,7 +10,7 @@
 
 <t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
 
-<section class="prompt e-prompt" aria-labelledby="${pageScope.id}">
+<section data-tag-type="htmlsection" class="prompt e-prompt" aria-labelledby="${pageScope.id}">
     <h2 id="${pageScope.id}" class="heading-medium"><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /></h2>
     <jsp:doBody/>
 </section>

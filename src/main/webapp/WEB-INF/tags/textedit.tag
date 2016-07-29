@@ -6,6 +6,7 @@
 <%@ attribute name="name" required="true"%>
     
 <%@ attribute name="id"%>
+<%@ attribute name="tagNested" %>
 <%@ attribute name="outerClass"%>
 <%@ attribute name="outerStyle"%>
 <%@ attribute name="labelKey"%>
@@ -27,7 +28,9 @@
     <c:set var="value" value="${requestScope[pageScope.name]}" />
 </c:if>
 
-<t:component name="${pageScope.name}" 
+<t:component tagType="textedit"
+             tagNested="${pageScope.tagNested}"
+             name="${pageScope.name}" 
              outerClass="${pageScope.outerClass}" 
              outerStyle="${pageScope.outerStyle}" 
              errors="${pageScope.errors}">

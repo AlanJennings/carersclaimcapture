@@ -16,7 +16,7 @@
     The default for a hidden panel should be block, so that it shows for JavaScript disabled browsers
     the JavaScript then initially hides the panel before any trigger events occur 
 --%>
-<div id="${pageScope.id}" class="${pageScope.outerClass}" style="display: none; margin-top: -20px;">
+<div data-tag-type="hiddenWarning" id="${pageScope.id}" class="${pageScope.outerClass}" style="display: none; margin-top: -20px;">
     <jsp:doBody/>
 </div>
 

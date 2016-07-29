@@ -20,6 +20,7 @@
     <c:set var='pageTitle' ><t:message code="${pageScope.pageTitleKey}" parentName="${pageScope.page}" element="pageTitle" /></c:set>
 </c:if>
 
+<t:adminInterface />
 <%-- ************************** start 'pageContent' context object ************************************ --%>
 
 <%-- We need to use 'jsp:useBean' to create the map in the first place, as 'variable' can't create variables directly --%>
@@ -68,7 +69,7 @@
                     <t:validationSummary errors="${pageScope.errors}" />
                     
                     <fieldset class="form-elements form-eligibility">
-                        <ul>
+                        <ul data-tag-type="page">
                             
                             <jsp:doBody/>
                             

@@ -26,7 +26,8 @@
     <c:set var="value" value="${requestScope[pageScope.name]}" />
 </c:if>
 
-<t:component name="${pageScope.name}" 
+<t:component tagType="select"
+             name="${pageScope.name}" 
              outerClass="${pageScope.outerClass}" 
              outerStyle="${pageScope.outerStyle}" 
              errors="${pageScope.errors}">

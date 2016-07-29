@@ -10,7 +10,7 @@
 
 <t:defaultValue value="${pageScope.innerClass}" defaultValue="break-data" var="innerClass" />
 
-<fieldset id="${pageScope.id}" class="form-elements results-detail">
+<fieldset data-tag-type="panel" id="${pageScope.id}" class="form-elements results-detail">
     <legend class="heading-medium form-class-bold"><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /></legend>
     <div class="data-table">
         <ul class="${pageScope.innerClass}">
