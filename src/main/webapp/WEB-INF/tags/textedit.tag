@@ -20,6 +20,43 @@
 <%@ attribute name="maxLength"%>
 <%@ attribute name="additionalClasses"%>
 
+    <script type="text/javascript">
+        // Note: NOT "errors", 
+        // we cannot do this in a tag as it changes the pageContext
+        var attributeNames = ["name", 
+                              "id", 
+                              "tagNested", 
+                              "outerClass", 
+                              "outerStyle", 
+                              "labelKey", 
+                              "labelKeyArgs", 
+                              "hintBeforeKey", 
+                              "hintAfterKey", 
+                              "value", 
+                              "useRawValue", 
+                              "maxLength", 
+                              "additionalClasses"];
+        var attributes = {};
+        for(var index in attributeNames) {
+            var attrName = attributeNames[index];
+            attributes[attrName] = null;
+        }
+        <c:forEach items="${pageScope}" var="p">
+            <c:if test="${p.value.getClass().getName()=='java.lang.String'}" >
+                if(attributeNames.indexOf("${p.key}") != -1) {
+                    attributes["${p.key}"] = "${p.value}";
+                }
+            </c:if>
+        </c:forEach>
+        
+        if(adminInterface) {
+            adminInterface.setDesignTimeInfo("${pageScope.name}", attributeNames, attributes);
+            console.log("adminInterface.getDesignTimeInfo");
+            console.log(adminInterface.getDesignTimeInfo("${pageScope.name}"));
+        }
+    </script>
+
+
 <t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
 <t:defaultValue value="${pageScope.useRawValue}" defaultValue="false" var="useRawValue" />
 

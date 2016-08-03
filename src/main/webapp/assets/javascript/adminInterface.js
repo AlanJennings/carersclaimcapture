@@ -1,6 +1,5 @@
 var adminInterface = (function () {
-
-    // make all the questions draggable
+    var designTimeInfo = {};
     
     var init = function () {
         $("[data-tag-type]").not("[data-tag-type='page']").not("[data-tag-nested='true']").draggable({
@@ -12,39 +11,50 @@ var adminInterface = (function () {
             }
         });
         
-      $("[data-tag-type='page']").add("[data-tag-type='container']").droppable({
-          drop: function(event, ui) {
-              var droppedComponent = ui.helper;
-              console.log('moving "' + droppedComponent.find("label").text().trim() + '"');
-              var page = droppedComponent.closest("[data-tag-type='page']");
-              var components = page.find("[data-tag-type]").not("[data-tag-type='page']").not("[data-tag-nested='true']");
-              _sortVertically(components);
+        $("[data-tag-type]").not("[data-tag-type='page']").not("[data-tag-nested='true']").dblclick(function(event) { 
+            var target = $(event.toElement);
+            var components = $("[data-tag-type]").not("[data-tag-nested='true']");
+            var clickedComponent = target.closest(components);
+            var name = clickedComponent.find("legend").text().trim();
+            if(name.length == 0) {
+                name = clickedComponent.find("label").text().trim();
+            }
+            console.log('clicked on "' + name + '"');
+        });
+        
+        $("[data-tag-type='page']").add("[data-tag-type='container']").droppable({
+            drop: function(event, ui) {
+                var droppedComponent = ui.helper;
+                console.log('moving "' + droppedComponent.find("label").text().trim() + '"');
+                var page = droppedComponent.closest("[data-tag-type='page']");
+                var components = page.find("[data-tag-type]").not("[data-tag-type='page']").not("[data-tag-nested='true']");
+                _sortVertically(components);
 
-              var top = ui.offset.top;
-              console.log("dropped at " + top);
-              for(var index = 0; index < components.length; index++) {
-                  var component = $(components[index]);
-                  var componentName = component.find('label').text().trim();
-                  console.log('Checking against "' + componentName + '"');
-                  var componentTop = component.position().top;
-                  console.log('componentTop = ' + componentTop);
-                  if(componentTop > top) {
-                      // note jquery 'is' only matches exactly for single objects
-                      if(component.is(droppedComponent)) {
-                          console.log('skipping self');
-                          continue;
-                      }
-                      console.log('found position, inserting before existing component');
-                      // the dropped component has been dropped below this one, so insert it here
-                      droppedComponent.insertBefore(component);
-                      // reset the css position
-                      console.log('resetting css position');
-                      droppedComponent.css('top', 'auto').css('left', 'auto');
-                      break;
-                  }
-              }
-              console.log('done moving component');
-          }
+                var top = ui.offset.top;
+                console.log("dropped at " + top);
+                for(var index = 0; index < components.length; index++) {
+                    var component = $(components[index]);
+                    var componentName = component.find('label').text().trim();
+                    console.log('Checking against "' + componentName + '"');
+                    var componentTop = component.position().top;
+                    console.log('componentTop = ' + componentTop);
+                    if(componentTop > top) {
+                        // note jquery 'is' only matches exactly for single objects
+                        if(component.is(droppedComponent)) {
+                            console.log('skipping self');
+                            continue;
+                        }
+                        console.log('found position, inserting before existing component');
+                        // the dropped component has been dropped below this one, so insert it here
+                        droppedComponent.insertBefore(component);
+                        // reset the css position
+                        console.log('resetting css position');
+                        droppedComponent.css('top', 'auto').css('left', 'auto');
+                        break;
+                    }
+                }
+                console.log('done moving component');
+            }
         });
     };
 
@@ -74,12 +84,20 @@ var adminInterface = (function () {
         });
     };
     
-    var anotherMethod = function () {
-        // public
+    var setDesignTimeInfo = function (name, attributeNames, attributeValues) {
+        designTimeInfo[name] = {};
+        designTimeInfo[name].attributeNames = attributeNames;
+        designTimeInfo[name].attributeValues = attributeValues;
     };
-  
+    
+    var getDesignTimeInfo = function(name) {
+        return designTimeInfo[name];
+    }
+
     return {
-        init: init
+        init: init,
+        setDesignTimeInfo: setDesignTimeInfo,
+        getDesignTimeInfo: getDesignTimeInfo
     };
 
 })();
