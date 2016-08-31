@@ -80,8 +80,8 @@ public class EducationController extends AbstractFormController {
             validateMandatoryField(fieldValues, "nameOfSchoolCollegeOrUniversity", "Have you been on a course of education since your claim date?");
             validateMandatoryField(fieldValues, "nameOfMainTeacherOrTutor", "Have you been on a course of education since your claim date?");
 
-            validateMandatoryDateField(fieldValues, "When did you start the course?", "educationStartDate", new String[]{"educationStartDate_day", "educationStartDate_month", "educationStartDate_year"});
-            validateMandatoryDateField(fieldValues, "When did the course end or when will you finish?", "educationeducationExpectedEndDate", new String[]{"educationExpectedEndDate_day", "educationExpectedEndDate_month", "educationExpectedEndDate_year"});
+            validateMandatoryDateField(fieldValues, "educationStartDate", "When did you start the course?");
+            validateMandatoryDateField(fieldValues, "educationeducationExpectedEndDate", "When did the course end or when will you finish?");
         }
 
         LOG.trace("Ending BenefitsController.validate");

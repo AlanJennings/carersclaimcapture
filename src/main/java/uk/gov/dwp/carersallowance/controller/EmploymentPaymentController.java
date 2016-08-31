@@ -93,7 +93,7 @@ public class EmploymentPaymentController extends AbstractFormController {
 
         validateMandatoryField(fieldValues, "employmentPaymentFrequency", "How often are you paid?");
         validateMandatoryField(fieldValues, "employmentWhenGetPaid", "When do you get paid?");
-        validateMandatoryDateField(fieldValues, "When were you last paid?", "employmentemploymentLastPaidDate", new String[]{"employmentLastPaidDate_day", "employmentLastPaidDate_month", "employmentLastPaidDate_year"});
+        validateMandatoryDateField(fieldValues, "employmentemploymentLastPaidDate", "When were you last paid?");
         validateMandatoryField(fieldValues, "employmentGrossPay", "What were you paid in your last wage?");
         validateMandatoryField(fieldValues, "employmentSameAmountEachTime", "Do you get the same amount each time?");
 

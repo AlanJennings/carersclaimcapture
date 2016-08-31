@@ -83,7 +83,7 @@ public class PartnerDetailsController extends AbstractFormController {
             validateMandatoryField(fieldValues, "partnerSurname", "Last name");
             validateMandatoryField(fieldValues, "partnerNatioNalInsuranceNumber", "National Insurance number");
             validateRegexField(fieldValues,"National Insurance number", "partnernatioNalInsuranceNumber", AbstractFormController.ValidationPatterns.NINO_REGEX);
-            validateMandatoryDateField(fieldValues, "Date of Birth", "partnerDateOfBirth", new String[]{"partnerDateOfBirth_day", "partnerDateOfBirth_month", "partnerDateOfBirth_year"});
+            validateMandatoryDateField(fieldValues, "partnerDateOfBirth", "Date of Birth");
             validateMandatoryField(fieldValues, "partnerNationality", "Nationality");
             validateMandatoryField(fieldValues, "partnerSeparated", "Have you separated since your claim date?");
             validateMandatoryField(fieldValues, "isPartnerPersonYouCareFor", "Is this the person you care for?");

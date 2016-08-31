@@ -89,7 +89,7 @@ public class FosteringAllowanceController extends AbstractFormController {
 
         validateMandatoryField(fieldValues, "fosteringAllowanceStillBeingPaidThisPay", "Are you still being paid this?");
         if(fieldValue_Equals(fieldValues, "fosteringAllowanceStillBeingPaidThisPay", "no")) {
-            validateMandatoryDateField(fieldValues, "When did you start the course?", "fosteringAllowanceWhenDidYouLastGetPaid", new String[]{"fosteringAllowanceWhenDidYouLastGetPaid_day", "fosteringAllowanceWhenDidYouLastGetPaid_month", "fosteringAllowanceWhenDidYouLastGetPaid_year"});
+            validateMandatoryDateField(fieldValues, "fosteringAllowanceWhenDidYouLastGetPaid", "When did you start the course?");
         }
 
         validateMandatoryField(fieldValues, "fosteringAllowanceWhoPaidYouThisPay", "Who paid you this?");

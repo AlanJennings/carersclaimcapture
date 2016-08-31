@@ -4,11 +4,11 @@
 
 <!DOCTYPE html>
 
-<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+<t:mainPage pageTitleKey="page.your-details.pageTitle" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" page="page.your-details" backLink="${previousPage}">
     
-        <t:textedit name="carerTitle" maxLength="20" /> 
+        <t:textedit name="carerTitle" maxLength="20" />
         <t:textedit name="carerFirstName" maxLength="17" />
         <t:textedit name="carerMiddleName" maxLength="17" />
         <t:textedit name="carerSurname" maxLength="35" />

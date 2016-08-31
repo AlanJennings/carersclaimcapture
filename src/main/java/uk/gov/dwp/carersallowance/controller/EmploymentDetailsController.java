@@ -109,10 +109,10 @@ public class EmploymentDetailsController extends AbstractFormController {
         validateMandatoryField(fieldValues, "finishedThisJob", "Have you finished this job?");
 
         if(fieldValue_Equals(fieldValues, "startJobBeforeClaimDate", "no")) {
-            validateMandatoryDateField(fieldValues, "Job start date", "jobStartDate", new String[]{"jobStartDate_day", "jobStartDate_month", "jobStartDate_year"});
+            validateMandatoryDateField(fieldValues, "jobStartDate", "Job start date");
         }
         if(fieldValue_Equals(fieldValues, "finishedThisJob", "yes")) {
-            validateMandatoryDateField(fieldValues, "Date last worked", "lastWorkDate", new String[]{"lastWorkDate_day", "lastWorkDate_month", "lastWorkDate_year"});
+            validateMandatoryDateField(fieldValues, "lastWorkDate", "Date last worked");
         }
 
         LOG.trace("Ending EmploymentDetailsController.validate");

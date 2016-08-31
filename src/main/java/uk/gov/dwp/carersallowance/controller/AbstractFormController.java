@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 
@@ -37,6 +39,30 @@ import uk.gov.dwp.carersallowance.validations.ValidationError;
 
 public abstract class AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractFormController.class);
+
+    /**
+     * In priority order
+     */
+    private enum ValidationType {
+        MANDATORY("mandatory"),
+        MAX_LENGTH("maxLength"),
+        DATE("date"),
+        ADDRESS("address"),
+        GROUP_ANY("group_any"),
+        GROUP_ALL("group_all"),
+        REGEX("regex"),
+        CONFIRM_FIELD("confirm_field");
+
+        private String property;
+
+        private ValidationType(String property) {
+            this.property = property;
+        }
+
+        public String getProperty() {
+            return property;
+        }
+    };
 
     private static final String[] PAGES = {
             "/allowance/benefits",
@@ -75,27 +101,51 @@ public abstract class AbstractFormController {
     public static final String   PHONE_REGEX = "[ 0123456789]{0,20}";       // probably convert to an enum
     public static final String   EMAIL_REGEX = "[ 0123456789]{0,20}";       // probably convert to an enum
 
+    private MessageSource     messageSource;
     private SessionManager    sessionManager;
     private ValidationSummary validationSummary;
     private List<String>      pageList;
 
-    public AbstractFormController(SessionManager sessionManager) {
+    public AbstractFormController(SessionManager sessionManager, MessageSource messageSource) {
+        this.sessionManager = sessionManager;
+        this.messageSource = messageSource;
+
         validationSummary = new ValidationSummary();
         pageList = new ArrayList<>(Arrays.asList(PAGES));
+    }
+
+    public AbstractFormController(SessionManager sessionManager) {
+        this(sessionManager, null);
     }
 
     /************************ START ABSTRACT METHODS **************************/
 
     public abstract String   getCurrentPage();           // e.g. /allowance/benefits
     public abstract String   getPageTitle();
+
     public abstract String[] getFields();
 
     protected abstract void validate(Map<String, String[]> fieldValues, String[] fields);
 
     /*********************** END ABSTRACT METHODS ******************************/
 
+    public MessageSource     getMessageSource()             { return messageSource; }
     public Session           getSession(String sessionId)   { return sessionManager.getSession(sessionId); }
     public ValidationSummary getValidationSummary()         { return validationSummary; }
+
+    protected void validate(Map<String, String[]> fieldValues, String[] fields, String[] enabledFields) {
+        validate(fieldValues, fields);
+    }
+
+    /**
+     * Used to decide which fields to validate (i.e. we only validate enabled fields)
+     * @param request
+     * @return
+     */
+    public String[] getEnabledFields(HttpServletRequest request) {
+        String[] dynamicFields = request.getParameterValues("field");
+        return dynamicFields;
+    }
 
     public String[] getSharedFields() {
         return null;
@@ -194,15 +244,33 @@ public abstract class AbstractFormController {
             LOG.debug("session = {}", session);
             LOG.debug("request.getParameterMap() = {}", request.getParameterMap());
 
-            copyFromRequestToSession(request, getFields());
+            String pageName = request.getParameter("pageName");
+            String fieldNames = this.getMessageSource().getMessage(pageName + ".fields", null, null);
+            LOG.info("pageName = {}, fieldNames = {}", pageName, fieldNames);
+
+            String[] fields;
+            if(StringUtils.isEmpty(fieldNames) == false) {
+                fields = fieldNames.split(",");
+                for(int index = 0; index < fields.length; index++) {
+                    fields[index] = fields[index].trim();
+                }
+
+                String[] preDefinedFields = getFields();
+                assertSameContents(fields, preDefinedFields);
+            } else {
+                fields = getFields();
+            }
+
+            copyFromRequestToSession(request, fields);
             copyFromRequestToSession(request, getSharedFields());
 
             getValidationSummary().reset();
-            validate(request.getParameterMap(), getFields());
+
+            validate(request.getParameterMap(), fields, getEnabledFields(request));
 
             if(hasErrors()) {
                 LOG.info("there are validation errors, re-showing form");
-                copyFromRequestToModel(request, getFields(), model);
+                copyFromRequestToModel(request, fields, model);
                 copyFromRequestToModel(request, getSharedFields(), model);
                 model.addAttribute("validationErrors", getValidationSummary());
                 return showForm(request, model);
@@ -220,6 +288,29 @@ public abstract class AbstractFormController {
             throw e;
         } finally {
             LOG.trace("Ending AbstractFormController.postForm");
+        }
+    }
+
+    private void assertSameContents(String[] dynamicFields, String[] staticFields) {
+        Parameters.validateMandatoryArgs(new Object[]{dynamicFields, staticFields}, new String[]{"dynamicFields", "staticFields"});
+
+        Set<String> dynamicSet = new HashSet<>(Arrays.asList(dynamicFields));
+        Set<String> staticSet = new HashSet<>(Arrays.asList(staticFields));
+        LOG.debug("dynamicFields = {}, staticFields = {}", dynamicSet, staticFields);
+        // lets assume staticFields is correct
+
+        // in staticFields, but not in dynamicFields
+        Set<String> missing = new HashSet<>(staticSet);
+        missing.removeAll(dynamicSet);
+        LOG.info("missing fields = {}", missing);
+
+        // in dynamicFields, but not in staticFields
+        Set<String> extra = new HashSet<>(dynamicSet);
+        extra.removeAll(staticSet);
+        LOG.info("extra fields = {}", extra);
+
+        if(missing.size() > 0 || extra.size() > 0) {
+            throw new IllegalStateException("missing(" + missing + ") or additional(" + extra + ") fields found");
         }
     }
 
@@ -339,25 +430,19 @@ public abstract class AbstractFormController {
         }
     }
 
+    /**
+     * Validate that all date fields are populated (field is mandatory)
+     * @param allfieldValues
+     * @param id
+     * @param fieldTitle
+     */
     protected void validateMandatoryDateField(Map<String, String[]> allfieldValues, String id, String fieldTitle) {
         LOG.trace("Started AbstractFormController.validateMandatoryDateField");
         Parameters.validateMandatoryArgs(new Object[]{allfieldValues, id, fieldTitle}, new String[]{"allfieldValues", "id", "fieldTitle"});
 
-        String[] dateFieldNames = new String[]{id + "_day", id + "_month", id + "_year"};
-        validateMandatoryDateField(allfieldValues, fieldTitle, id, dateFieldNames);
-
-        LOG.trace("Ending AbstractFormController.validateMandatoryDateField");
-    }
-
-    /**
-     * @deprecated use {@link AbstractFormController#validateMandatoryDateField}
-     */
-    protected void validateMandatoryDateField(Map<String, String[]> allfieldValues, String fieldTitle, String id, String[] dateFieldNames) {
-        LOG.trace("Started AbstractFormController.validateMandatoryDateField");
-        Parameters.validateMandatoryArgs(new Object[]{allfieldValues, id, dateFieldNames, fieldTitle}, new String[]{"allfieldValues", "id", "dateFieldNames", "fieldTitle"});
-
         boolean emptyField = false;
         boolean populatedField = false;
+        String[] dateFieldNames = new String[]{id + "_day", id + "_month", id + "_year"};
         for(String dateField: dateFieldNames) {
             String[] fieldValues = allfieldValues.get(dateField);
             LOG.debug("fieldName = {}, fieldValues={}", dateField, new LoggingObjectWrapper(fieldValues));
@@ -368,6 +453,7 @@ public abstract class AbstractFormController {
                 populatedField = true;
             }
         }
+
         if(emptyField) {
             if(populatedField) {
                 addFormError(id, fieldTitle, "Invalid value");
@@ -375,7 +461,57 @@ public abstract class AbstractFormController {
                 addFormError(id, fieldTitle, "You must complete this section");
             }
         }
+
         LOG.trace("Ending AbstractFormController.validateMandatoryDateField");
+    }
+
+    private boolean validationEnabled(String fieldName, ValidationType type) {
+        Locale locale  = null;
+        String defaultValue = null;
+        String validation = messageSource.getMessage(fieldName + ".validation." + type.getProperty(), null, defaultValue, locale);
+        boolean enabled = Boolean.valueOf(validation);
+
+        return enabled;
+    }
+
+    private String getFieldLabel(String fieldName, Object... args) {
+        Locale locale  = null;
+        String fieldTitle = messageSource.getMessage(fieldName + ".label", args, "{" + fieldName + ".label}", locale);
+        return fieldTitle;
+    }
+
+    /**
+     * Returns immediately after an error occurs (to avoid multiple errors for the same field)
+     */
+    protected void validateField(Map<String, String[]> allfieldValues, String fieldName, Object...args) {
+        for(ValidationType type: ValidationType.values()) {
+            if(validationEnabled(fieldName, type)) {
+                switch(type) {
+                    case MANDATORY:
+                        LOG.debug("field {} is mandatory, validating", fieldName);
+                        validateMandatoryField(allfieldValues, fieldName, getFieldLabel(fieldName, args));
+                        return;
+                    case MAX_LENGTH:
+                        break;
+                    case DATE:
+                        LOG.debug("field {} is mandatory, validating", fieldName);
+                        validateMandatoryDateField(allfieldValues, fieldName, getFieldLabel(fieldName, args));
+                        return;
+                    case ADDRESS:
+                        break;
+                    case GROUP_ANY:
+                        break;
+                    case GROUP_ALL:
+                        break;
+                    case REGEX:
+                        break;
+                    case CONFIRM_FIELD:
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Unrecognized ValidationType: " + type);
+                }
+            }
+        }
     }
 
     protected void validateMandatoryField(Map<String, String[]> allfieldValues, String fieldName, String fieldTitle) {

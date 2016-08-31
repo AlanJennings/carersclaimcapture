@@ -1,5 +1,6 @@
 package uk.gov.dwp.carersallowance.controller;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,9 +33,17 @@ public class YourDetailsController extends AbstractFormController {
                                             "carerDateOfBirth_month",
                                             "carerDateOfBirth_year"};
 
-    @Autowired
+    /**
+     * @deprecated update the test and remove these
+     * @param sessionManager
+     */
     public YourDetailsController(SessionManager sessionManager) {
-        super(sessionManager);
+        this(sessionManager, null);
+    }
+
+    @Autowired
+    public YourDetailsController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
@@ -61,23 +71,34 @@ public class YourDetailsController extends AbstractFormController {
         return super.postForm(request, session, model);
     }
 
+    protected void validate(Map<String, String[]> fieldValues, String[] fields) {
+        throw new UnsupportedOperationException("validate(Map<String, String[]> fieldValues, String[] fields)");
+    }
+
     /**
      * Might use BindingResult, and spring Validator, not sure yet
      * don't want to perform type conversion prior to controller as we have no control
      * over the (rather poor) reporting behaviour
      * @return
      */
-    protected void validate(Map<String, String[]> fieldValues, String[] fields) {
-        LOG.trace("Starting BenefitsController.validate");
+    protected void validate(Map<String, String[]> fieldValues, String[] fields, String[] enabledFields) {
+        LOG.trace("Starting YourDetailsController.validate");
 
-        validateMandatoryField(fieldValues, "carerTitle", "Title");
-        validateMandatoryField(fieldValues, "carerFirstName", "First name");
-        // "middleName" is optional,
-        validateMandatoryField(fieldValues, "carerSurname","Last name");
-        validateMandatoryField(fieldValues, "carerNationalInsuranceNumber", "National Insurance number");
+        LOG.info("EnabledFields = {}", enabledFields == null ? null : Arrays.asList(enabledFields));
 
-        validateMandatoryDateField(fieldValues, "Date of Birth", "carerDateOfBirth", new String[]{"carerDateOfBirth_day", "carerDateOfBirth_month", "carerDateOfBirth_year"});
+        for(String field: enabledFields) {
+            LOG.debug("validating enabled field {}", field);
+            validateField(fieldValues, field);
+        }
 
-        LOG.trace("Ending BenefitsController.validate");
+//        validateMandatoryField(fieldValues, "carerTitle");
+//        validateMandatoryField(fieldValues, "carerFirstName");
+//        // "middleName" is optional,
+//        validateMandatoryField(fieldValues, "carerSurname");
+//        validateMandatoryField(fieldValues, "carerNationalInsuranceNumber");
+
+//        validateMandatoryDateField(fieldValues, "carerDateOfBirth");
+
+        LOG.trace("Ending YourDetailsController.validate");
     }
 }

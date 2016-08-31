@@ -89,7 +89,7 @@ public class NationalityController extends AbstractFormController {
                 validateMandatoryField(fieldValues, "arrivedInUK", "When did you arrive in England, Scotland or Wales?");
 
                 if(fieldValue_Equals(fieldValues, "arrivedInUK", "less")) {
-                    validateMandatoryDateField(fieldValues, "Date arrived", "arrivedInUKDate", new String[]{"arrivedInUKDate_day", "arrivedInUKDate_month", "arrivedInUKDate_year"});
+                    validateMandatoryDateField(fieldValues, "arrivedInUKDate", "Date arrived");
                     validateMandatoryField(fieldValues, "arrivedInUKFrom", "Which country did you live in?");
                 }
             }

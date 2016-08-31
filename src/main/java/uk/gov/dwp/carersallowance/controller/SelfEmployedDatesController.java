@@ -91,7 +91,7 @@ public class SelfEmployedDatesController extends AbstractFormController {
 
         validateMandatoryField(fieldValues, "stillSelfEmployed", "Are you still doing this work?");
         if(fieldValue_Equals(fieldValues, "stillSelfEmployed", "no")) {
-            validateMandatoryDateField(fieldValues, "When did you start the course?", "finishThisWork", new String[]{"finishThisWork_day", "finishThisWork_month", "finishThisWork_year"});
+            validateMandatoryDateField(fieldValues, "finishThisWork", "When did you start the course?");
         }
 
         validateMandatoryField(fieldValues, "moreThanYearAgo", "Did you start this work more than a year ago?");
@@ -100,15 +100,15 @@ public class SelfEmployedDatesController extends AbstractFormController {
             if(fieldValue_Equals(fieldValues, "haveAccounts", "no")) {
                 validateMandatoryField(fieldValues, "knowTradingYear", "Do you know your trading year?");
                 if(fieldValue_Equals(fieldValues, "knowTradingYear", "yes")) {
-                    validateMandatoryDateField(fieldValues, "Trading year start date", "tradingYearStart", new String[]{"tradingYearStart_day", "tradingYearStart_month", "tradingYearStart_year"});
+                    validateMandatoryDateField(fieldValues, "tradingYearStart", "Trading year start date");
                 }
             }
         } else if(fieldValue_Equals(fieldValues, "moreThanYearAgo", "no")) {
-            validateMandatoryDateField(fieldValues, "When did you finish this work?", "startThisWork", new String[]{"startThisWork_day", "startThisWork_month", "startThisWork_year"});
+            validateMandatoryDateField(fieldValues, "startThisWork", "When did you finish this work?");
 
             validateMandatoryField(fieldValues, "paidMoney", "Has your self-employed business been paid any money yet?");
             if(fieldValue_Equals(fieldValues, "paidMoney", "yes")) {
-                validateMandatoryDateField(fieldValues, "Date money first received by the business", "paidMoneyDate", new String[]{"paidMoneyDate_day", "paidMoneyDate_month", "paidMoneyDate_year"});
+                validateMandatoryDateField(fieldValues, "paidMoneyDate", "Date money first received by the business");
             }
         }
 

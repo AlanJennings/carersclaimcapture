@@ -82,7 +82,7 @@ public class SickPayController extends AbstractFormController {
 
         validateMandatoryField(fieldValues, "sickPayStillBeingPaidThisPay", "Are you still being paid Statutory Sick Pay?");
         if(fieldValue_Equals(fieldValues, "sickPayStillBeingPaidThisPay", "no")) {
-            validateMandatoryDateField(fieldValues, "When were you last paid?", "sickPayWhenDidYouLastGetPaid", new String[]{"sickPayWhenDidYouLastGetPaid_day", "sickPayWhenDidYouLastGetPaid_month", "sickPayWhenDidYouLastGetPaid_year"});
+            validateMandatoryDateField(fieldValues, "sickPayWhenDidYouLastGetPaid", "When were you last paid?");
         }
 
         validateMandatoryField(fieldValues, "sickPayWhoPaidYouThisPay", "Who paid you Statutory Sick Pay?");

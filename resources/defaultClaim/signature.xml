@@ -1,0 +1,15 @@
+<ds:Signature>
+    <ds:SignedInfo>
+        <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
+        <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+        <ds:Reference URI="#16070000416">
+            <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+            <ds:DigestValue>Wv1Hy66eZyPRNUCUPX3VECd7F8Y=</ds:DigestValue>
+        </ds:Reference>
+    </ds:SignedInfo>
+    <ds:SignatureValue>Qlka0DhvxxFs4CaSxyLMOkxx4k2oIddOTddVg8d0qgizfcwgRZBR7Ia48SVT4AY+oOeNlNApHTGg
+Vg5YghiT7eli00JyZIdkIdPQyaJxkID0rP3+2Rd0wU4IOfmOXcDRCAjmpVv8GNbjeip5uwGbl1a3
+Ws7rFKX2YeEhs07wxQSW5He2tqv5CYJPDKQ5KCHIF+jsXl9QZqK1akwsFh7STE29s0rDL7AWhi9d
+Tmk3IrSiv9hRjP5fgDAfgfNx+nCSQK357IxllY2v6377QbzMsWBJXqaSoPVxxWIpyPqPZq11Nlvi
+wxK1hrwfX2SMzByMS67FTinlgJ/iM7iIzkxLpg==</ds:SignatureValue>
+</ds:Signature>

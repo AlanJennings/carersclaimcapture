@@ -15,8 +15,8 @@
     <mvc:default-servlet-handler />
     <mvc:annotation-driven ignore-default-model-on-redirect="true" />
     
-    <context:component-scan base-package="uk.gov.dwp.carersallowance.controller" />
     <context:component-scan base-package="uk.gov.dwp.carersallowance.session" />    
+    <context:component-scan base-package="uk.gov.dwp.carersallowance.controller" />
     
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix"><value>/views/</value></property>

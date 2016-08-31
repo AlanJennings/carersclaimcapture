@@ -84,7 +84,7 @@ public class OtherStatutoryPaymentsController extends AbstractFormController {
         validateMandatoryField(fieldValues, "otherStatPaymentPaymentTypesForThisPay", "Which are you paid?");
         validateMandatoryField(fieldValues, "otherStatPaymentStillBeingPaidThisPay", "Are you still being paid this?");
         if(fieldValue_Equals(fieldValues, "otherStatPaymentBeenInEducationSinceClaimDate", "yes")) {
-            validateMandatoryDateField(fieldValues, "When were you last paid?", "otherStatPaymentWhenDidYouLastGetPaid", new String[]{"otherStatPaymentWhenDidYouLastGetPaid_day", "otherStatPaymentWhenDidYouLastGetPaid_month", "otherStatPaymentWhenDidYouLastGetPaid_year"});
+            validateMandatoryDateField(fieldValues, "otherStatPaymentWhenDidYouLastGetPaid", "When were you last paid?");
         }
 
         validateMandatoryField(fieldValues, "otherStatPaymentWhoPaidYouThisPay", "Who paid you this?");

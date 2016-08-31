@@ -1,0 +1,255 @@
+<DWPBody xmlns="http://www.govtalk.gov.uk/dwp/carers-allowance" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.govtalk.gov.uk/dwp/carers-allowance file:/future/schema/ca/CarersAllowance_Schema.xsd">
+    <Version>0.20</Version>
+    <Origin>GB</Origin>
+    <DWPCATransaction id="16010000027">
+        <TransactionId>16010000027</TransactionId>
+        <DateTimeGenerated>23-02-2016 14:53</DateTimeGenerated>
+        <LanguageUsed>English</LanguageUsed>
+        <DWPCAClaim>
+            <DateOfClaim>
+                <QuestionLabel>Claim date</QuestionLabel>
+                <Answer>23-02-2016</Answer>
+            </DateOfClaim>
+            <QualifyingBenefit>
+                <QuestionLabel>What benefit does the person you care for get?</QuestionLabel>
+                <Answer>PIP</Answer>
+            </QualifyingBenefit>
+            <Claimant>
+                <Surname>
+                    <QuestionLabel>Last name</QuestionLabel>
+                    <Answer>bysLgkgUgt0w6p663XJFdXM6dWkS+BcgrGshIssGzGqV9VYAaRmkdiepupgKo/Uh</Answer>
+                </Surname>
+                <OtherNames>
+                    <QuestionLabel>First name</QuestionLabel>
+                    <Answer>David</Answer>
+                </OtherNames>
+                <Title>
+                    <QuestionLabel>Title</QuestionLabel>
+                    <Answer>Mr</Answer>
+                </Title>
+                <DateOfBirth>
+                    <QuestionLabel>Date of birth</QuestionLabel>
+                    <Answer>01-01-1970</Answer>
+                </DateOfBirth>
+                <NationalInsuranceNumber>
+                    <QuestionLabel>National Insurance number</QuestionLabel>
+                    <Answer>vNGfsV24x0JbWa9PFADw3f52tP/TGOZ/Wa67glebmRcQfJi85ogE8BcGUKlaKmns</Answer>
+                </NationalInsuranceNumber>
+                <Address>
+                    <QuestionLabel>Address</QuestionLabel>
+                    <Answer>
+                        <Line>First Line</Line>
+                        <Line>Second Line</Line>
+                        <PostCode>sKGxRACXdrnqYfSdNRxllUsw8nVbkgUX+BvqiTfZ87KDuOOiTgCrIcwl3qtC5jkr</PostCode>
+                    </Answer>
+                </Address>
+                <Cared35HoursBefore>
+                    <QuestionLabel>Were you caring for the person for more than 35 hours a week before this date?</QuestionLabel>
+                    <Answer>No</Answer>
+                </Cared35HoursBefore>
+                <MaritalStatus>
+                    <QuestionLabel>Your status</QuestionLabel>
+                    <Answer>Married or civil partner</Answer>
+                </MaritalStatus>
+                <TextPhoneContact>
+                    <QuestionLabel>This is a textphone for people with hearing difficulties.</QuestionLabel>
+                    <Answer>No</Answer>
+                </TextPhoneContact>
+                <WantsContactEmail>
+                    <QuestionLabel>Have you got an email address?</QuestionLabel>
+                    <Answer>Yes</Answer>
+                </WantsContactEmail>
+                <Email>
+                    <QuestionLabel>Email address</QuestionLabel>
+                    <Answer>mail@mail.com</Answer>
+                </Email>
+            </Claimant>
+            <Caree>
+                <Surname>
+                    <QuestionLabel>Last name</QuestionLabel>
+                    <Answer>UkM+n03jJQ7WQz8EEX3dqfH0/Uf8k5zTxufsWoiriAvf0GJDBwm9lyDyOPqP7AZn</Answer>
+                </Surname>
+                <OtherNames>
+                    <QuestionLabel>First name</QuestionLabel>
+                    <Answer>Cared For</Answer>
+                </OtherNames>
+                <Title>
+                    <QuestionLabel>Title</QuestionLabel>
+                    <Answer>Mrs</Answer>
+                </Title>
+                <DateOfBirth>
+                    <QuestionLabel>Date of birth</QuestionLabel>
+                    <Answer>01-01-1960</Answer>
+                </DateOfBirth>
+                <NationalInsuranceNumber>
+                    <QuestionLabel>National Insurance number</QuestionLabel>
+                    <Answer>xA1sUS06cVLSyYhcef1btTqPEAYE9e5JZDWxruz5CF9WPi3ftbnOe6pI8iEcgdGp</Answer>
+                </NationalInsuranceNumber>
+                <Address>
+                    <QuestionLabel>Address</QuestionLabel>
+                    <Answer>
+                        <Line>First Line</Line>
+                        <Line>Second Line</Line>
+                        <PostCode>qKCpZXi5j/yLjHWfe/XEknVe03QzODZUF/Qx+ui6XIpVFRCzS8hhQccDenuYwsvu</PostCode>
+                    </Answer>
+                </Address>
+                <RelationToClaimant>
+                    <QuestionLabel>What's their relationship to you?</QuestionLabel>
+                    <Answer>wife</Answer>
+                </RelationToClaimant>
+                <Cared35Hours>
+                    <QuestionLabel>Do you spend 35 hours or more each week caring for the person you care for?</QuestionLabel>
+                    <Answer>Yes</Answer>
+                </Cared35Hours>
+                <CareBreak>
+                    <BreaksSinceClaim>
+                        <QuestionLabel>Have you had any breaks from caring for this person since 23 February 2016?</QuestionLabel>
+                        <Answer>No</Answer>
+                    </BreaksSinceClaim>
+                </CareBreak>
+                <LiveSameAddress>
+                    <QuestionLabel>Do they live at the same address as you?</QuestionLabel>
+                    <Answer>Yes</Answer>
+                </LiveSameAddress>
+            </Caree>
+            <Residency>
+                <Nationality>
+                    <QuestionLabel>What is your nationality?</QuestionLabel>
+                    <Answer>British</Answer>
+                </Nationality>
+                <NormallyLiveInGB>
+                    <QuestionLabel>Do you normally live in England, Scotland or Wales?</QuestionLabel>
+                    <Answer>Yes</Answer>
+                </NormallyLiveInGB>
+                <PeriodAbroad>
+                    <TimeOutsideGBLast3Years>
+                        <QuestionLabel>Have you been away from England, Scotland or Wales for more than 52 weeks in the 3 years before your claim date?</QuestionLabel>
+                        <Answer>No</Answer>
+                    </TimeOutsideGBLast3Years>
+                </PeriodAbroad>
+            </Residency>
+            <CourseOfEducation>
+                <QuestionLabel>Have you been on a course of education since your claim date?</QuestionLabel>
+                <Answer>No</Answer>
+            </CourseOfEducation>
+            <SelfEmployed>
+                <QuestionLabel>Have you been self-employed at any time since 16 February 2016?</QuestionLabel>
+                <Answer>No</Answer>
+            </SelfEmployed>
+            <Employed>
+                <QuestionLabel>Have you been employed at any time since 23 August 2015?</QuestionLabel>
+                <Answer>No</Answer>
+            </Employed>
+            <HavePartner>
+                <QuestionLabel>Have you lived with a partner at any time since your claim date?</QuestionLabel>
+                <Answer>No</Answer>
+            </HavePartner>
+            <OtherBenefits>
+                <OtherMoneySSP>
+                    <QuestionLabel>Have you had any Statutory Sick Pay since your claim date?</QuestionLabel>
+                    <Answer>No</Answer>
+                </OtherMoneySSP>
+                <OtherMoneySP>
+                    <QuestionLabel>Have you had any Statutory Maternity Pay, Statutory Paternity Pay or Statutory Adoption Pay since your claim date?</QuestionLabel>
+                    <Answer>No</Answer>
+                </OtherMoneySP>
+                <OtherMoneyPayments>
+                    <QuestionLabel>Have you received any payments for the person you care for or any other person since your claim date?</QuestionLabel>
+                    <Answer>No</Answer>
+                </OtherMoneyPayments>
+                <EEA>
+                    <EEAGuardQuestion>
+                        <QuestionLabel>Have you or any of your close family worked abroad or been paid benefits from outside the United Kingdom since your claim date?</QuestionLabel>
+                        <Answer>No</Answer>
+                    </EEAGuardQuestion>
+                </EEA>
+            </OtherBenefits>
+            <Payment>
+                <PaymentFrequency>
+                    <QuestionLabel>How often do you want to be paid Carer's Allowance?</QuestionLabel>
+                    <Answer>Every week</Answer>
+                </PaymentFrequency>
+                <InitialAccountQuestion>
+                    <QuestionLabel>Do you have a bank account?</QuestionLabel>
+                    <Answer>No</Answer>
+                </InitialAccountQuestion>
+            </Payment>
+            <OtherInformation>
+                <WelshCommunication>
+                    <QuestionLabel>Do you live in Wales and want to receive future communications in Welsh?</QuestionLabel>
+                    <Answer>No</Answer>
+                </WelshCommunication>
+                <AdditionalInformation>
+                    <QuestionLabel>Do you want to tell us any additional information about your claim?</QuestionLabel>
+                    <Answer>No</Answer>
+                </AdditionalInformation>
+            </OtherInformation>
+            <Declaration>
+                <DeclarationStatement>
+                    <Content>By sending this application you agree that:</Content>
+                    <Content>the information you've given is complete and correct as far as you know</Content>
+                    <Content>you'll pay back any money you've been overpaid if you're asked to</Content>
+                    <Content>you'll report changes of your circumstances or those of the person you care for promptly either online or by contacting the Carer's Allowance Unit</Content>
+                    <Content>You could be prosecuted or have to pay a financial penalty if you deliberately give wrong or incomplete information or don't report changes. Your Carer's Allowance may also be stopped or reduced.</Content>
+                </DeclarationStatement>
+                <DeclarationQuestion>
+                    <QuestionLabel>Are you applying for Carer's Allowance for yourself?</QuestionLabel>
+                    <Answer>Yes</Answer>
+                </DeclarationQuestion>
+                <DeclarationQuestion>
+                    <QuestionLabel>I agree</QuestionLabel>
+                    <Answer>Yes</Answer>
+                </DeclarationQuestion>
+            </Declaration>
+            <Disclaimer>
+                <DisclaimerStatement>
+                    <Title>This is my claim for Carer's Allowance.</Title>
+                    <Content>When you claim Carer's Allowance the person you care for may stop getting:</Content>
+                    <Content>a severe disability premium paid with their benefits, if they get one</Content>
+                    <Content>an extra amount for severe disability paid with Pension Credit, if they get one</Content>
+                    <Content>reduced Council Tax, if their local council offers it</Content>
+                    <Content>Read more about how Carer's Allowance affects other benefits.</Content>
+                    <Content>You must tell the person you care for before you claim.</Content>
+                </DisclaimerStatement>
+                <DisclaimerQuestion>
+                    <QuestionLabel>I agree</QuestionLabel>
+                    <Answer>Yes</Answer>
+                </DisclaimerQuestion>
+            </Disclaimer>
+            <EvidenceList>
+                <Evidence>
+                    <Title>What happens next</Title>
+                </Evidence>
+                <Evidence>
+                    <Title>You'll get an email when your claim has been received.</Title>
+                </Evidence>
+                <Evidence>
+                    <Title>You don't have to do anything else - you'll usually get a decision within 4 weeks.</Title>
+                </Evidence>
+            </EvidenceList>
+            <Consents>
+                <Consent>
+                    <QuestionLabel>Do you agree to the Carer's Allowance Unit contacting anyone mentioned in this form?</QuestionLabel>
+                    <Answer>Yes</Answer>
+                </Consent>
+            </Consents>
+            <AssistedDecisions>
+                <AssistedDecision>
+                    <Reason>None</Reason>
+                    <RecommendedDecision>None,show table</RecommendedDecision>
+                </AssistedDecision>
+            </AssistedDecisions>
+        </DWPCAClaim>
+    </DWPCATransaction>
+    <ds:Signature>
+        <ds:SignedInfo>
+            <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
+            <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+            <ds:Reference URI="#16010000027">
+                <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+                <ds:DigestValue>iOhQpZRiDJ3Yt+I2KrDyCd9Wi1w=</ds:DigestValue>
+            </ds:Reference>
+        </ds:SignedInfo>
+        <ds:SignatureValue>Q6R2cKOyEquLJcO8bea1AEfCggzfD3+E1JOjUHGDnPSaOd0bqq5GIoHkmp4HDtGBo0tL2JHAVYcU TjI0Lt/Tas6LPAmHeu1vAsB7Ba89SK20wkdiXUfJCY7eR6sjLAu0cipfsDichgMO+ez+vAslsyFC nW+rzd2wVHp1kj2XSET3LNbwZr1Qpqjuk1vOKt6CgwQOGz9k7KJOO6oCWcwJ9ezwNxH4HjbfYV0O UndalXGx6xzmjjSqXojgzWCUoIfrjg+h6OPw3rE44YK9ntoGEtZeBSLD893vMah6Or9Ah4W1hZCv kQpzkHOGh7os7pDRc7forLbX77p/jMoqmULORA==</ds:SignatureValue>
+    </ds:Signature>
+</DWPBody>

@@ -82,7 +82,7 @@ public class DirectPaymentController extends AbstractFormController {
 
         validateMandatoryField(fieldValues, "directPaymentStillBeingPaidThisPay", "Are you still being paid this?");
         if(fieldValue_Equals(fieldValues, "directPaymentStillBeingPaidThisPay", "no")) {
-            validateMandatoryDateField(fieldValues, "When were you last paid?", "directPaymentWhenDidYouLastGetPaid", new String[]{"directPaymentWhenDidYouLastGetPaid_day", "directPaymentWhenDidYouLastGetPaid_month", "directPaymentWhenDidYouLastGetPaid_year"});
+            validateMandatoryDateField(fieldValues, "directPaymentWhenDidYouLastGetPaid", "When were you last paid?");
         }
 
         validateMandatoryField(fieldValues, "directPaymentWhoPaidYouThisPay", "Your Status");
