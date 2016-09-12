@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -24,28 +25,33 @@ import uk.gov.dwp.carersallowance.session.UnknownRecordException;
 
 @Controller
 public class EmploymentSummaryController extends AbstractFormController {
+    private static final String PENSION_EXPENSES_PAGE_NAME = "page.about-expenses";
+
+    private static final String LAST_WAGE_PAGE_NAME = "page.last-wage";
+
+    private static final String JON_DETAILS_PAGE_NAME = "page.job-details";
+
     private static final Logger LOG = LoggerFactory.getLogger(EmploymentSummaryController.class);
 
+    private static final String PAGE_NAME     = "page.been-employed";
     private static final String EMPLOYMENT_DETAIL     = "/your-income/employment/job-details";
     private static final String CURRENT_PAGE          = "/your-income/employment/been-employed";
     private static final String SAVE_EDITED_PAGE      = CURRENT_PAGE + "/update";
     private static final String EDITING_PAGE          = EMPLOYMENT_DETAIL;
-    private static final String PAGE_TITLE            = "Your employment history - Your income";
 
     private static final String[] READONLY_FIELDS       = {"employerName"};
-    private static final String[] FIELDS                = {"moreEmployment"};
     private static final String[] SORTING_FIELDS        = {"jobStartDate_year", "jobStartDate_month", "jobStartDate_day"};
 
     public static final String   FIELD_COLLECTION_NAME = "employment";
     public static final String   ID_FIELD              = "employment_id";
 
     @Autowired
-    public EmploymentSummaryController(SessionManager sessionManager) {
-        super(sessionManager);
+    public EmploymentSummaryController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
@@ -82,18 +88,13 @@ public class EmploymentSummaryController extends AbstractFormController {
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @Override
     public String[] getReadOnlyFields() {
         return READONLY_FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
     }
 
     /**
@@ -128,15 +129,16 @@ public class EmploymentSummaryController extends AbstractFormController {
      * over the individual page handlers (the request will need populating)
      */
     @RequestMapping(value=SAVE_EDITED_PAGE, method = RequestMethod.GET)
-    public String saveFieldCollection(HttpSession session) {
+    public String saveFieldCollection(HttpServletRequest request) {
         LOG.trace("Started EmploymentSummaryController.saveFieldCollection");
         try {
-            String[] fieldCollectionFields = FieldCollection.aggregateFieldLists(EmploymentDetailsController.FIELDS,
-                                                                                 EmploymentPaymentController.FIELDS,
-                                                                                 EmploymentPensionAndExpensesController.FIELDS);
-            populateFieldCollectionEntry(session, FIELD_COLLECTION_NAME, fieldCollectionFields, ID_FIELD);
+            String[] fieldCollectionFields = FieldCollection.aggregateFieldLists(getFields(JON_DETAILS_PAGE_NAME),
+                                                                                 getFields(LAST_WAGE_PAGE_NAME),
+                                                                                 getFields(PENSION_EXPENSES_PAGE_NAME));
 
-            return "redirect:" + getCurrentPage();
+            populateFieldCollectionEntry(request.getSession(), FIELD_COLLECTION_NAME, fieldCollectionFields, ID_FIELD);
+
+            return "redirect:" + getCurrentPage(request);
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
@@ -191,7 +193,7 @@ public class EmploymentSummaryController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
         // TODO date comes from earlier in the claim
-        validateMandatoryField(fieldValues, "moreEmployment", "Have you had any other jobs since 1 December 2015?");
+        validateMandatoryField(fieldValues, "moreEmployment");
 
         LOG.trace("Ending BenefitsController.validate");
     }

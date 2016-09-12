@@ -43,5 +43,4 @@
     <input type="hidden" name="field" value="${pageScope.name}" />
 
     <jsp:doBody />
-    
 </li>

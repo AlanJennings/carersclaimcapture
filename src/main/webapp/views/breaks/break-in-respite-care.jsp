@@ -4,7 +4,7 @@
 
 <!DOCTYPE html>
 
-<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+<t:mainPage page="page.break-in-respite-care" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" page="page.break-in-respite-care" backLink="${previousPage}">
         <input type="hidden" name="break_id" value="${break_id}" >

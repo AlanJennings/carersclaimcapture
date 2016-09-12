@@ -4,7 +4,7 @@
 
 <!DOCTYPE html>
 
-<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+<t:mainPage page="page.other-income" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" page="page.other-income" backLink="${previousPage}">
         <t:textarea name="otherPaymentsInfo" maxLength="3000" showRemainingChars="true" />

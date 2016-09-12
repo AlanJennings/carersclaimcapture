@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,26 +20,16 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class EmploymentPaymentController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(EmploymentPaymentController.class);
 
+    private static final String PAGE_NAME     = "page.last-wage";
     private static final String CURRENT_PAGE  = "/your-income/employment/last-wage"; // parameter to indicate which job index
-    private static final String PAGE_TITLE    = "Your pay - Your income";
     private static final String PREVIOUS_PAGE = "/your-income/employment/job-details";
     private static final String NEXT_PAGE     = "/your-income/employment/about-expenses";
 
     private static final String[] READONLY_FIELDS = {"employerName"};
 
-    public static final String[] FIELDS = {"employmentPaymentFrequency",
-                                           "employmentPaymentFrequencyOtherText",
-                                           "employmentwhenGetPaid",
-                                           "employmentLastPaidDate_day",
-                                           "employmentLastPaidDate_month",
-                                           "employmentLastPaidDate_year",
-                                           "employmentGrossPay",
-                                           "employmentPayInclusions",
-                                           "employmentSameAmountEachTime"};
-
     @Autowired
-    public EmploymentPaymentController(SessionManager sessionManager) {
-        super(sessionManager);
+    public EmploymentPaymentController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
@@ -47,7 +38,7 @@ public class EmploymentPaymentController extends AbstractFormController {
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
@@ -57,18 +48,13 @@ public class EmploymentPaymentController extends AbstractFormController {
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @Override
     public String[] getReadOnlyFields() {
         return READONLY_FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -91,11 +77,11 @@ public class EmploymentPaymentController extends AbstractFormController {
         LOG.trace("Starting BenefitsController.validate");
         // TODO the dates are from earlier in the claim
 
-        validateMandatoryField(fieldValues, "employmentPaymentFrequency", "How often are you paid?");
-        validateMandatoryField(fieldValues, "employmentWhenGetPaid", "When do you get paid?");
-        validateMandatoryDateField(fieldValues, "employmentemploymentLastPaidDate", "When were you last paid?");
-        validateMandatoryField(fieldValues, "employmentGrossPay", "What were you paid in your last wage?");
-        validateMandatoryField(fieldValues, "employmentSameAmountEachTime", "Do you get the same amount each time?");
+        validateMandatoryField(fieldValues, "employmentPaymentFrequency");
+        validateMandatoryField(fieldValues, "employmentWhenGetPaid");
+        validateMandatoryDateField(fieldValues, "employmentemploymentLastPaidDate");
+        validateMandatoryField(fieldValues, "employmentGrossPay");
+        validateMandatoryField(fieldValues, "employmentSameAmountEachTime");
 
 
         LOG.trace("Ending BenefitsController.validate");

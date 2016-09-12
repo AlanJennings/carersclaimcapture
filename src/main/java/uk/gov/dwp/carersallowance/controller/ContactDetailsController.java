@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +20,8 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class ContactDetailsController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(ContactDetailsController.class);
 
+    private static final String PAGE_NAME     = "page.contactDetails";
     private static final String CURRENT_PAGE  = "/about-you/contact-details";
-    private static final String PAGE_TITLE    = "Your Contact Details - About you - the carer";
 
     public static final String CARER_ADDRESS_LINE_ONE           = "carerAddressLineOne";
     public static final String CARER_ADDRESS_LINE_TWO           = "carerAddressLineTwo";
@@ -32,34 +33,21 @@ public class ContactDetailsController extends AbstractFormController {
     public static final String CARER_MAIL                       = "carerMail";
     public static final String CARER_MAIL_CONFIRMATION          = "carerMailConfirmation";
 
-    private static final String[] FIELDS = {CARER_ADDRESS_LINE_ONE,
-                                            CARER_ADDRESS_LINE_TWO,
-                                            CARER_ADDRESS_LINE_THREE,
-                                            CARER_POSTCODE,
-                                            CARER_HOW_WE_CONTACT_YOU,
-                                            CARER_HONTACT_YOU_BY_TELEPHONE,
-                                            CARER_WANTS_EMAIL_CONTACT,
-                                            CARER_MAIL,
-                                            CARER_MAIL_CONFIRMATION};
+// FIELDS = carerAddressLineOne, carerAddressLineTwo, carerAddressLineThree, carerPostcode, carerHowWeContactYou, carerContactYouByTextPhone, carerWantsEmailContact, carerMail, carerMailConfirmation
 
     @Autowired
-    public ContactDetailsController(SessionManager sessionManager) {
-        super(sessionManager);
+    public ContactDetailsController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -82,10 +70,10 @@ public class ContactDetailsController extends AbstractFormController {
         LOG.trace("Starting BenefitsController.validate");
 
         validateAddressFields(fieldValues, "Address", "carerAddress", new String[]{CARER_ADDRESS_LINE_ONE, CARER_ADDRESS_LINE_TWO, CARER_ADDRESS_LINE_THREE});
-        validateMandatoryField(fieldValues,CARER_WANTS_EMAIL_CONTACT, "Do you want an email to confirm your application has been received?");
+        validateMandatoryField(fieldValues,CARER_WANTS_EMAIL_CONTACT);
 
         if(fieldValue_Equals(fieldValues, CARER_WANTS_EMAIL_CONTACT, "yes")) {
-            validateMandatoryField(fieldValues,CARER_MAIL, "Your email address");
+            validateMandatoryField(fieldValues,CARER_MAIL);
             validateRegexField(fieldValues,"Your email address", CARER_MAIL, AbstractFormController.ValidationPatterns.EMAIL_REGEX);
 
             validateMatchingValues(fieldValues,"Your email address", CARER_MAIL, "Confirm your email address", CARER_MAIL_CONFIRMATION, true);

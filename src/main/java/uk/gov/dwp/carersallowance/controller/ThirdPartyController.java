@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,29 +21,22 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class ThirdPartyController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(ThirdPartyController.class);
 
+    private static final String PAGE_NAME     = "page.third-party";
     private static final String CURRENT_PAGE  = "/third-party/third-party";
-    private static final String PAGE_TITLE    = "Third Party - Are you applying for Carer's Allowance for yourself?";
-
-    private static final String[] FIELDS = {"thirdParty", "nameAndOrganisation", };
 
     @Autowired
-    public ThirdPartyController(SessionManager sessionManager) {
-        super(sessionManager);
+    public ThirdPartyController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -64,9 +58,9 @@ public class ThirdPartyController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "thirdParty", "Are you the carer?");
+        validateMandatoryField(fieldValues, "thirdParty");
         if(fieldValue_Equals(fieldValues, "thirdParty", "no")) {
-            validateMandatoryField(fieldValues, "nameAndOrganisation", "Your name and organisation");
+            validateMandatoryField(fieldValues, "nameAndOrganisation");
         }
 
         LOG.trace("Ending BenefitsController.validate");

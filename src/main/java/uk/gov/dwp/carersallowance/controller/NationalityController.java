@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,39 +21,22 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class NationalityController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(NationalityController.class);
 
+    private static final String PAGE_NAME     = "page.nationality-and-residency";
     private static final String CURRENT_PAGE  = "/about-you/nationality-and-residency";
-    private static final String PAGE_TITLE    = "About your nationality and where you live - Nationality and where you've lived";
-
-    private static final String[] FIELDS = {"nationality",
-                                            "actualnationality",
-                                            "alwaysLivedInUK",
-                                            "liveInUKNow",
-                                            "arrivedInUK",
-                                            "arrivedInUKDate_day",
-                                            "arrivedInUKDate_month",
-                                            "arrivedInUKDate_year",
-                                            "arrivedInUKFrom",
-                                            "trip52Weeks",
-                                            "tripDetails"};
 
     @Autowired
-    public NationalityController(SessionManager sessionManager) {
-        super(sessionManager);
+    public NationalityController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -74,29 +58,29 @@ public class NationalityController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "nationality", "What is your nationality?");
-        validateMandatoryField(fieldValues, "alwaysLivedInUK", "Have you always lived in England, Scotland or Wales?");
-        validateMandatoryField(fieldValues, "trip52Weeks","Have you been away from England, Scotland or Wales for more than 52 weeks in the 3 years before your claim date?");
+        validateMandatoryField(fieldValues, "nationality");
+        validateMandatoryField(fieldValues, "alwaysLivedInUK");
+        validateMandatoryField(fieldValues, "trip52Weeks");
 
         if(fieldValue_Equals(fieldValues, "nationality", "Another nationality")) {
-            validateMandatoryField(fieldValues, "actualnationality", "Your nationality");
+            validateMandatoryField(fieldValues, "actualnationality");
         }
 
         if(fieldValue_Equals(fieldValues, "alwaysLivedInUK", "no")) {
-            validateMandatoryField(fieldValues, "liveInUKNow", "Do you live in England, Scotland or Wales now?");
+            validateMandatoryField(fieldValues, "liveInUKNow");
 
             if(fieldValue_Equals(fieldValues, "liveInUKNow", "yes")) {
-                validateMandatoryField(fieldValues, "arrivedInUK", "When did you arrive in England, Scotland or Wales?");
+                validateMandatoryField(fieldValues, "arrivedInUK");
 
                 if(fieldValue_Equals(fieldValues, "arrivedInUK", "less")) {
-                    validateMandatoryDateField(fieldValues, "arrivedInUKDate", "Date arrived");
-                    validateMandatoryField(fieldValues, "arrivedInUKFrom", "Which country did you live in?");
+                    validateMandatoryDateField(fieldValues, "arrivedInUKDate");
+                    validateMandatoryField(fieldValues, "arrivedInUKFrom");
                 }
             }
         }
 
         if(fieldValue_Equals(fieldValues, "trip52Weeks", "yes")) {
-            validateMandatoryField(fieldValues, "tripDetails", "Tell us about where you've been.");
+            validateMandatoryField(fieldValues, "tripDetails");
         }
 
         LOG.trace("Ending BenefitsController.validate");

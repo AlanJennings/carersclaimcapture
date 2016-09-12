@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,29 +17,23 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 @Controller
 public class ApproveContoller extends AbstractFormController {
 
+    private static final String PAGE_NAME     = "page.approve";
+    private static final String CURRENT_PAGE  = "/allowance/approve";
+//FIELDS
+
     @Autowired
-    public ApproveContoller(SessionManager sessionManager) {
-        super(sessionManager);
+    public ApproveContoller(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
-    private static final String CURRENT_PAGE  = "/allowance/approve";
-    private static final String PAGE_TITLE    = "Can you get Carer's Allowance?";
-
-    private static final String[] FIELDS = {"allowedToContinue"};
-
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)

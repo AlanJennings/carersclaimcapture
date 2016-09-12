@@ -4,7 +4,7 @@
 
 <!DOCTYPE html>
 
-<t:mainPage pageTitle="page.approve.pageTitle" currentPage="${currentPage}">
+<t:mainPage page="page.approve" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" page="page.approve" backLink="${previousPage}">
 

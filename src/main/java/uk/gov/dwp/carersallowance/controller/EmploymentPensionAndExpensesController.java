@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,22 +20,16 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class EmploymentPensionAndExpensesController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(EmploymentPensionAndExpensesController.class);
 
-    private static final String PAGE_TITLE            = "Pension and expenses - Your income";
-    private static final String CURRENT_PAGE          = "/your-income/employment/about-expenses"; // parameter to indicate which job index
-    private static final String PREVIOUS_PAGE         = "/your-income/employment/last-wage";
-    private static final String NEXT_PAGE             = "/your-income/employment/been-employed/update";
+    private static final String PAGE_NAME     = "page.about-expenses";
+    private static final String CURRENT_PAGE  = "/your-income/employment/about-expenses"; // parameter to indicate which job index
+    private static final String PREVIOUS_PAGE = "/your-income/employment/last-wage";
+    private static final String NEXT_PAGE     = "/your-income/employment/been-employed/update";
 
     private static final String[] READONLY_FIELDS = {"employerName"};
-    public  static final String[] FIELDS          = {"payPensionScheme",
-                                                    "payPensionSchemeText",
-                                                    "payForThings",
-                                                    "payForThingsText",
-                                                    "haveExpensesForJob",
-                                                    "haveExpensesForJobText"};
 
     @Autowired
-    public EmploymentPensionAndExpensesController(SessionManager sessionManager) {
-        super(sessionManager);
+    public EmploymentPensionAndExpensesController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
@@ -43,7 +38,7 @@ public class EmploymentPensionAndExpensesController extends AbstractFormControll
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
@@ -53,18 +48,13 @@ public class EmploymentPensionAndExpensesController extends AbstractFormControll
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @Override
     public String[] getReadOnlyFields() {
         return READONLY_FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -87,17 +77,17 @@ public class EmploymentPensionAndExpensesController extends AbstractFormControll
         LOG.trace("Starting BenefitsController.validate");
         // TODO the dates are from earlier in the claim
 
-        validateMandatoryField(fieldValues, "payPensionScheme", "Do you pay into a pension?");
-        validateMandatoryField(fieldValues, "payForThings", "Do you pay for things you need to do your job?");
-        validateMandatoryField(fieldValues, "haveExpensesForJob", "Do you have any care costs because of this work?");
+        validateMandatoryField(fieldValues, "payPensionScheme");
+        validateMandatoryField(fieldValues, "payForThings");
+        validateMandatoryField(fieldValues, "haveExpensesForJob");
         if(fieldValue_Equals(fieldValues, "payPensionScheme", "yes")) {
-            validateMandatoryField(fieldValues, "payPensionSchemeText", "Give details of each pension you pay into, including how much and how often you pay.");
+            validateMandatoryField(fieldValues, "payPensionSchemeText");
         }
         if(fieldValue_Equals(fieldValues, "payForThings", "yes")) {
-            validateMandatoryField(fieldValues, "payForThingsText", "Give details of what you need to buy, why you need it and how much it costs.");
+            validateMandatoryField(fieldValues, "payForThingsText");
         }
         if(fieldValue_Equals(fieldValues, "haveExpensesForJob", "yes")) {
-            validateMandatoryField(fieldValues, "haveExpensesForJobText", "Give details of who you pay and what it costs.");
+            validateMandatoryField(fieldValues, "haveExpensesForJobText");
         }
 
         LOG.trace("Ending BenefitsController.validate");

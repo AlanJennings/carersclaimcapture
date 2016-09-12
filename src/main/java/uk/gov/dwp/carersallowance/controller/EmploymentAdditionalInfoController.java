@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,18 +20,15 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class EmploymentAdditionalInfoController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(EmploymentAdditionalInfoController.class);
 
+    private static final String PAGE_NAME     = "page.employment-additional-info";
     private static final String CURRENT_PAGE  = "/your-income/employment/additional-info";
     private static final String NEXT_PAGE     = "/pay-details/how-we-pay-you";
-    private static final String PAGE_TITLE    = "Additional Information  Your income";
 
     private static final String[] READONLY_FIELDS = {"employerName"};
 
-    public static final String[] FIELDS = {"empAdditionalInfo",
-                                           "empAdditionalInfoText"};
-
     @Autowired
-    public EmploymentAdditionalInfoController(SessionManager sessionManager) {
-        super(sessionManager);
+    public EmploymentAdditionalInfoController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
@@ -39,7 +37,7 @@ public class EmploymentAdditionalInfoController extends AbstractFormController {
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
@@ -49,18 +47,13 @@ public class EmploymentAdditionalInfoController extends AbstractFormController {
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @Override
     public String[] getReadOnlyFields() {
         return READONLY_FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -82,9 +75,9 @@ public class EmploymentAdditionalInfoController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "empAdditionalInfo", "Do you want to add anything about your work?");
+        validateMandatoryField(fieldValues, "empAdditionalInfo");
         if(fieldValue_Equals(fieldValues, "empAdditionalInfo", "yes")) {
-            validateMandatoryField(fieldValues, "empAdditionalInfoText", "Do you want to add anything about your work?");
+            validateMandatoryField(fieldValues, "empAdditionalInfoText");
         }
 
         LOG.trace("Ending BenefitsController.validate");

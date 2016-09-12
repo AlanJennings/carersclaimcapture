@@ -4,7 +4,7 @@
 
 <!DOCTYPE html>
 
-<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+<t:mainPage page="page.more-about-the-care" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" page="page.more-about-the-care" backLink="${previousPage}">
         <t:yesnofield name="spent35HoursCaring" />

@@ -4,9 +4,9 @@
 
 <!DOCTYPE html>
 
-<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+<t:mainPage page="page.disclaimer" currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" page="page.eligibility" nextButtonTextKey="page.eligibility.nextButtonText" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" page="page.disclaimer" nextButtonTextKey="page.disclaimer.nextButtonText" backLink="${previousPage}">
         
         <t:htmlsection name="disclaimer.section1">
             <p><t:message code="disclaimer.section1.line1" /></p>

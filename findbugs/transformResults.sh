@@ -1,0 +1,1 @@
+$FINDBUGS_HOME/bin/convertXmlToText -longBugCodes -html:fancy-hist.xsl -designations ./CarersClaimCapture.findbugs.xml ./CarersClaimCapture.findbugs.html

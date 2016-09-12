@@ -6,7 +6,7 @@
 
 <!DOCTYPE html>
 
-<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+<t:mainPage page="page.breaks-in-care" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" page="page.breaks-in-care" backLink="${previousPage}">
         

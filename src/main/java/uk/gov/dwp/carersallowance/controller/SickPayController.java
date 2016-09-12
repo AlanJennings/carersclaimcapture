@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,21 +20,12 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class SickPayController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(SickPayController.class);
 
+    private static final String PAGE_NAME     = "page.statutory-sick-pay";
     private static final String CURRENT_PAGE  = "/your-income/statutory-sick-pay";
-    private static final String PAGE_TITLE    = "Your income Statutory Sick Pay";
-
-    private static final String[] FIELDS = {"sickPayStillBeingPaidThisPay",
-                                            "sickPayWhenDidYouLastGetPaid_day",
-                                            "sickPayWhenDidYouLastGetPaid_month",
-                                            "sickPayWhenDidYouLastGetPaid_year",
-                                            "sickPayWhoPaidYouThisPay",
-                                            "sickPayAmountOfThisPay",
-                                            "sickPayHowOftenPaidThisPay",
-                                            "sickPayHowOftenPaidThisPayOther"};
 
     @Autowired
-    public SickPayController(SessionManager sessionManager) {
-        super(sessionManager);
+    public SickPayController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
@@ -42,7 +34,7 @@ public class SickPayController extends AbstractFormController {
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
@@ -52,13 +44,8 @@ public class SickPayController extends AbstractFormController {
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -80,17 +67,17 @@ public class SickPayController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "sickPayStillBeingPaidThisPay", "Are you still being paid Statutory Sick Pay?");
+        validateMandatoryField(fieldValues, "sickPayStillBeingPaidThisPay");
         if(fieldValue_Equals(fieldValues, "sickPayStillBeingPaidThisPay", "no")) {
-            validateMandatoryDateField(fieldValues, "sickPayWhenDidYouLastGetPaid", "When were you last paid?");
+            validateMandatoryDateField(fieldValues, "sickPayWhenDidYouLastGetPaid");
         }
 
-        validateMandatoryField(fieldValues, "sickPayWhoPaidYouThisPay", "Who paid you Statutory Sick Pay?");
-        validateMandatoryField(fieldValues, "sickPayAmountOfThisPay", "Amount paid");
+        validateMandatoryField(fieldValues, "sickPayWhoPaidYouThisPay");
+        validateMandatoryField(fieldValues, "sickPayAmountOfThisPay");
 
-        validateMandatoryField(fieldValues, "sickPayHowOftenPaidThisPay", "How often are you paid?");
+        validateMandatoryField(fieldValues, "sickPayHowOftenPaidThisPay");
         if(fieldValue_Equals(fieldValues, "sickPayHowOftenPaidThisPay", "Other")) {
-            validateMandatoryField(fieldValues, "sickPayHowOftenPaidThisPayOther", "How often are you paid?");
+            validateMandatoryField(fieldValues, "sickPayHowOftenPaidThisPayOther");
         }
 
         LOG.trace("Ending BenefitsController.validate");

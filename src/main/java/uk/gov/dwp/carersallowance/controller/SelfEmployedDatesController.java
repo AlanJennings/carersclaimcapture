@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,30 +20,12 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class SelfEmployedDatesController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(SelfEmployedDatesController.class);
 
+    private static final String PAGE_NAME     = "page.self-employment-dates";
     private static final String CURRENT_PAGE  = "/your-income/self-employment/self-employment-dates";
-    private static final String PAGE_TITLE    = "Your job Self-employment";
-
-    private static final String[] FIELDS = {"stillSelfEmployed",
-                                            "finishThisWork_day",
-                                            "finishThisWork_month",
-                                            "finishThisWork_year",
-                                            "moreThanYearAgo",
-                                            "haveAccounts",
-                                            "knowTradingYear",
-                                            "tradingYearStart_day",
-                                            "tradingYearStart_month",
-                                            "tradingYearStart_year",
-                                            "startThisWork_day",
-                                            "startThisWork_month",
-                                            "startThisWork_year",
-                                            "paidMoney",
-                                            "paidMoneyDate_day",
-                                            "paidMoneyDate_month",
-                                            "paidMoneyDate_year"};
 
     @Autowired
-    public SelfEmployedDatesController(SessionManager sessionManager) {
-        super(sessionManager);
+    public SelfEmployedDatesController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
@@ -51,23 +34,13 @@ public class SelfEmployedDatesController extends AbstractFormController {
     }
 
     @Override
-    public String getCurrentPage() {
-        return CURRENT_PAGE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @Override
     public String getNextPage(HttpServletRequest request) {
         return super.getNextPage(request, YourIncomeController.getIncomePageList(request.getSession()));
-    }
-
-    @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -89,26 +62,26 @@ public class SelfEmployedDatesController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "stillSelfEmployed", "Are you still doing this work?");
+        validateMandatoryField(fieldValues, "stillSelfEmployed");
         if(fieldValue_Equals(fieldValues, "stillSelfEmployed", "no")) {
-            validateMandatoryDateField(fieldValues, "finishThisWork", "When did you start the course?");
+            validateMandatoryDateField(fieldValues, "finishThisWork");
         }
 
-        validateMandatoryField(fieldValues, "moreThanYearAgo", "Did you start this work more than a year ago?");
+        validateMandatoryField(fieldValues, "moreThanYearAgo");
         if(fieldValue_Equals(fieldValues, "moreThanYearAgo", "yes")) {
-            validateMandatoryField(fieldValues, "haveAccounts", "Do you have accounts?");
+            validateMandatoryField(fieldValues, "haveAccounts");
             if(fieldValue_Equals(fieldValues, "haveAccounts", "no")) {
-                validateMandatoryField(fieldValues, "knowTradingYear", "Do you know your trading year?");
+                validateMandatoryField(fieldValues, "knowTradingYear");
                 if(fieldValue_Equals(fieldValues, "knowTradingYear", "yes")) {
-                    validateMandatoryDateField(fieldValues, "tradingYearStart", "Trading year start date");
+                    validateMandatoryDateField(fieldValues, "tradingYearStart");
                 }
             }
         } else if(fieldValue_Equals(fieldValues, "moreThanYearAgo", "no")) {
-            validateMandatoryDateField(fieldValues, "startThisWork", "When did you finish this work?");
+            validateMandatoryDateField(fieldValues, "startThisWork");
 
-            validateMandatoryField(fieldValues, "paidMoney", "Has your self-employed business been paid any money yet?");
+            validateMandatoryField(fieldValues, "paidMoney");
             if(fieldValue_Equals(fieldValues, "paidMoney", "yes")) {
-                validateMandatoryDateField(fieldValues, "paidMoneyDate", "Date money first received by the business");
+                validateMandatoryDateField(fieldValues, "paidMoneyDate");
             }
         }
 

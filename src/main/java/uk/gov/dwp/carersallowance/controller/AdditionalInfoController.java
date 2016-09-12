@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,31 +20,22 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class AdditionalInfoController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(AdditionalInfoController.class);
 
+    private static final String PAGE_NAME     = "page.additional-info";
     private static final String CURRENT_PAGE  = "/information/additional-info";
-    private static final String PAGE_TITLE    = "Additional information - Information";
-
-    private static final String[] FIELDS = {"anythingElse",
-                                            "anythingElseText",
-                                            "welshCommunication"};
 
     @Autowired
-    public AdditionalInfoController(SessionManager sessionManager) {
-        super(sessionManager);
+    public AdditionalInfoController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -65,12 +57,12 @@ public class AdditionalInfoController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "anythingElse", "Do you want to tell us any additional information about your claim?");
+        validateMandatoryField(fieldValues, "anythingElse");
         if(fieldValue_Equals(fieldValues, "anythingElse", "yes")) {
-            validateMandatoryField(fieldValues, "anythingElseText", "Tell us anything else you think we should know about your claim");
+            validateMandatoryField(fieldValues, "anythingElseText");
         }
 
-        validateMandatoryField(fieldValues, "welshCommunication", "Do you live in Wales and want to receive future communications in Welsh?");
+        validateMandatoryField(fieldValues, "welshCommunication");
 
         LOG.trace("Ending BenefitsController.validate");
     }

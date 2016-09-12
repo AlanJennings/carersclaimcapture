@@ -1,0 +1,3246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>
+         FindBugs (3.0.1) 
+         Analysis for 
+         C3</title>
+<style type="text/css">
+         html, body, div, form {
+            margin:0px;
+            padding:0px;
+         }
+         body {
+            padding:3px;
+         }
+         a, a:link , a:active, a:visited, a:hover {
+            text-decoration: none; color: black;
+         }
+         #navlist {
+                 padding: 3px 0;
+                 margin-left: 0;
+                 border-bottom: 1px solid #778;
+                 font: bold 12px Verdana, sans-serif;
+         }
+         #navlist li {
+                 list-style: none;
+                 margin: 0;
+                 display: inline;
+         }
+         #navlist li a {
+                 padding: 3px 0.5em;
+                 margin-left: 3px;
+                 border: 1px solid #778;
+                 border-bottom: none;
+                 background: #DDE;
+                 text-decoration: none;
+         }
+         #navlist li a:link { color: #448; }
+         #navlist li a:visited { color: #667; }
+         #navlist li a:hover {
+                 color: #000;
+                 background: #AAE;
+                 border-color: #227;
+         }
+         #navlist li a.current {
+                 background: white;
+                 border-bottom: 1px solid white;
+         }
+         #filterWrapper {
+            margin-bottom:5px;
+         }
+         #displayWrapper {
+            margin-top:5px;
+         }
+         .message {
+            background:#BBBBBB;
+           border: 1px solid #778;
+         }
+         .displayContainer {
+            border:1px solid #555555;
+            margin-top:3px;
+            padding: 3px;
+            display:none;
+         }
+         #summaryContainer table,
+         #historyContainer table {
+            border:1px solid black;
+         }
+         #summaryContainer th,
+         #historyContainer th {
+            background: #aaaaaa;
+            color: white;
+         }
+         #summaryContainer th, #summaryContainer td,
+         #historyContainer th, #historyContainer td {
+            padding: 2px 4px 2px 4px;
+         }
+         .summary-name {
+            background: #eeeeee;
+            text-align:left;
+         }
+         .summary-size {
+            background: #eeeeee;
+            text-align:center;
+         }
+         .summary-priority-all {
+            background: #dddddd;
+            text-align:center;
+         }
+         .summary-priority-1 {
+            background: red;
+            text-align:center;
+         }
+         .summary-priority-2 {
+            background: orange;
+            text-align:center;
+         }
+         .summary-priority-3 {
+            background: green;
+            text-align:center;
+         }
+         .summary-priority-4 {
+            background: blue;
+            text-align:center;
+         }
+
+         .bugList-level1 {
+            margin-bottom:5px;
+         }
+         .bugList-level1, .bugList-level2, .bugList-level3, .bugList-level4 {
+            background-color: #ffffff;
+            margin-left:15px;
+            padding-left:10px;
+         }
+         .bugList-level1-label, .bugList-level2-label, .bugList-level3-label, .bugList-level4-label {
+            background-color: #bbbbbb;
+            border: 1px solid black;
+            padding: 1px 3px 1px 3px;;
+         }
+         .bugList-level2-label, .bugList-level3-label, .bugList-level4-label {
+            border-width: 0px 1px 1px 1px;
+         }
+         .bugList-level4-label {
+            background-color: #ffffff;
+            border: 0px 0px 1px 0px;
+         }
+         .bugList-level4 {
+            border: 0px 1px 1px 1px;
+         }
+
+         .bugList-level4-inner {
+            border-style: solid;
+            border-color: black;
+            border-width: 0px 1px 1px 1px;
+         }
+         .b-r {
+            font-size: 10pt; font-weight: bold; padding: 0 0 0 60px;
+         }
+         .b-d {
+            font-weight: normal; background: #ccccc0;
+            padding: 0 5px 0 5px; margin: 0px;
+         }
+         .b-1 {
+            background: red; height: 0.5em; width: 1em;
+            margin-right: 0.5em;
+         }
+         .b-2 {
+            background: orange; height: 0.5em; width: 1em;
+            margin-right: 0.5em;
+         }
+         .b-3 {
+            background: green; height: 0.5em; width: 1em;
+            margin-right: 0.5em;
+         }
+         .b-4 {
+            background: blue; height: 0.5em; width: 1em;
+            margin-right: 0.5em;
+         }
+
+      </style>
+<script type="text/javascript">
+         var menus            = new Array('summary','info','history','listByCategories','listByPackages');
+         var selectedMenuId   = "summary";
+         var selectedVersion  = -1;
+         var selectedPriority = 4;
+         var lastVersion      = 0;
+         var includeFixedIntroducedBugs;
+
+         var bPackageNamesPopulated = false;
+
+         var filterContainerId              = "filterWrapper";
+         var historyControlContainerId      = "historyControlWrapper";
+         var messageContainerId             = "messageContainer";
+         var summaryContainerId             = "summaryContainer";
+         var infoContainerId                = "infoContainer";
+         var historyContainerId             = "historyContainer";
+         var listByCategoriesContainerId    = "listByCategoriesContainer";
+         var listByPackagesContainerId      = "listByPackagesContainer";
+
+         var idxCatKey = 0; var idxCatDescr = 1; var idxBugCat = 1;
+         var idxCodeKey = 0; var idxCodeDescr = 1; var idxBugCode = 2;
+         var idxPatternKey = 2; var idxPatternDescr = 3; var idxBugPattern = 3;
+         var idxBugKey = 0; var idxBugDescr = 6;
+         var idxBugClass = 6, idxBugPackage = 7;
+
+         // main init function
+         function init() {
+            loadFilter();
+            selectMenu(selectedMenuId);
+            lastVersion = versions.length - 1;
+         }
+
+         // menu callback function
+         function selectMenu(menuId) {
+            document.getElementById(selectedMenuId).className="none";
+            document.getElementById(menuId).className="current";
+            if (menuId!=selectedMenuId) {
+               hideMenu(selectedMenuId);
+               selectedMenuId = menuId;
+            }
+            if (menuId=="summary")           displaySummary();
+            if (menuId=="info")              displayInfo();
+            if (menuId=="history")           displayHistory();
+            if (menuId=="listByCategories")  displayListByCategories();
+            if (menuId=="listByPackages")    displayListByPackages();
+         }
+
+         // display filter
+         function loadFilter() {
+            var versionsBox = document.findbugsForm.versions.options;
+            versionsBox[0] = new Option(" -- All Versions -- ","-1");
+            versionsBox.selectedIndex = 0;
+            if (versions.length>=1) {
+               for (x=0; versions.length>1 && x<versions.length; x++) {
+                  versionsBox[x+1] = new Option(" Bugs at release: "+versions[versions.length-x-1][1], versions[versions.length-x-1][0]);
+               }
+            }
+
+            var prioritiesBox = document.findbugsForm.priorities.options;
+            prioritiesBox[0] = new Option(" -- All priorities -- ", "4");
+            prioritiesBox[1] = new Option(" P1 bugs ", "1");
+            prioritiesBox[2] = new Option(" P1 and P2 bugs ", "2");
+            prioritiesBox[3] = new Option(" P1, P2 and P3 bugs ", "3");
+         }
+
+         // display a message
+         function displayMessage(msg) {
+            var container = document.getElementById(messageContainerId);
+            container.innerHTML = "<div class='message'>"+msg+"</div>";
+         }
+
+         // reset displayed message
+         function resetMessage() {
+            var container = document.getElementById(messageContainerId);
+            container.innerHTML = "";
+         }
+
+         function hideMenu(menuId) {
+            var container = menuId+"Container";
+            document.getElementById(container).style.display="none";
+         }
+
+         // filter callback function
+         function filter() {
+            var versionsBox = document.findbugsForm.versions.options;
+            selectedVersion = versionsBox[versionsBox.selectedIndex].value;
+
+            var prioritiesBox = document.findbugsForm.priorities.options;
+            selectedPriority = prioritiesBox[prioritiesBox.selectedIndex].value;
+
+            selectMenu(selectedMenuId);
+         }
+
+         // includeFixedBugs callback function
+         function includeFixedIntroducedBugsInHistory() {
+            includeFixedIntroducedBugs =
+              document.findbugsHistoryControlForm.includeFixedIntroducedBugs.checked;
+
+            selectMenu(selectedMenuId);
+         }
+
+         // display summary tab
+         function displaySummary() {
+            resetMessage();
+            hide(filterContainerId);
+            hide(historyControlContainerId);
+            var container = document.getElementById(summaryContainerId);
+            container.style.display="block";
+         }
+
+         // display info tab
+         function displayInfo() {
+            resetMessage();
+            hide(filterContainerId);
+            hide(historyControlContainerId);
+            var container = document.getElementById(infoContainerId);
+            container.style.display="block";
+         }
+
+         // display history tab
+         function displayHistory() {
+            displayMessage("Loading history...");
+            hide(filterContainerId);
+            show(historyControlContainerId);
+            var container = document.getElementById(historyContainerId);
+            var content = "";
+            var i=0;
+            var p = [0,0,0,0,0];
+            var f = [0,0,0,0,0];
+
+            content += "<table><tr><th>Release</th><th>Bugs</th><th>Bugs p1</th><th>Bugs p2</th><th>Bugs p3</th><th>Bugs Exp.</th></tr>";
+
+            var aSpan   = "<span title='Bugs introduced in this release that have not been fixed.'>";
+            var fSpan   = "<span title='Bugs fixed in this release.'>";
+            var fiSpan  = "<span title='Bugs introduced in this release that were fixed in later releases.'>";
+            var afiSpan = "<span title='Total number of bugs introduced in this release.'>";
+            var eSpan   = "</span>";
+
+            if(includeFixedIntroducedBugs) {
+                for (i=(versions.length-1); i>0; i--) {
+                    v = countBugsVersion(i, 4);
+                    t = countTotalBugsVersion(i);
+                    o = countFixedButActiveBugsVersion(i);
+                    f = countFixedBugsInVersion(i);
+                    fi = countFixedBugsIntroducedInVersion(i);
+                    content += "<tr>";
+                    content += "<td class='summary-name'>" + versions[i][1] + "</td>";
+                    content += "<td class='summary-priority-all'> " + (t[0] + o[0]) + " (+" + afiSpan + (v[0] + fi[0]) + eSpan +
+                      " [" + aSpan + v[0] + eSpan + " / " + fiSpan + fi[0] + eSpan + "] " + eSpan + " / -" + fSpan + f[0] + eSpan + ") </td>";
+                    content += "<td class='summary-priority-1'> " + (t[1] + o[1]) + " (+" + afiSpan + (v[1] + fi[1]) + eSpan +
+                      " [" + aSpan + v[1] + eSpan + " / " + fiSpan + fi[1] + eSpan + "] " + eSpan + " / -" + fSpan + f[1] + eSpan + ") </td>";
+                    content += "<td class='summary-priority-2'> " + (t[2] + o[2]) + " (+" + afiSpan + (v[2] + fi[2]) + eSpan +
+                      " [" + aSpan + v[2] + eSpan + " / " + fiSpan + fi[2] + eSpan + "] " + eSpan + " / -" + fSpan + f[2] + eSpan + ") </td>";
+                    content += "<td class='summary-priority-3'> " + (t[3] + o[3]) + " (+" + afiSpan + (v[3] + fi[3]) + eSpan +
+                      " [" + aSpan + v[3] + eSpan + " / " + fiSpan + fi[3] + eSpan + "] " + eSpan + " / -" + fSpan + f[3] + eSpan + ") </td>";
+                    content += "<td class='summary-priority-4'> " + (t[4] + o[4]) + " (+" + afiSpan + (v[4] + fi[4]) + eSpan +
+                      " [" + aSpan + v[4] + eSpan + " / " + fiSpan + fi[4] + eSpan + "] " + eSpan + " / -" + fSpan + f[4] + eSpan + ") </td>";
+                    content += "</tr>";
+                }
+            } else {
+                for (i=(versions.length-1); i>0; i--) {
+                    v = countBugsVersion(i, 4);
+                    t = countTotalBugsVersion(i);
+                    o = countFixedButActiveBugsVersion(i);
+                    f = countFixedBugsInVersion(i);
+                    content += "<tr>";
+                    content += "<td class='summary-name'>" + versions[i][1] + "</td>";
+                    content += "<td class='summary-priority-all'> " + (t[0] + o[0]) + " (+" + aSpan + v[0] + eSpan + " / -" + fSpan + f[0] + eSpan + ") </td>";
+                    content += "<td class='summary-priority-1'  > " + (t[1] + o[1]) + " (+" + aSpan + v[1] + eSpan + " / -" + fSpan + f[1] + eSpan + ") </td>";
+                    content += "<td class='summary-priority-2'  > " + (t[2] + o[2]) + " (+" + aSpan + v[2] + eSpan + " / -" + fSpan + f[2] + eSpan + ") </td>";
+                    content += "<td class='summary-priority-3'  > " + (t[3] + o[3]) + " (+" + aSpan + v[3] + eSpan + " / -" + fSpan + f[3] + eSpan + ") </td>";
+                    content += "<td class='summary-priority-4'  > " + (t[4] + o[4]) + " (+" + aSpan + v[4] + eSpan + " / -" + fSpan + f[4] + eSpan + ") </td>";
+                    content += "</tr>";
+                }
+            }
+
+            t = countTotalBugsVersion(0);
+            o = countFixedButActiveBugsVersion(0);
+            content += "<tr>";
+            content += "<td class='summary-name'>" + versions[0][1] + "</td>";
+            content += "<td class='summary-priority-all'> " + (t[0] + o[0]) + " </td>";
+            content += "<td class='summary-priority-1'  > " + (t[1] + o[1]) + " </td>";
+            content += "<td class='summary-priority-2'  > " + (t[2] + o[2]) + " </td>";
+            content += "<td class='summary-priority-3'  > " + (t[3] + o[3]) + " </td>";
+            content += "<td class='summary-priority-4'  > " + (t[4] + o[4]) + " </td>";
+            content += "</tr>";
+
+            content += "</table>";
+            container.innerHTML = content;
+            container.style.display="block";
+            resetMessage();
+         }
+
+         // display list by cat tab
+         function displayListByCategories() {
+            hide(historyControlContainerId);
+            show(filterContainerId);
+            var container = document.getElementById(listByCategoriesContainerId);
+            container.innerHTML = "";
+            container.style.display="block";
+            displayMessage("Loading stats (categories)...");
+            container.innerHTML = displayLevel1("lbc", "Stats by Bug Categories");
+            resetMessage();
+         }
+
+         // display list by package tab
+         function displayListByPackages() {
+            hide(historyControlContainerId);
+            show(filterContainerId);
+            var container = document.getElementById(listByPackagesContainerId);
+            container.style.display="block";
+            if (!bPackageNamesPopulated) {
+               displayMessage("Initializing...");
+               populatePackageNames();
+            }
+            displayMessage("Loading stats (packages)...");
+            container.innerHTML = displayLevel1("lbp", "Stats by Bug Package");
+            resetMessage();
+         }
+
+         // callback function for list item click
+         function toggleList(listType, containerId, id1, id2, id3) {
+            var container = document.getElementById(containerId);
+            if (container.style.display=="block") {
+               container.style.display="none";
+            } else {
+               if (listType=="lbc") {
+                  if (id1.length>0 && id2.length==0 && id3.length==0) {
+                     displayCategoriesCodes(containerId, id1);
+                  } else if (id1.length>0 && id2.length>0 && id3.length==0) {
+                     displayCategoriesCodesPatterns(containerId, id1, id2);
+                  } else if (id1.length>0 && id2.length>0 && id3.length>0) {
+                     displayCategoriesCodesPatternsBugs(containerId, id1, id2, id3);
+                  } else {
+                     // ???
+                  }
+               } else if (listType=="lbp") {
+                  if (id1.length>0 && id2.length==0 && id3.length==0) {
+                     displayPackageCodes(containerId, id1);
+                  } else if (id1.length>0 && id2.length>0 && id3.length==0) {
+                     displayPackageClassPatterns(containerId, id1, id2);
+                  } else if (id1.length>0 && id2.length>0 && id3.length>0) {
+                     displayPackageClassPatternsBugs(containerId, id1, id2, id3);
+                  } else {
+                     // ???
+                  }
+               } else {
+                  // ????
+               }
+            }
+         }
+
+         // list by categories, display bug cat>codes
+         function displayCategoriesCodes(containerId, catId) {
+            displayMessage("Loading stats (codes)...");
+            var container = document.getElementById(containerId);
+            container.style.display="block";
+            if (container.innerHTML=="Loading..." || container.innerHTML=="") {
+               container.innerHTML = displayLevel2("lbc", catId);
+            }
+            resetMessage();
+         }
+
+         // list by categories, display bug package>codes
+         function displayPackageCodes(containerId, packageId) {
+            displayMessage("Loading stats (codes)...");
+            var container = document.getElementById(containerId);
+            container.style.display="block";
+            if (container.innerHTML=="Loading..." || container.innerHTML=="") {
+               container.innerHTML = displayLevel2("lbp", packageId);
+            }
+            resetMessage();
+         }
+
+         // list by categories, display bug cat>codes>patterns
+         function displayCategoriesCodesPatterns(containerId, catId, codeId) {
+            displayMessage("Loading stats (patterns)...");
+            var container = document.getElementById(containerId);
+            container.style.display="block";
+            if (container.innerHTML=="Loading..." || container.innerHTML=="")
+               container.innerHTML = displayLevel3("lbc", catId, codeId);
+            resetMessage();
+         }
+
+         // list by package, display bug package>class>patterns
+         function displayPackageClassPatterns(containerId, packageId, classId) {
+            displayMessage("Loading stats (patterns)...");
+            var container = document.getElementById(containerId);
+            container.style.display="block";
+            if (container.innerHTML=="Loading..." || container.innerHTML=="")
+               container.innerHTML = displayLevel3("lbp", packageId, classId);
+            resetMessage();
+         }
+
+         // list by categories, display bug cat>codes>patterns>bugs
+         function displayCategoriesCodesPatternsBugs(containerId, catId, codeId, patternId) {
+            displayMessage("Loading stats (bugs)...");
+            var container = document.getElementById(containerId);
+            container.style.display="block";
+            if (container.innerHTML=="Loading..." || container.innerHTML=="")
+               container.innerHTML = displayLevel4("lbc", catId, codeId, patternId);
+            resetMessage();
+         }
+
+         // list by package, display bug package>class>patterns>bugs
+         function displayPackageClassPatternsBugs(containerId, packageId, classId, patternId) {
+            displayMessage("Loading stats (bugs)...");
+            var container = document.getElementById(containerId);
+            container.style.display="block";
+            if (container.innerHTML=="Loading..." || container.innerHTML=="")
+               container.innerHTML = displayLevel4("lbp",  packageId, classId, patternId);
+            resetMessage();
+         }
+
+         // generate level 1 list
+         function displayLevel1(list, title) {
+            var content = "";
+            var content2 = "";
+
+            content += "<h3>"+title+"</h3>";
+            content += getPriorityLegend();
+            content2 += "<div class='bugList'>";
+
+            var id = "";
+            var containerId = "";
+            var subContainerId = "";
+            var prefixSub = "";
+            var prefixId = "";
+            var p = [0,0,0,0,0];
+            var numberOfBugs = 0;
+            var label = "";
+            var max = 0;
+            if (list=="lbc") {
+               max = categories.length;
+            } else if (list=="lbp") {
+               max = packageStats.length;
+            }
+
+            for (var x=0; x<max -1; x++) {
+               if (list=="lbp" && packageStats[x][1]=="0") continue;
+
+               if (list=="lbc") {
+                  id = categories[x][idxCatKey];
+                  label = categories[x][idxCatDescr];
+                  containerId = "categories-" + id;
+                  subContainerId = "cat-"+id;
+                  p = countBugsCat(selectedVersion, selectedPriority, id, idxBugCat);
+               }
+               if (list=="lbp") {
+                  id = packageStats[x][0];
+                  label = packageStats[x][0];
+                  containerId = "packages-" + id;
+                  subContainerId = "package-"+id;
+                  p = countBugsPackage(selectedVersion, selectedPriority, id, idxBugPackage);
+               }
+
+               subContainerId = prefixSub+id;
+
+               var total = p[1]+p[2]+p[3]+p[4];
+               if (total > 0) {
+                  content2 += addListItem( 1, containerId, label, total, p, subContainerId,
+                                          "toggleList('" + list + "', '" + subContainerId + "', '"+ id + "', '', '')"
+                                          );
+               }
+               numberOfBugs += total;
+            }
+            content2 += "</div>";
+            content += "<h4>Total number of bugs";
+            if (selectedVersion!=-1) {
+               content += " (introduced in release " + versions[selectedVersion][1] +")";
+            }
+            content += ": "+numberOfBugs+"</h4>";
+            return content+content2;
+         }
+
+         // generate level 2 list
+        function displayLevel2(list, id1) {
+            var content = "";
+            var code = "";
+            var containerId = "";
+            var subContainerId = "";
+            var p = [0,0,0,0,0];
+            var max = 0;
+            var id2 = "";
+            if (list=="lbc") {
+               max = codes.length;
+            } else if (list=="lbp") {
+               max = classStats.length;
+            }
+
+            for (var x=0; x<max -1; x++) {
+               if (list=="lbp" && classStats[x][3]=="0") continue;
+
+               if (list=="lbc") {
+                  id2 = codes[x][idxCodeKey];
+                  label = codes[x][idxCodeDescr];
+                  containerId = "codes-"+id1;
+                  subContainerId = "cat-" + id1 + "-code-" + id2;
+                  p = countBugsCode(selectedVersion, selectedPriority, id1, idxBugCat, id2, idxBugCode);
+               }
+               if (list=="lbp") {
+                  id2 = classStats[x][0];
+                  label = classStats[x][0];
+                  containerId = "packages-"+id1;
+                  subContainerId = "package-" + id1 + "-class-" + id2;
+                  p = countBugsClass(selectedVersion, selectedPriority, id1, idxBugPackage, id2, idxBugClass);
+               }
+
+               var total = p[1]+p[2]+p[3]+p[4];
+               if (total > 0) {
+                  content += addListItem( 2, containerId, label, total, p, subContainerId,
+                                          "toggleList('"+ list + "', '" + subContainerId + "', '"+ id1 + "', '"+ id2 + "', '')"
+                                          );
+               }
+            }
+            return content;
+         }
+
+         // generate level 3 list
+        function displayLevel3(list, id1, id2) {
+            var content = "";
+            var containerId = "";
+            var subContainerId = "";
+            var p = [0,0,0,0,0];
+            var max = 0;
+            var label = "";
+            var id3 = "";
+
+            if (list=="lbc") {
+               max = patterns.length;
+            } else if (list=="lbp") {
+               max = patterns.length;
+            }
+
+            for (var x=0; x<max -1; x++) {
+               //if (list=="lbp" && (patterns[x][0]!=id1 || patterns[x][1]!=id2)) continue;
+               //if (list=="lbp" && classStats[x][3]=="0") continue;
+
+               if (list=="lbc") {
+                  id3 = patterns[x][idxPatternKey];;
+                  label = patterns[x][idxPatternDescr];
+                  containerId = "patterns-"+id1;
+                  subContainerId = "cat-" + id1 + "-code-" + id2 + "-pattern-" + id3;
+                  p = countBugsPattern(selectedVersion, selectedPriority, id1, idxBugCat, id2, idxBugCode, id3, idxBugPattern);
+               }
+               if (list=="lbp") {
+                  id3 = patterns[x][idxPatternKey];;
+                  label = patterns[x][idxPatternDescr];
+                  containerId = "classpatterns-"+id1;
+                  subContainerId = "package-" + id1 + "-class-" + id2 + "-pattern-" + id3;
+                  p = countBugsClassPattern(selectedVersion, selectedPriority, id2, idxBugClass, id3, idxBugPattern);
+               }
+
+               var total = p[1]+p[2]+p[3]+p[4];
+               if (total > 0) {
+                  content += addListItem( 3, containerId, label, total, p, subContainerId,
+                                          "toggleList('" + list + "', '" + subContainerId + "', '"+ id1 + "', '"+ id2 + "', '"+ id3 + "')"
+                                          );
+               }
+            }
+            return content;
+         }
+
+         // generate level 4 list
+        function displayLevel4(list, id1, id2, id3) {
+            var content = "";
+            var bug = "";
+            var bugP = 0;
+            var containerId = "";
+            var subContainerId = "";
+            var bugId = "";
+            var label = "";
+            var p = [0,0,0,0,0];
+            for (var x=0; x<bugs.length -1; x++) {
+               bug = bugs[x];
+               if (list=="lbc") {
+                  if ( bug[1]!=id1 || bug[2]!=id2 || bug[3]!=id3 ) continue;
+                  if ( selectedVersion!=-1
+                     && selectedVersion!=bug[5]) continue;
+                  if ( selectedPriority!=4
+                     && selectedPriority<bug[4]) continue;
+
+                  subContainerId = "cat-" + id1 + "-code-" + id2 + "-pattern-" + id3 + "-bug-" + bug[0];
+               }
+               if (list=="lbp") {
+                  if ( bug[7]!=id1 || bug[6]!=id2 || bug[3]!=id3 ) continue;
+                  if ( selectedVersion!=-1
+                     && selectedVersion!=bug[5]) continue;
+                  if ( selectedPriority!=4
+                     && selectedPriority<bug[4]) continue;
+
+                  subContainerId = "package-" + id1 + "-class-" + id2 + "-pattern-" + id3 + "-bug-" + bug[0];
+               }
+
+               bugId = "b-uid-" + bug[0];
+               label = bug[idxBugDescr];
+               containerId = "bugs-"+bugId;
+               bugP = bug[4];
+               p[bugP]++;
+               var total = p[1]+p[2]+p[3]+p[4];
+               if (total > 0) {
+                  content += addBug(   4, containerId, label, bugP, bug[5], subContainerId,
+                                       "showbug('" + bugId + "', '" + subContainerId + "', '"+id3+"')");
+               }
+            }
+            return content;
+         }
+
+
+         function addListItem(level, id, label, total, p, subId, onclick) {
+            var content = "";
+
+            content += "<div class='bugList-level"+level+"' >";
+            content += "<div class='bugList-level"+level+"-label' id='"+id+"' >";
+            content += "<a href='' onclick=\"" + onclick + ";return false;\" ";
+            content += ">";
+            content += "<strong>"+label+"</strong>";
+            content += " "+total+" bugs";
+            if (selectedPriority>1)
+               content += " <em>("+p[1];
+            if (selectedPriority>=2)
+               content += "/"+p[2];
+            if (selectedPriority>=3)
+               content += "/"+p[3];
+            if (selectedPriority>=4)
+               content += "/"+p[4];
+            if (selectedPriority>1)
+               content += ")</em>";
+            content += "</a>";
+            content += "</div>";
+            content += "<div class='bugList-level"+level+"-inner' id='"+subId+"' style='display:none;'>Loading...</div>";
+            content += "</div>";
+            return content;
+         }
+
+         function addBug( level, id, label, p, version, subId, onclick) {
+            var content = "";
+
+            content += "<div class='bugList-level" + level + "' id='" + id + "'>";
+            content += "<div class='bugList-level" + level + "-label' id='" + id + "'>";
+            content += "<span class='b-" + p + "'>&nbsp;&nbsp;&nbsp;</span>";
+            content += "<a href='' onclick=\"" + onclick + ";return false;\">";
+            if (version==lastVersion) {
+               content += "<span style='color:red;font-weight:bold;'>NEW!</span> ";
+            }
+            content += "<strong>" + label + "</strong>";
+            if (version==0) {
+               content += " <em>since release first historized release</em>";
+            } else {
+               content += " <em>since release " + versions[version][1] + "</em>";
+            }
+            content += "</a>";
+            content += "</div>";
+            content += "<div class='bugList-level" + level + "-inner' id='" + subId + "' style='display:none;'>Loading...</div>";
+            content += "</div>";
+            return content;
+         }
+
+         function countBugsVersion(version, priority) {
+            return countBugs(version, priority, "", -1, "", -1, "", -1, "", -1, "", -1);
+         }
+
+         function countBugsCat(version, priority, cat, idxCat) {
+            return countBugs(version, priority, cat, idxCat, "", -1, "", -1, "", -1, "", -1);
+         }
+
+         function countBugsPackage(version, priority, packageId, idxPackage) {
+            return countBugs(version, priority, "", -1, "", -1, "", -1, packageId, idxPackage, "", -1);
+         }
+
+         function countBugsCode(version, priority, cat, idxCat, code, idxCode) {
+            return countBugs(version, priority, cat, idxCat, code, idxCode, "", -1, "", -1, "", -1);
+         }
+
+         function countBugsPattern(version, priority, cat, idxCat, code, idxCode, packageId, idxPattern) {
+            return countBugs(version, priority, cat, idxCat, code, idxCode, packageId, idxPattern, "", -1, "", -1);
+         }
+
+         function countBugsClass(version, priority, id1, idxBugPackage, id2, idxBugClass) {
+            return countBugs(version, priority, "", -1, "", -1, "", -1, id1, idxBugPackage, id2, idxBugClass);
+         }
+
+         function countBugsClassPattern(version, priority, id2, idxBugClass, id3, idxBugPattern) {
+            return countBugs(version, priority, "", -1, "", -1, id3, idxBugPattern, "", -1, id2, idxBugClass);
+         }
+
+         function countBugs(version, priority, cat, idxCat, code, idxCode, pattern, idxPattern, packageId, idxPackage, classId, idxClass) {
+            var count = [0,0,0,0,0];
+            var last=1000000;
+            for (var x=0; x<bugs.length-1; x++) {
+               var bug = bugs[x];
+
+               var bugCat = bug[idxCat];
+               var bugP = bug[4];
+               var bugCode = bug[idxCode];
+               var bugPattern = bug[idxPattern];
+
+               if (     (version==-1    || version==bug[5])
+                     && (priority==4    || priority>=bug[4])
+                     && (idxCat==-1     || bug[idxCat]==cat)
+                     && (idxCode==-1    || bug[idxCode]==code)
+                     && (idxPattern==-1 || bug[idxPattern]==pattern)
+                     && (idxPackage==-1 || bug[idxPackage]==packageId)
+                     && (idxClass==-1   || bug[idxClass]==classId)
+                     ) {
+                  count[bug[4]]++;
+               }
+            }
+            count[0] = count[1] + count[2] + count[3] + count[4];
+            return count;
+         }
+
+         function countFixedBugsInVersion(version) {
+            var count = [0,0,0,0,0];
+            var last=1000000;
+            for (var x=0; x<fixedBugs.length-1; x++) {
+               var bug = fixedBugs[x];
+
+               var bugP = bug[4];
+
+               if ( version==-1 || version==(bug[6]+1)) {
+                  count[bug[4]]++;
+               }
+            }
+            count[0] = count[1] + count[2] + count[3] + count[4];
+            return count;
+         }
+
+         function countFixedBugsIntroducedInVersion(version) {
+            var count = [0,0,0,0,0];
+            var last=1000000;
+            for (var x=0; x<fixedBugs.length-1; x++) {
+               var bug = fixedBugs[x];
+
+               var bugP = bug[4];
+
+               if ( version==-1 || version==(bug[5])) {
+                  count[bug[4]]++;
+               }
+            }
+            count[0] = count[1] + count[2] + count[3] + count[4];
+            return count;
+         }
+
+         function countFixedButActiveBugsVersion(version) {
+            var count = [0,0,0,0,0];
+            var last=1000000;
+            for (var x=0; x<fixedBugs.length-1; x++) {
+               var bug = fixedBugs[x];
+
+               var bugP = bug[4];
+
+               if ( version==-1 || (version >=bug[5] && version<=bug[6]) ) {
+                  count[bug[4]]++;
+               }
+            }
+            count[0] = count[1] + count[2] + count[3] + count[4];
+            return count;
+         }
+
+         function countTotalBugsVersion(version) {
+            var count = [0,0,0,0,0];
+            var last=1000000;
+            for (var x=0; x<bugs.length-1; x++) {
+               var bug = bugs[x];
+
+               var bugP = bug[4];
+
+               if (version==-1 || version>=bug[5]) {
+                  count[bug[4]]++;
+               }
+            }
+            count[0] = count[1] + count[2] + count[3] + count[4];
+            return count;
+         }
+
+         function getPriorityLegend() {
+            var content = "";
+            content += "<h5><span class='b-1'>&nbsp;&nbsp;&nbsp;</span> P1 ";
+            content += "<span class='b-2'>&nbsp;&nbsp;&nbsp;</span> P2 ";
+            content += "<span class='b-3'>&nbsp;&nbsp;&nbsp;</span> P3 ";
+            content += "<span class='b-4'>&nbsp;&nbsp;&nbsp;</span> Exp ";
+            content += "</h5>";
+            return content;
+         }
+
+         function populatePackageNames() {
+            for (var i=0; i<bugs.length; i++) {
+               var classId = bugs[i][6];
+               var idx = classId.lastIndexOf('.');
+               var packageId = "";
+
+               if (idx>0) {
+                  packageId = classId.substring(0, idx);
+               }
+
+               bugs[i][7] = packageId;
+            }
+         }
+
+         function showbug(bugId, containerId, patternId) {
+            var bugplaceholder   = document.getElementById(containerId);
+            var bug              = document.getElementById(bugId);
+
+            if ( bugplaceholder==null) {
+               alert(buguid+'-ph-'+list+' - '+buguid+' - bugplaceholder==null');
+               return;
+            }
+            if ( bug==null) {
+               alert(buguid+'-ph-'+list+' - '+buguid+' - bug==null');
+               return;
+            }
+
+            var newBug = bug.innerHTML;
+            var pattern = document.getElementById('tip-'+patternId).innerHTML;
+            toggle(containerId);
+            bugplaceholder.innerHTML = newBug + pattern;
+         }
+         function toggle(foo) {
+            if( document.getElementById(foo).style.display == "none") {
+               show(foo);
+            } else {
+               if( document.getElementById(foo).style.display == "block") {
+                  hide(foo);
+               } else {
+                  show(foo);
+               }
+            }
+         }
+         function show(foo) {
+            document.getElementById(foo).style.display="block";
+         }
+         function hide(foo) {
+            document.getElementById(foo).style.display="none";
+         }
+
+         window.onload = function(){
+            init();
+         };
+      </script>
+<script type="text/javascript">
+         // versions fields: release id, release label
+         var versions = new Array(
+            
+               [ "0", "" ]
+            );
+
+         // categories fields: category id, category label
+         var categories = new Array(
+            
+               [ "BAD_PRACTICE", "Bad practice" ],
+            
+               [ "CORRECTNESS", "Correctness" ],
+            
+               [ "I18N", "Internationalization" ],
+            
+               [ "MALICIOUS_CODE", "Malicious code vulnerability" ],
+            
+               [ "PERFORMANCE", "Performance" ],
+            
+               [ "STYLE", "Dodgy code" ],
+            
+               [ "", "" ]
+            );
+
+         // codes fields: code id, code label
+         var codes = new Array(
+            
+               [ "BC", "Bad casts of object references" ],
+            
+               [ "Dm", "Dubious method used" ],
+            
+               [ "DMI", "Dubious method invocation" ],
+            
+               [ "EI", "Method returning array may expose internal representation" ],
+            
+               [ "EI2", "Storing reference to mutable object" ],
+            
+               [ "ES", "Checking String equality using == or !=" ],
+            
+               [ "MS", "Mutable static field" ],
+            
+               [ "NP", "Null pointer dereference" ],
+            
+               [ "PZLA", "Prefer zero length arrays to null to indicate no results" ],
+            
+               [ "RC", "Questionable use of reference equality rather than calling equals" ],
+            
+               [ "RCN", "Redundant comparison to null" ],
+            
+               [ "RpC", "Repeated conditional test" ],
+            
+               [ "Se", "Incorrect definition of Serializable class" ],
+            
+               [ "UPM", "Private method is never called" ],
+            
+               [ "UrF", "Unread field" ],
+            
+               [ "UuF", "Unused field" ],
+            
+               [ "UwF", "Unwritten field" ],
+            
+               [ "", "" ]
+            );
+
+         // patterns fields: category id, code id, pattern id, pattern label
+         var patterns = new Array(
+            
+               [ "STYLE", "BC", "BC_UNCONFIRMED_CAST_OF_RETURN_VALUE", "Unchecked/unconfirmed cast of return value from method" ],
+
+            
+               [ "I18N", "Dm", "DM_CONVERT_CASE", "Consider using Locale parameterized version of invoked method" ],
+
+            
+               [ "STYLE", "DMI", "DMI_HARDCODED_ABSOLUTE_FILENAME", "Code contains a hard coded reference to an absolute pathname" ],
+
+            
+               [ "MALICIOUS_CODE", "EI", "EI_EXPOSE_REP", "May expose internal representation by returning reference to mutable object" ],
+
+            
+               [ "MALICIOUS_CODE", "EI2", "EI_EXPOSE_REP2", "May expose internal representation by incorporating reference to mutable object" ],
+
+            
+               [ "BAD_PRACTICE", "ES", "ES_COMPARING_PARAMETER_STRING_WITH_EQ", "Comparison of String parameter using == or !=" ],
+
+            
+               [ "MALICIOUS_CODE", "MS", "MS_PKGPROTECT", "Field should be package protected" ],
+
+            
+               [ "MALICIOUS_CODE", "MS", "MS_SHOULD_BE_FINAL", "Field isn't final but should be" ],
+
+            
+               [ "BAD_PRACTICE", "NP", "NP_BOOLEAN_RETURN_NULL", "Method with Boolean return type returns explicit null" ],
+
+            
+               [ "STYLE", "NP", "NP_LOAD_OF_KNOWN_NULL_VALUE", "Load of known null value" ],
+
+            
+               [ "CORRECTNESS", "NP", "NP_NULL_ON_SOME_PATH", "Possible null pointer dereference" ],
+
+            
+               [ "BAD_PRACTICE", "NP", "NP_TOSTRING_COULD_RETURN_NULL", "toString method may return null" ],
+
+            
+               [ "STYLE", "PZLA", "PZLA_PREFER_ZERO_LENGTH_ARRAYS", "Consider returning a zero length array rather than null" ],
+
+            
+               [ "BAD_PRACTICE", "RC", "RC_REF_COMPARISON_BAD_PRACTICE_BOOLEAN", "Suspicious reference comparison of Boolean values" ],
+
+            
+               [ "STYLE", "RCN", "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE", "Redundant nullcheck of value known to be non-null" ],
+
+            
+               [ "CORRECTNESS", "RpC", "RpC_REPEATED_CONDITIONAL_TEST", "Repeated conditional tests" ],
+
+            
+               [ "BAD_PRACTICE", "Se", "SE_COMPARATOR_SHOULD_BE_SERIALIZABLE", "Comparator doesn't implement Serializable" ],
+
+            
+               [ "PERFORMANCE", "UPM", "UPM_UNCALLED_PRIVATE_METHOD", "Private method is never called" ],
+
+            
+               [ "PERFORMANCE", "UrF", "URF_UNREAD_FIELD", "Unread field" ],
+
+            
+               [ "STYLE", "UrF", "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD", "Unread public/protected field" ],
+
+            
+               [ "PERFORMANCE", "UuF", "UUF_UNUSED_FIELD", "Unused field" ],
+
+            
+               [ "CORRECTNESS", "UwF", "UWF_UNWRITTEN_FIELD", "Unwritten field" ],
+
+            
+               [ "", "", "", "" ]
+            );
+
+         // class stats fields: class name, package name, isInterface, total bugs, bugs p1, bugs p2, bugs p3, bugs p4
+         var classStats = new Array(
+            
+               [ "uk.gov.dwp.carersallowance.admin.controller.TextEditTagController", "uk.gov.dwp.carersallowance.admin.controller", "false", "2", "", "", "2", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.AbstractFormController", "uk.gov.dwp.carersallowance.controller", "false", "9", "1", "2", "6", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.AbstractFormController$1", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns", "uk.gov.dwp.carersallowance.controller", "false", "40", "12", "", "28", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationSummary", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationType", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.AdditionalInfoController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.ApproveContoller", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.BenefitsController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.BreakInHospitalController", "uk.gov.dwp.carersallowance.controller", "false", "2", "", "2", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController", "uk.gov.dwp.carersallowance.controller", "false", "2", "", "2", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.BreaksInCareSummaryController", "uk.gov.dwp.carersallowance.controller", "false", "1", "", "1", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController", "uk.gov.dwp.carersallowance.controller", "false", "2", "", "2", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.CareeDetailsController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.CareHoursController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.ClaimDateController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.ConsentDeclarationController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.ContactDetailsController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultFormController", "uk.gov.dwp.carersallowance.controller.defaultcontoller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultFormController$MessageSourceAccessor", "uk.gov.dwp.carersallowance.controller.defaultcontoller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.DirectPaymentController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.DisclaimerController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.EducationController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.EligibilityController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.EmploymentAdditionalInfoController", "uk.gov.dwp.carersallowance.controller", "false", "1", "", "1", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.EmploymentDetailsController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.EmploymentPaymentController", "uk.gov.dwp.carersallowance.controller", "false", "1", "", "1", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.EmploymentPensionAndExpensesController", "uk.gov.dwp.carersallowance.controller", "false", "1", "", "1", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.EmploymentSummaryController", "uk.gov.dwp.carersallowance.controller", "false", "1", "", "1", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.FosteringAllowanceController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.HowWePayYouController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.MaritalStatusController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.NationalityController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.OtherIncomeController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.OtherStatutoryPaymentsController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.PartnerDetailsController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.PaymentsFromAbroadController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.SelfEmployedDatesController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.SelfEmployedPensionAndExpensesController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.SickPayController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.started.PreviewController", "uk.gov.dwp.carersallowance.controller.started", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.SubmittedPageController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.ThirdPartyController", "uk.gov.dwp.carersallowance.controller", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.YourDetailsController", "uk.gov.dwp.carersallowance.controller", "false", "1", "1", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.YourIncomeController", "uk.gov.dwp.carersallowance.controller", "false", "1", "", "1", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.data.AbstractQuestion", "uk.gov.dwp.carersallowance.data", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.data.FormData", "uk.gov.dwp.carersallowance.data", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.data.FormData$Page", "uk.gov.dwp.carersallowance.data", "false", "4", "", "4", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.data.MultiValuedQuestion", "uk.gov.dwp.carersallowance.data", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.data.Question", "uk.gov.dwp.carersallowance.data", "true", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.data.YesNoQuestion", "uk.gov.dwp.carersallowance.data", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.JspFunctions", "uk.gov.dwp.carersallowance", "false", "1", "", "", "1", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.JspFunctions$TagException", "uk.gov.dwp.carersallowance", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.session.FieldCollection", "uk.gov.dwp.carersallowance.session", "false", "1", "", "", "1", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator", "uk.gov.dwp.carersallowance.session", "false", "3", "", "2", "1", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.session.FieldValue", "uk.gov.dwp.carersallowance.session", "false", "2", "", "2", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.session.IllegalFieldValueException", "uk.gov.dwp.carersallowance.session", "false", "5", "", "5", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.session.InconsistentFieldValuesException", "uk.gov.dwp.carersallowance.session", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.session.MultipleValuesException", "uk.gov.dwp.carersallowance.session", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.session.NoSessionException", "uk.gov.dwp.carersallowance.session", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.session.SessionManager", "uk.gov.dwp.carersallowance.session", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.session.SessionManager$1", "uk.gov.dwp.carersallowance.session", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.session.SessionManager$Session", "uk.gov.dwp.carersallowance.session", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.session.UnknownRecordException", "uk.gov.dwp.carersallowance.session", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.utils.CollectionUtils", "uk.gov.dwp.carersallowance.utils", "false", "2", "", "", "2", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.utils.KeyValueList", "uk.gov.dwp.carersallowance.utils", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper", "uk.gov.dwp.carersallowance.utils", "false", "1", "", "1", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.utils.Parameters", "uk.gov.dwp.carersallowance.utils", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.utils.Parameters$ValidateArgsException", "uk.gov.dwp.carersallowance.utils", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil", "uk.gov.dwp.carersallowance.utils.xml", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.utils.xml.SignXml", "uk.gov.dwp.carersallowance.utils.xml", "false", "1", "", "1", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.utils.xml.VerifyXmlSignature", "uk.gov.dwp.carersallowance.utils.xml", "false", "1", "", "1", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter", "uk.gov.dwp.carersallowance.utils.xml", "false", "1", "", "1", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter$1", "uk.gov.dwp.carersallowance.utils.xml", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter$StripWhitespaceFilter", "uk.gov.dwp.carersallowance.utils.xml", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.utils.xml.XmlValidator", "uk.gov.dwp.carersallowance.utils.xml", "false", "9", "", "9", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.utils.xml.XmlValidator$ValidationErorrs", "uk.gov.dwp.carersallowance.utils.xml", "true", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.utils.xml.XmlValidator$XmlErrorHandler", "uk.gov.dwp.carersallowance.utils.xml", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.validations.FormValidationError", "uk.gov.dwp.carersallowance.validations", "false", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.validations.ValidationError", "uk.gov.dwp.carersallowance.validations", "true", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.xml.ClaimXml", "uk.gov.dwp.carersallowance.xml", "false", "1", "", "1", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.xml.FieldNameMap", "uk.gov.dwp.carersallowance.xml", "false", "1", "", "1", "", "" ],
+            
+               [ "", "", "", "", "", "", "", "" ]
+            );
+
+         // package stats fields: package name, total bugs, bugs p1, bugs p2, bugs p3, bugs p4
+         var packageStats = new Array(
+            
+               [ "uk.gov.dwp.carersallowance", "1", "", "", "1", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.admin.controller", "2", "", "", "2", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller", "62", "14", "14", "34", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.defaultcontoller", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.controller.started", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.data", "4", "", "4", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.session", "11", "", "9", "2", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.utils", "3", "", "1", "2", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.utils.xml", "12", "", "12", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.validations", "0", "", "", "", "" ],
+            
+               [ "uk.gov.dwp.carersallowance.xml", "2", "", "2", "", "" ],
+            
+               [ "", "", "", "", "", "" ]
+            );
+
+
+         // bugs fields: bug id, category id, code id, pattern id, priority, release id, class name, packagename (populated by javascript)
+         var bugs = new Array(
+            
+
+               [ "d74ffec08fb74c53394a40ae22043099-0",
+                 "I18N",
+                 "Dm",
+                 "DM_CONVERT_CASE",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.JspFunctions",
+                 ""],
+            
+
+               [ "ce122e99b6f7ff0cf682a2dc5766fe2f-0",
+                 "PERFORMANCE",
+                 "UPM",
+                 "UPM_UNCALLED_PRIVATE_METHOD",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.admin.controller.TextEditTagController",
+                 ""],
+            
+
+               [ "32c95b0def63456b23fa457ec7dbaf6c-0",
+                 "PERFORMANCE",
+                 "UPM",
+                 "UPM_UNCALLED_PRIVATE_METHOD",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.admin.controller.TextEditTagController",
+                 ""],
+            
+
+               [ "d7d8aa9ec7683e5c68126e0ab9175cff-0",
+                 "BAD_PRACTICE",
+                 "NP",
+                 "NP_BOOLEAN_RETURN_NULL",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController",
+                 ""],
+            
+
+               [ "868a005f8d9bbad6200184a46f266334-0",
+                 "STYLE",
+                 "NP",
+                 "NP_LOAD_OF_KNOWN_NULL_VALUE",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController",
+                 ""],
+            
+
+               [ "b99c9d05b05357d42b0b939dc87799fe-0",
+                 "STYLE",
+                 "NP",
+                 "NP_LOAD_OF_KNOWN_NULL_VALUE",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController",
+                 ""],
+            
+
+               [ "e5d219e9242754180173abc7b2c85b4a-0",
+                 "STYLE",
+                 "NP",
+                 "NP_LOAD_OF_KNOWN_NULL_VALUE",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController",
+                 ""],
+            
+
+               [ "c10ce609f0cc11f18c3cb869fb6223a5-0",
+                 "STYLE",
+                 "PZLA",
+                 "PZLA_PREFER_ZERO_LENGTH_ARRAYS",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController",
+                 ""],
+            
+
+               [ "f9844d4a96e9fab5da61431dd0a0d3dc-0",
+                 "STYLE",
+                 "PZLA",
+                 "PZLA_PREFER_ZERO_LENGTH_ARRAYS",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController",
+                 ""],
+            
+
+               [ "5dfb33a7d3be422c6da154fa4cc78f5f-0",
+                 "STYLE",
+                 "PZLA",
+                 "PZLA_PREFER_ZERO_LENGTH_ARRAYS",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController",
+                 ""],
+            
+
+               [ "891547d62c435fc5e578018da98f0bc2-0",
+                 "STYLE",
+                 "RCN",
+                 "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController",
+                 ""],
+            
+
+               [ "f01cb8e48d492b9e601086f1cc082c34-0",
+                 "CORRECTNESS",
+                 "RpC",
+                 "RpC_REPEATED_CONDITIONAL_TEST",
+                 1,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController",
+                 ""],
+            
+
+               [ "ba1bacb6675e2d5787946c371afc6834-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 1,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "303d39e1d6c2485fd5c31f789d6780b1-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 1,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "c586c92d7e2e92df76138b6db3ffcee8-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 1,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "63f1b300611bf569a30690dc3eab5b8-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 1,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "5cd7715a7e2426b31e961b386bf2e81f-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 1,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "8662142d5870b30d4ecb3f2e27dc4b7c-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 1,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "b2ff19b2299754de6a390021d8acdce2-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 1,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "18d9071ebbcd8f46f256b8e217a04be3-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 1,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "1d028418005eaa06bda055415fdec186-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 1,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "5af9acc359e5825aefa24f688cc7ec6b-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 1,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "bae4cdbb9ca32c2241dcc59cd00585cb-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 1,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "2a3122356da7bb1bc9835ebfe658628a-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 1,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "a6eb2b65fd1ac042e9b0dc990dcf55ca-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "fd07a2a7864a334b0c97452b6897398b-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "c3929426e2ef88b3ffa921a77fa51344-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "f16bcd4c24ef8df49272510eececfefb-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "723715ad0127ac2516b470182f2b24-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "40654553e19fc714a333dbf2c2db556e-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "90dab905ce7ba782a5e13c9711f1de74-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "1590aa096eca48e9cf5a5443ddaf5bea-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "5931f795bc6a63ae8740300b1ebcb99a-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "983772a0ac7bb9862c7ade53ba32887d-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "3b4b1c1f0c508cfa0ad4080855d6d0af-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "98c021f5c357c1b1c0aa42c0cea3fe71-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "3f69352cb4b66461d54a38940c60794b-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "8c952cad707510e7cc31ba252b73618b-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_SHOULD_BE_FINAL",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "dfa87fda3e766a88eec6ba535d58829e-0",
+                 "STYLE",
+                 "UrF",
+                 "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "69ec0e437e5b3090b9ef88f0f687425d-0",
+                 "STYLE",
+                 "UrF",
+                 "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "c8b5360b1b687ab90d8cd89bb11262fa-0",
+                 "STYLE",
+                 "UrF",
+                 "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "1dc34d830a9c683ae15ad98755058bd5-0",
+                 "STYLE",
+                 "UrF",
+                 "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "f13299ade4c1be2473fb620abbecbaa2-0",
+                 "STYLE",
+                 "UrF",
+                 "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "c868cf53f88dac875d10c375f7c5708e-0",
+                 "STYLE",
+                 "UrF",
+                 "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "e583e2f8d4777a2a2120c523755009f9-0",
+                 "STYLE",
+                 "UrF",
+                 "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "122e58f4111d20264fc5915859a27053-0",
+                 "STYLE",
+                 "UrF",
+                 "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "4b57ac071abdb2ef3d2b0dcaec8ca919-0",
+                 "STYLE",
+                 "UrF",
+                 "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "6abe35c8be07aa4df7250a3d59a8346b-0",
+                 "STYLE",
+                 "UrF",
+                 "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "9cb068d856ddf44ac24ea08556745b13-0",
+                 "STYLE",
+                 "UrF",
+                 "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "fba2b968a44553f37ca619700fb2ff3b-0",
+                 "STYLE",
+                 "UrF",
+                 "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "3b099ba01e33d47a37486ff8f35cd13b-0",
+                 "STYLE",
+                 "UrF",
+                 "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "c4c8e444dd91aa63352eb16cc9d75cf3-0",
+                 "STYLE",
+                 "UrF",
+                 "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns",
+                 ""],
+            
+
+               [ "156eef3c986188d96a0422ba2bc174ff-0",
+                 "MALICIOUS_CODE",
+                 "EI",
+                 "EI_EXPOSE_REP",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.BreakInHospitalController",
+                 ""],
+            
+
+               [ "ca51518e7d02cad8991f85eff86f7ba6-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_PKGPROTECT",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.BreakInHospitalController",
+                 ""],
+            
+
+               [ "47da0c57460f307911974d75ab5dff49-0",
+                 "MALICIOUS_CODE",
+                 "EI",
+                 "EI_EXPOSE_REP",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController",
+                 ""],
+            
+
+               [ "fd37b00032acce132f4d4d6ff9d00de5-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_PKGPROTECT",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController",
+                 ""],
+            
+
+               [ "89d14b0aaa16fd18e82085da75cfb347-0",
+                 "MALICIOUS_CODE",
+                 "EI",
+                 "EI_EXPOSE_REP",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController",
+                 ""],
+            
+
+               [ "ae9659eee6869d955aabc6ba9d38f771-0",
+                 "MALICIOUS_CODE",
+                 "MS",
+                 "MS_PKGPROTECT",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController",
+                 ""],
+            
+
+               [ "47b72452bd443a331645569dd3f97c8c-0",
+                 "MALICIOUS_CODE",
+                 "EI",
+                 "EI_EXPOSE_REP",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.BreaksInCareSummaryController",
+                 ""],
+            
+
+               [ "4ec4e4d69d9cefc8089d2df90914a206-0",
+                 "MALICIOUS_CODE",
+                 "EI",
+                 "EI_EXPOSE_REP",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.EmploymentAdditionalInfoController",
+                 ""],
+            
+
+               [ "1c56a12228dbe1f68da2f57855a75eb9-0",
+                 "MALICIOUS_CODE",
+                 "EI",
+                 "EI_EXPOSE_REP",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.EmploymentPaymentController",
+                 ""],
+            
+
+               [ "bbcaadbf7e10b8e3f5a21161edf9262f-0",
+                 "MALICIOUS_CODE",
+                 "EI",
+                 "EI_EXPOSE_REP",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.EmploymentPensionAndExpensesController",
+                 ""],
+            
+
+               [ "36e574cd9093d7a55c9c593e1b8f24b3-0",
+                 "MALICIOUS_CODE",
+                 "EI",
+                 "EI_EXPOSE_REP",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.EmploymentSummaryController",
+                 ""],
+            
+
+               [ "70ee92406ef60353e71c7420d55d4d28-0",
+                 "CORRECTNESS",
+                 "NP",
+                 "NP_NULL_ON_SOME_PATH",
+                 1,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.YourDetailsController",
+                 ""],
+            
+
+               [ "ad10aa22938910ef1e828a03d998e2a7-0",
+                 "BAD_PRACTICE",
+                 "RC",
+                 "RC_REF_COMPARISON_BAD_PRACTICE_BOOLEAN",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.controller.YourIncomeController",
+                 ""],
+            
+
+               [ "47f85b85364eb75f6020867e5d496e8b-0",
+                 "CORRECTNESS",
+                 "UwF",
+                 "UWF_UNWRITTEN_FIELD",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.data.FormData$Page",
+                 ""],
+            
+
+               [ "abae59ed6837f5685a747f07738f3995-0",
+                 "CORRECTNESS",
+                 "UwF",
+                 "UWF_UNWRITTEN_FIELD",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.data.FormData$Page",
+                 ""],
+            
+
+               [ "9c890ad5da0b40bc90f9486dc3a21ccd-0",
+                 "CORRECTNESS",
+                 "UwF",
+                 "UWF_UNWRITTEN_FIELD",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.data.FormData$Page",
+                 ""],
+            
+
+               [ "8fc6f81c538034dd84d952622ffdbed9-0",
+                 "CORRECTNESS",
+                 "UwF",
+                 "UWF_UNWRITTEN_FIELD",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.data.FormData$Page",
+                 ""],
+            
+
+               [ "3e9a4b187984aaa073bc2ddbcc342a7d-0",
+                 "STYLE",
+                 "PZLA",
+                 "PZLA_PREFER_ZERO_LENGTH_ARRAYS",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.session.FieldCollection",
+                 ""],
+            
+
+               [ "54e14da62db38481e32a265848f079f8-0",
+                 "BAD_PRACTICE",
+                 "ES",
+                 "ES_COMPARING_PARAMETER_STRING_WITH_EQ",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator",
+                 ""],
+            
+
+               [ "6b26756c870304e221ac26b50162402b-0",
+                 "BAD_PRACTICE",
+                 "Se",
+                 "SE_COMPARATOR_SHOULD_BE_SERIALIZABLE",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator",
+                 ""],
+            
+
+               [ "fbdddf15f2c06e6001f98d53dee148be-0",
+                 "CORRECTNESS",
+                 "UwF",
+                 "UWF_UNWRITTEN_FIELD",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator",
+                 ""],
+            
+
+               [ "579f384b334c0f84c36ea42fc4152e5a-0",
+                 "MALICIOUS_CODE",
+                 "EI",
+                 "EI_EXPOSE_REP",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.session.FieldValue",
+                 ""],
+            
+
+               [ "90541b9f6a2299d3c26deb34b13327ba-0",
+                 "MALICIOUS_CODE",
+                 "EI2",
+                 "EI_EXPOSE_REP2",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.session.FieldValue",
+                 ""],
+            
+
+               [ "93b4186229cf319d213381a400635c4-0",
+                 "MALICIOUS_CODE",
+                 "EI",
+                 "EI_EXPOSE_REP",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.session.IllegalFieldValueException",
+                 ""],
+            
+
+               [ "a4098d07dfc58ff1f2c1fadaf8033277-0",
+                 "MALICIOUS_CODE",
+                 "EI2",
+                 "EI_EXPOSE_REP2",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.session.IllegalFieldValueException",
+                 ""],
+            
+
+               [ "7410b375f22d0d39881c08713af2d209-0",
+                 "MALICIOUS_CODE",
+                 "EI2",
+                 "EI_EXPOSE_REP2",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.session.IllegalFieldValueException",
+                 ""],
+            
+
+               [ "8b089b61a9fc4c8c3959455a4a003ef5-0",
+                 "MALICIOUS_CODE",
+                 "EI2",
+                 "EI_EXPOSE_REP2",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.session.IllegalFieldValueException",
+                 ""],
+            
+
+               [ "d984301c6430f7f215dea875acebc2b9-0",
+                 "MALICIOUS_CODE",
+                 "EI2",
+                 "EI_EXPOSE_REP2",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.session.IllegalFieldValueException",
+                 ""],
+            
+
+               [ "52c1cda565d60edfe3864fb7891dd967-0",
+                 "STYLE",
+                 "BC",
+                 "BC_UNCONFIRMED_CAST_OF_RETURN_VALUE",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.utils.CollectionUtils",
+                 ""],
+            
+
+               [ "5e654a259f3de467c6b2e0554d66ed8f-0",
+                 "I18N",
+                 "Dm",
+                 "DM_CONVERT_CASE",
+                 3,
+                 0,
+                 "uk.gov.dwp.carersallowance.utils.CollectionUtils",
+                 ""],
+            
+
+               [ "43221d0d2d568e98dec3c14669e5f455-0",
+                 "BAD_PRACTICE",
+                 "NP",
+                 "NP_TOSTRING_COULD_RETURN_NULL",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper",
+                 ""],
+            
+
+               [ "a34fe982870411dc356511565633b502-0",
+                 "STYLE",
+                 "DMI",
+                 "DMI_HARDCODED_ABSOLUTE_FILENAME",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.utils.xml.SignXml",
+                 ""],
+            
+
+               [ "5e81260e0d808f5480ce8694ddb7932a-0",
+                 "STYLE",
+                 "DMI",
+                 "DMI_HARDCODED_ABSOLUTE_FILENAME",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.utils.xml.VerifyXmlSignature",
+                 ""],
+            
+
+               [ "b56e39ec68a6b0d10cb4d0b7f241c8d4-0",
+                 "STYLE",
+                 "DMI",
+                 "DMI_HARDCODED_ABSOLUTE_FILENAME",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter",
+                 ""],
+            
+
+               [ "e8b8ef41d979adb8eb30a4397b12c610-0",
+                 "STYLE",
+                 "DMI",
+                 "DMI_HARDCODED_ABSOLUTE_FILENAME",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.utils.xml.XmlValidator",
+                 ""],
+            
+
+               [ "5010a8c704ba767ade7c1f9c9f25a5ba-0",
+                 "STYLE",
+                 "DMI",
+                 "DMI_HARDCODED_ABSOLUTE_FILENAME",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.utils.xml.XmlValidator",
+                 ""],
+            
+
+               [ "23ff221565692351da2ffa62c122a37c-0",
+                 "STYLE",
+                 "DMI",
+                 "DMI_HARDCODED_ABSOLUTE_FILENAME",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.utils.xml.XmlValidator",
+                 ""],
+            
+
+               [ "489362a79b8b0c3bf11618052e690102-0",
+                 "STYLE",
+                 "DMI",
+                 "DMI_HARDCODED_ABSOLUTE_FILENAME",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.utils.xml.XmlValidator",
+                 ""],
+            
+
+               [ "a6b76b5def347124e0f8cd10bc876b1a-0",
+                 "STYLE",
+                 "DMI",
+                 "DMI_HARDCODED_ABSOLUTE_FILENAME",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.utils.xml.XmlValidator",
+                 ""],
+            
+
+               [ "ea02e0067a79b1014dcd5fea6394d139-0",
+                 "STYLE",
+                 "DMI",
+                 "DMI_HARDCODED_ABSOLUTE_FILENAME",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.utils.xml.XmlValidator",
+                 ""],
+            
+
+               [ "e2d1331725082c82e20dad1b13cdf5e2-0",
+                 "STYLE",
+                 "DMI",
+                 "DMI_HARDCODED_ABSOLUTE_FILENAME",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.utils.xml.XmlValidator",
+                 ""],
+            
+
+               [ "ab9e9a4d51ce55f043e393129fc7f1c2-0",
+                 "STYLE",
+                 "DMI",
+                 "DMI_HARDCODED_ABSOLUTE_FILENAME",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.utils.xml.XmlValidator",
+                 ""],
+            
+
+               [ "ef9d0a7b21f8162f695e2608a1197263-0",
+                 "STYLE",
+                 "DMI",
+                 "DMI_HARDCODED_ABSOLUTE_FILENAME",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.utils.xml.XmlValidator",
+                 ""],
+            
+
+               [ "2548075f7dc678b86fa4735cdf2856d4-0",
+                 "PERFORMANCE",
+                 "UrF",
+                 "URF_UNREAD_FIELD",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.xml.ClaimXml",
+                 ""],
+            
+
+               [ "1a0ed191cf8de9cc60803fc52b8e852b-0",
+                 "PERFORMANCE",
+                 "UuF",
+                 "UUF_UNUSED_FIELD",
+                 2,
+                 0,
+                 "uk.gov.dwp.carersallowance.xml.FieldNameMap",
+                 ""],
+            
+               [ "", "", "", "", 0, 0, "", "" ]
+            );
+
+         // bugs fields: bug id, category id, code id, pattern id, priority, first release id, fixed release id, class name
+         var fixedBugs = new Array(
+            
+               [ "", "", "", "", 0, 0, 0, "" ]
+            );
+
+      </script>
+</head>
+<body>
+<h3>
+<a href="http://findbugs.sourceforge.net">FindBugs</a> (3.0.1) 
+         Analysis for 
+         C3</h3>
+<div id="menuWrapper" style="">
+<div id="navcontainer">
+<ul id="navlist">
+<li>
+<a id="summary" class="current" href="#" onclick="selectMenu('summary'); return false;">Summary</a>
+</li>
+<li>
+<a id="history" class="none" href="#" onclick="selectMenu('history'); return false;">History</a>
+</li>
+<li>
+<a id="listByCategories" class="none" href="#" onclick="selectMenu('listByCategories'); return false;">Browse By Categories</a>
+</li>
+<li>
+<a id="listByPackages" class="none" href="#" onclick="selectMenu('listByPackages'); return false;">Browse by Packages</a>
+</li>
+<li>
+<a id="info" class="none" href="#" onclick="selectMenu('info'); return false;">Info</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="displayWrapper">
+<div style="height:25px;">
+<div id="messageContainer" style="float:right;">
+            Computing data...
+         </div>
+<div id="filterWrapper" style="display:none;">
+<form name="findbugsForm">
+<div id="filterContainer">
+<select name="versions" onchange="filter()">
+<option value="loading">Loading filter...</option>
+</select>
+<select name="priorities" onchange="filter()">
+<option value="loading">Loading filter...</option>
+</select>
+</div>
+</form>
+</div>
+<div id="historyControlWrapper" style="display:none;">
+<form name="findbugsHistoryControlForm">
+<div id="historyControlContainer">
+<input type="checkbox" name="includeFixedIntroducedBugs" value="checked" alt="Include fixed introduced bugs." onclick="includeFixedIntroducedBugsInHistory()"/>
+               Include counts of introduced bugs that were fixed in later releases.
+             </div>
+</form>
+</div>
+</div>
+<div id="summaryContainer" class="displayContainer">
+<h3>Package Summary</h3>
+<table>
+<tr>
+<th>Package</th>
+<th>Code Size</th>
+<th>Bugs</th>
+<th>Bugs p1</th>
+<th>Bugs p2</th>
+<th>Bugs p3</th>
+<th>Bugs Exp.</th>
+</tr>
+<tr>
+<td class="summary-name">
+                     Overall
+                     (11 packages),
+                     (82 classes)
+                  </td>
+<td class="summary-size">3227</td>
+<td class="summary-priority-all">97</td>
+<td class="summary-priority-1">14</td>
+<td class="summary-priority-2">42</td>
+<td class="summary-priority-3">41</td>
+<td class="summary-priority-4"/>
+</tr>
+<tr>
+<td class="summary-name">uk.gov.dwp.carersallowance</td>
+<td class="summary-size">101</td>
+<td class="summary-priority-all">1</td>
+<td class="summary-priority-1"/>
+<td class="summary-priority-2"/>
+<td class="summary-priority-3">1</td>
+<td class="summary-priority-4"/>
+</tr>
+<tr>
+<td class="summary-name">uk.gov.dwp.carersallowance.admin.controller</td>
+<td class="summary-size">52</td>
+<td class="summary-priority-all">2</td>
+<td class="summary-priority-1"/>
+<td class="summary-priority-2"/>
+<td class="summary-priority-3">2</td>
+<td class="summary-priority-4"/>
+</tr>
+<tr>
+<td class="summary-name">uk.gov.dwp.carersallowance.controller</td>
+<td class="summary-size">2035</td>
+<td class="summary-priority-all">62</td>
+<td class="summary-priority-1">14</td>
+<td class="summary-priority-2">14</td>
+<td class="summary-priority-3">34</td>
+<td class="summary-priority-4"/>
+</tr>
+<tr>
+<td class="summary-name">uk.gov.dwp.carersallowance.data</td>
+<td class="summary-size">116</td>
+<td class="summary-priority-all">4</td>
+<td class="summary-priority-1"/>
+<td class="summary-priority-2">4</td>
+<td class="summary-priority-3"/>
+<td class="summary-priority-4"/>
+</tr>
+<tr>
+<td class="summary-name">uk.gov.dwp.carersallowance.session</td>
+<td class="summary-size">242</td>
+<td class="summary-priority-all">11</td>
+<td class="summary-priority-1"/>
+<td class="summary-priority-2">9</td>
+<td class="summary-priority-3">2</td>
+<td class="summary-priority-4"/>
+</tr>
+<tr>
+<td class="summary-name">uk.gov.dwp.carersallowance.utils</td>
+<td class="summary-size">82</td>
+<td class="summary-priority-all">3</td>
+<td class="summary-priority-1"/>
+<td class="summary-priority-2">1</td>
+<td class="summary-priority-3">2</td>
+<td class="summary-priority-4"/>
+</tr>
+<tr>
+<td class="summary-name">uk.gov.dwp.carersallowance.utils.xml</td>
+<td class="summary-size">317</td>
+<td class="summary-priority-all">12</td>
+<td class="summary-priority-1"/>
+<td class="summary-priority-2">12</td>
+<td class="summary-priority-3"/>
+<td class="summary-priority-4"/>
+</tr>
+<tr>
+<td class="summary-name">uk.gov.dwp.carersallowance.xml</td>
+<td class="summary-size">178</td>
+<td class="summary-priority-all">2</td>
+<td class="summary-priority-1"/>
+<td class="summary-priority-2">2</td>
+<td class="summary-priority-3"/>
+<td class="summary-priority-4"/>
+</tr>
+</table>
+</div>
+<div id="infoContainer" class="displayContainer">
+<div id="analyzed-files">
+<h3>Analyzed Files:</h3>
+<ul>
+<li>/Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/target/classes</li>
+</ul>
+</div>
+<div id="used-libraries">
+<h3>Used Libraries:</h3>
+<ul>
+<li>/Users/drh/m2/repository/org/springframework/spring-core/4.2.5.RELEASE/spring-core-4.2.5.RELEASE.jar</li>
+<li>/Users/drh/m2/repository/org/springframework/spring-context/4.2.5.RELEASE/spring-context-4.2.5.RELEASE.jar</li>
+<li>/Users/drh/m2/repository/org/springframework/spring-web/4.2.5.RELEASE/spring-web-4.2.5.RELEASE.jar</li>
+<li>/Users/drh/m2/repository/org/springframework/spring-webmvc/4.2.5.RELEASE/spring-webmvc-4.2.5.RELEASE.jar</li>
+<li>/Users/drh/m2/repository/org/springframework/spring-beans/4.2.5.RELEASE/spring-beans-4.2.5.RELEASE.jar</li>
+<li>/Users/drh/m2/repository/javax/servlet/javax.servlet-api/3.0.1/javax.servlet-api-3.0.1.jar</li>
+<li>/Users/drh/m2/repository/ch/qos/logback/logback-core/1.1.2/logback-core-1.1.2.jar</li>
+<li>/Users/drh/m2/repository/ch/qos/logback/logback-classic/1.1.2/logback-classic-1.1.2.jar</li>
+<li>/Users/drh/m2/repository/org/slf4j/slf4j-api/1.7.6/slf4j-api-1.7.6.jar</li>
+<li>/Users/drh/m2/repository/org/apache/commons/commons-lang3/3.0/commons-lang3-3.0.jar</li>
+<li>/Users/drh/m2/repository/commons-io/commons-io/2.5/commons-io-2.5.jar</li>
+<li>/Users/drh/m2/repository/gov/dwp/carers/xmlcommons/8.14-SNAPSHOT/xmlcommons-8.14-SNAPSHOT.jar</li>
+</ul>
+</div>
+<div id="analysis-error">
+<h3>Analysis Errors:</h3>
+<ul>
+<li>None</li>
+</ul>
+</div>
+</div>
+<div id="historyContainer" class="displayContainer">Loading...</div>
+<div id="listByCategoriesContainer" class="displayContainer">Loading...</div>
+<div id="listByPackagesContainer" class="displayContainer">Loading...</div>
+</div>
+<div id="bug-collection" style="display:none;">
+<div id="tip-URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" class="tip">
+
+  <p> This field is never read.&nbsp;
+The field is public or protected, so perhaps
+    it is intended to be used with classes not seen as part of the analysis. If not,
+consider removing it from the class.</p>
+
+    </div>
+<div id="tip-EI_EXPOSE_REP2" class="tip">
+
+  <p> This code stores a reference to an externally mutable object into the
+  internal representation of the object.&nbsp;
+   If instances
+   are accessed by untrusted code, and unchecked changes to
+   the mutable object would compromise security or other
+   important properties, you will need to do something different.
+  Storing a copy of the object is better approach in many situations.</p>
+
+    </div>
+<div id="tip-NP_NULL_ON_SOME_PATH" class="tip">
+
+<p> There is a branch of statement that, <em>if executed,</em>  guarantees that
+a null value will be dereferenced, which
+would generate a <code>NullPointerException</code> when the code is executed.
+Of course, the problem might be that the branch or statement is infeasible and that
+the null pointer exception can't ever be executed; deciding that is beyond the ability of FindBugs.
+</p>
+
+    </div>
+<div id="tip-NP_LOAD_OF_KNOWN_NULL_VALUE" class="tip">
+
+  <p> The variable referenced at this point is known to be null due to an earlier
+   check against null. Although this is valid, it might be a mistake (perhaps you
+intended to refer to a different variable, or perhaps the earlier check to see if the
+variable is null should have been a check to see if it was non-null).
+</p>
+
+    </div>
+<div id="tip-NP_TOSTRING_COULD_RETURN_NULL" class="tip">
+      
+      <p>
+    This toString method seems to return null in some circumstances. A liberal reading of the
+    spec could be interpreted as allowing this, but it is probably a bad idea and could cause
+    other code to break. Return the empty string or some other appropriate string rather than null.
+      </p>
+      
+   </div>
+<div id="tip-MS_SHOULD_BE_FINAL" class="tip">
+
+   <p>
+This static field public but not final, and
+could be changed by malicious code or
+        by accident from another package.
+        The field could be made final to avoid
+        this vulnerability.</p>
+
+    </div>
+<div id="tip-RC_REF_COMPARISON_BAD_PRACTICE_BOOLEAN" class="tip">
+
+<p> This method compares two Boolean values using the == or != operator.
+Normally, there are only two Boolean values (Boolean.TRUE and Boolean.FALSE),
+but it is possible to create other Boolean objects using the <code>new Boolean(b)</code>
+constructor. It is best to avoid such objects, but if they do exist,
+then checking Boolean objects for equality using == or != will give results
+than are different than you would get using <code>.equals(...)</code>
+</p>
+
+    </div>
+<div id="tip-URF_UNREAD_FIELD" class="tip">
+
+  <p> This field is never read.&nbsp; Consider removing it from the class.</p>
+
+    </div>
+<div id="tip-UPM_UNCALLED_PRIVATE_METHOD" class="tip">
+
+<p> This private method is never called. Although it is
+possible that the method will be invoked through reflection,
+it is more likely that the method is never used, and should be
+removed.
+</p>
+
+</div>
+<div id="tip-NP_BOOLEAN_RETURN_NULL" class="tip">
+       
+       <p>
+    A method that returns either Boolean.TRUE, Boolean.FALSE or null is an accident waiting to happen.
+    This method can be invoked as though it returned a value of type boolean, and
+    the compiler will insert automatic unboxing of the Boolean value. If a null value is returned,
+    this will result in a NullPointerException.
+       </p>
+       
+       </div>
+<div id="tip-RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" class="tip">
+
+<p> This method contains a redundant check of a known non-null value against
+the constant null.</p>
+
+    </div>
+<div id="tip-MS_PKGPROTECT" class="tip">
+
+  <p> A mutable static field could be changed by malicious code or
+   by accident.
+   The field could be made package protected to avoid
+   this vulnerability.</p>
+
+    </div>
+<div id="tip-RpC_REPEATED_CONDITIONAL_TEST" class="tip">
+
+<p>The code contains a conditional test is performed twice, one right after the other
+(e.g., <code>x == 0 || x == 0</code>). Perhaps the second occurrence is intended to be something else
+(e.g., <code>x == 0 || y == 0</code>).
+</p>
+
+    </div>
+<div id="tip-BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" class="tip">
+
+<p>
+This code performs an unchecked cast of the return value of a method.
+The code might be calling the method in such a way that the cast is guaranteed to be
+safe, but FindBugs is unable to verify that the cast is safe.  Check that your program logic ensures that this
+cast will not fail.
+</p>
+
+    </div>
+<div id="tip-PZLA_PREFER_ZERO_LENGTH_ARRAYS" class="tip">
+
+<p> It is often a better design to
+return a length zero array rather than a null reference to indicate that there
+are no results (i.e., an empty list of results).
+This way, no explicit check for null is needed by clients of the method.</p>
+
+<p>On the other hand, using null to indicate
+"there is no answer to this question" is probably appropriate.
+For example, <code>File.listFiles()</code> returns an empty list
+if given a directory containing no files, and returns null if the file
+is not a directory.</p>
+
+    </div>
+<div id="tip-EI_EXPOSE_REP" class="tip">
+
+  <p> Returning a reference to a mutable object value stored in one of the object's fields
+  exposes the internal representation of the object.&nbsp;
+   If instances
+   are accessed by untrusted code, and unchecked changes to
+   the mutable object would compromise security or other
+   important properties, you will need to do something different.
+  Returning a new copy of the object is better approach in many situations.</p>
+
+    </div>
+<div id="tip-UWF_UNWRITTEN_FIELD" class="tip">
+
+  <p> This field is never written.&nbsp; All reads of it will return the default
+value. Check for errors (should it have been initialized?), or remove it if it is useless.</p>
+
+    </div>
+<div id="tip-DMI_HARDCODED_ABSOLUTE_FILENAME" class="tip">
+
+<p>This code constructs a File object using a hard coded to an absolute pathname
+(e.g., <code>new File("/home/dannyc/workspace/j2ee/src/share/com/sun/enterprise/deployment");</code>
+</p>
+
+    </div>
+<div id="tip-UUF_UNUSED_FIELD" class="tip">
+
+  <p> This field is never used.&nbsp; Consider removing it from the class.</p>
+
+    </div>
+<div id="tip-ES_COMPARING_PARAMETER_STRING_WITH_EQ" class="tip">
+
+  <p>This code compares a <code>java.lang.String</code> parameter for reference
+equality using the == or != operators. Requiring callers to
+pass only String constants or interned strings to a method is unnecessarily
+fragile, and rarely leads to measurable performance gains. Consider
+using the <code>equals(Object)</code> method instead.</p>
+
+    </div>
+<div id="tip-SE_COMPARATOR_SHOULD_BE_SERIALIZABLE" class="tip">
+
+  <p> This class implements the <code>Comparator</code> interface. You
+should consider whether or not it should also implement the <code>Serializable</code>
+interface. If a comparator is used to construct an ordered collection
+such as a <code>TreeMap</code>, then the <code>TreeMap</code>
+will be serializable only if the comparator is also serializable.
+As most comparators have little or no state, making them serializable
+is generally easy and good defensive programming.
+</p>
+
+    </div>
+<div id="tip-DM_CONVERT_CASE" class="tip">
+
+  <p> A String is being converted to upper or lowercase, using the platform's default encoding. This may
+      result in improper conversions when used with international characters. Use the </p>
+      <ul>
+    <li>String.toUpperCase( Locale l )</li>
+    <li>String.toLowerCase( Locale l )</li>
+    </ul>
+      <p>versions instead.</p>
+
+    </div>
+<div style="display:none;" class="bug" id="b-uid-d74ffec08fb74c53394a40ae22043099-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.JspFunctions</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.JspFunctions.dateOffset(Date, String)</div>
+<div class="b-r">At JspFunctions.java:[line 104]</div>
+<div class="b-d">Use of non-localized String.toUpperCase() or String.toLowerCase() in uk.gov.dwp.carersallowance.JspFunctions.dateOffset(Date, String)</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-ce122e99b6f7ff0cf682a2dc5766fe2f-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.admin.controller.TextEditTagController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.admin.controller.TextEditTagController.getMessage(String, String, String)</div>
+<div class="b-r">At TextEditTagController.java:[lines 88-96]</div>
+<div class="b-d">Private method uk.gov.dwp.carersallowance.admin.controller.TextEditTagController.getMessage(String, String, String) is never called</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-32c95b0def63456b23fa457ec7dbaf6c-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.admin.controller.TextEditTagController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.admin.controller.TextEditTagController.getMessageKey(String, String, String)</div>
+<div class="b-r">At TextEditTagController.java:[lines 80-83]</div>
+<div class="b-d">Private method uk.gov.dwp.carersallowance.admin.controller.TextEditTagController.getMessageKey(String, String, String) is never called</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-d7d8aa9ec7683e5c68126e0ab9175cff-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.AbstractFormController.getBooleanFieldValue(String, String, String, String[])</div>
+<div class="b-r">At AbstractFormController.java:[line 890]</div>
+<div class="b-r">Another occurrence at AbstractFormController.java:[line 907]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController.getBooleanFieldValue(String, String, String, String[]) has Boolean return type and returns explicit null</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-868a005f8d9bbad6200184a46f266334-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.AbstractFormController.getFieldLabel(String, Object[])</div>
+<div class="b-r">Value loaded from locale</div>
+<div class="b-r">At AbstractFormController.java:[line 446]</div>
+<div class="b-d">Load of known null value in uk.gov.dwp.carersallowance.controller.AbstractFormController.getFieldLabel(String, Object[])</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-b99c9d05b05357d42b0b939dc87799fe-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.AbstractFormController.validationEnabled(String, AbstractFormController$ValidationType)</div>
+<div class="b-r">Value loaded from defaultValue</div>
+<div class="b-r">At AbstractFormController.java:[line 438]</div>
+<div class="b-d">Load of known null value in uk.gov.dwp.carersallowance.controller.AbstractFormController.validationEnabled(String, AbstractFormController$ValidationType)</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-e5d219e9242754180173abc7b2c85b4a-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.AbstractFormController.validationEnabled(String, AbstractFormController$ValidationType)</div>
+<div class="b-r">Value loaded from locale</div>
+<div class="b-r">At AbstractFormController.java:[line 438]</div>
+<div class="b-d">Load of known null value in uk.gov.dwp.carersallowance.controller.AbstractFormController.validationEnabled(String, AbstractFormController$ValidationType)</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-c10ce609f0cc11f18c3cb869fb6223a5-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.AbstractFormController.getReadOnlyFields()</div>
+<div class="b-r">At AbstractFormController.java:[line 150]</div>
+<div class="b-d">Should uk.gov.dwp.carersallowance.controller.AbstractFormController.getReadOnlyFields() return a zero length array rather than null?</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-f9844d4a96e9fab5da61431dd0a0d3dc-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.AbstractFormController.getSessionStringAttribute(HttpSession, String)</div>
+<div class="b-r">At AbstractFormController.java:[line 872]</div>
+<div class="b-d">Should uk.gov.dwp.carersallowance.controller.AbstractFormController.getSessionStringAttribute(HttpSession, String) return a zero length array rather than null?</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-5dfb33a7d3be422c6da154fa4cc78f5f-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.AbstractFormController.getSharedFields()</div>
+<div class="b-r">At AbstractFormController.java:[line 146]</div>
+<div class="b-d">Should uk.gov.dwp.carersallowance.controller.AbstractFormController.getSharedFields() return a zero length array rather than null?</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-891547d62c435fc5e578018da98f0bc2-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.AbstractFormController.validateMatchingValues(Map, String, String, String, String, boolean)</div>
+<div class="b-r">Value loaded from firstFieldValues</div>
+<div class="b-r">Return value of java.util.Map.get(Object) of type Object</div>
+<div class="b-r">Redundant null check at AbstractFormController.java:[line 603]</div>
+<div class="b-d">Redundant nullcheck of firstFieldValues, which is known to be non-null in uk.gov.dwp.carersallowance.controller.AbstractFormController.validateMatchingValues(Map, String, String, String, String, boolean)</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-f01cb8e48d492b9e601086f1cc082c34-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.AbstractFormController.validateMatchingValues(Map, String, String, String, String, boolean)</div>
+<div class="b-r">At AbstractFormController.java:[line 603]</div>
+<div class="b-r">At AbstractFormController.java:[line 603]</div>
+<div class="b-d">Repeated conditional test in uk.gov.dwp.carersallowance.controller.AbstractFormController.validateMatchingValues(Map, String, String, String, String, boolean)</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-ba1bacb6675e2d5787946c371afc6834-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.ACCOUNT_HOLDER_NAME_MAX_LENGTH</div>
+<div class="b-r">At AbstractFormController.java:[line 1273]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.ACCOUNT_HOLDER_NAME_MAX_LENGTH isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-303d39e1d6c2485fd5c31f789d6780b1-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.ACCOUNT_NUMBER_MAX_LENGTH</div>
+<div class="b-r">At AbstractFormController.java:[line 1274]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.ACCOUNT_NUMBER_MAX_LENGTH isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-c586c92d7e2e92df76138b6db3ffcee8-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.ACCOUNT_NUMBER_MIN_LENGTH</div>
+<div class="b-r">At AbstractFormController.java:[line 1275]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.ACCOUNT_NUMBER_MIN_LENGTH isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-63f1b300611bf569a30690dc3eab5b8-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.EMAIL_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1290]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.EMAIL_REGEX isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-5cd7715a7e2426b31e961b386bf2e81f-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.FULL_NAME_MAX_LENGTH</div>
+<div class="b-r">At AbstractFormController.java:[line 1277]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.FULL_NAME_MAX_LENGTH isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-8662142d5870b30d4ecb3f2e27dc4b7c-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NAME_MAX_LENGTH</div>
+<div class="b-r">At AbstractFormController.java:[line 1278]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NAME_MAX_LENGTH isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-b2ff19b2299754de6a390021d8acdce2-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NATIONALITY_MAX_LENGTH</div>
+<div class="b-r">At AbstractFormController.java:[line 1279]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NATIONALITY_MAX_LENGTH isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-18d9071ebbcd8f46f256b8e217a04be3-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NATIONALITY_SEQ</div>
+<div class="b-r">At AbstractFormController.java:[line 1284]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NATIONALITY_SEQ isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-1d028418005eaa06bda055415fdec186-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NINO_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1293]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NINO_REGEX isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-5af9acc359e5825aefa24f688cc7ec6b-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.PHONE_NUMBER_MAX_LENGTH</div>
+<div class="b-r">At AbstractFormController.java:[line 1280]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.PHONE_NUMBER_MAX_LENGTH isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-bae4cdbb9ca32c2241dcc59cd00585cb-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.PHONE_NUMBER_SEQ</div>
+<div class="b-r">At AbstractFormController.java:[line 1283]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.PHONE_NUMBER_SEQ isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-2a3122356da7bb1bc9835ebfe658628a-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.RESTRICTED_CHARS</div>
+<div class="b-r">At AbstractFormController.java:[line 1282]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.RESTRICTED_CHARS isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-a6eb2b65fd1ac042e9b0dc990dcf55ca-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.ACCOUNT_HOLDER_NAME_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1286]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.ACCOUNT_HOLDER_NAME_REGEX isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-fd07a2a7864a334b0c97452b6897398b-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.ACCOUNT_NUMBER_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1287]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.ACCOUNT_NUMBER_REGEX isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-c3929426e2ef88b3ffa921a77fa51344-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.CURRENCY_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1288]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.CURRENCY_REGEX isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-f16bcd4c24ef8df49272510eececfefb-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.CURRENCY_REGEX_MAX_LENGTH</div>
+<div class="b-r">At AbstractFormController.java:[line 1276]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.CURRENCY_REGEX_MAX_LENGTH isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-723715ad0127ac2516b470182f2b24-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.DECIMAL_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1289]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.DECIMAL_REGEX isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-40654553e19fc714a333dbf2c2db556e-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.FULL_NAME_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1291]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.FULL_NAME_REGEX isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-90dab905ce7ba782a5e13c9711f1de74-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NATIONALITY_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1292]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NATIONALITY_REGEX isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-1590aa096eca48e9cf5a5443ddaf5bea-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NUMBER_OR_SPACE_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1294]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NUMBER_OR_SPACE_REGEX isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-5931f795bc6a63ae8740300b1ebcb99a-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NUMBER_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1295]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NUMBER_REGEX isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-983772a0ac7bb9862c7ade53ba32887d-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.PHONE_NUMBER_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1296]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.PHONE_NUMBER_REGEX isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-3b4b1c1f0c508cfa0ad4080855d6d0af-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.POSTCODE_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1297]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.POSTCODE_REGEX isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-98c021f5c357c1b1c0aa42c0cea3fe71-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.RESTRICTED_POSTCODE_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1298]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.RESTRICTED_POSTCODE_REGEX isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-3f69352cb4b66461d54a38940c60794b-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.SORT_CODE_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1299]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.SORT_CODE_REGEX isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-8c952cad707510e7cc31ba252b73618b-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.SURNAME_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1300]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.SURNAME_REGEX isn't final but should be</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-dfa87fda3e766a88eec6ba535d58829e-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.ACCOUNT_HOLDER_NAME_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1286]</div>
+<div class="b-d">Unread public/protected field: uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.ACCOUNT_HOLDER_NAME_REGEX</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-69ec0e437e5b3090b9ef88f0f687425d-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.ACCOUNT_NUMBER_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1287]</div>
+<div class="b-d">Unread public/protected field: uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.ACCOUNT_NUMBER_REGEX</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-c8b5360b1b687ab90d8cd89bb11262fa-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.CURRENCY_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1288]</div>
+<div class="b-d">Unread public/protected field: uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.CURRENCY_REGEX</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-1dc34d830a9c683ae15ad98755058bd5-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.CURRENCY_REGEX_MAX_LENGTH</div>
+<div class="b-r">At AbstractFormController.java:[line 1276]</div>
+<div class="b-d">Unread public/protected field: uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.CURRENCY_REGEX_MAX_LENGTH</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-f13299ade4c1be2473fb620abbecbaa2-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.DECIMAL_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1289]</div>
+<div class="b-d">Unread public/protected field: uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.DECIMAL_REGEX</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-c868cf53f88dac875d10c375f7c5708e-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.FULL_NAME_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1291]</div>
+<div class="b-d">Unread public/protected field: uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.FULL_NAME_REGEX</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-e583e2f8d4777a2a2120c523755009f9-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NATIONALITY_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1292]</div>
+<div class="b-d">Unread public/protected field: uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NATIONALITY_REGEX</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-122e58f4111d20264fc5915859a27053-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NUMBER_OR_SPACE_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1294]</div>
+<div class="b-d">Unread public/protected field: uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NUMBER_OR_SPACE_REGEX</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-4b57ac071abdb2ef3d2b0dcaec8ca919-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NUMBER_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1295]</div>
+<div class="b-d">Unread public/protected field: uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.NUMBER_REGEX</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-6abe35c8be07aa4df7250a3d59a8346b-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.PHONE_NUMBER_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1296]</div>
+<div class="b-d">Unread public/protected field: uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.PHONE_NUMBER_REGEX</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-9cb068d856ddf44ac24ea08556745b13-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.POSTCODE_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1297]</div>
+<div class="b-d">Unread public/protected field: uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.POSTCODE_REGEX</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-fba2b968a44553f37ca619700fb2ff3b-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.RESTRICTED_POSTCODE_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1298]</div>
+<div class="b-d">Unread public/protected field: uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.RESTRICTED_POSTCODE_REGEX</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-3b099ba01e33d47a37486ff8f35cd13b-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.SORT_CODE_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1299]</div>
+<div class="b-d">Unread public/protected field: uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.SORT_CODE_REGEX</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-c4c8e444dd91aa63352eb16cc9d75cf3-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.SURNAME_REGEX</div>
+<div class="b-r">At AbstractFormController.java:[line 1300]</div>
+<div class="b-d">Unread public/protected field: uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns.SURNAME_REGEX</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-156eef3c986188d96a0422ba2bc174ff-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.BreakInHospitalController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.BreakInHospitalController.getSharedFields()</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.BreakInHospitalController.SHARED_FIELDS</div>
+<div class="b-r">At BreakInHospitalController.java:[line 57]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.BreakInHospitalController.getSharedFields() may expose internal representation by returning BreakInHospitalController.SHARED_FIELDS</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-ca51518e7d02cad8991f85eff86f7ba6-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.BreakInHospitalController</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.BreakInHospitalController.SHARED_FIELDS</div>
+<div class="b-r">At BreakInHospitalController.java:[line 33]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.BreakInHospitalController.SHARED_FIELDS should be package protected</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-47da0c57460f307911974d75ab5dff49-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController.getSharedFields()</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController.SHARED_FIELDS</div>
+<div class="b-r">At BreakInRespiteCareController.java:[line 58]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController.getSharedFields() may expose internal representation by returning BreakInRespiteCareController.SHARED_FIELDS</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-fd37b00032acce132f4d4d6ff9d00de5-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController.SHARED_FIELDS</div>
+<div class="b-r">At BreakInRespiteCareController.java:[line 33]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController.SHARED_FIELDS should be package protected</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-89d14b0aaa16fd18e82085da75cfb347-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController.getSharedFields()</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController.SHARED_FIELDS</div>
+<div class="b-r">At BreakSomewhereElseController.java:[line 57]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController.getSharedFields() may expose internal representation by returning BreakSomewhereElseController.SHARED_FIELDS</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-ae9659eee6869d955aabc6ba9d38f771-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController.SHARED_FIELDS</div>
+<div class="b-r">At BreakSomewhereElseController.java:[line 33]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController.SHARED_FIELDS should be package protected</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-47b72452bd443a331645569dd3f97c8c-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.BreaksInCareSummaryController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.BreaksInCareSummaryController.getReadOnlyFields()</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.BreaksInCareSummaryController.READONLY_FIELDS</div>
+<div class="b-r">At BreaksInCareSummaryController.java:[line 111]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.BreaksInCareSummaryController.getReadOnlyFields() may expose internal representation by returning BreaksInCareSummaryController.READONLY_FIELDS</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-4ec4e4d69d9cefc8089d2df90914a206-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.EmploymentAdditionalInfoController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.EmploymentAdditionalInfoController.getReadOnlyFields()</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.EmploymentAdditionalInfoController.READONLY_FIELDS</div>
+<div class="b-r">At EmploymentAdditionalInfoController.java:[line 56]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.EmploymentAdditionalInfoController.getReadOnlyFields() may expose internal representation by returning EmploymentAdditionalInfoController.READONLY_FIELDS</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-1c56a12228dbe1f68da2f57855a75eb9-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.EmploymentPaymentController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.EmploymentPaymentController.getReadOnlyFields()</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.EmploymentPaymentController.READONLY_FIELDS</div>
+<div class="b-r">At EmploymentPaymentController.java:[line 57]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.EmploymentPaymentController.getReadOnlyFields() may expose internal representation by returning EmploymentPaymentController.READONLY_FIELDS</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-bbcaadbf7e10b8e3f5a21161edf9262f-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.EmploymentPensionAndExpensesController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.EmploymentPensionAndExpensesController.getReadOnlyFields()</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.EmploymentPensionAndExpensesController.READONLY_FIELDS</div>
+<div class="b-r">At EmploymentPensionAndExpensesController.java:[line 57]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.EmploymentPensionAndExpensesController.getReadOnlyFields() may expose internal representation by returning EmploymentPensionAndExpensesController.READONLY_FIELDS</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-36e574cd9093d7a55c9c593e1b8f24b3-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.EmploymentSummaryController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.EmploymentSummaryController.getReadOnlyFields()</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.controller.EmploymentSummaryController.READONLY_FIELDS</div>
+<div class="b-r">At EmploymentSummaryController.java:[line 97]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.controller.EmploymentSummaryController.getReadOnlyFields() may expose internal representation by returning EmploymentSummaryController.READONLY_FIELDS</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-70ee92406ef60353e71c7420d55d4d28-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.YourDetailsController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.YourDetailsController.validate(Map, String[], String[])</div>
+<div class="b-r">Value loaded from enabledFields</div>
+<div class="b-r">Dereferenced at YourDetailsController.java:[line 74]</div>
+<div class="b-r">Known null at YourDetailsController.java:[line 72]</div>
+<div class="b-d">Possible null pointer dereference of enabledFields in uk.gov.dwp.carersallowance.controller.YourDetailsController.validate(Map, String[], String[])</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-ad10aa22938910ef1e828a03d998e2a7-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.controller.YourIncomeController</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.controller.YourIncomeController.getIncomePageList(HttpSession)</div>
+<div class="b-r">Actual type Boolean</div>
+<div class="b-r">Value loaded from field java.lang.Boolean.TRUE</div>
+<div class="b-r">At YourIncomeController.java:[line 53]</div>
+<div class="b-r">Another occurrence at YourIncomeController.java:[line 57]</div>
+<div class="b-r">Another occurrence at YourIncomeController.java:[line 62]</div>
+<div class="b-r">Another occurrence at YourIncomeController.java:[line 66]</div>
+<div class="b-r">Another occurrence at YourIncomeController.java:[line 70]</div>
+<div class="b-r">Another occurrence at YourIncomeController.java:[line 74]</div>
+<div class="b-r">Another occurrence at YourIncomeController.java:[line 78]</div>
+<div class="b-d">Suspicious comparison of Boolean references in uk.gov.dwp.carersallowance.controller.YourIncomeController.getIncomePageList(HttpSession)</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-47f85b85364eb75f6020867e5d496e8b-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.data.FormData$Page</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.data.FormData$Page.beforeLink</div>
+<div class="b-r">At FormData.java:[line 39]</div>
+<div class="b-d">Unwritten field: uk.gov.dwp.carersallowance.data.FormData$Page.beforeLink</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-abae59ed6837f5685a747f07738f3995-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.data.FormData$Page</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.data.FormData$Page.nextLink</div>
+<div class="b-r">At FormData.java:[line 40]</div>
+<div class="b-d">Unwritten field: uk.gov.dwp.carersallowance.data.FormData$Page.nextLink</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-9c890ad5da0b40bc90f9486dc3a21ccd-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.data.FormData$Page</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.data.FormData$Page.sectionId</div>
+<div class="b-r">At FormData.java:[line 37]</div>
+<div class="b-d">Unwritten field: uk.gov.dwp.carersallowance.data.FormData$Page.sectionId</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-8fc6f81c538034dd84d952622ffdbed9-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.data.FormData$Page</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.data.FormData$Page.title</div>
+<div class="b-r">At FormData.java:[line 38]</div>
+<div class="b-d">Unwritten field: uk.gov.dwp.carersallowance.data.FormData$Page.title</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-3e9a4b187984aaa073bc2ddbcc342a7d-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.session.FieldCollection</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.session.FieldCollection.aggregateFieldLists(String[][])</div>
+<div class="b-r">At FieldCollection.java:[line 54]</div>
+<div class="b-d">Should uk.gov.dwp.carersallowance.session.FieldCollection.aggregateFieldLists(String[][]) return a zero length array rather than null?</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-54e14da62db38481e32a265848f079f8-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator.compare(String, String)</div>
+<div class="b-r">Actual type String</div>
+<div class="b-r">Value loaded from second</div>
+<div class="b-r">Value loaded from first</div>
+<div class="b-r">At FieldCollection.java:[line 128]</div>
+<div class="b-d">Comparison of String parameter using == or != in uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator.compare(String, String) </div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-6b26756c870304e221ac26b50162402b-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator</div>
+<div class="b-r">At FieldCollection.java:[lines 71-141]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator implements Comparator but not Serializable</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-fbdddf15f2c06e6001f98d53dee148be-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator.reverse</div>
+<div class="b-r">At FieldCollection.java:[line 116]</div>
+<div class="b-d">Unwritten field: uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator.reverse</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-579f384b334c0f84c36ea42fc4152e5a-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.session.FieldValue</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.session.FieldValue.getValues()</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.session.FieldValue.values</div>
+<div class="b-r">At FieldValue.java:[line 33]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.session.FieldValue.getValues() may expose internal representation by returning FieldValue.values</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-90541b9f6a2299d3c26deb34b13327ba-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.session.FieldValue</div>
+<div class="b-r">In method new uk.gov.dwp.carersallowance.session.FieldValue(String[])</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.session.FieldValue.values</div>
+<div class="b-r">Local variable named values</div>
+<div class="b-r">At FieldValue.java:[line 17]</div>
+<div class="b-d">new uk.gov.dwp.carersallowance.session.FieldValue(String[]) may expose internal representation by storing an externally mutable object into FieldValue.values</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-93b4186229cf319d213381a400635c4-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.session.IllegalFieldValueException</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.session.IllegalFieldValueException.getFieldValues()</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.session.IllegalFieldValueException.fieldValues</div>
+<div class="b-r">At IllegalFieldValueException.java:[line 44]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.session.IllegalFieldValueException.getFieldValues() may expose internal representation by returning IllegalFieldValueException.fieldValues</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-a4098d07dfc58ff1f2c1fadaf8033277-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.session.IllegalFieldValueException</div>
+<div class="b-r">In method new uk.gov.dwp.carersallowance.session.IllegalFieldValueException(String, String, String[])</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.session.IllegalFieldValueException.fieldValues</div>
+<div class="b-r">Local variable named fieldValues</div>
+<div class="b-r">At IllegalFieldValueException.java:[line 26]</div>
+<div class="b-d">new uk.gov.dwp.carersallowance.session.IllegalFieldValueException(String, String, String[]) may expose internal representation by storing an externally mutable object into IllegalFieldValueException.fieldValues</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-7410b375f22d0d39881c08713af2d209-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.session.IllegalFieldValueException</div>
+<div class="b-r">In method new uk.gov.dwp.carersallowance.session.IllegalFieldValueException(String, String, String[], Throwable)</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.session.IllegalFieldValueException.fieldValues</div>
+<div class="b-r">Local variable named fieldValues</div>
+<div class="b-r">At IllegalFieldValueException.java:[line 33]</div>
+<div class="b-d">new uk.gov.dwp.carersallowance.session.IllegalFieldValueException(String, String, String[], Throwable) may expose internal representation by storing an externally mutable object into IllegalFieldValueException.fieldValues</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-8b089b61a9fc4c8c3959455a4a003ef5-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.session.IllegalFieldValueException</div>
+<div class="b-r">In method new uk.gov.dwp.carersallowance.session.IllegalFieldValueException(String, String[])</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.session.IllegalFieldValueException.fieldValues</div>
+<div class="b-r">Local variable named fieldValues</div>
+<div class="b-r">At IllegalFieldValueException.java:[line 19]</div>
+<div class="b-d">new uk.gov.dwp.carersallowance.session.IllegalFieldValueException(String, String[]) may expose internal representation by storing an externally mutable object into IllegalFieldValueException.fieldValues</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-d984301c6430f7f215dea875acebc2b9-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.session.IllegalFieldValueException</div>
+<div class="b-r">In method new uk.gov.dwp.carersallowance.session.IllegalFieldValueException(String, String[], Throwable)</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.session.IllegalFieldValueException.fieldValues</div>
+<div class="b-r">Local variable named fieldValues</div>
+<div class="b-r">At IllegalFieldValueException.java:[line 40]</div>
+<div class="b-d">new uk.gov.dwp.carersallowance.session.IllegalFieldValueException(String, String[], Throwable) may expose internal representation by storing an externally mutable object into IllegalFieldValueException.fieldValues</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-52c1cda565d60edfe3864fb7891dd967-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.utils.CollectionUtils</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.utils.CollectionUtils.toUpperCase(Set)</div>
+<div class="b-r">Actual type java.util.Collection&lt;java.lang.String&gt;</div>
+<div class="b-r">Expected java.util.Set</div>
+<div class="b-r">At CollectionUtils.java:[line 10]</div>
+<div class="b-d">Unchecked/unconfirmed cast from java.util.Collection&lt;java.lang.String&gt; to java.util.Set of return value in uk.gov.dwp.carersallowance.utils.CollectionUtils.toUpperCase(Set)</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-5e654a259f3de467c6b2e0554d66ed8f-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.utils.CollectionUtils</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.utils.CollectionUtils.toUpperCase(Collection)</div>
+<div class="b-r">At CollectionUtils.java:[line 23]</div>
+<div class="b-d">Use of non-localized String.toUpperCase() or String.toLowerCase() in uk.gov.dwp.carersallowance.utils.CollectionUtils.toUpperCase(Collection)</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-43221d0d2d568e98dec3c14669e5f455-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper.toString()</div>
+<div class="b-r">At LoggingObjectWrapper.java:[line 19]</div>
+<div class="b-d">uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper.toString() may return null</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-a34fe982870411dc356511565633b502-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.utils.xml.SignXml</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.utils.xml.SignXml.main(String[])</div>
+<div class="b-r">File name /Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/resources/unchangedDefaultClaim/DefaultClaim.raw.nosignature.xml</div>
+<div class="b-r">At SignXml.java:[line 71]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in uk.gov.dwp.carersallowance.utils.xml.SignXml.main(String[])</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-5e81260e0d808f5480ce8694ddb7932a-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.utils.xml.VerifyXmlSignature</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.utils.xml.VerifyXmlSignature.main(String[])</div>
+<div class="b-r">File name /Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/resources/defaultClaim/DefaultClaim.xml</div>
+<div class="b-r">At VerifyXmlSignature.java:[line 41]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in uk.gov.dwp.carersallowance.utils.xml.VerifyXmlSignature.main(String[])</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-b56e39ec68a6b0d10cb4d0b7f241c8d4-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter.main(String[])</div>
+<div class="b-r">File name /Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/resources/data/claim.16010000027.v3_4.xml</div>
+<div class="b-r">At XmlPrettyPrinter.java:[line 168]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter.main(String[])</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-e8b8ef41d979adb8eb30a4397b12c610-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.utils.xml.XmlValidator</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.utils.xml.XmlValidator.main(String[])</div>
+<div class="b-r">File name C:\\projects\\EIS-007\\metadata aggregator\\aleph\\test\\sample.aleph.dc.xml</div>
+<div class="b-r">At XmlValidator.java:[line 217]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in uk.gov.dwp.carersallowance.utils.xml.XmlValidator.main(String[])</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-5010a8c704ba767ade7c1f9c9f25a5ba-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.utils.xml.XmlValidator</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.utils.xml.XmlValidator.validateDc(String)</div>
+<div class="b-r">File name C:\\projects\\EIS-007\\metadata aggregator\\documents\\schema\\oai_dc.xsd</div>
+<div class="b-r">At XmlValidator.java:[line 120]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in uk.gov.dwp.carersallowance.utils.xml.XmlValidator.validateDc(String)</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-23ff221565692351da2ffa62c122a37c-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.utils.xml.XmlValidator</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.utils.xml.XmlValidator.validateDc(String)</div>
+<div class="b-r">File name C:\\projects\\EIS-007\\metadata aggregator\\documents\\schema\\simpledc20021212.xsd</div>
+<div class="b-r">At XmlValidator.java:[line 119]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in uk.gov.dwp.carersallowance.utils.xml.XmlValidator.validateDc(String)</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-489362a79b8b0c3bf11618052e690102-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.utils.xml.XmlValidator</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.utils.xml.XmlValidator.validateDc(String)</div>
+<div class="b-r">File name C:\\projects\\EIS-007\\metadata aggregator\\documents\\schema\\xml.xsd</div>
+<div class="b-r">At XmlValidator.java:[line 118]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in uk.gov.dwp.carersallowance.utils.xml.XmlValidator.validateDc(String)</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-a6b76b5def347124e0f8cd10bc876b1a-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.utils.xml.XmlValidator</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.utils.xml.XmlValidator.validateMarc21Slim(String)</div>
+<div class="b-r">File name C:\\projects\\EIS-007\\metadata aggregator\\documents\\schema\\MARC21slim.xsd</div>
+<div class="b-r">At XmlValidator.java:[line 152]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in uk.gov.dwp.carersallowance.utils.xml.XmlValidator.validateMarc21Slim(String)</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-ea02e0067a79b1014dcd5fea6394d139-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.utils.xml.XmlValidator</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.utils.xml.XmlValidator.validateMods(String)</div>
+<div class="b-r">File name C:\\projects\\EIS-007\\metadata aggregator\\documents\\schema\\mods-3-4.xsd</div>
+<div class="b-r">At XmlValidator.java:[line 136]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in uk.gov.dwp.carersallowance.utils.xml.XmlValidator.validateMods(String)</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-e2d1331725082c82e20dad1b13cdf5e2-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.utils.xml.XmlValidator</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.utils.xml.XmlValidator.validateMods(String)</div>
+<div class="b-r">File name C:\\projects\\EIS-007\\metadata aggregator\\documents\\schema\\xlink.xsd</div>
+<div class="b-r">At XmlValidator.java:[line 137]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in uk.gov.dwp.carersallowance.utils.xml.XmlValidator.validateMods(String)</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-ab9e9a4d51ce55f043e393129fc7f1c2-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.utils.xml.XmlValidator</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.utils.xml.XmlValidator.validateMods(String)</div>
+<div class="b-r">File name C:\\projects\\EIS-007\\metadata aggregator\\documents\\schema\\xml.xsd</div>
+<div class="b-r">At XmlValidator.java:[line 138]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in uk.gov.dwp.carersallowance.utils.xml.XmlValidator.validateMods(String)</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-ef9d0a7b21f8162f695e2608a1197263-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.utils.xml.XmlValidator</div>
+<div class="b-r">In method uk.gov.dwp.carersallowance.utils.xml.XmlValidator.validateOaiMarc(String)</div>
+<div class="b-r">File name C:\\projects\\EIS-007\\metadata aggregator\\documents\\schema\\oai_marc.xsd</div>
+<div class="b-r">At XmlValidator.java:[line 166]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in uk.gov.dwp.carersallowance.utils.xml.XmlValidator.validateOaiMarc(String)</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-2548075f7dc678b86fa4735cdf2856d4-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.xml.ClaimXml</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.xml.ClaimXml.encryptionXPaths</div>
+<div class="b-r">At ClaimXml.java:[line 43]</div>
+<div class="b-d">Unread field: uk.gov.dwp.carersallowance.xml.ClaimXml.encryptionXPaths</div>
+</div>
+<div style="display:none;" class="bug" id="b-uid-1a0ed191cf8de9cc60803fc52b8e852b-0">
+<div class="b-r">In class uk.gov.dwp.carersallowance.xml.FieldNameMap</div>
+<div class="b-r">Field uk.gov.dwp.carersallowance.xml.FieldNameMap.nameMap</div>
+<div class="b-r">In FieldNameMap.java</div>
+<div class="b-d">Unused field: uk.gov.dwp.carersallowance.xml.FieldNameMap.nameMap</div>
+</div>
+</div>
+</body>
+</html>

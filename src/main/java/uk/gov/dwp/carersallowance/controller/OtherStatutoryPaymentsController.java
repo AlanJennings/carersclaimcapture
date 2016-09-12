@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,22 +20,12 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class OtherStatutoryPaymentsController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(OtherStatutoryPaymentsController.class);
 
+    private static final String PAGE_NAME     = "page.smp-spa-sap";
     private static final String CURRENT_PAGE  = "/your-income/smp-spa-sap";
-    private static final String PAGE_TITLE    = "Your income Statutory Pay";
-
-    private static final String[] FIELDS = {"otherStatPaymentPaymentTypesForThisPay",
-                                            "otherStatPaymentStillBeingPaidThisPay",
-                                            "otherStatPaymentWhenDidYouLastGetPaid_day",
-                                            "otherStatPaymentWhenDidYouLastGetPaid_month",
-                                            "otherStatPaymentWhenDidYouLastGetPaid_year",
-                                            "otherStatPaymentWhoPaidYouThisPay",
-                                            "otherStatPaymentAmountOfThisPay",
-                                            "otherStatPaymentHowOftenPaidThisPay",
-                                            "otherStatPaymentHowOftenPaidThisPayOther"};
 
     @Autowired
-    public OtherStatutoryPaymentsController(SessionManager sessionManager) {
-        super(sessionManager);
+    public OtherStatutoryPaymentsController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
@@ -43,7 +34,7 @@ public class OtherStatutoryPaymentsController extends AbstractFormController {
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
@@ -53,13 +44,8 @@ public class OtherStatutoryPaymentsController extends AbstractFormController {
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -81,17 +67,17 @@ public class OtherStatutoryPaymentsController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "otherStatPaymentPaymentTypesForThisPay", "Which are you paid?");
-        validateMandatoryField(fieldValues, "otherStatPaymentStillBeingPaidThisPay", "Are you still being paid this?");
+        validateMandatoryField(fieldValues, "otherStatPaymentPaymentTypesForThisPay");
+        validateMandatoryField(fieldValues, "otherStatPaymentStillBeingPaidThisPay");
         if(fieldValue_Equals(fieldValues, "otherStatPaymentBeenInEducationSinceClaimDate", "yes")) {
-            validateMandatoryDateField(fieldValues, "otherStatPaymentWhenDidYouLastGetPaid", "When were you last paid?");
+            validateMandatoryDateField(fieldValues, "otherStatPaymentWhenDidYouLastGetPaid");
         }
 
-        validateMandatoryField(fieldValues, "otherStatPaymentWhoPaidYouThisPay", "Who paid you this?");
-        validateMandatoryField(fieldValues, "otherStatPaymentAmountOfThisPay", "Amount paid");
-        validateMandatoryField(fieldValues, "otherStatPaymentHowOftenPaidThisPay", "How often are you paid?");
+        validateMandatoryField(fieldValues, "otherStatPaymentWhoPaidYouThisPay");
+        validateMandatoryField(fieldValues, "otherStatPaymentAmountOfThisPay");
+        validateMandatoryField(fieldValues, "otherStatPaymentHowOftenPaidThisPay");
         if(fieldValue_Equals(fieldValues, "otherStatPaymentHowOftenPaidThisPay", "Other")) {
-            validateMandatoryField(fieldValues, "otherStatPaymentHowOftenPaidThisPayOther", "How often are you paid?");
+            validateMandatoryField(fieldValues, "otherStatPaymentHowOftenPaidThisPayOther");
         }
 
         LOG.trace("Ending BenefitsController.validate");

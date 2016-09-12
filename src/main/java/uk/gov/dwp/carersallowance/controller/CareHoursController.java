@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,33 +20,22 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class CareHoursController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(CareHoursController.class);
 
+    private static final String PAGE_NAME     = "page.more-about-the-care";
     private static final String CURRENT_PAGE  = "/care-you-provide/more-about-the-care";
-    private static final String PAGE_TITLE    = "More about the care you provide - About the person you care for";
-
-    private static final String[] FIELDS = {"spent35HoursCaring",
-                                            "otherResidence_hospital",
-                                            "otherResidence_respite",
-                                            "otherResidence_none",
-                                            "weeksNotCaring"};
 
     @Autowired
-    public CareHoursController(SessionManager sessionManager) {
-        super(sessionManager);
+    public CareHoursController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -67,7 +57,7 @@ public class CareHoursController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "spent35HoursCaring", "Do you spend 35 hours or more each week caring for John Smith?");
+        validateMandatoryField(fieldValues, "spent35HoursCaring");
         validateMandatoryFieldGroupAnyField(fieldValues,
                                             "otherResidenceGroup",
                                             "Since 16 October 2015, have you or John Smith been in any of the following for at least a week",
@@ -76,7 +66,7 @@ public class CareHoursController extends AbstractFormController {
                                             "otherResidence_none",
                                             "weeksNotCaring");
 
-        validateMandatoryField(fieldValues, "weeksNotCaring", "Have there been any other weeks you've not provided care for John Smith for 35 hours a week");
+        validateMandatoryField(fieldValues, "weeksNotCaring");
 
         LOG.trace("Ending BenefitsController.validate");
     }

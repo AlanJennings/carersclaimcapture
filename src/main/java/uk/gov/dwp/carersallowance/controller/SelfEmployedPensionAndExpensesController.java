@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,17 +20,12 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class SelfEmployedPensionAndExpensesController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(SelfEmployedPensionAndExpensesController.class);
 
+    private static final String PAGE_NAME     = "page.pensions-and-expenses";
     private static final String CURRENT_PAGE  = "/your-income/self-employment/pensions-and-expenses";
-    private static final String PAGE_TITLE    = "Pensions and expenses Self-employment";
-
-    private static final String[] FIELDS = {"selfEmployedPayPensionScheme",
-                                            "selfEmployedPayPensionSchemeText",
-                                            "selfEmployedHaveExpensesForJob",
-                                            "selfEmployedHaveExpensesForJobText"};
 
     @Autowired
-    public SelfEmployedPensionAndExpensesController(SessionManager sessionManager) {
-        super(sessionManager);
+    public SelfEmployedPensionAndExpensesController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
@@ -38,7 +34,7 @@ public class SelfEmployedPensionAndExpensesController extends AbstractFormContro
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
@@ -48,13 +44,8 @@ public class SelfEmployedPensionAndExpensesController extends AbstractFormContro
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -76,14 +67,14 @@ public class SelfEmployedPensionAndExpensesController extends AbstractFormContro
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "selfEmployedPayPensionScheme", "Do you pay into a pension?");
+        validateMandatoryField(fieldValues, "selfEmployedPayPensionScheme");
         if(fieldValue_Equals(fieldValues, "selfEmployedPayPensionScheme", "yes")) {
-            validateMandatoryField(fieldValues, "selfEmployedPayPensionSchemeText", "Give details of each pension you pay into, including how much and how often you pay.");
+            validateMandatoryField(fieldValues, "selfEmployedPayPensionSchemeText");
         }
 
-        validateMandatoryField(fieldValues, "selfEmployedHaveExpensesForJob", "Do you have any care costs because of this work?");
+        validateMandatoryField(fieldValues, "selfEmployedHaveExpensesForJob");
         if(fieldValue_Equals(fieldValues, "selfEmployedHaveExpensesForJob", "yes")) {
-            validateMandatoryField(fieldValues, "selfEmployedHaveExpensesForJobText", "Give details of who you pay and what it costs.");
+            validateMandatoryField(fieldValues, "selfEmployedHaveExpensesForJobText");
         }
 
         LOG.trace("Ending BenefitsController.validate");

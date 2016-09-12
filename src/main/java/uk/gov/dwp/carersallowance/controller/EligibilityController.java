@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,29 +20,22 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class EligibilityController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(EligibilityController.class);
 
+    private static final String PAGE_NAME     = "";
     private static final String CURRENT_PAGE  = "/allowance/eligibility";
-    private static final String PAGE_TITLE    = "Eligibility - Can you get Carer's Allowance?";
-
-    private static final String[] FIELDS = {"over35HoursAWeek", "over16YearsOld", "originCountry"};
 
     @Autowired
-    public EligibilityController(SessionManager sessionManager) {
-        super(sessionManager);
+    public EligibilityController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -58,9 +52,9 @@ public class EligibilityController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting EligibilityController.validate");
 
-        validateMandatoryField(fieldValues, "over35HoursAWeek", "Do you spend 35 hours or more each week caring for the person you care for?");
-        validateMandatoryField(fieldValues, "over16YearsOld", "Are you aged 16 or over?");
-        validateMandatoryField(fieldValues, "originCountry", "Which country do you live in?");
+        validateMandatoryField(fieldValues, "over35HoursAWeek");
+        validateMandatoryField(fieldValues, "over16YearsOld");
+        validateMandatoryField(fieldValues, "originCountry");
         LOG.trace("Ending EligibilityController.validate");
     }
 }

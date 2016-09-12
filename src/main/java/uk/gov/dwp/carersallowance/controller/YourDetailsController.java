@@ -21,25 +21,8 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class YourDetailsController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(YourDetailsController.class);
 
+    private static final String PAGE_NAME     = "page.your-details";
     private static final String CURRENT_PAGE  = "/about-you/your-details";
-    private static final String PAGE_TITLE    = "Your details - About you - the carer";
-
-    private static final String[] FIELDS = {"carerTitle",
-                                            "carerFirstName",
-                                            "carerMiddleName",
-                                            "carerSurname",
-                                            "carerNationalInsuranceNumber",
-                                            "carerDateOfBirth_day",
-                                            "carerDateOfBirth_month",
-                                            "carerDateOfBirth_year"};
-
-    /**
-     * @deprecated update the test and remove these
-     * @param sessionManager
-     */
-    public YourDetailsController(SessionManager sessionManager) {
-        this(sessionManager, null);
-    }
 
     @Autowired
     public YourDetailsController(SessionManager sessionManager, MessageSource messageSource) {
@@ -47,18 +30,17 @@ public class YourDetailsController extends AbstractFormController {
     }
 
     @Override
-    public String getCurrentPage() {
+    protected String getPageName() {
+        return PAGE_NAME;
+    }
+
+    /**
+     * We can replace currentPage with the value from message.properties, IF we match all urls; i.e. single controller
+     * (but not static resources) and manage to move validations to a data driven design (javascript is the sticking point)
+     */
+    @Override
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
-    }
-
-    @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -72,33 +54,28 @@ public class YourDetailsController extends AbstractFormController {
     }
 
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
-        throw new UnsupportedOperationException("validate(Map<String, String[]> fieldValues, String[] fields)");
+        LOG.trace("Starting YourDetailsController.validate");
+
+        validateField(fieldValues, "carerTitle");
+        validateField(fieldValues, "carerFirstName");
+        // "middleName" is optional,
+        validateField(fieldValues, "carerSurname");
+        validateField(fieldValues, "carerNationalInsuranceNumber");
+
+        validateField(fieldValues, "carerDateOfBirth");
+
+        LOG.trace("Ending YourDetailsController.validate");
     }
 
-    /**
-     * Might use BindingResult, and spring Validator, not sure yet
-     * don't want to perform type conversion prior to controller as we have no control
-     * over the (rather poor) reporting behaviour
-     * @return
-     */
     protected void validate(Map<String, String[]> fieldValues, String[] fields, String[] enabledFields) {
-        LOG.trace("Starting YourDetailsController.validate");
 
         LOG.info("EnabledFields = {}", enabledFields == null ? null : Arrays.asList(enabledFields));
 
-        for(String field: enabledFields) {
-            LOG.debug("validating enabled field {}", field);
-            validateField(fieldValues, field);
+        if(enabledFields != null) {
+            for(String field: enabledFields) {
+                LOG.debug("validating enabled field {}", field);
+                validateField(fieldValues, field);
+            }
         }
-
-//        validateMandatoryField(fieldValues, "carerTitle");
-//        validateMandatoryField(fieldValues, "carerFirstName");
-//        // "middleName" is optional,
-//        validateMandatoryField(fieldValues, "carerSurname");
-//        validateMandatoryField(fieldValues, "carerNationalInsuranceNumber");
-
-//        validateMandatoryDateField(fieldValues, "carerDateOfBirth");
-
-        LOG.trace("Ending YourDetailsController.validate");
     }
 }

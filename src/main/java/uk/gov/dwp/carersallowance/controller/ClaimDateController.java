@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,35 +21,24 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class ClaimDateController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(ClaimDateController.class);
 
+    private static final String PAGE_NAME     = "";
     private static final String CURRENT_PAGE  = "/your-claim-date/claim-date";
-    private static final String PAGE_TITLE    = "Claim date - When do you want Carer's Allowance to start?";
 
-    private static final String[] FIELDS = {"dateOfClaim_year",
-                                            "dateOfClaim_month",
-                                            "dateOfClaim_day",
-                                            "beforeClaimCaring",
-                                            "beforeClaimCaringDate_year",
-                                            "beforeClaimCaringDate_month",
-                                            "beforeClaimCaringDate_day"};
+// FIELDS = dateOfClaim_year, dateOfClaim_month, dateOfClaim_day, beforeClaimCaring, beforeClaimCaringDate_year, beforeClaimCaringDate_month, beforeClaimCaringDate_day
 
     @Autowired
-    public ClaimDateController(SessionManager sessionManager) {
-        super(sessionManager);
+    public ClaimDateController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -66,20 +56,15 @@ public class ClaimDateController extends AbstractFormController {
         saveFormattedDate(request.getSession(), "dateOfClaim", "dd MMMMMMMMMM yyyy", "dateOfClaim_year", "dateOfClaim_month", "dateOfClaim_day");
     }
 
-    /**
-     * Might use BindingResult, and spring Validator, not sure yet
-     * don't want to perform type conversion prior to controller as we have no control
-     * over the (rather poor) reporting behaviour
-     * @return
-     */
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
-        LOG.trace("Starting BenefitsController.validate");
+        LOG.trace("Starting YourDetailsController.validate");
 
-        validateMandatoryDateField(fieldValues, "dateOfClaim", "Claim date");
-        validateMandatoryField(fieldValues, "beforeClaimCaring", "Were you caring for the person for more than 35 hours a week before this date?");
+        validateMandatoryDateField(fieldValues, "dateOfClaim");
+        validateMandatoryField(fieldValues, "beforeClaimCaring");
         if(fieldValue_Equals(fieldValues, "beforeClaimCaring", "yes")) {
-            validateMandatoryDateField(fieldValues, "beforeClaimCaringDate", "When did you begin caring?");
+            validateMandatoryDateField(fieldValues, "beforeClaimCaringDate");
         }
-        LOG.trace("Ending BenefitsController.validate");
+
+        LOG.trace("Ending YourDetailsController.validate");
     }
 }

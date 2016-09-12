@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,23 +20,12 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class FosteringAllowanceController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(FosteringAllowanceController.class);
 
+    private static final String PAGE_NAME     = "page.fostering-allowance";
     private static final String CURRENT_PAGE  = "/your-income/fostering-allowance";
-    private static final String PAGE_TITLE    = "Your income Fostering Allowance";
-
-    private static final String[] FIELDS = {"fosteringAllowancePay",
-                                            "fosteringAllowancePayOther",
-                                            "fosteringAllowanceStillBeingPaidThisPay",
-                                            "fosteringAllowanceWhenDidYouLastGetPaid_day",
-                                            "fosteringAllowanceWhenDidYouLastGetPaid_month",
-                                            "fosteringAllowanceWhenDidYouLastGetPaid_year",
-                                            "fosteringAllowanceWhoPaidYouThisPay",
-                                            "fosteringAllowanceAmountOfThisPay",
-                                            "fosteringAllowanceHowOftenPaidThisPay",
-                                            "fosteringAllowanceHowOftenPaidThisPayOther"};
 
     @Autowired
-    public FosteringAllowanceController(SessionManager sessionManager) {
-        super(sessionManager);
+    public FosteringAllowanceController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
@@ -44,7 +34,7 @@ public class FosteringAllowanceController extends AbstractFormController {
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
@@ -54,13 +44,8 @@ public class FosteringAllowanceController extends AbstractFormController {
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -82,22 +67,22 @@ public class FosteringAllowanceController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "fosteringAllowancePay", "What type of organisation pays you for Fostering Allowance?");
+        validateMandatoryField(fieldValues, "fosteringAllowancePay");
         if(fieldValue_Equals(fieldValues, "fosteringAllowancePay", "Other")) {
-            validateMandatoryField(fieldValues, "fosteringAllowancePayOther", "Who paid you Fostering Allowance?");
+            validateMandatoryField(fieldValues, "fosteringAllowancePayOther");
         }
 
-        validateMandatoryField(fieldValues, "fosteringAllowanceStillBeingPaidThisPay", "Are you still being paid this?");
+        validateMandatoryField(fieldValues, "fosteringAllowanceStillBeingPaidThisPay");
         if(fieldValue_Equals(fieldValues, "fosteringAllowanceStillBeingPaidThisPay", "no")) {
-            validateMandatoryDateField(fieldValues, "fosteringAllowanceWhenDidYouLastGetPaid", "When did you start the course?");
+            validateMandatoryDateField(fieldValues, "fosteringAllowanceWhenDidYouLastGetPaid");
         }
 
-        validateMandatoryField(fieldValues, "fosteringAllowanceWhoPaidYouThisPay", "Who paid you this?");
-        validateMandatoryField(fieldValues, "fosteringAllowanceAmountOfThisPay", "Amount paid");
+        validateMandatoryField(fieldValues, "fosteringAllowanceWhoPaidYouThisPay");
+        validateMandatoryField(fieldValues, "fosteringAllowanceAmountOfThisPay");
 
-        validateMandatoryField(fieldValues, "fosteringAllowanceHowOftenPaidThisPay", "How often are you paid?");
+        validateMandatoryField(fieldValues, "fosteringAllowanceHowOftenPaidThisPay");
         if(fieldValue_Equals(fieldValues, "fosteringAllowanceHowOftenPaidThisPay", "Other")) {
-            validateMandatoryField(fieldValues, "fosteringAllowanceHowOftenPaidThisPayOther", "How often are you paid?");
+            validateMandatoryField(fieldValues, "fosteringAllowanceHowOftenPaidThisPayOther");
         }
 
         LOG.trace("Ending BenefitsController.validate");

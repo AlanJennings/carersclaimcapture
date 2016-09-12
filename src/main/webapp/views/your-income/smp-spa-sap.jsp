@@ -4,7 +4,7 @@
 
 <!DOCTYPE html>
 
-<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+<t:mainPage page="page.smp-spa-sap" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" page="page.smp-spa-sap" backLink="${previousPage}">
 

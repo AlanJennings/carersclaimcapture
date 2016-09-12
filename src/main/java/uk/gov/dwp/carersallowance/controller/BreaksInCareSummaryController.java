@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -27,12 +28,18 @@ import uk.gov.dwp.carersallowance.utils.Parameters;
 @Controller
 public class BreaksInCareSummaryController extends AbstractFormController {
 
+    private static final String BREAK_SOMEWHERE_ELSE_PAGE_NAME = "page.break-somewhere-else";
+
+    private static final String BREAK_IN_RESPITE_CARE_PAGE_NAME = "page.break-in-respite-care";
+
+    private static final String BREAK_IN_HOSPITAL_PAGE_NAME = "page.break-in-hospital";
+
     private static final String BREAK_IN_CARE_TYPE = "breakInCareType";
 
     private static final Logger LOG = LoggerFactory.getLogger(BreaksInCareSummaryController.class);
 
+    private static final String PAGE_NAME     = "page.breaks-in-care";
     private static final String CURRENT_PAGE          = "/breaks/breaks-in-care";
-    private static final String PAGE_TITLE            = "Breaks from care - About the person you care for";
 
     private static final String BREAKS_IN_HOSPITAL    = "/breaks/break-in-hospital";
     private static final String BREAKS_IN_RESPITE     = "/breaks/break-in-respite-care";
@@ -42,19 +49,19 @@ public class BreaksInCareSummaryController extends AbstractFormController {
 
 
     private static final String[] READONLY_FIELDS       = {"carerFirstName", "carerSurname", "careeFirstName", "careeSurname"};
-    private static final String[] FIELDS                = {"moreBreaksInCare"};
+// FIELDS                moreBreaksInCare
     private static final String[] SORTING_FIELDS        = {"startDate_year", "startDate_month", "startDate_day"};
 
     private static final String   FIELD_COLLECTION_NAME = "breaks";
     private static final String   ID_FIELD              = "break_id";
 
     @Autowired
-    public BreaksInCareSummaryController(SessionManager sessionManager) {
-        super(sessionManager);
+    public BreaksInCareSummaryController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
@@ -105,13 +112,8 @@ public class BreaksInCareSummaryController extends AbstractFormController {
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -146,7 +148,7 @@ public class BreaksInCareSummaryController extends AbstractFormController {
             LOG.debug("fieldCollectionFields = {}", Arrays.asList(fieldCollectionFields));
             populateFieldCollectionEntry(session, FIELD_COLLECTION_NAME, fieldCollectionFields, ID_FIELD);
 
-            return "redirect:" + getCurrentPage();
+            return "redirect:" + getCurrentPage(request);
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
@@ -157,9 +159,9 @@ public class BreaksInCareSummaryController extends AbstractFormController {
 
     private String[] getFieldCollectionFields() {
         String[] fieldCollectionFields = FieldCollection.aggregateFieldLists(new String[]{ID_FIELD, BREAK_IN_CARE_TYPE},
-                                                                             BreakInHospitalController.FIELDS,
-                                                                             BreakInRespiteCareController.FIELDS,
-                                                                             BreakSomewhereElseController.FIELDS);
+                                                                             getFields(BREAK_IN_HOSPITAL_PAGE_NAME),
+                                                                             getFields(BREAK_IN_RESPITE_CARE_PAGE_NAME),
+                                                                             getFields(BREAK_SOMEWHERE_ELSE_PAGE_NAME));
         return fieldCollectionFields;
     }
 
@@ -240,7 +242,7 @@ public class BreaksInCareSummaryController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "moreBreaksInCare", "Have you had any more breaks from caring for this person since 1 March 2016?");
+        validateMandatoryField(fieldValues, "moreBreaksInCare");
 
         LOG.trace("Ending BenefitsController.validate");
     }

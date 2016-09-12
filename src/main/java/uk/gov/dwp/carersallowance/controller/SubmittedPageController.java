@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,14 +20,14 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class SubmittedPageController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(SubmittedPageController.class);
 
+    private static final String PAGE_NAME     = "";
     private static final String CURRENT_PAGE  = "/thankyou/apply-carers";
-    private static final String PAGE_TITLE    = null;
 
-    private static final String[] FIELDS = {};
+// FIELDS = {};
 
     @Autowired
-    public SubmittedPageController(SessionManager sessionManager) {
-        super(sessionManager);
+    public SubmittedPageController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
@@ -35,7 +36,7 @@ public class SubmittedPageController extends AbstractFormController {
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
@@ -45,13 +46,8 @@ public class SubmittedPageController extends AbstractFormController {
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)

@@ -4,7 +4,7 @@
 
 <!DOCTYPE html>
 
-<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+<t:mainPage page="page.pensions-and-expenses" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" page="page.pensions-and-expenses" pageTitle="${employerName}" backLink="${previousPage}">
         <t:yesnofield name="payPensionScheme" />

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,21 +20,13 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class DirectPaymentController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(DirectPaymentController.class);
 
+    private static final String PAGE_NAME     = "page.direct-payment";
     private static final String CURRENT_PAGE  = "/your-income/direct-payment";
-    private static final String PAGE_TITLE    = "Your income direct payments for caring for people";
 
-    private static final String[] FIELDS = {"directPaymentStillBeingPaidThisPay",
-                                            "directPaymentWhenDidYouLastGetPaid_day",
-                                            "directPaymentWhenDidYouLastGetPaid_month",
-                                            "directPaymentWhenDidYouLastGetPaid_year",
-                                            "directPaymentWhoPaidYouThisPay",
-                                            "directPaymentAmountOfThisPay",
-                                            "directPaymentHowOftenPaidThisPay",
-                                            "directPaymentHowOftenPaidThisPayOther"};
 
     @Autowired
-    public DirectPaymentController(SessionManager sessionManager) {
-        super(sessionManager);
+    public DirectPaymentController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
@@ -42,7 +35,7 @@ public class DirectPaymentController extends AbstractFormController {
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
@@ -52,13 +45,8 @@ public class DirectPaymentController extends AbstractFormController {
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -80,17 +68,17 @@ public class DirectPaymentController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "directPaymentStillBeingPaidThisPay", "Are you still being paid this?");
+        validateMandatoryField(fieldValues, "directPaymentStillBeingPaidThisPay");
         if(fieldValue_Equals(fieldValues, "directPaymentStillBeingPaidThisPay", "no")) {
-            validateMandatoryDateField(fieldValues, "directPaymentWhenDidYouLastGetPaid", "When were you last paid?");
+            validateMandatoryDateField(fieldValues, "directPaymentWhenDidYouLastGetPaid");
         }
 
-        validateMandatoryField(fieldValues, "directPaymentWhoPaidYouThisPay", "Your Status");
-        validateMandatoryField(fieldValues, "directPaymentAmountOfThisPay", "Your Status");
+        validateMandatoryField(fieldValues, "directPaymentWhoPaidYouThisPay");
+        validateMandatoryField(fieldValues, "directPaymentAmountOfThisPay");
 
-        validateMandatoryField(fieldValues, "directPaymentHowOftenPaidThisPay", "How often are you paid?");
+        validateMandatoryField(fieldValues, "directPaymentHowOftenPaidThisPay");
         if(fieldValue_Equals(fieldValues, "directPaymentHowOftenPaidThisPay", "Other")) {
-            validateMandatoryField(fieldValues, "directPaymentHowOftenPaidThisPayOther", "How often are you paid?");
+            validateMandatoryField(fieldValues, "directPaymentHowOftenPaidThisPayOther");
         }
 
         LOG.trace("Ending BenefitsController.validate");

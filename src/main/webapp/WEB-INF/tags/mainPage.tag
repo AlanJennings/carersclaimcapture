@@ -2,6 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
+<%@ attribute name="page" required="true" %>
+
 <%@ attribute name="pageTitle" %>
 <%@ attribute name="pageTitleKey" %>
 <%@ attribute name="currentPage" %>
@@ -9,7 +11,7 @@
 
 <%-- TODO can we send analytics from the server side as well? might be able to add useful information --%>
 <t:defaultValue value="${pageScope.analytics}" defaultValue="true" var="analytics" />
-
+<t:defaultValue value="${pageScope.pageTitleKey}" defaultValue="${page}.pageTitle" var="pageTitleKey" />
 <c:if test="${empty pageTitle}" >
     <c:set var="pageTitle"><t:message parentName="${pageScope.pageTitleKey}" /></c:set>
 </c:if>
@@ -118,19 +120,10 @@
         <script src="<c:url value='/assets/javascript/respond.min.js' />" ></script>
         <![endif]-->
 
-        <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-            
-            ga('create', 'UA-57523228-19', {
-              'siteSpeedSampleRate': '1'
-            });
-            ga('send', 'pageview');
-            ga('set', 'anonymizeIp', true);
-            ga('set', 'nonInteraction', true);
-        </script>
+        <c:set var="analyticsId"     value="UA-57523228-19" />
+        <c:set var="testAnalyticsId" value="UA-83580544-1" />
+
+        <t:googleAnalytics trackingId="UA-83580544-1" />
     </head>
 
     <body>

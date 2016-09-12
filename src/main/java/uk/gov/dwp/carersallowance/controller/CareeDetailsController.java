@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,42 +20,23 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class CareeDetailsController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(CareeDetailsController.class);
 
+    private static final String PAGE_NAME     = "page.their-personal-details";
     private static final String CURRENT_PAGE  = "/care-you-provide/their-personal-details";
-    private static final String PAGE_TITLE    = "Details of the person you care for - About the person you care for";
 
-    private static final String[] FIELDS = {"careeTitle",
-                                            "careeFirstName",
-                                            "careeMiddleName",
-                                            "careeSurname",
-                                            "careeNationalInsuranceNumber",
-                                            "careeDateOfBirth_day",
-                                            "careeDateOfBirth_month",
-                                            "careeDateOfBirth_year",
-                                            "careeRelationship",
-                                            "careeSameAddress",
-                                            "careeAddressLineOne",
-                                            "careeAddressLineTwo",
-                                            "careeAddressLineThree",
-                                            "careePostcode"};
-
+// careeTitle, careeFirstName, careeMiddleName, careeSurname, careeNationalInsuranceNumber, careeDateOfBirth_day, careeDateOfBirth_month, careeDateOfBirth_year, careeRelationship, careeSameAddress, careeAddressLineOne, careeAddressLineTwo, careeAddressLineThree, careePostcode};
     @Autowired
-    public CareeDetailsController(SessionManager sessionManager) {
-        super(sessionManager);
+    public CareeDetailsController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -76,12 +58,12 @@ public class CareeDetailsController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "careeTitle", "Title");
-        validateMandatoryField(fieldValues, "careeFirstName", "First name");
-        validateMandatoryField(fieldValues, "careeSurname", "Last name");
-        validateMandatoryDateField(fieldValues, "careeDateOfBirth", "Date of Birth");
-        validateMandatoryField(fieldValues, "careeRelationship", "What's their relationship to you?");
-        validateMandatoryField(fieldValues, "careeSameAddress", "Do they live at the same address as you?");
+        validateMandatoryField(fieldValues, "careeTitle");
+        validateMandatoryField(fieldValues, "careeFirstName");
+        validateMandatoryField(fieldValues, "careeSurname");
+        validateMandatoryDateField(fieldValues, "careeDateOfBirth");
+        validateMandatoryField(fieldValues, "careeRelationship");
+        validateMandatoryField(fieldValues, "careeSameAddress");
         // address and postcode are not mandatory
 
         LOG.trace("Ending BenefitsController.validate");

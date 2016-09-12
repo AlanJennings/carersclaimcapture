@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,34 +25,20 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class BreakSomewhereElseController extends AbstractFormController {
     public static final Logger LOG = LoggerFactory.getLogger(BreakSomewhereElseController.class);
 
+    private static final String PAGE_NAME     = "page.break-somewhere-else";
     private static final String CURRENT_PAGE  = "/breaks/break-somewhere-else";    // this has an argument
     private static final String NEXT_PAGE     = "/breaks/breaks-in-care/update";
     private static final String PARENT_PAGE   = "/breaks/breaks-in-care";
-    private static final String PAGE_TITLE    = "Break - About the care you provide";
 
     public static final String[] SHARED_FIELDS = {"break_id", "breakInCareType"};
 
-    public static final String[] FIELDS = {"careeSomewhereElseStartDate_day",
-                                           "careeSomewhereElseStartDate_month",
-                                           "careeSomewhereElseStartDate_year",
-                                           "careeSomewhereElseStartTime",
-                                           "careeSomewhereElseEndedTime",
-                                           "careeSomewhereElseEndDate_day",
-                                           "careeSomewhereElseEndDate_month",
-                                           "careeSomewhereElseEndDate_year",
-                                           "careeSomewhereElseEndTime",
-                                           "carerSomewhereElseWhereYou",
-                                           "carerSomewhereElseWhereYouOtherText",
-                                           "carerSomewhereElseWhereCaree",
-                                           "carerSomewhereElseWhereCareeOtherText"};
-
     @Autowired
-    public BreakSomewhereElseController(SessionManager sessionManager) {
-        super(sessionManager);
+    public BreakSomewhereElseController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
@@ -71,13 +58,8 @@ public class BreakSomewhereElseController extends AbstractFormController {
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -107,20 +89,20 @@ public class BreakSomewhereElseController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryDateField(fieldValues, "careeSomewhereElseStartDate", "When did the break start?");
-        validateMandatoryField(fieldValues, "careeSomewhereElseEndedTime", "Have you started providing care again?");
+        validateMandatoryDateField(fieldValues, "careeSomewhereElseStartDate");
+        validateMandatoryField(fieldValues, "careeSomewhereElseEndedTime");
         if(fieldValue_Equals(fieldValues, "careeSomewhereElseEndedTime", "yes")) {
-            validateMandatoryDateField(fieldValues, "careeSomewhereElseEndDate", "Date Started");
+            validateMandatoryDateField(fieldValues, "careeSomewhereElseEndDate");
         }
 
-        validateMandatoryField(fieldValues, "carerSomewhereElseWhereYou", "Where were you during this time?");
+        validateMandatoryField(fieldValues, "carerSomewhereElseWhereYou");
         if(fieldValue_Equals(fieldValues, "carerSomewhereElseWhereYou", "elsewhere")) {
-            validateMandatoryField(fieldValues, "carerSomewhereElseWhereYouOtherText", "Tell us where");
+            validateMandatoryField(fieldValues, "carerSomewhereElseWhereYouOtherText");
         }
 
-        validateMandatoryField(fieldValues, "carerSomewhereElseWhereCaree", "Where was the person you care for during the break?");
+        validateMandatoryField(fieldValues, "carerSomewhereElseWhereCaree");
         if(fieldValue_Equals(fieldValues, "carerSomewhereElseWhereCaree", "elsewhere")) {
-            validateMandatoryField(fieldValues, "carerSomewhereElseWhereCareeOtherText", "Tell us where");
+            validateMandatoryField(fieldValues, "carerSomewhereElseWhereCareeOtherText");
         }
 
         LOG.trace("Ending BenefitsController.validate");

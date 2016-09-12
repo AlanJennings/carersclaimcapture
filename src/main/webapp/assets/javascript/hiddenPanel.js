@@ -3,7 +3,7 @@
 
     window.initPanelState = function(panelId, triggerId, triggerValue, clearOnHide) {
         var show = false;
-        $("#" + triggerId + " input").add("select#" + triggerId).each(function(){
+        $("#" + triggerId + " input").not('input[type="hidden"]').add("select#" + triggerId).each(function(){
             var that = $(this);
             if(that.val() === triggerValue) {
                 if(that.attr('type') === "radio" || that.attr('type') === "checkbox") {
@@ -27,7 +27,7 @@
     };
 
     window.initPanelEvents = function(panelId, triggerId, triggerValue, clearOnHide) {
-        return $("#" + triggerId + " input").add("select#" + triggerId).on("change", function() {
+        return $("#" + triggerId + " input").not('input[type="hidden"]').add("select#" + triggerId).on("change", function() {
             if ($(this).val() === triggerValue) {
                 $("#" + panelId).show();
                 showPanel("#" + panelId, clearOnHide);
@@ -49,7 +49,7 @@
     
     window.hidePanel = function(panelId, clearOnHide) {
         if(clearOnHide === "true") {
-            $("#" + panelId).find('input').add('textarea').add('select').val('');
+            $("#" + panelId).find('input').not('input[type="hidden"]').add('textarea').add('select').val('');
         } else {
             // TODO, disable fields
         }

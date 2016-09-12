@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,30 +21,30 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class PreviewController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(PreviewController.class);
 
+    private static final String PAGE_NAME     = "page.preview";
     private static final String CURRENT_PAGE  = "/preview";
-    private static final String PAGE_TITLE    = "Check your answers";
 
-    private static final String[] FIELDS = {};
+//    private static final String[] FIELDS = {};
 
     @Autowired
-    public PreviewController(SessionManager sessionManager) {
-        super(sessionManager);
+    public PreviewController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
+    public String getPageName() {
+        return PAGE_NAME;
     }
 
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
-    }
+//    @Override
+//    public String[] getFields() {
+//        return FIELDS;
+//    }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
     public String showForm(HttpServletRequest request, Model model) {

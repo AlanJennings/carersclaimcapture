@@ -114,18 +114,10 @@ public abstract class AbstractFormController {
         pageList = new ArrayList<>(Arrays.asList(PAGES));
     }
 
-    public AbstractFormController(SessionManager sessionManager) {
-        this(sessionManager, null);
-    }
-
     /************************ START ABSTRACT METHODS **************************/
 
-    public abstract String   getCurrentPage();           // e.g. /allowance/benefits
-    public abstract String   getPageTitle();
-
-    public abstract String[] getFields();
-
-    protected abstract void validate(Map<String, String[]> fieldValues, String[] fields);
+    protected abstract String getPageName();
+    protected abstract void   validate(Map<String, String[]> fieldValues, String[] fields);
 
     /*********************** END ABSTRACT METHODS ******************************/
 
@@ -133,18 +125,21 @@ public abstract class AbstractFormController {
     public Session           getSession(String sessionId)   { return sessionManager.getSession(sessionId); }
     public ValidationSummary getValidationSummary()         { return validationSummary; }
 
-    protected void validate(Map<String, String[]> fieldValues, String[] fields, String[] enabledFields) {
-        validate(fieldValues, fields);
+    public String getCurrentPage(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return path;
     }
 
-    /**
-     * Used to decide which fields to validate (i.e. we only validate enabled fields)
-     * @param request
-     * @return
-     */
-    public String[] getEnabledFields(HttpServletRequest request) {
-        String[] dynamicFields = request.getParameterValues("field");
-        return dynamicFields;
+    public String[] getFields(String pageName) {
+        Parameters.validateMandatoryArgs(pageName, "pageName");
+
+        String fieldNameList = messageSource.getMessage(pageName + ".fields", null, null, null);
+        String[] fieldNames = fieldNameList.split(",");
+        for(int index = 0; index < fieldNames.length; index++) {
+            fieldNames[index] = fieldNames[index].trim();
+        }
+
+        return fieldNames;
     }
 
     public String[] getSharedFields() {
@@ -160,7 +155,7 @@ public abstract class AbstractFormController {
     }
 
     public String getPreviousPage(HttpServletRequest request, List<String> currentPageList) {
-        String currentPage = getCurrentPage();
+        String currentPage = getCurrentPage(request);
         int index = currentPageList.indexOf(currentPage);
         if(index == -1 || index == 0) {
             // not found or first
@@ -179,7 +174,7 @@ public abstract class AbstractFormController {
      * @return
      */
     public String getNextPage(HttpServletRequest request, List<String> currentPageList) {
-        String currentPage = getCurrentPage();
+        String currentPage = getCurrentPage(request);
         int index = currentPageList.indexOf(currentPage);
         if(index == -1 || index == (currentPageList.size() -1)) {
             // not found or last
@@ -198,16 +193,24 @@ public abstract class AbstractFormController {
         try {
             LOG.debug("model = {}", model);
 
-            model.addAttribute("previousPage", getPreviousPage(request));   // not sure if we can use this as the request data is not available yet
-            model.addAttribute("currentPage", getCurrentPage());
-            model.addAttribute("nextPage", getNextPage(request));           // not sure if we can use this as the request data is not available yet
-            model.addAttribute("pageTitle", getPageTitle());
+            String path = request.getServletPath();
+            LOG.info("path = {}", path);
 
-            copyFromSessionToModel(request, getFields(), model);
+            model.addAttribute("previousPage", getPreviousPage(request));   // not sure if we can use this as the request data is not available yet
+            model.addAttribute("currentPage", getCurrentPage(request));
+            model.addAttribute("nextPage", getNextPage(request));           // not sure if we can use this as the request data is not available yet
+//            model.addAttribute("pageTitle", getPageTitle());
+
+            // if we copy everything then we don't need a static list
+            // in which case the fields used are defined by the jsp, which is far less visible
+            // it would also remove the distinction between shared & readonly fields and ordinary fields
+            // so we probably could verify if a field name was duplicated.
+            // So probably best to stick to a list of fields, but make it data driven (in messages.properties)
+            copyFromSessionToModel(request, getFields(getPageName()), model);
             copyFromSessionToModel(request, getSharedFields(), model);
             copyFromSessionToModel(request, getReadOnlyFields(), model);
 
-            return getCurrentPage();        // returns the view name
+            return getCurrentPage(request);        // returns the view name
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
@@ -245,28 +248,14 @@ public abstract class AbstractFormController {
             LOG.debug("request.getParameterMap() = {}", request.getParameterMap());
 
             String pageName = request.getParameter("pageName");
-            String fieldNames = this.getMessageSource().getMessage(pageName + ".fields", null, null);
-            LOG.info("pageName = {}, fieldNames = {}", pageName, fieldNames);
-
-            String[] fields;
-            if(StringUtils.isEmpty(fieldNames) == false) {
-                fields = fieldNames.split(",");
-                for(int index = 0; index < fields.length; index++) {
-                    fields[index] = fields[index].trim();
-                }
-
-                String[] preDefinedFields = getFields();
-                assertSameContents(fields, preDefinedFields);
-            } else {
-                fields = getFields();
-            }
+            String[] fields = getFields(pageName);
 
             copyFromRequestToSession(request, fields);
             copyFromRequestToSession(request, getSharedFields());
 
             getValidationSummary().reset();
 
-            validate(request.getParameterMap(), fields, getEnabledFields(request));
+            validate(request.getParameterMap(), fields);
 
             if(hasErrors()) {
                 LOG.info("there are validation errors, re-showing form");
@@ -288,29 +277,6 @@ public abstract class AbstractFormController {
             throw e;
         } finally {
             LOG.trace("Ending AbstractFormController.postForm");
-        }
-    }
-
-    private void assertSameContents(String[] dynamicFields, String[] staticFields) {
-        Parameters.validateMandatoryArgs(new Object[]{dynamicFields, staticFields}, new String[]{"dynamicFields", "staticFields"});
-
-        Set<String> dynamicSet = new HashSet<>(Arrays.asList(dynamicFields));
-        Set<String> staticSet = new HashSet<>(Arrays.asList(staticFields));
-        LOG.debug("dynamicFields = {}, staticFields = {}", dynamicSet, staticFields);
-        // lets assume staticFields is correct
-
-        // in staticFields, but not in dynamicFields
-        Set<String> missing = new HashSet<>(staticSet);
-        missing.removeAll(dynamicSet);
-        LOG.info("missing fields = {}", missing);
-
-        // in dynamicFields, but not in staticFields
-        Set<String> extra = new HashSet<>(dynamicSet);
-        extra.removeAll(staticSet);
-        LOG.info("extra fields = {}", extra);
-
-        if(missing.size() > 0 || extra.size() > 0) {
-            throw new IllegalStateException("missing(" + missing + ") or additional(" + extra + ") fields found");
         }
     }
 
@@ -436,9 +402,9 @@ public abstract class AbstractFormController {
      * @param id
      * @param fieldTitle
      */
-    protected void validateMandatoryDateField(Map<String, String[]> allfieldValues, String id, String fieldTitle) {
+    protected void validateMandatoryDateField(Map<String, String[]> allfieldValues, String id, Object... args) {
         LOG.trace("Started AbstractFormController.validateMandatoryDateField");
-        Parameters.validateMandatoryArgs(new Object[]{allfieldValues, id, fieldTitle}, new String[]{"allfieldValues", "id", "fieldTitle"});
+        Parameters.validateMandatoryArgs(new Object[]{allfieldValues, id}, new String[]{"allfieldValues", "id"});
 
         boolean emptyField = false;
         boolean populatedField = false;
@@ -455,6 +421,7 @@ public abstract class AbstractFormController {
         }
 
         if(emptyField) {
+            String fieldTitle = getFieldLabel(id, args);
             if(populatedField) {
                 addFormError(id, fieldTitle, "Invalid value");
             } else {
@@ -482,6 +449,11 @@ public abstract class AbstractFormController {
 
     /**
      * Returns immediately after an error occurs (to avoid multiple errors for the same field)
+     *
+     * If javascript is in use then we can deduce the fields on screen and automate this but
+     * but we need a journey that works without javascript.
+     *
+     * TODO not sure if this is the best approach or not (requires validation info in messages.properties)
      */
     protected void validateField(Map<String, String[]> allfieldValues, String fieldName, Object...args) {
         for(ValidationType type: ValidationType.values()) {
@@ -514,15 +486,16 @@ public abstract class AbstractFormController {
         }
     }
 
-    protected void validateMandatoryField(Map<String, String[]> allfieldValues, String fieldName, String fieldTitle) {
+    protected void validateMandatoryField(Map<String, String[]> allfieldValues, String fieldName, Object...args) {
         LOG.trace("Started AbstractFormController.validateMandatoryField");
-        Parameters.validateMandatoryArgs(new Object[]{allfieldValues, fieldTitle, fieldName}, new String[]{"allfieldValues", "fieldTitle", "fieldName"});
+        Parameters.validateMandatoryArgs(new Object[]{allfieldValues, fieldName}, new String[]{"allfieldValues", "fieldName"});
 
         String[] fieldValues = allfieldValues.get(fieldName);
         LOG.debug("fieldName = {}, fieldValues={}", fieldName, new LoggingObjectWrapper(fieldValues));
 
         if(isEmpty(fieldValues)) {
             LOG.debug("missing mandatory field: {}", fieldName);
+            String fieldTitle = getFieldLabel(fieldName, args);
             addFormError(fieldName, fieldTitle, "You must complete this section");
         }
 
@@ -627,7 +600,7 @@ public abstract class AbstractFormController {
                 return;
             }
 
-            if(firstFieldValues != null && firstFieldValues != null) {
+            if(firstFieldValues != null && secondFieldValues != null) {
                 Set<String> firstValuesSet = new HashSet<>(Arrays.asList(firstFieldValues));
                 Set<String> secondValuesSet = new HashSet<>(Arrays.asList(secondFieldValues));
 
@@ -1186,7 +1159,7 @@ public abstract class AbstractFormController {
                 throw new UnknownRecordException("Unknown record id: " + idToDelete);
             }
 
-            return "redirect:" + getCurrentPage();
+            return "redirect:" + getCurrentPage(request);
         } finally {
             LOG.trace("Ending EmploymentHistoryController.deleteEmployment");
         }

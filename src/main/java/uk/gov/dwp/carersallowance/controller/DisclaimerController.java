@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,29 +16,22 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 
 @Controller
 public class DisclaimerController extends AbstractFormController {
+    private static final String PAGE_NAME     = "page.disclaimer";
     private static final String CURRENT_PAGE  = "/disclaimer/disclaimer";
-    private static final String PAGE_TITLE    = "Disclaimer - Before you start";
-
-    private static final String[] FIELDS = {};
 
     @Autowired
-    public DisclaimerController(SessionManager sessionManager) {
-        super(sessionManager);
+    public DisclaimerController(SessionManager sessionManager, MessageSource messageSource) {
+        super(sessionManager, messageSource);
     }
 
     @Override
-    public String getCurrentPage() {
+    public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
     @Override
-    public String[] getFields() {
-        return FIELDS;
-    }
-
-    @Override
-    public String getPageTitle() {
-        return PAGE_TITLE;
+    protected String getPageName() {
+        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)

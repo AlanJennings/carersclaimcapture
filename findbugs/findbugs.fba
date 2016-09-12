@@ -1,0 +1,1096 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BugCollection version="3.0.1" sequence="0" timestamp="1473087940000" analysisTimestamp="1473156418829" release="">
+  <Project projectName="C3">
+    <Jar>/Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/target/classes</Jar>
+    <AuxClasspathEntry>/Users/drh/m2/repository/org/springframework/spring-core/4.2.5.RELEASE/spring-core-4.2.5.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/drh/m2/repository/org/springframework/spring-context/4.2.5.RELEASE/spring-context-4.2.5.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/drh/m2/repository/org/springframework/spring-web/4.2.5.RELEASE/spring-web-4.2.5.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/drh/m2/repository/org/springframework/spring-webmvc/4.2.5.RELEASE/spring-webmvc-4.2.5.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/drh/m2/repository/org/springframework/spring-beans/4.2.5.RELEASE/spring-beans-4.2.5.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/drh/m2/repository/javax/servlet/javax.servlet-api/3.0.1/javax.servlet-api-3.0.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/drh/m2/repository/ch/qos/logback/logback-core/1.1.2/logback-core-1.1.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/drh/m2/repository/ch/qos/logback/logback-classic/1.1.2/logback-classic-1.1.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/drh/m2/repository/org/slf4j/slf4j-api/1.7.6/slf4j-api-1.7.6.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/drh/m2/repository/org/apache/commons/commons-lang3/3.0/commons-lang3-3.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/drh/m2/repository/commons-io/commons-io/2.5/commons-io-2.5.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/Users/drh/m2/repository/gov/dwp/carers/xmlcommons/8.14-SNAPSHOT/xmlcommons-8.14-SNAPSHOT.jar</AuxClasspathEntry>
+    <SrcDir>/Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/src/main/java</SrcDir>
+    <WrkDir>/Users/drh/development-java/CarersClaimCapture/CarersClaimCapture</WrkDir>
+  </Project>
+  <BugInstance type="DM_CONVERT_CASE" priority="3" rank="20" abbrev="Dm" category="I18N">
+    <Class classname="uk.gov.dwp.carersallowance.JspFunctions">
+      <SourceLine classname="uk.gov.dwp.carersallowance.JspFunctions" sourcefile="JspFunctions.java" sourcepath="uk/gov/dwp/carersallowance/JspFunctions.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.JspFunctions" name="dateOffset" signature="(Ljava/util/Date;Ljava/lang/String;)Ljava/util/Date;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.JspFunctions" start="65" end="138" startBytecode="0" endBytecode="1098" sourcefile="JspFunctions.java" sourcepath="uk/gov/dwp/carersallowance/JspFunctions.java"/>
+    </Method>
+    <SourceLine classname="uk.gov.dwp.carersallowance.JspFunctions" start="104" end="104" startBytecode="165" endBytecode="165" sourcefile="JspFunctions.java" sourcepath="uk/gov/dwp/carersallowance/JspFunctions.java"/>
+  </BugInstance>
+  <BugInstance type="UPM_UNCALLED_PRIVATE_METHOD" priority="3" rank="20" abbrev="UPM" category="PERFORMANCE">
+    <Class classname="uk.gov.dwp.carersallowance.admin.controller.TextEditTagController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.admin.controller.TextEditTagController" sourcefile="TextEditTagController.java" sourcepath="uk/gov/dwp/carersallowance/admin/controller/TextEditTagController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.admin.controller.TextEditTagController" name="getMessage" signature="(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.admin.controller.TextEditTagController" start="88" end="96" startBytecode="0" endBytecode="244" sourcefile="TextEditTagController.java" sourcepath="uk/gov/dwp/carersallowance/admin/controller/TextEditTagController.java"/>
+    </Method>
+  </BugInstance>
+  <BugInstance type="UPM_UNCALLED_PRIVATE_METHOD" priority="3" rank="20" abbrev="UPM" category="PERFORMANCE">
+    <Class classname="uk.gov.dwp.carersallowance.admin.controller.TextEditTagController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.admin.controller.TextEditTagController" sourcefile="TextEditTagController.java" sourcepath="uk/gov/dwp/carersallowance/admin/controller/TextEditTagController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.admin.controller.TextEditTagController" name="getMessageKey" signature="(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.admin.controller.TextEditTagController" start="80" end="83" startBytecode="0" endBytecode="121" sourcefile="TextEditTagController.java" sourcepath="uk/gov/dwp/carersallowance/admin/controller/TextEditTagController.java"/>
+    </Method>
+  </BugInstance>
+  <BugInstance type="NP_BOOLEAN_RETURN_NULL" priority="2" rank="14" abbrev="NP" category="BAD_PRACTICE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" name="getBooleanFieldValue" signature="(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)Ljava/lang/Boolean;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="888" end="921" startBytecode="0" endBytecode="456" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Method>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="890" end="890" startBytecode="39" endBytecode="39" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="907" end="907" startBytecode="137" endBytecode="137" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java" role="SOURCE_LINE_ANOTHER_INSTANCE"/>
+  </BugInstance>
+  <BugInstance type="NP_LOAD_OF_KNOWN_NULL_VALUE" priority="3" rank="19" abbrev="NP" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" name="getFieldLabel" signature="(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="445" end="447" startBytecode="0" endBytecode="27" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Method>
+    <LocalVariable name="locale" register="3" pc="47" role="LOCAL_VARIABLE_VALUE_OF"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="446" end="446" startBytecode="50" endBytecode="50" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="NP_LOAD_OF_KNOWN_NULL_VALUE" priority="3" rank="19" abbrev="NP" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" name="validationEnabled" signature="(Ljava/lang/String;Luk/gov/dwp/carersallowance/controller/AbstractFormController$ValidationType;)Z" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="436" end="441" startBytecode="0" endBytecode="27" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Method>
+    <LocalVariable name="defaultValue" register="4" pc="35" role="LOCAL_VARIABLE_VALUE_OF"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="438" end="438" startBytecode="36" endBytecode="36" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="NP_LOAD_OF_KNOWN_NULL_VALUE" priority="3" rank="19" abbrev="NP" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" name="validationEnabled" signature="(Ljava/lang/String;Luk/gov/dwp/carersallowance/controller/AbstractFormController$ValidationType;)Z" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="436" end="441" startBytecode="0" endBytecode="27" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Method>
+    <LocalVariable name="locale" register="3" pc="36" role="LOCAL_VARIABLE_VALUE_OF"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="438" end="438" startBytecode="38" endBytecode="38" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="PZLA_PREFER_ZERO_LENGTH_ARRAYS" priority="3" rank="20" abbrev="PZLA" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" name="getReadOnlyFields" signature="()[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="150" end="150" startBytecode="0" endBytecode="43" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Method>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="150" end="150" startBytecode="1" endBytecode="1" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="PZLA_PREFER_ZERO_LENGTH_ARRAYS" priority="3" rank="20" abbrev="PZLA" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" name="getSessionStringAttribute" signature="(Ljavax/servlet/http/HttpSession;Ljava/lang/String;)[Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="870" end="880" startBytecode="0" endBytecode="187" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Method>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="872" end="872" startBytecode="13" endBytecode="13" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="PZLA_PREFER_ZERO_LENGTH_ARRAYS" priority="3" rank="20" abbrev="PZLA" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" name="getSharedFields" signature="()[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="146" end="146" startBytecode="0" endBytecode="43" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Method>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="146" end="146" startBytecode="1" endBytecode="1" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" priority="2" rank="18" abbrev="RCN" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" name="validateMatchingValues" signature="(Ljava/util/Map;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="590" end="622" startBytecode="0" endBytecode="679" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Method>
+    <LocalVariable name="firstFieldValues" register="7" pc="156" role="LOCAL_VARIABLE_VALUE_OF"/>
+    <Method classname="java.util.Map" name="get" signature="(Ljava/lang/Object;)Ljava/lang/Object;" isStatic="false" role="METHOD_RETURN_VALUE_OF">
+      <SourceLine classname="java.util.Map" sourcefile="Map.java" sourcepath="java/util/Map.java"/>
+    </Method>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="603" end="603" startBytecode="158" endBytecode="158" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java" role="SOURCE_REDUNDANT_NULL_CHECK"/>
+  </BugInstance>
+  <BugInstance type="RpC_REPEATED_CONDITIONAL_TEST" priority="1" rank="6" abbrev="RpC" category="CORRECTNESS">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" name="validateMatchingValues" signature="(Ljava/util/Map;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="590" end="622" startBytecode="0" endBytecode="679" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Method>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="603" end="603" startBytecode="151" endBytecode="152" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController" start="603" end="603" startBytecode="156" endBytecode="157" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="1" rank="16" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="ACCOUNT_HOLDER_NAME_MAX_LENGTH" signature="I" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1273" end="1273" startBytecode="2" endBytecode="2" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="1" rank="16" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="ACCOUNT_NUMBER_MAX_LENGTH" signature="I" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1274" end="1274" startBytecode="7" endBytecode="7" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="1" rank="16" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="ACCOUNT_NUMBER_MIN_LENGTH" signature="I" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1275" end="1275" startBytecode="12" endBytecode="12" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="1" rank="16" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="EMAIL_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1290" end="1290" startBytecode="147" endBytecode="147" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="1" rank="16" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="FULL_NAME_MAX_LENGTH" signature="I" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1277" end="1277" startBytecode="22" endBytecode="22" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="1" rank="16" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="NAME_MAX_LENGTH" signature="I" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1278" end="1278" startBytecode="27" endBytecode="27" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="1" rank="16" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="NATIONALITY_MAX_LENGTH" signature="I" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1279" end="1279" startBytecode="32" endBytecode="32" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="1" rank="16" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="NATIONALITY_SEQ" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1284" end="1284" startBytecode="52" endBytecode="52" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="1" rank="16" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="NINO_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1293" end="1293" startBytecode="232" endBytecode="232" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="1" rank="16" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="PHONE_NUMBER_MAX_LENGTH" signature="I" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1280" end="1280" startBytecode="37" endBytecode="37" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="1" rank="16" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="PHONE_NUMBER_SEQ" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1283" end="1283" startBytecode="47" endBytecode="47" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="1" rank="16" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="RESTRICTED_CHARS" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1282" end="1282" startBytecode="42" endBytecode="42" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="3" rank="20" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="ACCOUNT_HOLDER_NAME_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1286" end="1286" startBytecode="92" endBytecode="92" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="3" rank="20" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="ACCOUNT_NUMBER_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1287" end="1287" startBytecode="132" endBytecode="132" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="3" rank="20" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="CURRENCY_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1288" end="1288" startBytecode="137" endBytecode="137" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="3" rank="20" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="CURRENCY_REGEX_MAX_LENGTH" signature="I" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1276" end="1276" startBytecode="17" endBytecode="17" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="3" rank="20" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="DECIMAL_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1289" end="1289" startBytecode="142" endBytecode="142" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="3" rank="20" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="FULL_NAME_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1291" end="1291" startBytecode="187" endBytecode="187" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="3" rank="20" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="NATIONALITY_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1292" end="1292" startBytecode="227" endBytecode="227" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="3" rank="20" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="NUMBER_OR_SPACE_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1294" end="1294" startBytecode="237" endBytecode="237" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="3" rank="20" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="NUMBER_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1295" end="1295" startBytecode="242" endBytecode="242" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="3" rank="20" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="PHONE_NUMBER_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1296" end="1296" startBytecode="282" endBytecode="282" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="3" rank="20" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="POSTCODE_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1297" end="1297" startBytecode="287" endBytecode="287" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="3" rank="20" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="RESTRICTED_POSTCODE_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1298" end="1298" startBytecode="292" endBytecode="292" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="3" rank="20" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="SORT_CODE_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1299" end="1299" startBytecode="297" endBytecode="297" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_SHOULD_BE_FINAL" priority="3" rank="20" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="SURNAME_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1300" end="1300" startBytecode="337" endBytecode="337" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" priority="3" rank="20" abbrev="UrF" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="ACCOUNT_HOLDER_NAME_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1286" end="1286" startBytecode="92" endBytecode="92" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" priority="3" rank="20" abbrev="UrF" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="ACCOUNT_NUMBER_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1287" end="1287" startBytecode="132" endBytecode="132" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" priority="3" rank="20" abbrev="UrF" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="CURRENCY_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1288" end="1288" startBytecode="137" endBytecode="137" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" priority="3" rank="20" abbrev="UrF" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="CURRENCY_REGEX_MAX_LENGTH" signature="I" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1276" end="1276" startBytecode="17" endBytecode="17" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" priority="3" rank="20" abbrev="UrF" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="DECIMAL_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1289" end="1289" startBytecode="142" endBytecode="142" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" priority="3" rank="20" abbrev="UrF" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="FULL_NAME_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1291" end="1291" startBytecode="187" endBytecode="187" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" priority="3" rank="20" abbrev="UrF" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="NATIONALITY_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1292" end="1292" startBytecode="227" endBytecode="227" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" priority="3" rank="20" abbrev="UrF" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="NUMBER_OR_SPACE_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1294" end="1294" startBytecode="237" endBytecode="237" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" priority="3" rank="20" abbrev="UrF" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="NUMBER_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1295" end="1295" startBytecode="242" endBytecode="242" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" priority="3" rank="20" abbrev="UrF" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="PHONE_NUMBER_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1296" end="1296" startBytecode="282" endBytecode="282" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" priority="3" rank="20" abbrev="UrF" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="POSTCODE_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1297" end="1297" startBytecode="287" endBytecode="287" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" priority="3" rank="20" abbrev="UrF" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="RESTRICTED_POSTCODE_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1298" end="1298" startBytecode="292" endBytecode="292" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" priority="3" rank="20" abbrev="UrF" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="SORT_CODE_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1299" end="1299" startBytecode="297" endBytecode="297" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" priority="3" rank="20" abbrev="UrF" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" name="SURNAME_REGEX" signature="Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" start="1300" end="1300" startBytecode="337" endBytecode="337" sourcefile="AbstractFormController.java" sourcepath="uk/gov/dwp/carersallowance/controller/AbstractFormController.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP" priority="2" rank="18" abbrev="EI" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.BreakInHospitalController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakInHospitalController" sourcefile="BreakInHospitalController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakInHospitalController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.BreakInHospitalController" name="getSharedFields" signature="()[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakInHospitalController" start="57" end="57" startBytecode="0" endBytecode="45" sourcefile="BreakInHospitalController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakInHospitalController.java"/>
+    </Method>
+    <Field classname="uk.gov.dwp.carersallowance.controller.BreakInHospitalController" name="SHARED_FIELDS" signature="[Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakInHospitalController" sourcefile="BreakInHospitalController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakInHospitalController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakInHospitalController" start="57" end="57" startBytecode="3" endBytecode="3" sourcefile="BreakInHospitalController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakInHospitalController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_PKGPROTECT" priority="2" rank="18" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.BreakInHospitalController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakInHospitalController" sourcefile="BreakInHospitalController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakInHospitalController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.BreakInHospitalController" name="SHARED_FIELDS" signature="[Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakInHospitalController" sourcefile="BreakInHospitalController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakInHospitalController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakInHospitalController" start="33" end="33" startBytecode="22" endBytecode="22" sourcefile="BreakInHospitalController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakInHospitalController.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP" priority="2" rank="18" abbrev="EI" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController" sourcefile="BreakInRespiteCareController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakInRespiteCareController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController" name="getSharedFields" signature="()[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController" start="58" end="58" startBytecode="0" endBytecode="45" sourcefile="BreakInRespiteCareController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakInRespiteCareController.java"/>
+    </Method>
+    <Field classname="uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController" name="SHARED_FIELDS" signature="[Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController" sourcefile="BreakInRespiteCareController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakInRespiteCareController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController" start="58" end="58" startBytecode="3" endBytecode="3" sourcefile="BreakInRespiteCareController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakInRespiteCareController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_PKGPROTECT" priority="2" rank="18" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController" sourcefile="BreakInRespiteCareController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakInRespiteCareController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController" name="SHARED_FIELDS" signature="[Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController" sourcefile="BreakInRespiteCareController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakInRespiteCareController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController" start="33" end="33" startBytecode="22" endBytecode="22" sourcefile="BreakInRespiteCareController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakInRespiteCareController.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP" priority="2" rank="18" abbrev="EI" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController" sourcefile="BreakSomewhereElseController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakSomewhereElseController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController" name="getSharedFields" signature="()[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController" start="57" end="57" startBytecode="0" endBytecode="45" sourcefile="BreakSomewhereElseController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakSomewhereElseController.java"/>
+    </Method>
+    <Field classname="uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController" name="SHARED_FIELDS" signature="[Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController" sourcefile="BreakSomewhereElseController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakSomewhereElseController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController" start="57" end="57" startBytecode="3" endBytecode="3" sourcefile="BreakSomewhereElseController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakSomewhereElseController.java"/>
+  </BugInstance>
+  <BugInstance type="MS_PKGPROTECT" priority="2" rank="18" abbrev="MS" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController" sourcefile="BreakSomewhereElseController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakSomewhereElseController.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController" name="SHARED_FIELDS" signature="[Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController" sourcefile="BreakSomewhereElseController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakSomewhereElseController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController" start="33" end="33" startBytecode="22" endBytecode="22" sourcefile="BreakSomewhereElseController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreakSomewhereElseController.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP" priority="2" rank="18" abbrev="EI" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.BreaksInCareSummaryController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreaksInCareSummaryController" sourcefile="BreaksInCareSummaryController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreaksInCareSummaryController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.BreaksInCareSummaryController" name="getReadOnlyFields" signature="()[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreaksInCareSummaryController" start="111" end="111" startBytecode="0" endBytecode="45" sourcefile="BreaksInCareSummaryController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreaksInCareSummaryController.java"/>
+    </Method>
+    <Field classname="uk.gov.dwp.carersallowance.controller.BreaksInCareSummaryController" name="READONLY_FIELDS" signature="[Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreaksInCareSummaryController" sourcefile="BreaksInCareSummaryController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreaksInCareSummaryController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.BreaksInCareSummaryController" start="111" end="111" startBytecode="3" endBytecode="3" sourcefile="BreaksInCareSummaryController.java" sourcepath="uk/gov/dwp/carersallowance/controller/BreaksInCareSummaryController.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP" priority="2" rank="18" abbrev="EI" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.EmploymentAdditionalInfoController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.EmploymentAdditionalInfoController" sourcefile="EmploymentAdditionalInfoController.java" sourcepath="uk/gov/dwp/carersallowance/controller/EmploymentAdditionalInfoController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.EmploymentAdditionalInfoController" name="getReadOnlyFields" signature="()[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.EmploymentAdditionalInfoController" start="56" end="56" startBytecode="0" endBytecode="45" sourcefile="EmploymentAdditionalInfoController.java" sourcepath="uk/gov/dwp/carersallowance/controller/EmploymentAdditionalInfoController.java"/>
+    </Method>
+    <Field classname="uk.gov.dwp.carersallowance.controller.EmploymentAdditionalInfoController" name="READONLY_FIELDS" signature="[Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.EmploymentAdditionalInfoController" sourcefile="EmploymentAdditionalInfoController.java" sourcepath="uk/gov/dwp/carersallowance/controller/EmploymentAdditionalInfoController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.EmploymentAdditionalInfoController" start="56" end="56" startBytecode="3" endBytecode="3" sourcefile="EmploymentAdditionalInfoController.java" sourcepath="uk/gov/dwp/carersallowance/controller/EmploymentAdditionalInfoController.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP" priority="2" rank="18" abbrev="EI" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.EmploymentPaymentController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.EmploymentPaymentController" sourcefile="EmploymentPaymentController.java" sourcepath="uk/gov/dwp/carersallowance/controller/EmploymentPaymentController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.EmploymentPaymentController" name="getReadOnlyFields" signature="()[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.EmploymentPaymentController" start="57" end="57" startBytecode="0" endBytecode="45" sourcefile="EmploymentPaymentController.java" sourcepath="uk/gov/dwp/carersallowance/controller/EmploymentPaymentController.java"/>
+    </Method>
+    <Field classname="uk.gov.dwp.carersallowance.controller.EmploymentPaymentController" name="READONLY_FIELDS" signature="[Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.EmploymentPaymentController" sourcefile="EmploymentPaymentController.java" sourcepath="uk/gov/dwp/carersallowance/controller/EmploymentPaymentController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.EmploymentPaymentController" start="57" end="57" startBytecode="3" endBytecode="3" sourcefile="EmploymentPaymentController.java" sourcepath="uk/gov/dwp/carersallowance/controller/EmploymentPaymentController.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP" priority="2" rank="18" abbrev="EI" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.EmploymentPensionAndExpensesController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.EmploymentPensionAndExpensesController" sourcefile="EmploymentPensionAndExpensesController.java" sourcepath="uk/gov/dwp/carersallowance/controller/EmploymentPensionAndExpensesController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.EmploymentPensionAndExpensesController" name="getReadOnlyFields" signature="()[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.EmploymentPensionAndExpensesController" start="57" end="57" startBytecode="0" endBytecode="45" sourcefile="EmploymentPensionAndExpensesController.java" sourcepath="uk/gov/dwp/carersallowance/controller/EmploymentPensionAndExpensesController.java"/>
+    </Method>
+    <Field classname="uk.gov.dwp.carersallowance.controller.EmploymentPensionAndExpensesController" name="READONLY_FIELDS" signature="[Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.EmploymentPensionAndExpensesController" sourcefile="EmploymentPensionAndExpensesController.java" sourcepath="uk/gov/dwp/carersallowance/controller/EmploymentPensionAndExpensesController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.EmploymentPensionAndExpensesController" start="57" end="57" startBytecode="3" endBytecode="3" sourcefile="EmploymentPensionAndExpensesController.java" sourcepath="uk/gov/dwp/carersallowance/controller/EmploymentPensionAndExpensesController.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP" priority="2" rank="18" abbrev="EI" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.EmploymentSummaryController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.EmploymentSummaryController" sourcefile="EmploymentSummaryController.java" sourcepath="uk/gov/dwp/carersallowance/controller/EmploymentSummaryController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.EmploymentSummaryController" name="getReadOnlyFields" signature="()[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.EmploymentSummaryController" start="97" end="97" startBytecode="0" endBytecode="45" sourcefile="EmploymentSummaryController.java" sourcepath="uk/gov/dwp/carersallowance/controller/EmploymentSummaryController.java"/>
+    </Method>
+    <Field classname="uk.gov.dwp.carersallowance.controller.EmploymentSummaryController" name="READONLY_FIELDS" signature="[Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.EmploymentSummaryController" sourcefile="EmploymentSummaryController.java" sourcepath="uk/gov/dwp/carersallowance/controller/EmploymentSummaryController.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.EmploymentSummaryController" start="97" end="97" startBytecode="3" endBytecode="3" sourcefile="EmploymentSummaryController.java" sourcepath="uk/gov/dwp/carersallowance/controller/EmploymentSummaryController.java"/>
+  </BugInstance>
+  <BugInstance type="NP_NULL_ON_SOME_PATH" priority="1" rank="6" abbrev="NP" category="CORRECTNESS">
+    <Class classname="uk.gov.dwp.carersallowance.controller.YourDetailsController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.YourDetailsController" sourcefile="YourDetailsController.java" sourcepath="uk/gov/dwp/carersallowance/controller/YourDetailsController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.YourDetailsController" name="validate" signature="(Ljava/util/Map;[Ljava/lang/String;[Ljava/lang/String;)V" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.YourDetailsController" start="72" end="78" startBytecode="0" endBytecode="268" sourcefile="YourDetailsController.java" sourcepath="uk/gov/dwp/carersallowance/controller/YourDetailsController.java"/>
+    </Method>
+    <LocalVariable name="enabledFields" register="3" pc="25" role="LOCAL_VARIABLE_VALUE_OF"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.YourDetailsController" start="74" end="74" startBytecode="27" endBytecode="27" sourcefile="YourDetailsController.java" sourcepath="uk/gov/dwp/carersallowance/controller/YourDetailsController.java" role="SOURCE_LINE_DEREF"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.YourDetailsController" start="72" end="72" startBytecode="9" endBytecode="9" sourcefile="YourDetailsController.java" sourcepath="uk/gov/dwp/carersallowance/controller/YourDetailsController.java" role="SOURCE_LINE_KNOWN_NULL"/>
+  </BugInstance>
+  <BugInstance type="RC_REF_COMPARISON_BAD_PRACTICE_BOOLEAN" priority="2" rank="16" abbrev="RC" category="BAD_PRACTICE">
+    <Class classname="uk.gov.dwp.carersallowance.controller.YourIncomeController">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.YourIncomeController" sourcefile="YourIncomeController.java" sourcepath="uk/gov/dwp/carersallowance/controller/YourIncomeController.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.controller.YourIncomeController" name="getIncomePageList" signature="(Ljavax/servlet/http/HttpSession;)Ljava/util/List;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.controller.YourIncomeController" start="49" end="85" startBytecode="0" endBytecode="88" sourcefile="YourIncomeController.java" sourcepath="uk/gov/dwp/carersallowance/controller/YourIncomeController.java"/>
+    </Method>
+    <Type descriptor="Ljava/lang/Boolean;" role="TYPE_FOUND">
+      <SourceLine classname="java.lang.Boolean" start="43" end="333" sourcefile="Boolean.java" sourcepath="java/lang/Boolean.java"/>
+    </Type>
+    <Field classname="java.lang.Boolean" name="TRUE" signature="Ljava/lang/Boolean;" isStatic="true" role="FIELD_VALUE_OF">
+      <SourceLine classname="java.lang.Boolean" sourcefile="Boolean.java" sourcepath="java/lang/Boolean.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.YourIncomeController" start="53" end="53" startBytecode="33" endBytecode="33" sourcefile="YourIncomeController.java" sourcepath="uk/gov/dwp/carersallowance/controller/YourIncomeController.java"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.YourIncomeController" start="57" end="57" startBytecode="54" endBytecode="54" sourcefile="YourIncomeController.java" sourcepath="uk/gov/dwp/carersallowance/controller/YourIncomeController.java" role="SOURCE_LINE_ANOTHER_INSTANCE"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.YourIncomeController" start="62" end="62" startBytecode="84" endBytecode="84" sourcefile="YourIncomeController.java" sourcepath="uk/gov/dwp/carersallowance/controller/YourIncomeController.java" role="SOURCE_LINE_ANOTHER_INSTANCE"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.YourIncomeController" start="66" end="66" startBytecode="105" endBytecode="105" sourcefile="YourIncomeController.java" sourcepath="uk/gov/dwp/carersallowance/controller/YourIncomeController.java" role="SOURCE_LINE_ANOTHER_INSTANCE"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.YourIncomeController" start="70" end="70" startBytecode="126" endBytecode="126" sourcefile="YourIncomeController.java" sourcepath="uk/gov/dwp/carersallowance/controller/YourIncomeController.java" role="SOURCE_LINE_ANOTHER_INSTANCE"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.YourIncomeController" start="74" end="74" startBytecode="147" endBytecode="147" sourcefile="YourIncomeController.java" sourcepath="uk/gov/dwp/carersallowance/controller/YourIncomeController.java" role="SOURCE_LINE_ANOTHER_INSTANCE"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.controller.YourIncomeController" start="78" end="78" startBytecode="168" endBytecode="168" sourcefile="YourIncomeController.java" sourcepath="uk/gov/dwp/carersallowance/controller/YourIncomeController.java" role="SOURCE_LINE_ANOTHER_INSTANCE"/>
+  </BugInstance>
+  <BugInstance type="UWF_UNWRITTEN_FIELD" priority="2" rank="12" abbrev="UwF" category="CORRECTNESS">
+    <Class classname="uk.gov.dwp.carersallowance.data.FormData$Page">
+      <SourceLine classname="uk.gov.dwp.carersallowance.data.FormData$Page" sourcefile="FormData.java" sourcepath="uk/gov/dwp/carersallowance/data/FormData.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.data.FormData$Page" name="beforeLink" signature="Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.data.FormData$Page" sourcefile="FormData.java" sourcepath="uk/gov/dwp/carersallowance/data/FormData.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.data.FormData$Page" start="39" end="39" startBytecode="1" endBytecode="1" sourcefile="FormData.java" sourcepath="uk/gov/dwp/carersallowance/data/FormData.java"/>
+  </BugInstance>
+  <BugInstance type="UWF_UNWRITTEN_FIELD" priority="2" rank="12" abbrev="UwF" category="CORRECTNESS">
+    <Class classname="uk.gov.dwp.carersallowance.data.FormData$Page">
+      <SourceLine classname="uk.gov.dwp.carersallowance.data.FormData$Page" sourcefile="FormData.java" sourcepath="uk/gov/dwp/carersallowance/data/FormData.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.data.FormData$Page" name="nextLink" signature="Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.data.FormData$Page" sourcefile="FormData.java" sourcepath="uk/gov/dwp/carersallowance/data/FormData.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.data.FormData$Page" start="40" end="40" startBytecode="1" endBytecode="1" sourcefile="FormData.java" sourcepath="uk/gov/dwp/carersallowance/data/FormData.java"/>
+  </BugInstance>
+  <BugInstance type="UWF_UNWRITTEN_FIELD" priority="2" rank="12" abbrev="UwF" category="CORRECTNESS">
+    <Class classname="uk.gov.dwp.carersallowance.data.FormData$Page">
+      <SourceLine classname="uk.gov.dwp.carersallowance.data.FormData$Page" sourcefile="FormData.java" sourcepath="uk/gov/dwp/carersallowance/data/FormData.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.data.FormData$Page" name="sectionId" signature="Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.data.FormData$Page" sourcefile="FormData.java" sourcepath="uk/gov/dwp/carersallowance/data/FormData.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.data.FormData$Page" start="37" end="37" startBytecode="1" endBytecode="1" sourcefile="FormData.java" sourcepath="uk/gov/dwp/carersallowance/data/FormData.java"/>
+  </BugInstance>
+  <BugInstance type="UWF_UNWRITTEN_FIELD" priority="2" rank="12" abbrev="UwF" category="CORRECTNESS">
+    <Class classname="uk.gov.dwp.carersallowance.data.FormData$Page">
+      <SourceLine classname="uk.gov.dwp.carersallowance.data.FormData$Page" sourcefile="FormData.java" sourcepath="uk/gov/dwp/carersallowance/data/FormData.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.data.FormData$Page" name="title" signature="Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.data.FormData$Page" sourcefile="FormData.java" sourcepath="uk/gov/dwp/carersallowance/data/FormData.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.data.FormData$Page" start="38" end="38" startBytecode="1" endBytecode="1" sourcefile="FormData.java" sourcepath="uk/gov/dwp/carersallowance/data/FormData.java"/>
+  </BugInstance>
+  <BugInstance type="PZLA_PREFER_ZERO_LENGTH_ARRAYS" priority="3" rank="20" abbrev="PZLA" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.session.FieldCollection">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.FieldCollection" sourcefile="FieldCollection.java" sourcepath="uk/gov/dwp/carersallowance/session/FieldCollection.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.session.FieldCollection" name="aggregateFieldLists" signature="([[Ljava/lang/String;)[Ljava/lang/String;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.FieldCollection" start="53" end="65" startBytecode="0" endBytecode="306" sourcefile="FieldCollection.java" sourcepath="uk/gov/dwp/carersallowance/session/FieldCollection.java"/>
+    </Method>
+    <SourceLine classname="uk.gov.dwp.carersallowance.session.FieldCollection" start="54" end="54" startBytecode="5" endBytecode="5" sourcefile="FieldCollection.java" sourcepath="uk/gov/dwp/carersallowance/session/FieldCollection.java"/>
+  </BugInstance>
+  <BugInstance type="ES_COMPARING_PARAMETER_STRING_WITH_EQ" priority="2" rank="16" abbrev="ES" category="BAD_PRACTICE">
+    <Class classname="uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator" sourcefile="FieldCollection.java" sourcepath="uk/gov/dwp/carersallowance/session/FieldCollection.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator" name="compare" signature="(Ljava/lang/String;Ljava/lang/String;)I" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator" start="128" end="141" startBytecode="0" endBytecode="16" sourcefile="FieldCollection.java" sourcepath="uk/gov/dwp/carersallowance/session/FieldCollection.java"/>
+    </Method>
+    <Type descriptor="Ljava/lang/String;" role="TYPE_FOUND">
+      <SourceLine classname="java.lang.String" start="111" end="3141" sourcefile="String.java" sourcepath="java/lang/String.java"/>
+    </Type>
+    <LocalVariable name="second" register="2" pc="1" role="LOCAL_VARIABLE_VALUE_OF"/>
+    <LocalVariable name="first" register="1" pc="1" role="LOCAL_VARIABLE_VALUE_OF"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator" start="128" end="128" startBytecode="2" endBytecode="2" sourcefile="FieldCollection.java" sourcepath="uk/gov/dwp/carersallowance/session/FieldCollection.java"/>
+    <Property name="edu.umd.cs.findbugs.detect.RefComparisonWarningProperty.STATIC_AND_PARAMETER" value="true"/>
+  </BugInstance>
+  <BugInstance type="SE_COMPARATOR_SHOULD_BE_SERIALIZABLE" priority="2" rank="19" abbrev="Se" category="BAD_PRACTICE">
+    <Class classname="uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator" start="71" end="141" sourcefile="FieldCollection.java" sourcepath="uk/gov/dwp/carersallowance/session/FieldCollection.java"/>
+    </Class>
+  </BugInstance>
+  <BugInstance type="UWF_UNWRITTEN_FIELD" priority="3" rank="15" abbrev="UwF" category="CORRECTNESS">
+    <Class classname="uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator" sourcefile="FieldCollection.java" sourcepath="uk/gov/dwp/carersallowance/session/FieldCollection.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator" name="reverse" signature="Z" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator" sourcefile="FieldCollection.java" sourcepath="uk/gov/dwp/carersallowance/session/FieldCollection.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator" start="116" end="116" startBytecode="114" endBytecode="114" sourcefile="FieldCollection.java" sourcepath="uk/gov/dwp/carersallowance/session/FieldCollection.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP" priority="2" rank="18" abbrev="EI" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.session.FieldValue">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.FieldValue" sourcefile="FieldValue.java" sourcepath="uk/gov/dwp/carersallowance/session/FieldValue.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.session.FieldValue" name="getValues" signature="()[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.FieldValue" start="33" end="33" startBytecode="0" endBytecode="46" sourcefile="FieldValue.java" sourcepath="uk/gov/dwp/carersallowance/session/FieldValue.java"/>
+    </Method>
+    <Field classname="uk.gov.dwp.carersallowance.session.FieldValue" name="values" signature="[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.FieldValue" sourcefile="FieldValue.java" sourcepath="uk/gov/dwp/carersallowance/session/FieldValue.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.session.FieldValue" start="33" end="33" startBytecode="4" endBytecode="4" sourcefile="FieldValue.java" sourcepath="uk/gov/dwp/carersallowance/session/FieldValue.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP2" priority="2" rank="18" abbrev="EI2" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.session.FieldValue">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.FieldValue" sourcefile="FieldValue.java" sourcepath="uk/gov/dwp/carersallowance/session/FieldValue.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.session.FieldValue" name="&lt;init&gt;" signature="([Ljava/lang/String;)V" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.FieldValue" start="16" end="18" startBytecode="0" endBytecode="69" sourcefile="FieldValue.java" sourcepath="uk/gov/dwp/carersallowance/session/FieldValue.java"/>
+    </Method>
+    <Field classname="uk.gov.dwp.carersallowance.session.FieldValue" name="values" signature="[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.FieldValue" sourcefile="FieldValue.java" sourcepath="uk/gov/dwp/carersallowance/session/FieldValue.java"/>
+    </Field>
+    <LocalVariable name="values" register="1" pc="6" role="LOCAL_VARIABLE_NAMED"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.session.FieldValue" start="17" end="17" startBytecode="6" endBytecode="6" sourcefile="FieldValue.java" sourcepath="uk/gov/dwp/carersallowance/session/FieldValue.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP" priority="2" rank="18" abbrev="EI" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" name="getFieldValues" signature="()[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" start="44" end="44" startBytecode="0" endBytecode="46" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+    </Method>
+    <Field classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" name="fieldValues" signature="[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" start="44" end="44" startBytecode="4" endBytecode="4" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP2" priority="2" rank="18" abbrev="EI2" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" name="&lt;init&gt;" signature="(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)V" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" start="23" end="27" startBytecode="0" endBytecode="99" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+    </Method>
+    <Field classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" name="fieldValues" signature="[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+    </Field>
+    <LocalVariable name="fieldValues" register="3" pc="12" role="LOCAL_VARIABLE_NAMED"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" start="26" end="26" startBytecode="12" endBytecode="12" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP2" priority="2" rank="18" abbrev="EI2" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" name="&lt;init&gt;" signature="(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/Throwable;)V" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" start="30" end="34" startBytecode="0" endBytecode="111" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+    </Method>
+    <Field classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" name="fieldValues" signature="[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+    </Field>
+    <LocalVariable name="fieldValues" register="3" pc="14" role="LOCAL_VARIABLE_NAMED"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" start="33" end="33" startBytecode="14" endBytecode="14" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP2" priority="2" rank="18" abbrev="EI2" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" name="&lt;init&gt;" signature="(Ljava/lang/String;[Ljava/lang/String;)V" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" start="16" end="20" startBytecode="0" endBytecode="88" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+    </Method>
+    <Field classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" name="fieldValues" signature="[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+    </Field>
+    <LocalVariable name="fieldValues" register="2" pc="11" role="LOCAL_VARIABLE_NAMED"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" start="19" end="19" startBytecode="11" endBytecode="11" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+  </BugInstance>
+  <BugInstance type="EI_EXPOSE_REP2" priority="2" rank="18" abbrev="EI2" category="MALICIOUS_CODE">
+    <Class classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" name="&lt;init&gt;" signature="(Ljava/lang/String;[Ljava/lang/String;Ljava/lang/Throwable;)V" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" start="37" end="41" startBytecode="0" endBytecode="99" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+    </Method>
+    <Field classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" name="fieldValues" signature="[Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+    </Field>
+    <LocalVariable name="fieldValues" register="2" pc="12" role="LOCAL_VARIABLE_NAMED"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" start="40" end="40" startBytecode="12" endBytecode="12" sourcefile="IllegalFieldValueException.java" sourcepath="uk/gov/dwp/carersallowance/session/IllegalFieldValueException.java"/>
+  </BugInstance>
+  <BugInstance type="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" priority="3" rank="20" abbrev="BC" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.utils.CollectionUtils">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.CollectionUtils" sourcefile="CollectionUtils.java" sourcepath="uk/gov/dwp/carersallowance/utils/CollectionUtils.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.utils.CollectionUtils" name="toUpperCase" signature="(Ljava/util/Set;)Ljava/util/Set;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.CollectionUtils" start="10" end="10" startBytecode="0" endBytecode="3" sourcefile="CollectionUtils.java" sourcepath="uk/gov/dwp/carersallowance/utils/CollectionUtils.java"/>
+    </Method>
+    <Type descriptor="Ljava/util/Collection;" role="TYPE_FOUND" typeParameters="&lt;java.lang.String&gt;">
+      <SourceLine classname="java.util.Collection" start="410" end="602" sourcefile="Collection.java" sourcepath="java/util/Collection.java"/>
+    </Type>
+    <Type descriptor="Ljava/util/Set;" role="TYPE_EXPECTED">
+      <SourceLine classname="java.util.Set" start="411" end="411" sourcefile="Set.java" sourcepath="java/util/Set.java"/>
+    </Type>
+    <SourceLine classname="uk.gov.dwp.carersallowance.utils.CollectionUtils" start="10" end="10" startBytecode="4" endBytecode="4" sourcefile="CollectionUtils.java" sourcepath="uk/gov/dwp/carersallowance/utils/CollectionUtils.java"/>
+  </BugInstance>
+  <BugInstance type="DM_CONVERT_CASE" priority="3" rank="20" abbrev="Dm" category="I18N">
+    <Class classname="uk.gov.dwp.carersallowance.utils.CollectionUtils">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.CollectionUtils" sourcefile="CollectionUtils.java" sourcepath="uk/gov/dwp/carersallowance/utils/CollectionUtils.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.utils.CollectionUtils" name="toUpperCase" signature="(Ljava/util/Collection;)Ljava/util/Collection;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.CollectionUtils" start="14" end="30" startBytecode="0" endBytecode="280" sourcefile="CollectionUtils.java" sourcepath="uk/gov/dwp/carersallowance/utils/CollectionUtils.java"/>
+    </Method>
+    <SourceLine classname="uk.gov.dwp.carersallowance.utils.CollectionUtils" start="23" end="23" startBytecode="48" endBytecode="48" sourcefile="CollectionUtils.java" sourcepath="uk/gov/dwp/carersallowance/utils/CollectionUtils.java"/>
+  </BugInstance>
+  <BugInstance type="NP_TOSTRING_COULD_RETURN_NULL" priority="2" rank="14" abbrev="NP" category="BAD_PRACTICE">
+    <Class classname="uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper" sourcefile="LoggingObjectWrapper.java" sourcepath="uk/gov/dwp/carersallowance/utils/LoggingObjectWrapper.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper" name="toString" signature="()Ljava/lang/String;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper" start="18" end="27" startBytecode="0" endBytecode="145" sourcefile="LoggingObjectWrapper.java" sourcepath="uk/gov/dwp/carersallowance/utils/LoggingObjectWrapper.java"/>
+    </Method>
+    <SourceLine classname="uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper" start="19" end="19" startBytecode="8" endBytecode="8" sourcefile="LoggingObjectWrapper.java" sourcepath="uk/gov/dwp/carersallowance/utils/LoggingObjectWrapper.java"/>
+  </BugInstance>
+  <BugInstance type="DMI_HARDCODED_ABSOLUTE_FILENAME" priority="2" rank="17" abbrev="DMI" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.utils.xml.SignXml">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.SignXml" sourcefile="SignXml.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/SignXml.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.utils.xml.SignXml" name="main" signature="([Ljava/lang/String;)V" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.SignXml" start="66" end="87" startBytecode="0" endBytecode="78" sourcefile="SignXml.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/SignXml.java"/>
+    </Method>
+    <String value="/Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/resources/unchangedDefaultClaim/DefaultClaim.raw.nosignature.xml" role="FILE_NAME"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.SignXml" start="71" end="71" startBytecode="25" endBytecode="25" sourcefile="SignXml.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/SignXml.java"/>
+  </BugInstance>
+  <BugInstance type="DMI_HARDCODED_ABSOLUTE_FILENAME" priority="2" rank="17" abbrev="DMI" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.utils.xml.VerifyXmlSignature">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.VerifyXmlSignature" sourcefile="VerifyXmlSignature.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/VerifyXmlSignature.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.utils.xml.VerifyXmlSignature" name="main" signature="([Ljava/lang/String;)V" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.VerifyXmlSignature" start="36" end="56" startBytecode="0" endBytecode="80" sourcefile="VerifyXmlSignature.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/VerifyXmlSignature.java"/>
+    </Method>
+    <String value="/Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/resources/defaultClaim/DefaultClaim.xml" role="FILE_NAME"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.VerifyXmlSignature" start="41" end="41" startBytecode="25" endBytecode="25" sourcefile="VerifyXmlSignature.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/VerifyXmlSignature.java"/>
+  </BugInstance>
+  <BugInstance type="DMI_HARDCODED_ABSOLUTE_FILENAME" priority="2" rank="17" abbrev="DMI" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter" sourcefile="XmlPrettyPrinter.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlPrettyPrinter.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter" name="main" signature="([Ljava/lang/String;)V" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter" start="161" end="202" startBytecode="0" endBytecode="102" sourcefile="XmlPrettyPrinter.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlPrettyPrinter.java"/>
+    </Method>
+    <String value="/Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/resources/data/claim.16010000027.v3_4.xml" role="FILE_NAME"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter" start="168" end="168" startBytecode="16" endBytecode="16" sourcefile="XmlPrettyPrinter.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlPrettyPrinter.java"/>
+  </BugInstance>
+  <BugInstance type="DMI_HARDCODED_ABSOLUTE_FILENAME" priority="2" rank="17" abbrev="DMI" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" name="main" signature="([Ljava/lang/String;)V" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" start="205" end="220" startBytecode="0" endBytecode="9" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+    </Method>
+    <String value="C:\\projects\\EIS-007\\metadata aggregator\\aleph\\test\\sample.aleph.dc.xml" role="FILE_NAME"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" start="217" end="217" startBytecode="10" endBytecode="10" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+  </BugInstance>
+  <BugInstance type="DMI_HARDCODED_ABSOLUTE_FILENAME" priority="2" rank="17" abbrev="DMI" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" name="validateDc" signature="(Ljava/lang/String;)Luk/gov/dwp/carersallowance/utils/xml/XmlValidator$ValidationErorrs;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" start="111" end="125" startBytecode="0" endBytecode="64" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+    </Method>
+    <String value="C:\\projects\\EIS-007\\metadata aggregator\\documents\\schema\\oai_dc.xsd" role="FILE_NAME"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" start="120" end="120" startBytecode="76" endBytecode="76" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+  </BugInstance>
+  <BugInstance type="DMI_HARDCODED_ABSOLUTE_FILENAME" priority="2" rank="17" abbrev="DMI" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" name="validateDc" signature="(Ljava/lang/String;)Luk/gov/dwp/carersallowance/utils/xml/XmlValidator$ValidationErorrs;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" start="111" end="125" startBytecode="0" endBytecode="64" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+    </Method>
+    <String value="C:\\projects\\EIS-007\\metadata aggregator\\documents\\schema\\simpledc20021212.xsd" role="FILE_NAME"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" start="119" end="119" startBytecode="59" endBytecode="59" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+  </BugInstance>
+  <BugInstance type="DMI_HARDCODED_ABSOLUTE_FILENAME" priority="2" rank="17" abbrev="DMI" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" name="validateDc" signature="(Ljava/lang/String;)Luk/gov/dwp/carersallowance/utils/xml/XmlValidator$ValidationErorrs;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" start="111" end="125" startBytecode="0" endBytecode="64" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+    </Method>
+    <String value="C:\\projects\\EIS-007\\metadata aggregator\\documents\\schema\\xml.xsd" role="FILE_NAME"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" start="118" end="118" startBytecode="42" endBytecode="42" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+  </BugInstance>
+  <BugInstance type="DMI_HARDCODED_ABSOLUTE_FILENAME" priority="2" rank="17" abbrev="DMI" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" name="validateMarc21Slim" signature="(Ljava/lang/String;)Luk/gov/dwp/carersallowance/utils/xml/XmlValidator$ValidationErorrs;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" start="147" end="157" startBytecode="0" endBytecode="36" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+    </Method>
+    <String value="C:\\projects\\EIS-007\\metadata aggregator\\documents\\schema\\MARC21slim.xsd" role="FILE_NAME"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" start="152" end="152" startBytecode="35" endBytecode="35" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+  </BugInstance>
+  <BugInstance type="DMI_HARDCODED_ABSOLUTE_FILENAME" priority="2" rank="17" abbrev="DMI" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" name="validateMods" signature="(Ljava/lang/String;)Luk/gov/dwp/carersallowance/utils/xml/XmlValidator$ValidationErorrs;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" start="129" end="143" startBytecode="0" endBytecode="64" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+    </Method>
+    <String value="C:\\projects\\EIS-007\\metadata aggregator\\documents\\schema\\mods-3-4.xsd" role="FILE_NAME"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" start="136" end="136" startBytecode="42" endBytecode="42" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+  </BugInstance>
+  <BugInstance type="DMI_HARDCODED_ABSOLUTE_FILENAME" priority="2" rank="17" abbrev="DMI" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" name="validateMods" signature="(Ljava/lang/String;)Luk/gov/dwp/carersallowance/utils/xml/XmlValidator$ValidationErorrs;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" start="129" end="143" startBytecode="0" endBytecode="64" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+    </Method>
+    <String value="C:\\projects\\EIS-007\\metadata aggregator\\documents\\schema\\xlink.xsd" role="FILE_NAME"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" start="137" end="137" startBytecode="59" endBytecode="59" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+  </BugInstance>
+  <BugInstance type="DMI_HARDCODED_ABSOLUTE_FILENAME" priority="2" rank="17" abbrev="DMI" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" name="validateMods" signature="(Ljava/lang/String;)Luk/gov/dwp/carersallowance/utils/xml/XmlValidator$ValidationErorrs;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" start="129" end="143" startBytecode="0" endBytecode="64" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+    </Method>
+    <String value="C:\\projects\\EIS-007\\metadata aggregator\\documents\\schema\\xml.xsd" role="FILE_NAME"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" start="138" end="138" startBytecode="76" endBytecode="76" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+  </BugInstance>
+  <BugInstance type="DMI_HARDCODED_ABSOLUTE_FILENAME" priority="2" rank="17" abbrev="DMI" category="STYLE">
+    <Class classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+    </Class>
+    <Method classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" name="validateOaiMarc" signature="(Ljava/lang/String;)Luk/gov/dwp/carersallowance/utils/xml/XmlValidator$ValidationErorrs;" isStatic="true">
+      <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" start="161" end="171" startBytecode="0" endBytecode="36" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+    </Method>
+    <String value="C:\\projects\\EIS-007\\metadata aggregator\\documents\\schema\\oai_marc.xsd" role="FILE_NAME"/>
+    <SourceLine classname="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" start="166" end="166" startBytecode="35" endBytecode="35" sourcefile="XmlValidator.java" sourcepath="uk/gov/dwp/carersallowance/utils/xml/XmlValidator.java"/>
+  </BugInstance>
+  <BugInstance type="URF_UNREAD_FIELD" priority="2" rank="18" abbrev="UrF" category="PERFORMANCE">
+    <Class classname="uk.gov.dwp.carersallowance.xml.ClaimXml">
+      <SourceLine classname="uk.gov.dwp.carersallowance.xml.ClaimXml" sourcefile="ClaimXml.java" sourcepath="uk/gov/dwp/carersallowance/xml/ClaimXml.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.xml.ClaimXml" name="encryptionXPaths" signature="Ljava/util/List;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.xml.ClaimXml" sourcefile="ClaimXml.java" sourcepath="uk/gov/dwp/carersallowance/xml/ClaimXml.java"/>
+    </Field>
+    <SourceLine classname="uk.gov.dwp.carersallowance.xml.ClaimXml" start="43" end="43" startBytecode="12" endBytecode="12" sourcefile="ClaimXml.java" sourcepath="uk/gov/dwp/carersallowance/xml/ClaimXml.java"/>
+  </BugInstance>
+  <BugInstance type="UUF_UNUSED_FIELD" priority="2" rank="18" abbrev="UuF" category="PERFORMANCE">
+    <Class classname="uk.gov.dwp.carersallowance.xml.FieldNameMap">
+      <SourceLine classname="uk.gov.dwp.carersallowance.xml.FieldNameMap" sourcefile="FieldNameMap.java" sourcepath="uk/gov/dwp/carersallowance/xml/FieldNameMap.java"/>
+    </Class>
+    <Field classname="uk.gov.dwp.carersallowance.xml.FieldNameMap" name="nameMap" signature="Ljava/util/Map;" isStatic="false">
+      <SourceLine classname="uk.gov.dwp.carersallowance.xml.FieldNameMap" sourcefile="FieldNameMap.java" sourcepath="uk/gov/dwp/carersallowance/xml/FieldNameMap.java"/>
+    </Field>
+  </BugInstance>
+  <Errors errors="0" missingClasses="0"></Errors>
+  <FindBugsSummary timestamp="Mon, 5 Sep 2016 16:05:40 +0100" total_classes="82" referenced_classes="251" total_bugs="97" total_size="3227" num_packages="11" java_version="1.8.0_60" vm_version="25.60-b23" cpu_seconds="4.87" clock_seconds="17.61" peak_mbytes="116.21" alloc_mbytes="3641.00" gc_seconds="0.00" priority_3="41" priority_2="42" priority_1="14">
+    <PackageStats package="uk.gov.dwp.carersallowance" total_bugs="1" total_types="2" total_size="101" priority_3="1">
+      <ClassStats class="uk.gov.dwp.carersallowance.JspFunctions" sourceFile="JspFunctions.java" interface="false" size="87" bugs="1" priority_3="1"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.JspFunctions$TagException" sourceFile="JspFunctions.java" interface="false" size="14" bugs="0"/>
+    </PackageStats>
+    <PackageStats package="uk.gov.dwp.carersallowance.admin.controller" total_bugs="2" total_types="1" total_size="52" priority_3="2">
+      <ClassStats class="uk.gov.dwp.carersallowance.admin.controller.TextEditTagController" sourceFile="TextEditTagController.java" interface="false" size="52" bugs="2" priority_3="2"/>
+    </PackageStats>
+    <PackageStats package="uk.gov.dwp.carersallowance.controller" total_bugs="62" total_types="41" total_size="2035" priority_3="34" priority_2="14" priority_1="14">
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.AbstractFormController" sourceFile="AbstractFormController.java" interface="false" size="625" bugs="9" priority_3="6" priority_2="2" priority_1="1"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.AbstractFormController$1" sourceFile="AbstractFormController.java" interface="false" size="4" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationPatterns" sourceFile="AbstractFormController.java" interface="false" size="56" bugs="40" priority_3="28" priority_1="12"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationSummary" sourceFile="AbstractFormController.java" interface="false" size="44" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.AbstractFormController$ValidationType" sourceFile="AbstractFormController.java" interface="false" size="29" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.AdditionalInfoController" sourceFile="AdditionalInfoController.java" interface="false" size="25" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.ApproveContoller" sourceFile="ApproveContoller.java" interface="false" size="16" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.BenefitsController" sourceFile="BenefitsController.java" interface="false" size="20" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.BreakInHospitalController" sourceFile="BreakInHospitalController.java" interface="false" size="48" bugs="2" priority_2="2"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.BreakInRespiteCareController" sourceFile="BreakInRespiteCareController.java" interface="false" size="50" bugs="2" priority_2="2"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.BreakSomewhereElseController" sourceFile="BreakSomewhereElseController.java" interface="false" size="46" bugs="2" priority_2="2"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.BreaksInCareSummaryController" sourceFile="BreaksInCareSummaryController.java" interface="false" size="113" bugs="1" priority_2="1"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.CareHoursController" sourceFile="CareHoursController.java" interface="false" size="24" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.CareeDetailsController" sourceFile="CareeDetailsController.java" interface="false" size="27" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.ClaimDateController" sourceFile="ClaimDateController.java" interface="false" size="28" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.ConsentDeclarationController" sourceFile="ConsentDeclarationController.java" interface="false" size="24" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.ContactDetailsController" sourceFile="ContactDetailsController.java" interface="false" size="36" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.DirectPaymentController" sourceFile="DirectPaymentController.java" interface="false" size="33" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.DisclaimerController" sourceFile="DisclaimerController.java" interface="false" size="17" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.EducationController" sourceFile="EducationController.java" interface="false" size="28" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.EligibilityController" sourceFile="EligibilityController.java" interface="false" size="24" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.EmploymentAdditionalInfoController" sourceFile="EmploymentAdditionalInfoController.java" interface="false" size="33" bugs="1" priority_2="1"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.EmploymentDetailsController" sourceFile="EmploymentDetailsController.java" interface="false" size="42" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.EmploymentPaymentController" sourceFile="EmploymentPaymentController.java" interface="false" size="36" bugs="1" priority_2="1"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.EmploymentPensionAndExpensesController" sourceFile="EmploymentPensionAndExpensesController.java" interface="false" size="40" bugs="1" priority_2="1"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.EmploymentSummaryController" sourceFile="EmploymentSummaryController.java" interface="false" size="82" bugs="1" priority_2="1"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.FosteringAllowanceController" sourceFile="FosteringAllowanceController.java" interface="false" size="36" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.HowWePayYouController" sourceFile="HowWePayYouController.java" interface="false" size="30" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.MaritalStatusController" sourceFile="MaritalStatusController.java" interface="false" size="22" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.NationalityController" sourceFile="NationalityController.java" interface="false" size="35" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.OtherIncomeController" sourceFile="OtherIncomeController.java" interface="false" size="26" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.OtherStatutoryPaymentsController" sourceFile="OtherStatutoryPaymentsController.java" interface="false" size="34" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.PartnerDetailsController" sourceFile="PartnerDetailsController.java" interface="false" size="32" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.PaymentsFromAbroadController" sourceFile="PaymentsFromAbroadController.java" interface="false" size="29" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.SelfEmployedDatesController" sourceFile="SelfEmployedDatesController.java" interface="false" size="38" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.SelfEmployedPensionAndExpensesController" sourceFile="SelfEmployedPensionAndExpensesController.java" interface="false" size="31" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.SickPayController" sourceFile="SickPayController.java" interface="false" size="33" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.SubmittedPageController" sourceFile="SubmittedPageController.java" interface="false" size="25" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.ThirdPartyController" sourceFile="ThirdPartyController.java" interface="false" size="24" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.YourDetailsController" sourceFile="YourDetailsController.java" interface="false" size="32" bugs="1" priority_1="1"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.YourIncomeController" sourceFile="YourIncomeController.java" interface="false" size="58" bugs="1" priority_2="1"/>
+    </PackageStats>
+    <PackageStats package="uk.gov.dwp.carersallowance.controller.defaultcontoller" total_bugs="0" total_types="2" total_size="54">
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultFormController" sourceFile="DefaultFormController.java" interface="false" size="38" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultFormController$MessageSourceAccessor" sourceFile="DefaultFormController.java" interface="false" size="16" bugs="0"/>
+    </PackageStats>
+    <PackageStats package="uk.gov.dwp.carersallowance.controller.started" total_bugs="0" total_types="1" total_size="21">
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.started.PreviewController" sourceFile="PreviewController.java" interface="false" size="21" bugs="0"/>
+    </PackageStats>
+    <PackageStats package="uk.gov.dwp.carersallowance.data" total_bugs="4" total_types="6" total_size="116" priority_2="4">
+      <ClassStats class="uk.gov.dwp.carersallowance.data.AbstractQuestion" sourceFile="AbstractQuestion.java" interface="false" size="37" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.data.FormData" sourceFile="FormData.java" interface="false" size="15" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.data.FormData$Page" sourceFile="FormData.java" interface="false" size="34" bugs="4" priority_2="4"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.data.MultiValuedQuestion" sourceFile="MultiValuedQuestion.java" interface="false" size="16" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.data.Question" sourceFile="Question.java" interface="true" size="1" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.data.YesNoQuestion" sourceFile="YesNoQuestion.java" interface="false" size="13" bugs="0"/>
+    </PackageStats>
+    <PackageStats package="uk.gov.dwp.carersallowance.session" total_bugs="11" total_types="11" total_size="242" priority_3="2" priority_2="9">
+      <ClassStats class="uk.gov.dwp.carersallowance.session.FieldCollection" sourceFile="FieldCollection.java" interface="false" size="32" bugs="1" priority_3="1"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.session.FieldCollection$FieldCollectionComparator" sourceFile="FieldCollection.java" interface="false" size="42" bugs="3" priority_3="1" priority_2="2"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.session.FieldValue" sourceFile="FieldValue.java" interface="false" size="34" bugs="2" priority_2="2"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.session.IllegalFieldValueException" sourceFile="IllegalFieldValueException.java" interface="false" size="33" bugs="5" priority_2="5"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.session.InconsistentFieldValuesException" sourceFile="InconsistentFieldValuesException.java" interface="false" size="14" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.session.MultipleValuesException" sourceFile="MultipleValuesException.java" interface="false" size="14" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.session.NoSessionException" sourceFile="NoSessionException.java" interface="false" size="14" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.session.SessionManager" sourceFile="SessionManager.java" interface="false" size="18" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.session.SessionManager$1" sourceFile="SessionManager.java" interface="false" size="1" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.session.SessionManager$Session" sourceFile="SessionManager.java" interface="false" size="26" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.session.UnknownRecordException" sourceFile="UnknownRecordException.java" interface="false" size="14" bugs="0"/>
+    </PackageStats>
+    <PackageStats package="uk.gov.dwp.carersallowance.utils" total_bugs="3" total_types="5" total_size="82" priority_3="2" priority_2="1">
+      <ClassStats class="uk.gov.dwp.carersallowance.utils.CollectionUtils" sourceFile="CollectionUtils.java" interface="false" size="24" bugs="2" priority_3="2"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.utils.KeyValueList" sourceFile="KeyValueList.java" interface="false" size="3" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper" sourceFile="LoggingObjectWrapper.java" interface="false" size="20" bugs="1" priority_2="1"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.utils.Parameters" sourceFile="Parameters.java" interface="false" size="27" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.utils.Parameters$ValidateArgsException" sourceFile="Parameters.java" interface="false" size="8" bugs="0"/>
+    </PackageStats>
+    <PackageStats package="uk.gov.dwp.carersallowance.utils.xml" total_bugs="12" total_types="9" total_size="317" priority_2="12">
+      <ClassStats class="uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil" sourceFile="ClaimXmlUtil.java" interface="false" size="3" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.utils.xml.SignXml" sourceFile="SignXml.java" interface="false" size="46" bugs="1" priority_2="1"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.utils.xml.VerifyXmlSignature" sourceFile="VerifyXmlSignature.java" interface="false" size="26" bugs="1" priority_2="1"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter" sourceFile="XmlPrettyPrinter.java" interface="false" size="95" bugs="1" priority_2="1"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter$1" sourceFile="XmlPrettyPrinter.java" interface="false" size="1" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter$StripWhitespaceFilter" sourceFile="XmlPrettyPrinter.java" interface="false" size="17" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.utils.xml.XmlValidator" sourceFile="XmlValidator.java" interface="false" size="97" bugs="9" priority_2="9"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.utils.xml.XmlValidator$ValidationErorrs" sourceFile="XmlValidator.java" interface="true" size="5" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.utils.xml.XmlValidator$XmlErrorHandler" sourceFile="XmlValidator.java" interface="false" size="27" bugs="0"/>
+    </PackageStats>
+    <PackageStats package="uk.gov.dwp.carersallowance.validations" total_bugs="0" total_types="2" total_size="29">
+      <ClassStats class="uk.gov.dwp.carersallowance.validations.FormValidationError" sourceFile="FormValidationError.java" interface="false" size="25" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.validations.ValidationError" sourceFile="ValidationError.java" interface="true" size="4" bugs="0"/>
+    </PackageStats>
+    <PackageStats package="uk.gov.dwp.carersallowance.xml" total_bugs="2" total_types="2" total_size="178" priority_2="2">
+      <ClassStats class="uk.gov.dwp.carersallowance.xml.ClaimXml" sourceFile="ClaimXml.java" interface="false" size="172" bugs="1" priority_2="1"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.xml.FieldNameMap" sourceFile="FieldNameMap.java" interface="false" size="6" bugs="1" priority_2="1"/>
+    </PackageStats>
+    <FindBugsProfile>
+      <ClassProfile name="edu.umd.cs.findbugs.SAXBugCollectionHandler" totalMilliseconds="54" invocations="1" avgMicrosecondsPerInvocation="54660" maxMicrosecondsPerInvocation="54660" standardDeviationMircosecondsPerInvocation="0"/>
+    </FindBugsProfile>
+  </FindBugsSummary>
+  <ClassFeatures></ClassFeatures>
+  <History></History>
+</BugCollection>

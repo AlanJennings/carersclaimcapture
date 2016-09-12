@@ -4,7 +4,7 @@
 
 <!DOCTYPE html>
 
-<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+<t:mainPage page="" pageTitle="" currentPage="${currentPage}">
 
         <main class="container" role="main" id="main">
             <div class="carers-allowance clearfix">

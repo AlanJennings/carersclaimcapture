@@ -4,9 +4,9 @@
 
 <!DOCTYPE html>
 
-<t:mainPage pageTitle="Can you get Carer's Allowance?" currentPage="${currentPage}">
+<t:mainPage page="page.benefits" currentPage="${currentPage}">
     
-    <t:pageContent errors="${validationErrors}" page="page.benefits">page.benefits.
+    <t:pageContent errors="${validationErrors}" page="page.benefits">
         
         <t:radiobuttons name="benefitsAnswer" optionValues="PIP|DLA|AA|CAA|AFIP|NONE" />
         

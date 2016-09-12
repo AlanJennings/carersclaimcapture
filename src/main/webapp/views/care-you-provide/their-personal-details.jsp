@@ -4,7 +4,7 @@
 
 <!DOCTYPE html>
 
-<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+<t:mainPage page="page.their-personal-details" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" page="page.their-personal-details" backLink="${previousPage}">
 

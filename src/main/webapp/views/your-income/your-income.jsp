@@ -4,7 +4,7 @@
 <%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %> 
 <!DOCTYPE html>
 
-<t:mainPage pageTitle="${pageTitle}" currentPage="${currentPage}">
+<t:mainPage page="page.your-income" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" page="page.your-income" backLink="${previousPage}">
 
