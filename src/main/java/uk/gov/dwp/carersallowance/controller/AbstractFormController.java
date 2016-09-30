@@ -37,7 +37,8 @@ import uk.gov.dwp.carersallowance.utils.Parameters;
 import uk.gov.dwp.carersallowance.validations.FormValidationError;
 import uk.gov.dwp.carersallowance.validations.ValidationError;
 
-public abstract class AbstractFormController {
+// TODO SuppressWarnings temporary, all complaints largely true. Remove them later and re-analyze
+public class AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractFormController.class);
 
     /**
@@ -114,12 +115,9 @@ public abstract class AbstractFormController {
         pageList = new ArrayList<>(Arrays.asList(PAGES));
     }
 
-    /************************ START ABSTRACT METHODS **************************/
-
-    protected abstract String getPageName();
-    protected abstract void   validate(Map<String, String[]> fieldValues, String[] fields);
-
-    /*********************** END ABSTRACT METHODS ******************************/
+    protected String getPageName() {
+        return null;
+    }
 
     public MessageSource     getMessageSource()             { return messageSource; }
     public Session           getSession(String sessionId)   { return sessionManager.getSession(sessionId); }
@@ -131,9 +129,15 @@ public abstract class AbstractFormController {
     }
 
     public String[] getFields(String pageName) {
-        Parameters.validateMandatoryArgs(pageName, "pageName");
+        if(pageName == null) {
+            return null;
+        }
 
         String fieldNameList = messageSource.getMessage(pageName + ".fields", null, null, null);
+        if(fieldNameList == null) {
+            return null;
+        }
+
         String[] fieldNames = fieldNameList.split(",");
         for(int index = 0; index < fieldNames.length; index++) {
             fieldNames[index] = fieldNames[index].trim();
@@ -206,7 +210,12 @@ public abstract class AbstractFormController {
             // it would also remove the distinction between shared & readonly fields and ordinary fields
             // so we probably could verify if a field name was duplicated.
             // So probably best to stick to a list of fields, but make it data driven (in messages.properties)
-            copyFromSessionToModel(request, getFields(getPageName()), model);
+            String[] fields = getFields(getCurrentPage(request));
+            if(fields == null || fields.length == 0) {
+                fields = getFields(getPageName());
+            }
+
+            copyFromSessionToModel(request, fields, model);
             copyFromSessionToModel(request, getSharedFields(), model);
             copyFromSessionToModel(request, getReadOnlyFields(), model);
 
@@ -432,6 +441,9 @@ public abstract class AbstractFormController {
         LOG.trace("Ending AbstractFormController.validateMandatoryDateField");
     }
 
+    /**
+     * @return false is the validation does not exist or is set to false/FALSE
+     */
     private boolean validationEnabled(String fieldName, ValidationType type) {
         Locale locale  = null;
         String defaultValue = null;
@@ -441,6 +453,9 @@ public abstract class AbstractFormController {
         return enabled;
     }
 
+    /**
+     * @return the message or null if it does not exist
+     */
     private String getFieldLabel(String fieldName, Object... args) {
         Locale locale  = null;
         String fieldTitle = messageSource.getMessage(fieldName + ".label", args, "{" + fieldName + ".label}", locale);
@@ -456,32 +471,37 @@ public abstract class AbstractFormController {
      * TODO not sure if this is the best approach or not (requires validation info in messages.properties)
      */
     protected void validateField(Map<String, String[]> allfieldValues, String fieldName, Object...args) {
+
         for(ValidationType type: ValidationType.values()) {
-            if(validationEnabled(fieldName, type)) {
-                switch(type) {
-                    case MANDATORY:
-                        LOG.debug("field {} is mandatory, validating", fieldName);
-                        validateMandatoryField(allfieldValues, fieldName, getFieldLabel(fieldName, args));
-                        return;
-                    case MAX_LENGTH:
-                        break;
-                    case DATE:
-                        LOG.debug("field {} is mandatory, validating", fieldName);
-                        validateMandatoryDateField(allfieldValues, fieldName, getFieldLabel(fieldName, args));
-                        return;
-                    case ADDRESS:
-                        break;
-                    case GROUP_ANY:
-                        break;
-                    case GROUP_ALL:
-                        break;
-                    case REGEX:
-                        break;
-                    case CONFIRM_FIELD:
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Unrecognized ValidationType: " + type);
-                }
+
+            if(validationEnabled(fieldName, type) == false) {
+                // support for optional fields
+                continue;
+            }
+
+            switch(type) {
+                case MANDATORY:
+                    LOG.debug("field {} is mandatory, validating", fieldName);
+                    validateMandatoryField(allfieldValues, fieldName, getFieldLabel(fieldName, args));
+                    return;
+                case MAX_LENGTH:
+                    break;
+                case DATE:
+                    LOG.debug("field {} is mandatory, validating", fieldName);
+                    validateMandatoryDateField(allfieldValues, fieldName, getFieldLabel(fieldName, args));
+                    return;
+                case ADDRESS:
+                    break;
+                case GROUP_ANY:
+                    break;
+                case GROUP_ALL:
+                    break;
+                case REGEX:
+                    break;
+                case CONFIRM_FIELD:
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unrecognized ValidationType: " + type);
             }
         }
     }
@@ -815,7 +835,7 @@ public abstract class AbstractFormController {
      * make the map the field collection
      * make the list the field collection list? (yuk)
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked" })
     protected List<Map<String, String>> getFieldCollections(HttpSession session, String collectionName, boolean create) {
         LOG.trace("Started AbstractFormController.getFieldCollections");
         try {
@@ -882,7 +902,17 @@ public abstract class AbstractFormController {
     }
 
     /**
-     * case-insensitive
+     * Return True or False object if the values match the trueValue or falseValue parameters
+     *
+     * all comparisons are case-insensitive
+     *
+     * @return null if the inputs are null,
+     *         Boolean.TRUE if all the values the same as the 'trueValue' parameter
+     *         Boolean.FALSE if all the values the same as the 'falseValue' parameter
+     *         or throw an expcetion if it is confused
+     *
+     * @throws IllegalFieldValueException if one or more of the values is neither the 'trueFalse' or 'falseValue'
+     * @throws InconsistentFieldValuesException if the values are not consistent, i.e. both true and false
      */
     public static Boolean getBooleanFieldValue(String fieldName, String trueValue, String falseValue, String[] values) {
         Parameters.validateMandatoryArgs(new Object[]{trueValue, falseValue}, new String[]{"trueValue", "falseValue"});
@@ -893,6 +923,8 @@ public abstract class AbstractFormController {
         boolean yes = false;
         boolean no = false;
         boolean other = false;
+
+        // not a single valued boolean, so check all values
         for(String value : values) {
             if(trueValue.equalsIgnoreCase(value)) {
                 yes = true;
@@ -903,21 +935,26 @@ public abstract class AbstractFormController {
             }
         }
 
+        // there were no matches, i.e. all null or empty, so return null
         if(other == false && no == false && yes == false) {
             return null;
         }
 
+        // there was nothing un-recognised
         if(other == false) {
             if(yes == true && no == false) {
-                return Boolean.TRUE;
+                return Boolean.TRUE;        // we only had matches against trueValue
             } else if(yes == false && no == true) {
-                return Boolean.FALSE;
+                return Boolean.FALSE;       // we only had matches against trueValue
             }
         }
 
         if(other == true) {
+            // we had unrecognized values that did not match either trueValue or falseValue
             throw new IllegalFieldValueException(fieldName, values);
         }
+
+        // we had matches to both trueValue AND falseValue
         throw new InconsistentFieldValuesException(fieldName, values);
     }
 
@@ -925,6 +962,7 @@ public abstract class AbstractFormController {
         int value = 0;
         for(int index = 0; index < fieldCollectionList.size(); index++) {
             Map<String, String> existingFieldCollection = fieldCollectionList.get(index);
+
             String id = existingFieldCollection.get(idFieldName);
             if(id == null) {
                 LOG.error("Missing ID field: " + idFieldName + " for record(" + index + "): " + existingFieldCollection);
@@ -937,7 +975,7 @@ public abstract class AbstractFormController {
                 }
             } catch(NumberFormatException e) {
                 LOG.error("ID field: " + idFieldName + " value is not an integer(" + id + ")");
-                throw new IllegalArgumentException("ID field: " + idFieldName + " value is not an integer(" + id + ")");
+                throw new IllegalArgumentException("ID field: " + idFieldName + " value is not an integer(" + id + ")", e);
             }
         }
 
@@ -966,7 +1004,7 @@ public abstract class AbstractFormController {
         calendar.set(Calendar.YEAR, year);
         Date date = calendar.getTime();
 
-        SimpleDateFormat formatter = new SimpleDateFormat(format);
+        SimpleDateFormat formatter = new SimpleDateFormat(format, Locale.getDefault());
         String dateString = formatter.format(date);
         session.setAttribute(dateFieldName, dateString);
     }
@@ -985,7 +1023,7 @@ public abstract class AbstractFormController {
         try {
             return Integer.valueOf(value.trim());
         } catch(NumberFormatException e) {
-            throw new IllegalArgumentException("Expecting a 'numerical' session value:" + fieldName + " but found: '" + value + "'");
+            throw new IllegalArgumentException("Expecting a 'numerical' session value:" + fieldName + " but found: '" + value + "'", e);
         }
     }
 
@@ -1183,7 +1221,7 @@ public abstract class AbstractFormController {
             return null;
         }
 
-        Map<String, String[]> map = new HashMap<>();;
+        Map<String, String[]> map = new HashMap<>();
 
         List<String> attrNames = Collections.list(session.getAttributeNames());
         for(String attrName: attrNames) {
@@ -1198,6 +1236,42 @@ public abstract class AbstractFormController {
         }
 
         return map;
+    }
+
+    /**
+     * @param fieldValues all the values from the form being validated
+     * @param fields the names of the fields the form uses (from the resource bundle)
+     */
+    protected void validate(Map<String, String[]> fieldValues, String[] fields) {
+        LOG.trace("Starting BenefitsController.validate");
+
+        if(fields == null) {
+            return;
+        }
+
+        // build a dependency tree
+        // .validation.date
+        // .validation.dependency
+
+
+        // the rules can be cached
+        String mandatoryValidationFormat = "%s.validation.mandatory";
+
+        LOG.debug("fields = {}", fields == null ? null : Arrays.asList(fields));
+        for(String field: fields) {
+            LOG.debug("Field = {}", field);
+            String rule = String.format(mandatoryValidationFormat, field);
+            LOG.debug("rule = {}", rule);
+            String mandatoryValidationStr = this.getMessageSource().getMessage(rule, null, null, Locale.getDefault());
+            LOG.debug("mandatoryValidationStr = {}", mandatoryValidationStr);
+            boolean mandatoryValidation = Boolean.valueOf(mandatoryValidationStr);
+            LOG.debug("mandatoryValidation = {}", mandatoryValidation);
+            if(mandatoryValidation) {
+                validateMandatoryField(fieldValues, field);
+            }
+        }
+
+        LOG.trace("Ending BenefitsController.validate");
     }
 
     public static class ValidationSummary {
@@ -1270,34 +1344,33 @@ public abstract class AbstractFormController {
 
     public static class ValidationPatterns {
 
-        public static int    ACCOUNT_HOLDER_NAME_MAX_LENGTH = 60;
-        public static int    ACCOUNT_NUMBER_MAX_LENGTH      = 10;
-        public static int    ACCOUNT_NUMBER_MIN_LENGTH      = 6;
-        public static int    CURRENCY_REGEX_MAX_LENGTH      = 12;
-        public static int    FULL_NAME_MAX_LENGTH           = 60;
-        public static int    NAME_MAX_LENGTH                = 35;
-        public static int    NATIONALITY_MAX_LENGTH         = 35;
-        public static int    PHONE_NUMBER_MAX_LENGTH        = 20;
+        public static final int    ACCOUNT_HOLDER_NAME_MAX_LENGTH = 60;
+        public static final int    ACCOUNT_NUMBER_MAX_LENGTH      = 10;
+        public static final int    ACCOUNT_NUMBER_MIN_LENGTH      = 6;
+        public static final int    CURRENCY_REGEX_MAX_LENGTH      = 12;
+        public static final int    FULL_NAME_MAX_LENGTH           = 60;
+        public static final int    NAME_MAX_LENGTH                = 35;
+        public static final int    NATIONALITY_MAX_LENGTH         = 35;
+        public static final int    PHONE_NUMBER_MAX_LENGTH        = 20;
 
-        public static String RESTRICTED_CHARS               = "^[A-Za-zÀ-ƶ\\s0-9\\(\\)&£€\\\"\\'!\\-_:;\\.,/\\?\\@]*$";
-        public static String PHONE_NUMBER_SEQ               = "^[0-9 \\-]$";
-        public static String NATIONALITY_SEQ                = "^[a-zA-ZÀ-ƶ \\-\\']$";
+        public static final String RESTRICTED_CHARS               = "^[A-Za-zÀ-ƶ\\s0-9\\(\\)&£€\\\"\\'!\\-_:;\\.,/\\?\\@]*$";
+        public static final String PHONE_NUMBER_SEQ               = "^[0-9 \\-]$";
+        public static final String NATIONALITY_SEQ                = "^[a-zA-ZÀ-ƶ \\-\\']$";
 
-        public static String ACCOUNT_HOLDER_NAME_REGEX      = "^[" + RESTRICTED_CHARS + "]{1," + ACCOUNT_HOLDER_NAME_MAX_LENGTH + "}$$";
-        public static String ACCOUNT_NUMBER_REGEX           = "^\\d{" + ACCOUNT_NUMBER_MIN_LENGTH + "," + ACCOUNT_NUMBER_MAX_LENGTH + "}$$";
-        public static String CURRENCY_REGEX                 = "^\\£?[0-9]{1,8}(\\.[0-9]{1,2})?$";
-        public static String DECIMAL_REGEX                  = "^[0-9]{1,12}(\\.[0-9]{1,2})?$";
-        public static String EMAIL_REGEX                    = "^[a-zA-Z0-9\\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])*(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9]))+$";
-        public static String FULL_NAME_REGEX                = "^[" + RESTRICTED_CHARS + "]{1, " + FULL_NAME_MAX_LENGTH + "}$$";
-        public static String NATIONALITY_REGEX              = "^[" + NATIONALITY_SEQ + "]{1," + NATIONALITY_MAX_LENGTH + "}$$";
-        public static String NINO_REGEX                     = "(([A-CEHJ-MOPRSW-Y]{1}[A-CEGHJ-NPR-TW-Z]{1}[0-9]{6})|([G]{1}[ACEGHJ-NPR-TW-Z]{1}[0-9]{6})|([N]{1}[A-CEGHJL-NPR-TW-Z]{1}[0-9]{6})|([T]{1}[A-CEGHJ-MPR-TW-Z]{1}[0-9]{6})|([Z]{1}[A-CEGHJ-NPR-TW-Y]{1}[0-9]{6}))(([A-D ]{1})|([\\S\\s\\d]{0,0}))";
-        public static String NUMBER_OR_SPACE_REGEX          = "^[0-9 ]*$";
-        public static String NUMBER_REGEX                   = "^[0-9]*$";
-        public static String PHONE_NUMBER_REGEX             = "^[" + PHONE_NUMBER_SEQ + "]{7," + PHONE_NUMBER_MAX_LENGTH + "}$$";
-        public static String POSTCODE_REGEX                 = "^(?i)(GIR 0AA)|((([A-Z][0-9][0-9]?)|(([A-Z][A-HJ-Y][0-9][0-9]?)|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) ?[0-9][A-Z]{2})$";
-        public static String RESTRICTED_POSTCODE_REGEX      = "^[A-Za-zÀ-ƶ\\s0-9]*$";
-        public static String SORT_CODE_REGEX                = "^\\d{6}$";
-        public static String SURNAME_REGEX                  = "^[" + RESTRICTED_CHARS + "]{1," + NAME_MAX_LENGTH + "}$$";
+        public static final String ACCOUNT_HOLDER_NAME_REGEX      = "^[" + RESTRICTED_CHARS + "]{1," + ACCOUNT_HOLDER_NAME_MAX_LENGTH + "}$$";
+        public static final String ACCOUNT_NUMBER_REGEX           = "^\\d{" + ACCOUNT_NUMBER_MIN_LENGTH + "," + ACCOUNT_NUMBER_MAX_LENGTH + "}$$";
+        public static final String CURRENCY_REGEX                 = "^\\£?[0-9]{1,8}(\\.[0-9]{1,2})?$";
+        public static final String DECIMAL_REGEX                  = "^[0-9]{1,12}(\\.[0-9]{1,2})?$";
+        public static final String EMAIL_REGEX                    = "^[a-zA-Z0-9\\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])*(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9]))+$";
+        public static final String FULL_NAME_REGEX                = "^[" + RESTRICTED_CHARS + "]{1, " + FULL_NAME_MAX_LENGTH + "}$$";
+        public static final String NATIONALITY_REGEX              = "^[" + NATIONALITY_SEQ + "]{1," + NATIONALITY_MAX_LENGTH + "}$$";
+        public static final String NINO_REGEX                     = "(([A-CEHJ-MOPRSW-Y]{1}[A-CEGHJ-NPR-TW-Z]{1}[0-9]{6})|([G]{1}[ACEGHJ-NPR-TW-Z]{1}[0-9]{6})|([N]{1}[A-CEGHJL-NPR-TW-Z]{1}[0-9]{6})|([T]{1}[A-CEGHJ-MPR-TW-Z]{1}[0-9]{6})|([Z]{1}[A-CEGHJ-NPR-TW-Y]{1}[0-9]{6}))(([A-D ]{1})|([\\S\\s\\d]{0,0}))";
+        public static final String NUMBER_OR_SPACE_REGEX          = "^[0-9 ]*$";
+        public static final String NUMBER_REGEX                   = "^[0-9]*$";
+        public static final String PHONE_NUMBER_REGEX             = "^[" + PHONE_NUMBER_SEQ + "]{7," + PHONE_NUMBER_MAX_LENGTH + "}$$";
+        public static final String POSTCODE_REGEX                 = "^(?i)(GIR 0AA)|((([A-Z][0-9][0-9]?)|(([A-Z][A-HJ-Y][0-9][0-9]?)|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) ?[0-9][A-Z]{2})$";
+        public static final String RESTRICTED_POSTCODE_REGEX      = "^[A-Za-zÀ-ƶ\\s0-9]*$";
+        public static final String SORT_CODE_REGEX                = "^\\d{6}$";
+        public static final String SURNAME_REGEX                  = "^[" + RESTRICTED_CHARS + "]{1," + NAME_MAX_LENGTH + "}$$";
     }
 }
-

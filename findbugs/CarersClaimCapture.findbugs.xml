@@ -1080,7 +1080,7 @@
     </Field>
   </BugInstance>
   <Errors errors="0" missingClasses="0"></Errors>
-  <FindBugsSummary timestamp="Mon, 12 Sep 2016 09:03:59 +0100" total_classes="79" referenced_classes="247" total_bugs="48" total_size="3335" num_packages="11" java_version="1.8.0_60" vm_version="25.60-b23" cpu_seconds="96.32" clock_seconds="1370.84" peak_mbytes="549.68" alloc_mbytes="3641.00" gc_seconds="0.10" priority_3="12" priority_2="36">
+  <FindBugsSummary timestamp="Mon, 12 Sep 2016 09:03:59 +0100" total_classes="79" referenced_classes="247" total_bugs="48" total_size="3335" num_packages="11" java_version="1.8.0_60" vm_version="25.60-b23" cpu_seconds="100.99" clock_seconds="1394.68" peak_mbytes="550.25" alloc_mbytes="3641.00" gc_seconds="0.10" priority_3="12" priority_2="36">
     <PackageStats package="uk.gov.dwp.carersallowance" total_bugs="1" total_types="2" total_size="96" priority_3="1">
       <ClassStats class="uk.gov.dwp.carersallowance.JspFunctions" sourceFile="JspFunctions.java" interface="false" size="82" bugs="1" priority_3="1"/>
       <ClassStats class="uk.gov.dwp.carersallowance.JspFunctions$TagException" sourceFile="JspFunctions.java" interface="false" size="14" bugs="0"/>

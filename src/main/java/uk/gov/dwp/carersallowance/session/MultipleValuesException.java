@@ -7,8 +7,8 @@ public class MultipleValuesException extends IllegalStateException {
         super();
     }
 
-    public MultipleValuesException(String s) {
-        super(s);
+    public MultipleValuesException(String message) {
+        super(message);
     }
 
     public MultipleValuesException(String message, Throwable cause) {

@@ -21,7 +21,7 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class ClaimDateController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(ClaimDateController.class);
 
-    private static final String PAGE_NAME     = "";
+    private static final String PAGE_NAME     = "page.claim-date";
     private static final String CURRENT_PAGE  = "/your-claim-date/claim-date";
 
 // FIELDS = dateOfClaim_year, dateOfClaim_month, dateOfClaim_day, beforeClaimCaring, beforeClaimCaringDate_year, beforeClaimCaringDate_month, beforeClaimCaringDate_day

@@ -81,7 +81,7 @@ public class Parameters
 			}
 		}
 	}
-	
+
     /**
      * An IllegalArgumentException indicating that the arguments to these functions are illegal.
      * Used in order to distinguish it from an ordinary IllegalArgumentException thrown in the
@@ -89,17 +89,14 @@ public class Parameters
      */
     public static class ValidateArgsException extends IllegalArgumentException
     {
-        /**
-         *
-         */
         private static final long serialVersionUID = 7380826752015136721L;
         public ValidateArgsException()
         {
             super();
         }
-        public ValidateArgsException(String s)
+        public ValidateArgsException(String message)
         {
-            super(s);
+            super(message);
         }
     }
 }

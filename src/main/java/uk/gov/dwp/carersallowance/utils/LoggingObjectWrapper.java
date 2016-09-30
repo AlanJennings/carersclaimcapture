@@ -26,13 +26,4 @@ public class LoggingObjectWrapper {
 
         return object.toString();
     }
-
-    public static void main(String[] args) {
-        Object[] objects = new Object[]{"single", new String[]{"one", "two"}, null};
-        for(Object object : objects) {
-            System.out.println(object);
-            System.out.println(new LoggingObjectWrapper(object));
-            System.out.println();
-        }
-    }
 }

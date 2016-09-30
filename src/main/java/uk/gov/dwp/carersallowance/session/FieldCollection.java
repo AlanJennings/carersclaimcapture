@@ -1,5 +1,6 @@
 package uk.gov.dwp.carersallowance.session;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -10,7 +11,9 @@ import java.util.Set;
 
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
-public class FieldCollection {
+public final class FieldCollection {
+
+    private FieldCollection() {}
 
     /**
      * return the subset of allFieldValues named by fieldNames, (also map to single values).
@@ -68,7 +71,8 @@ public class FieldCollection {
     /**
      * Not sure if this would be better using a separate reversing comparator
      */
-    public static class FieldCollectionComparator implements Comparator<Map<String, String>>{
+    public static class FieldCollectionComparator implements Comparator<Map<String, String>>, Serializable {
+        private static final long serialVersionUID = -982043683734590349L;
 
         private boolean      reverse;
         private List<String> compareFields;
@@ -83,6 +87,7 @@ public class FieldCollection {
                 throw new IllegalArgumentException("no compareFields specified");
             }
 
+            this.reverse = reverse;
             this.compareFields = Arrays.asList(compareFields);
         }
 

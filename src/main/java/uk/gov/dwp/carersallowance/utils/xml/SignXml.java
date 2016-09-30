@@ -2,9 +2,7 @@ package uk.gov.dwp.carersallowance.utils.xml;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import gov.dwp.carers.xml.signing.XmlSignature;
@@ -60,29 +58,5 @@ public class SignXml {
         File newFile = new File(parent, newFilename);
 
         return newFile;
-    }
-
-    public static void main(String[] args) throws IOException {
-        System.out.println("Started");
-        // read the XML, then add the signature
-        File[] files;
-        if(args.length == 0) {
-//            files = new File[] {new File("/Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/resources/defaultClaim/DefaultClaim.nosignature.xml")};
-            files = new File[] {new File("/Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/resources/unchangedDefaultClaim/DefaultClaim.raw.nosignature.xml")};
-        } else {
-            files = new File[args.length];
-            for(int index = 0; index < args.length; index++) {
-                files[index] = new File(args[index]);
-            }
-        }
-
-        SignXml claimUtils = new SignXml(KEYSTORE);
-        for(File file: files) {
-            String xml = FileUtils.readFileToString(file, Charset.defaultCharset());
-            String signedXml = claimUtils.signClaimXml(xml);
-            File outputFile = deriveNewFilename(file, "signed");
-            FileUtils.write(outputFile, signedXml, Charset.defaultCharset());
-        }
-        System.out.println("Complete");
     }
 }

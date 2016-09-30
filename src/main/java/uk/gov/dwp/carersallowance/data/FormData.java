@@ -40,6 +40,12 @@ public class FormData {
         public String            getNextLink()     { return nextLink; }
         public List<Question<?>> getQuestions()    { return questions; }
 
+        public void setSectionId(String value)              { this.sectionId = value; }
+        public void setTitle(String value)                  { this.title = value; }
+        public void setBeforeLink(String value)             { this.beforeLink = value; }
+        public void setNextLink(String value)               { this.nextLink = value; }
+        public void setQuestions(List<Question<?>> values)  { this.questions = values; }
+
         public void addQuestion(Question<?> question) {
             questions.add(question);
         }

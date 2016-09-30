@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -35,14 +36,13 @@ import uk.gov.dwp.carersallowance.utils.Parameters;
  */
 public class ClaimXml {
 
-    private DocumentBuilderFactory docFactory;
-    private DocumentBuilder        docBuilder;
-    private List<String>           encryptionXPaths;
+    private DocumentBuilder docBuilder;
+    private List<String>    encryptionXPaths;
 
     public ClaimXml() throws ParserConfigurationException {
         encryptionXPaths = new ArrayList<>();       // this is largely to accumulate the list
 
-        docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         docBuilder = docFactory.newDocumentBuilder();
     }
 
@@ -103,12 +103,11 @@ public class ClaimXml {
      * @param document
      * @param parent
      * @param tagName
-     * @param questionLabelKey
      * @param address
      *
      * TODO probably use OrderedMap for this
      */
-    private Element addAddressNode(Document document, Node parent, String tagName, String questionLabelKey, Object addressObj) {
+    private Element addAddressNode(Document document, Node parent, String tagName) {
         Element addressNode = addNode(document, parent, tagName, null);
 
         addNode(document, addressNode, "Line", "addressObj.getAddressLine1", false);
@@ -139,7 +138,7 @@ public class ClaimXml {
 
         Node dwpCaTransaction = addElementWithAttributes(document, dwpBody, "DWPCATransaction", "id", transactionId);
         addNode(document, dwpCaTransaction, "TransactionId", transactionId);
-        addNode(document, dwpCaTransaction, "DateTimeGenerated", new SimpleDateFormat("dd-MM-yyyy HH:mm").format(new Date()));
+        addNode(document, dwpCaTransaction, "DateTimeGenerated", new SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault()).format(new Date()));
         addNode(document, dwpCaTransaction, "LanguageUsed", language);
 
         buildDwpCaClaim(document, dwpCaTransaction, claim);
@@ -186,7 +185,7 @@ public class ClaimXml {
         addQuestionNode(document, node, "Title", "title", "yourDetails.title");
         addQuestionNode(document, node, "DateOfBirth","dateOfBirth", "yourDetails.dateOfBirth");
         addQuestionNode(document, node, "NationalInsuranceNumber","nationalInsuranceNumber", "yourDetails.nationalInsuranceNumber");  //encrypt
-            addAddressNode(document, node, "Address", "address", "contactDetails.address");  // postcode is encrypted (uppercase?)
+            addAddressNode(document, node, "Address");  // postcode is encrypted (uppercase?)
         addQuestionNode(document, node, "DayTimePhoneNumber","howWeContactYou", "contactDetails.howWeContactYou");
         addQuestionNode(document, node, "Cared35HoursBefore","spent35HoursCaringBeforeClaim.label", "claimDateDetails.spent35HoursCaringBeforeClaim.answer, claim.dateOfClaim.fold({NO CLAIM DATE})(dmy => displayPlaybackDatesFormat(Lang(en),dmy))");
             addDateQuestionNode(document, node, "DayTimePhoneNumber","DateStartCaring", "contactDetails.howWeContactYou");
@@ -207,7 +206,7 @@ public class ClaimXml {
         addQuestionNode(document, node, "Title", "title", "theirPersonalDetails.title");
         addQuestionNode(document, node, "DateOfBirth", "dateOfBirth", "theirPersonalDetails.dateOfBirth.`dd-MM-yyyy`");
         addQuestionNode(document, node, "NationalInsuranceNumber", "nationalInsuranceNumber", "theirPersonalDetails.nationalInsuranceNumber");  // encrypt
-            addAddressNode(document, node, "Address", "address", "theirPersonalDetails.theirAddress.address");  // postcode is encrypted (uppercase?)
+            addAddressNode(document, node, "Address");  // postcode is encrypted (uppercase?)
         addQuestionNode(document, node, "RelationToClaimant", "relationship", "theirPersonalDetails.relationship");
         addQuestionNode(document, node, "Cared35Hours", "spent35HoursCaring", "moreAboutTheCare.spent35HoursCaring, dpName");
         addQuestionNode(document, node, "OtherCarer", "otherCarer", "moreAboutTheCare.otherCarer, dpName");

@@ -1,11 +1,7 @@
 package uk.gov.dwp.carersallowance.utils.xml;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.StringWriter;
-import java.nio.charset.Charset;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,7 +25,9 @@ import uk.gov.dwp.carersallowance.utils.Parameters;
  *
  * @author David Hutchinson (drh@elegantsoftwaresolutions.co.uk)
  */
-public class XmlPrettyPrinter {
+public final class XmlPrettyPrinter {
+    private XmlPrettyPrinter() {}
+
     public static String xmlToString(Node xml, boolean includeXmlDeclaration) throws InstantiationException { return xmlToString(xml, false, includeXmlDeclaration); }
 
     public static String xmlToString(Node xml) throws InstantiationException     { return xmlToString(xml, false, true); }
@@ -157,47 +155,47 @@ public class XmlPrettyPrinter {
 
     }
 
-    public static void main(String[] args) throws Exception {
-        System.out.println("Started");
-
-        String filename = "/Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/resources/data/claim.16010000027.v3_4.xml";
-
-//        for(int index = 0; index < args.length; index++) {
-//            String filename = args[index];
-            try {
-                String rawXml = FileUtils.readFileToString(new File(filename), Charset.defaultCharset());
-                String prettyXml = formatXml(rawXml, true, false);
-                String flatXml = formatXml(rawXml, false, false);
-                String flattenedXml = formatXml(prettyXml, false, false);
-
-                System.out.println("   RAW XML");
-                System.out.println("=============");
-                System.out.println(rawXml);
-                System.out.println();
-
-                System.out.println("  PRETTY XML");
-                System.out.println("=============");
-                System.out.println(prettyXml);
-                System.out.println();
-
-                System.out.println("  FLAT XML");
-                System.out.println("=============");
-                System.out.println(flatXml);
-                System.out.println();
-
-                System.out.println("  FLATENED XML");
-                System.out.println("================");
-                System.out.println(flattenedXml);
-                System.out.println();
-
-            } catch(IOException e) {
-                System.err.println("Problems with file: " + filename);
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                System.err.println("Problems with file: " + filename);
-                e.printStackTrace();
-            }
-//        }
-            System.out.println("Complete");
-    }
+//    public static void main(String[] args) {
+//        System.out.println("Started");
+//
+//        String filename = "/Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/resources/data/claim.16010000027.v3_4.xml";
+//
+////        for(int index = 0; index < args.length; index++) {
+////            String filename = args[index];
+//            try {
+//                String rawXml = FileUtils.readFileToString(new File(filename), Charset.defaultCharset());
+//                String prettyXml = formatXml(rawXml, true, false);
+//                String flatXml = formatXml(rawXml, false, false);
+//                String flattenedXml = formatXml(prettyXml, false, false);
+//
+//                System.out.println("   RAW XML");
+//                System.out.println("=============");
+//                System.out.println(rawXml);
+//                System.out.println();
+//
+//                System.out.println("  PRETTY XML");
+//                System.out.println("=============");
+//                System.out.println(prettyXml);
+//                System.out.println();
+//
+//                System.out.println("  FLAT XML");
+//                System.out.println("=============");
+//                System.out.println(flatXml);
+//                System.out.println();
+//
+//                System.out.println("  FLATENED XML");
+//                System.out.println("================");
+//                System.out.println(flattenedXml);
+//                System.out.println();
+//
+//            } catch(IOException e) {
+//                System.err.println("Problems with file: " + filename);
+//                e.printStackTrace();
+//            } catch (InstantiationException e) {
+//                System.err.println("Problems with file: " + filename);
+//                e.printStackTrace();
+//            }
+////        }
+//            System.out.println("Complete");
+//    }
 }

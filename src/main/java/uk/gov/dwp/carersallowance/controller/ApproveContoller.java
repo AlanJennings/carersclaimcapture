@@ -48,5 +48,6 @@ public class ApproveContoller extends AbstractFormController {
 
     @Override
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
+        // empty implementation
     }
 }

@@ -106,7 +106,7 @@ public class EmploymentSummaryController extends AbstractFormController {
         LOG.trace("Started EmploymentSummaryController.showForm");
         try {
             List<Map<String, String>> employments = getFieldCollections(request.getSession(), FIELD_COLLECTION_NAME);
-            if(employments == null || employments.size() == 0) {
+            if(employments == null || employments.isEmpty()) {
                 return "redirect:" + EMPLOYMENT_DETAIL;
             }
             return super.showForm(request, model);

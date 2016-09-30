@@ -2,8 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<%@ attribute name="page" required="true" %>
-    
+<%@ attribute name="page" %>
 <%@ attribute name="pageTitle" %>
 <%@ attribute name="pageTitleKey" %>
 <%@ attribute name="pageSectionKey" %>
@@ -11,6 +10,7 @@
 <%@ attribute name="nextButtonTextKey" %>
     
 <%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+<t:defaultValue value="${pageScope.page}" defaultValue="${requestScope['javax.servlet.forward.servlet_path']}" var="page" />
 <t:defaultValue value="${pageScope.nextButtonTextKey}" defaultValue="next" var="nextButtonTextKey" />
 <t:defaultValue value="${pageScope.pageTitleKey}" defaultValue="${page}.pageTitle" var="pageTitleKey" />
 

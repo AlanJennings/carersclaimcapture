@@ -14,7 +14,19 @@
     <mvc:resources mapping="/assets/**" location="/assets/" />
     <mvc:default-servlet-handler />
     <mvc:annotation-driven ignore-default-model-on-redirect="true" />
+
+    <bean class="uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultFormController"></bean>
     
+    <bean class="uk.gov.dwp.carersallowance.handler.FilteredRequestMappingHandlerMapping">
+        <property name="order" value="0" /> <!-- If this is not set, it ignores it -->
+        <!-- Do not set the defaultHandler property, this is called when no controller is found, including excluded urls -->
+        <property name="exclude"><value>/assets/**</value></property>
+        <!-- 
+            bizarelly spring does not allow you to set the same property twice, (the workarounds
+            are something to behold), we only need it for one path though, so will generalize it later 
+        -->
+    </bean>
+
     <context:component-scan base-package="uk.gov.dwp.carersallowance.session" />    
     <context:component-scan base-package="uk.gov.dwp.carersallowance.controller" />
     
@@ -29,16 +41,14 @@
         <property name="cacheSeconds" value="1" />
     </bean>
 
-    <bean id="localeResolver"
-        class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
         <property name="defaultLocale" value="en" />
         <property name="cookieName" value="c3LocaleCookie"></property>
         <property name="cookieMaxAge" value="3600"></property>
     </bean>
 
     <mvc:interceptors>
-        <bean
-            class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
             <property name="paramName" value="locale" />
         </bean>
     </mvc:interceptors>

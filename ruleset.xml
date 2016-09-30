@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         name="C3 Custom Ruleset"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+   
+   <description>C3 trimmed rules, to limit false positives</description>
+   
+    <rule ref="rulesets/java/basic.xml">
+       <exclude name="BooleanInstantiation"/>       <!-- This rules seems to be broken -->
+    </rule>
+    
+    <rule ref="rulesets/java/codesize.xml"></rule>
+    
+    <rule ref="rulesets/java/coupling.xml">
+        <exclude name="LawOfDemeter"/>      <!-- While this looks good on paper, the implementation is woeful and just seems to give false positives -->
+    </rule>
+    
+    <rule ref="rulesets/java/design.xml">
+        <exclude name="ConfusingTernary"/>                              <!-- Overly simple analysis -->
+        <exclude name="SimplifyBooleanExpressions"/>                    <!-- This rule does not seem to operate correctly, triggers on expressions that cannot be simplified -->
+        <exclude name="EmptyMethodInAbstractClassShouldBeAbstract"/>    <!-- Incorrect rule. This is to supplies a default implementation, not an abstract method signature -->
+        <exclude name="ImmutableField"/>                                <!-- Immutable fields have little to no value in the absence of immutable classes which were a failed experiment in java -->
+        <exclude name="ReturnEmptyArrayRatherThanNull"/>                <!-- There is no advantage to this, as a calling method cannot see the internals of the method and therefore always has to check for null  -->
+        <exclude name="UnnecessaryLocalBeforeReturn"/>                  <!-- Micro-optimsation, resolved by compiler, local is for ease of inspection during debugging -->
+        <exclude name="UseVarargs"/>                                    <!-- Poor analysis, appears to always be a false positive -->
+    </rule>
+    
+    <rule ref="rulesets/java/empty.xml"/>
+    <rule ref="rulesets/java/imports.xml"/>
+    <rule ref="rulesets/java/j2ee.xml"/>
+    <rule ref="rulesets/java/logging-java.xml"/>
+    
+    <rule ref="rulesets/java/naming.xml">
+        <exclude name="LongVariable"/>      <!-- clarity is the main concern which should show up other ways, rather than length per se -->
+        <exclude name="ShortClassName"/>    <!-- clarity is the main concern which should show up other ways, rather than length per se  -->
+    </rule>
+    
+    <rule ref="rulesets/java/optimizations.xml">
+       <exclude name="AvoidInstantiatingObjectsInLoops"/>   <!-- While this seems like a good idea, the compiler handles this automatically, so it is a question of clarity; which this rule cannot determine -->
+       <exclude name="MethodArgumentCouldBeFinal"/>         <!-- Of little to no value, just adds noise. immutable classes proved to be unworkable some time ago -->
+       <exclude name="LocalVariableCouldBeFinal"/>          <!-- Of little to no value, just adds noise -->
+       <exclude name="SimplifyStartsWith"/>                 <!-- Micro-optimisation reducing clarity -->
+    </rule>
+    
+    <rule ref="rulesets/java/sunsecure.xml"/>
+    <rule ref="rulesets/java/typeresolution.xml"/>
+    
+    <rule ref="rulesets/java/unnecessary.xml">
+       <exclude name="UselessParentheses"/>     <!-- Additional parenthesis may be for clarity, and does no harm -->
+    </rule>
+    
+    <rule ref="rulesets/java/unusedcode.xml">
+       <exclude name="UnusedModifier"/>         <!-- Modifier may be for clarity, and does no harm -->
+    </rule>
+</ruleset>

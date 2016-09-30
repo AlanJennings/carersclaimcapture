@@ -7,8 +7,8 @@ public class UnknownRecordException extends IllegalArgumentException {
         super();
     }
 
-    public UnknownRecordException(String s) {
-        super(s);
+    public UnknownRecordException(String message) {
+        super(message);
     }
 
     public UnknownRecordException(String message, Throwable cause) {

@@ -5,14 +5,17 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import org.springframework.util.StringUtils;
 
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
+// TODO remove these and re-analyze
 public class JspFunctions {
-
     private static final String READ_DATE_FORMAT = "dd-MM-yyyy";
+
+    private JspFunctions() {}
 
     public static String dateOffset(String dayField, String monthField, String yearField, String format, String offset) {
         if(StringUtils.isEmpty(format)) {
@@ -25,7 +28,7 @@ public class JspFunctions {
 
         Parameters.validateMandatoryArgs(new Object[]{dayField, monthField, yearField, format},  new String[]{"dayField", "monthField", "yearField", "format"});
         String dateField = String.format("%s-%s-%s", pad(dayField, 2, '0'), pad(monthField, 2, '0'), pad(yearField, 4, '0'));
-        SimpleDateFormat dateParser = new SimpleDateFormat(READ_DATE_FORMAT);
+        SimpleDateFormat dateParser = new SimpleDateFormat(READ_DATE_FORMAT, Locale.getDefault());
         Date date;
         try {
             date = dateParser.parse(dateField);
@@ -37,7 +40,7 @@ public class JspFunctions {
 
         SimpleDateFormat dateFomatter;
         try {
-            dateFomatter = new SimpleDateFormat(format);
+            dateFomatter = new SimpleDateFormat(format, Locale.getDefault());
         } catch(IllegalArgumentException e) {
             throw new TagException("Do not understand requested date format: '" + format + "'", e);
         }
@@ -61,6 +64,25 @@ public class JspFunctions {
         return padding + string;
     }
 
+    /**
+     * Apply an offset to the date
+     * The offset format is:
+     *    [+|-]<integer amount><unit>
+     *
+     * where unit is one of:
+     *   "minute"
+     *   "minutes"
+     *   "hour"
+     *   "hours"
+     *   "day"
+     *   "days"
+     *   "week"
+     *   "weeks"
+     *   "month"
+     *   "months"
+     *   "year"
+     *   "years"
+     */
     private static Date dateOffset(Date date, String offset) {
         if(StringUtils.isEmpty(offset) || date == null) {
             return date;
@@ -100,9 +122,15 @@ public class JspFunctions {
             amount = -amount;
         }
 
+        // units
         String unit = current.substring(endOfAmount);
-        unit = unit.toLowerCase();
+        unit = unit.toLowerCase(Locale.getDefault());
 
+        Date result = applyDateOffset(date, amount, unit);
+        return result;
+    }
+
+    private static Date applyDateOffset(Date date, int amount, String unit) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         switch(unit) {
@@ -134,8 +162,8 @@ public class JspFunctions {
                 throw new TagException("Do not undestand date offset unit: " + unit);
         }
 
-        date = calendar.getTime();
-        return date;
+        Date result = calendar.getTime();
+        return result;
     }
 
     public static class TagException extends RuntimeException {
@@ -145,8 +173,8 @@ public class JspFunctions {
             super();
         }
 
-        public TagException(String s) {
-            super(s);
+        public TagException(String message) {
+            super(message);
         }
 
         public TagException(String message, Throwable cause) {
@@ -155,23 +183,6 @@ public class JspFunctions {
 
         public TagException(Throwable cause) {
             super(cause);
-        }
-    }
-
-    public static void main(String[] args) throws ParseException {
-        String[] data = {null, "", "1week", "+1day", "-1day", "4months", "2years", "year", "+", "3"};
-
-        String dateStr = "01-01-2000 00:00:00";
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-
-        for(String offset: data) {
-            try {
-                Date startDate = formatter.parse(dateStr);
-                Date offsetDate = dateOffset(startDate, offset);
-                System.out.println("offset = '" + offset + "' => " + formatter.format(offsetDate));
-            } catch(TagException e) {
-                e.printStackTrace();
-            }
         }
     }
 }

@@ -4,9 +4,9 @@
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.benefits" currentPage="${currentPage}">
+<t:mainPage>
     
-    <t:pageContent errors="${validationErrors}" page="page.benefits">
+    <t:pageContent errors="${validationErrors}">
         
         <t:radiobuttons name="benefitsAnswer" optionValues="PIP|DLA|AA|CAA|AFIP|NONE" />
         
@@ -17,3 +17,4 @@
     </t:pageContent>
     
 </t:mainPage>
+

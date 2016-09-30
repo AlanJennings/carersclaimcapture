@@ -20,7 +20,7 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
 public class SubmittedPageController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(SubmittedPageController.class);
 
-    private static final String PAGE_NAME     = "";
+    private static final String PAGE_NAME     = "page.thankyou";
     private static final String CURRENT_PAGE  = "/thankyou/apply-carers";
 
 // FIELDS = {};

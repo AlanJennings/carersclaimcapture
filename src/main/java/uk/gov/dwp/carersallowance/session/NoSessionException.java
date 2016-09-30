@@ -7,8 +7,8 @@ public class NoSessionException extends IllegalStateException {
         super();
     }
 
-    public NoSessionException(String s) {
-        super(s);
+    public NoSessionException(String message) {
+        super(message);
     }
 
     public NoSessionException(String message, Throwable cause) {

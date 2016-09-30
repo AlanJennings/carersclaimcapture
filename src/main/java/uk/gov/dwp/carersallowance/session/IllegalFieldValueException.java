@@ -16,28 +16,28 @@ public class IllegalFieldValueException extends RuntimeException {
         super();
 
         this.fieldName = fieldName;
-        this.fieldValues = fieldValues;
+        this.fieldValues = fieldValues == null ? null : fieldValues.clone();
     }
 
     public IllegalFieldValueException(String message, String fieldName, String[] fieldValues) {
         super(message);
 
         this.fieldName = fieldName;
-        this.fieldValues = fieldValues;
+        this.fieldValues = fieldValues == null ? null : fieldValues.clone();
     }
 
     public IllegalFieldValueException(String message, String fieldName, String[] fieldValues, Throwable cause) {
         super(message, cause);
 
         this.fieldName = fieldName;
-        this.fieldValues = fieldValues;
+        this.fieldValues = fieldValues == null ? null : fieldValues.clone();
     }
 
     public IllegalFieldValueException(String fieldName, String[] fieldValues, Throwable cause) {
         super(cause);
 
         this.fieldName = fieldName;
-        this.fieldValues = fieldValues;
+        this.fieldValues = fieldValues == null ? null : fieldValues.clone();
     }
 
     public String   getFieldName()   { return fieldName; }

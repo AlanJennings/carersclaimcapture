@@ -46,14 +46,14 @@ public class SessionManager {
         private String              sessionId;
         private Map<String, Object> data;
 
-        private Session(String sessionId, Map<String, Object> data) {
+        protected Session(String sessionId, Map<String, Object> data) {
             Parameters.validateMandatoryArgs(new Object[]{sessionId, data}, new String[]{"sessionId", "data"});
 
             this.sessionId = sessionId;
             this.data = data;
         }
 
-        private Session() {
+        protected Session() {
             this(UUID.randomUUID().toString(), new HashMap<>());
         }
 

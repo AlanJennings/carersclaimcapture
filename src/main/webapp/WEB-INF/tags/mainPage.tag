@@ -2,14 +2,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<%@ attribute name="page" required="true" %>
-
+<%@ attribute name="page" %>
 <%@ attribute name="pageTitle" %>
 <%@ attribute name="pageTitleKey" %>
 <%@ attribute name="currentPage" %>
 <%@ attribute name="analytics" %>   
 
 <%-- TODO can we send analytics from the server side as well? might be able to add useful information --%>
+<t:defaultValue value="${pageScope.page}" defaultValue="${requestScope['javax.servlet.forward.servlet_path']}" var="page" />
+<t:defaultValue value="${pageScope.currentPage}" defaultValue="${page}" var="currentPage" />
 <t:defaultValue value="${pageScope.analytics}" defaultValue="true" var="analytics" />
 <t:defaultValue value="${pageScope.pageTitleKey}" defaultValue="${page}.pageTitle" var="pageTitleKey" />
 <c:if test="${empty pageTitle}" >
@@ -167,3 +168,5 @@
         <div id="global-app-error" class="app-error hidden"></div>            
     </body>
 </html>
+
+request.servletPath = ${requestScope['javax.servlet.forward.servlet_path']}
