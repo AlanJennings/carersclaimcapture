@@ -4,9 +4,9 @@
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.approve" currentPage="${currentPage}">
+<t:mainPage >
 
-    <t:pageContent errors="${validationErrors}" page="page.approve" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
 
         <input type="hidden" id="allowedToContinue" name="allowedToContinue" value="true"/>
         <input type="hidden" id="js" name="jsEnabled" value="false">

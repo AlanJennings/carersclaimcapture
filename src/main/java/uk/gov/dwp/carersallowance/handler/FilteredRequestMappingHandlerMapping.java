@@ -30,25 +30,19 @@ public class FilteredRequestMappingHandlerMapping extends RequestMappingHandlerM
 
     private AntPathMatcher pathMatcher;
     private List<String>   excludePatterns;
-//    private String         defaultControllerName;
 
     public FilteredRequestMappingHandlerMapping() {
         pathMatcher = new AntPathMatcher();
         excludePatterns = new ArrayList<>();
     }
 
-//    public void setDefaultController(String className) {
-//        if(StringUtils.isBlank(className)) {
-//            defaultControllerName = null;
-//        }
-//        defaultControllerName = className;
-//    }
-
-    /**
-     * @deprecated try this disabled and see if it stil works.
-     */
+    @Override
     public void setDefaultHandler(Object defaultHandler) {
-        super.setDefaultHandler(defaultHandler);
+        // do nothing
+        //
+        // this overrides the underlying defaultHandler which is called when
+        // getHandlerInternal returns null (therefore stopping this handler
+        // from "not handling" a request (e.g. for excluded paths)
     }
 
     public void setExclude(String pattern) {
@@ -70,6 +64,12 @@ public class FilteredRequestMappingHandlerMapping extends RequestMappingHandlerM
 
             try {
                 Object controller = getApplicationContext().getBean(DefaultFormController.class);   // TODO try this with className
+                if(controller instanceof DefaultFormController) {
+                    DefaultFormController defaultController = (DefaultFormController)controller;
+                    if(defaultController.supportsRequest(request) == false) {
+                        return null;
+                    }
+                }
                 HandlerMethod handlerMethod = new HandlerMethod(controller, "handleRequest", HttpServletRequest.class, Model.class);
                 return handlerMethod;
             } catch (NoSuchMethodException e) {

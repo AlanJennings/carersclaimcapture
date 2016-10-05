@@ -4,9 +4,9 @@
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.nationality-and-residency" currentPage="${currentPage}">
+<t:mainPage>
 
-    <t:pageContent errors="${validationErrors}" page="page.nationality-and-residency" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
 
         <t:radiobuttons name="nationality"  optionValues="British|Another nationality" optionLabelKeys="British|Other"/>
 

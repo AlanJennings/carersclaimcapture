@@ -169,4 +169,3 @@
     </body>
 </html>
 
-request.servletPath = ${requestScope['javax.servlet.forward.servlet_path']}

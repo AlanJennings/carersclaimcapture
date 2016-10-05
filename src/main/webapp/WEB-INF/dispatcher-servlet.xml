@@ -15,11 +15,9 @@
     <mvc:default-servlet-handler />
     <mvc:annotation-driven ignore-default-model-on-redirect="true" />
 
-    <bean class="uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultFormController"></bean>
-    
+    <!-- Note: defaultHandler parameter has been disabled in this class -->
     <bean class="uk.gov.dwp.carersallowance.handler.FilteredRequestMappingHandlerMapping">
         <property name="order" value="0" /> <!-- If this is not set, it ignores it -->
-        <!-- Do not set the defaultHandler property, this is called when no controller is found, including excluded urls -->
         <property name="exclude"><value>/assets/**</value></property>
         <!-- 
             bizarelly spring does not allow you to set the same property twice, (the workarounds

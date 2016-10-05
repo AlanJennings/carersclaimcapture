@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
-//TODO
 @Controller
 public class NationalityController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(NationalityController.class);
@@ -58,30 +57,31 @@ public class NationalityController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "nationality");
-        validateMandatoryField(fieldValues, "alwaysLivedInUK");
-        validateMandatoryField(fieldValues, "trip52Weeks");
-
-        if(fieldValue_Equals(fieldValues, "nationality", "Another nationality")) {
-            validateMandatoryField(fieldValues, "actualnationality");
-        }
-
-        if(fieldValue_Equals(fieldValues, "alwaysLivedInUK", "no")) {
-            validateMandatoryField(fieldValues, "liveInUKNow");
-
-            if(fieldValue_Equals(fieldValues, "liveInUKNow", "yes")) {
-                validateMandatoryField(fieldValues, "arrivedInUK");
-
-                if(fieldValue_Equals(fieldValues, "arrivedInUK", "less")) {
-                    validateMandatoryDateField(fieldValues, "arrivedInUKDate");
-                    validateMandatoryField(fieldValues, "arrivedInUKFrom");
-                }
-            }
-        }
-
-        if(fieldValue_Equals(fieldValues, "trip52Weeks", "yes")) {
-            validateMandatoryField(fieldValues, "tripDetails");
-        }
+        super.validate(fieldValues, fields);
+//        validateMandatoryField(fieldValues, "nationality");
+//        validateMandatoryField(fieldValues, "alwaysLivedInUK");
+//        validateMandatoryField(fieldValues, "trip52Weeks");
+//
+//        if(fieldValue_Equals(fieldValues, "nationality", "Another nationality")) {
+//            validateMandatoryField(fieldValues, "actualnationality");
+//        }
+//
+//        if(fieldValue_Equals(fieldValues, "alwaysLivedInUK", "no")) {
+//            validateMandatoryField(fieldValues, "liveInUKNow");
+//
+//            if(fieldValue_Equals(fieldValues, "liveInUKNow", "yes")) {
+//                validateMandatoryField(fieldValues, "arrivedInUK");
+//
+//                if(fieldValue_Equals(fieldValues, "arrivedInUK", "less")) {
+//                    validateMandatoryDateField(fieldValues, "arrivedInUKDate");
+//                    validateMandatoryField(fieldValues, "arrivedInUKFrom");
+//                }
+//            }
+//        }
+//
+//        if(fieldValue_Equals(fieldValues, "trip52Weeks", "yes")) {
+//            validateMandatoryField(fieldValues, "tripDetails");
+//        }
 
         LOG.trace("Ending BenefitsController.validate");
     }

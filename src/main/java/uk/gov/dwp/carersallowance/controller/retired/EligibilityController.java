@@ -1,16 +1,19 @@
-package uk.gov.dwp.carersallowance.controller;
+package uk.gov.dwp.carersallowance.controller.retired;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
 
+import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
-public class ThirdPartyController extends AbstractFormController {
+public class EligibilityController extends AbstractFormController {
 
-    public ThirdPartyController(SessionManager sessionManager, MessageSource messageSource) {
+    @Autowired
+    public EligibilityController(SessionManager sessionManager, MessageSource messageSource) {
         super(sessionManager, messageSource);
     }
 
@@ -21,13 +24,5 @@ public class ThirdPartyController extends AbstractFormController {
     public String postForm(HttpServletRequest request, HttpSession session, Model model) {
         return super.postForm(request, session, model);
     }
-
-//    protected void validate(Map<String, String[]> fieldValues, String[] fields) {
-//
-//        validateMandatoryField(fieldValues, "thirdParty");
-//        if(fieldValue_Equals(fieldValues, "thirdParty", "no")) {
-//            validateMandatoryField(fieldValues, "nameAndOrganisation");
-//        }
-//
-//    }
 }
+

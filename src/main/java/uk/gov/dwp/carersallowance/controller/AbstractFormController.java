@@ -1,5 +1,6 @@
 package uk.gov.dwp.carersallowance.controller;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,8 +35,8 @@ import uk.gov.dwp.carersallowance.session.UnknownRecordException;
 import uk.gov.dwp.carersallowance.utils.CollectionUtils;
 import uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper;
 import uk.gov.dwp.carersallowance.utils.Parameters;
-import uk.gov.dwp.carersallowance.validations.FormValidationError;
-import uk.gov.dwp.carersallowance.validations.ValidationError;
+import uk.gov.dwp.carersallowance.validations.FormValidations;
+import uk.gov.dwp.carersallowance.validations.ValidationSummary;
 
 // TODO SuppressWarnings temporary, all complaints largely true. Remove them later and re-analyze
 public class AbstractFormController {
@@ -453,6 +454,20 @@ public class AbstractFormController {
         return enabled;
     }
 
+    public boolean isEmpty(String[] values) {
+        if(values == null) {
+            return true;
+        }
+
+        // None of them are populated, even if there is more than one
+        for(String value: values) {
+            if(StringUtils.isEmpty(value) == false) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * @return the message or null if it does not exist
      */
@@ -743,20 +758,6 @@ public class AbstractFormController {
             return null;
         }
         return value.trim();
-    }
-
-    private boolean isEmpty(String[] values) {
-        if(values == null) {
-            return true;
-        }
-
-        // None of them are populated, even if there is more than one
-        for(String value: values) {
-            if(StringUtils.isEmpty(value) == false) {
-                return false;
-            }
-        }
-        return true;
     }
 
     protected void addFormError(String id, String displayName, String errorMessage) {
@@ -1243,103 +1244,24 @@ public class AbstractFormController {
      * @param fields the names of the fields the form uses (from the resource bundle)
      */
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
-        LOG.trace("Starting BenefitsController.validate");
+        LOG.trace("Starting AbstractFormController.validate");
 
         if(fields == null) {
             return;
         }
 
-        // build a dependency tree
-        // .validation.date
-        // .validation.dependency
-
-
-        // the rules can be cached
-        String mandatoryValidationFormat = "%s.validation.mandatory";
-
-        LOG.debug("fields = {}", fields == null ? null : Arrays.asList(fields));
-        for(String field: fields) {
-            LOG.debug("Field = {}", field);
-            String rule = String.format(mandatoryValidationFormat, field);
-            LOG.debug("rule = {}", rule);
-            String mandatoryValidationStr = this.getMessageSource().getMessage(rule, null, null, Locale.getDefault());
-            LOG.debug("mandatoryValidationStr = {}", mandatoryValidationStr);
-            boolean mandatoryValidation = Boolean.valueOf(mandatoryValidationStr);
-            LOG.debug("mandatoryValidation = {}", mandatoryValidation);
-            if(mandatoryValidation) {
-                validateMandatoryField(fieldValues, field);
-            }
+        try {
+            FormValidations validations = new FormValidations(this.getMessageSource(), "pageName not known", fields);
+            validations.validate(getValidationSummary(), getMessageSource(), fieldValues);
+        } catch (ParseException e) {
+            throw new IllegalStateException("Unable to read validation configuration.");
         }
 
-        LOG.trace("Ending BenefitsController.validate");
+        LOG.trace("Ending AbstractFormController.validate");
     }
 
-    public static class ValidationSummary {
-        private List<ValidationError> formErrors;
-
-        public ValidationSummary() {
-            formErrors = new ArrayList<>();
-        }
-
-        public List<ValidationError> getFormErrors()  { return formErrors; }
-
-        protected void addFormError(String id, String displayName, String errorMessage) {
-            formErrors.add(new FormValidationError(id, displayName, errorMessage));
-        }
-
-        public void reset() {
-            formErrors.clear();
-        }
-
-        public boolean hasFormErrors() {
-            return !formErrors.isEmpty();
-        }
-
-        public String getErrorDisplayName(String id) {
-            ValidationError error = getError(id);
-            if(error == null) {
-                return null;
-            }
-            return error.getDisplayName();
-        }
-
-        public String getErrorMessage(String id) {
-            ValidationError error = getError(id);
-            if(error == null) {
-                return null;
-            }
-            return error.getErrorMessage();
-        }
-
-        public ValidationError getError(String id) {
-            if(formErrors == null || StringUtils.isEmpty(id)) {
-                return null;
-            }
-
-            for(ValidationError error: formErrors) {
-                if(id.equals(error.getId())) {
-                    return error;
-                }
-            }
-
-            return null;
-        }
-
-        public boolean hasError(String id) {
-            ValidationError error = getError(id);
-            return error != null;
-        }
-
-        public String toString() {
-            StringBuffer buffer = new StringBuffer();
-
-            buffer.append(this.getClass().getName()).append("@").append(System.identityHashCode(this));
-            buffer.append("=[");
-            buffer.append(", formErrors = ").append(formErrors);
-            buffer.append("]");
-
-            return buffer.toString();
-        }
+    public interface Validation {
+        boolean validate(String value);
     }
 
     public static class ValidationPatterns {

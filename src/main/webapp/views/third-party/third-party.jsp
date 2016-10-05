@@ -4,9 +4,9 @@
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.contactDetails" currentPage="${currentPage}">
+<t:mainPage>
 
-    <t:pageContent errors="${validationErrors}" page="page.contactDetails" backLink="${previousPage}"> 
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}"> 
         
         <t:radiobuttons name="thirdParty" optionValues="yes|no" />
 

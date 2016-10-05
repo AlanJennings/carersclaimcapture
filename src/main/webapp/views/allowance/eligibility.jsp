@@ -4,9 +4,9 @@
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.eligibility" currentPage="${currentPage}">
+<t:mainPage>
     
-    <t:pageContent errors="${validationErrors}" page="page.eligibility" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
     
         <t:yesnofield name="over35HoursAWeek" />
         

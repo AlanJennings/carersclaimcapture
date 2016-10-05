@@ -1,5 +1,7 @@
 package uk.gov.dwp.carersallowance.controller.defaultcontoller;
 
+import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -26,11 +28,43 @@ import uk.gov.dwp.carersallowance.utils.Parameters;
 public class DefaultFormController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultFormController.class);
 
+    private static final String HTTP_POST = "POST";
+    private static final String HTTP_GET = "GET";
+
     @Autowired
     public DefaultFormController(SessionManager sessionManager, MessageSource messageSource) {
         super(sessionManager, messageSource);
     }
 
+    public boolean supportsRequest(HttpServletRequest request) {
+        LOG.trace("Started DefaultFormController.supportsRequest");
+        Parameters.validateMandatoryArgs(request, "request");
+        try {
+            String method = request.getMethod();
+            if(HTTP_GET.equalsIgnoreCase(method) == false && HTTP_POST.equalsIgnoreCase(method) == false) {
+                LOG.info("Unsupported request method: {}", method);
+                return false;
+            }
+
+            String path = request.getServletPath();
+            LOG.info("method = {}, path = {}", method, path);
+            String fieldsKey = path + ".fields";
+            String fields = getMessageSource().getMessage(fieldsKey, null, null, Locale.getDefault()); // If there are no fields, but is an entry do we get null or ""?
+            if(fields == null) {
+                LOG.info("Unsupported request: {}", path);
+                return false;
+            }
+            return true;
+
+        } finally {
+            LOG.trace("Ending DefaultFormController.supportsRequest");
+        }
+    }
+
+    /**
+     * Data driven request holder
+     * @throws NoSuchRequestHandlingMethodException
+     */
     public String handleRequest(HttpServletRequest request, Model model) throws NoSuchRequestHandlingMethodException {
         LOG.trace("Started DefaultFormController.handleRequest");
         Parameters.validateMandatoryArgs(request, "request");
@@ -39,9 +73,9 @@ public class DefaultFormController extends AbstractFormController {
             String method = request.getMethod();
 
             LOG.info("method = {}, path = {}", method, path);
-            if("GET".equalsIgnoreCase(method)) {
+            if(HTTP_GET.equalsIgnoreCase(method)) {
                 return super.showForm(request, model);
-            } else if("POST".equalsIgnoreCase(method)) {
+            } else if(HTTP_POST.equalsIgnoreCase(method)) {
                 return super.postForm(request, request.getSession(), model);
             } else {
                 LOG.error("Request method {} is not supported in request: {}", method, path);
