@@ -18,7 +18,7 @@ public class FormValidations {
     private static final Logger LOG = LoggerFactory.getLogger(FormValidations.class);
 
     private static final String VALIDATION_DEPENDENCY_KEY_FORMAT = "%s.validation.dependency";
-    private static final String DEFAULT_FIELD_NAMES_KEY_FORMAT   = "%s..fields";
+    private static final String DEFAULT_FIELD_NAMES_KEY_FORMAT   = "%s.fields";
 
     private String                        formName;
     private List<String>                  fields;
@@ -90,23 +90,29 @@ public class FormValidations {
         LOG.trace("Started FormValidations.initValidations");
         try {
             Map<String, List<Validation>> results = new HashMap<>();
-            // add mandatory validations
-            LOG.debug("Adding mandatory validations");
-            Validation mandatoryValidation = ValidationFactory.getValidation(ValidationType.MANDATORY);
-            for(String field: fields) {
-                String key = String.format(ValidationType.MANDATORY.getKeyFormat(), field);    // e.g. nameAndOrganisation.validation.mandatory
-                String value = getMessage(messageSource, key);
-                LOG.debug("{} = {}", key, value);
-                if(Boolean.parseBoolean(value)) {
-                    List<Validation> fieldValidations = results.get(field);
-                    if(fieldValidations == null) {
-                        fieldValidations = new ArrayList<>();
-                        results.put(field,  fieldValidations);
-                    } else {
-                        LOG.debug("Adding to existing validations: {}", fieldValidations);
+
+            for(ValidationType validationType: ValidationType.values()) {
+                // add mandatory validations
+                LOG.debug("Adding validation: {}", validationType);
+                for(String field: fields) {
+                    String key = String.format(validationType.getKeyFormat(), field);    // e.g. nameAndOrganisation.validation.mandatory
+                    String condition = getMessage(messageSource, key);
+                    LOG.debug("{} = {}", key, condition);
+
+                    ValidationFactory validationFactory = new ValidationFactory(messageSource);
+                    Validation validation = validationFactory.getValidation(validationType, condition);
+                    if(validation != null) {
+                        // add to the field validations for this field
+                        List<Validation> fieldValidations = results.get(field);
+                        if(fieldValidations == null) {
+                            fieldValidations = new ArrayList<>();
+                            results.put(field,  fieldValidations);
+                        } else {
+                            LOG.debug("Adding to existing validations: {}", fieldValidations);
+                        }
+                        LOG.info("Adding field({}) validation({})", field, validation);
+                        fieldValidations.add(validation);
                     }
-                    LOG.info("Adding field({}) validation({})", field, mandatoryValidation);
-                    fieldValidations.add(mandatoryValidation);
                 }
             }
 
@@ -127,6 +133,7 @@ public class FormValidations {
                 String rawDependency = getMessage(messageSource, key);                 // e.g. thirdParty=no
                 LOG.debug("{} = {}", key, rawDependency);
                 if(rawDependency != null) {
+                    rawDependency = trimQuotes(rawDependency);
                     LOG.info("Adding field({}) dependency {} = {}", field, key, rawDependency);
                     try {
                         Dependency dependency = Dependency.parseSingleLine(rawDependency);
@@ -159,6 +166,7 @@ public class FormValidations {
                 validationSummary = new ValidationSummary();
             }
 
+            LOG.debug("Validating Fields: {}", fields);
             for(String field: fields) {
                 LOG.debug("validating {}", field);
                 if(validations.containsKey(field) == false) {
@@ -190,22 +198,46 @@ public class FormValidations {
      * for an enclosing fold-out have been fulfilled)
      */
     private boolean areDependenciesFulfilled(String field, Map<String, String[]> fieldValues) {
-        Parameters.validateMandatoryArgs(field, "field");
+        LOG.trace("Started FormValidations.areDependenciesFulfilled");
+        try {
+            Parameters.validateMandatoryArgs(field, "field");
+            LOG.debug("Checking dependencies for field: '{}'", field);
 
-        Dependency dependency = dependencies.get(field);
-        if(dependency == null) {
-            // this field has no dependencies, so the validations are all enabled
-            return true;
+            Dependency dependency = dependencies.get(field);
+            if(dependency == null) {
+                // this field has no dependencies, so the validations are all enabled
+                LOG.debug("No dependencies for field, skipping");
+                return true;
+            }
+
+            String[] values = fieldValues.get(dependency.getDependantField());
+            LOG.debug("dependent field({}) required value = {}, actual values = {}", dependency.getDependantField(), dependency.getFieldValue(), values == null ? null : Arrays.asList(values));
+            boolean fulfilled = dependency.isFulfilled(values);
+            if(fulfilled == false) {
+                LOG.debug("condition is not fulfilled");
+                return false;
+            }
+
+            // make sure the dependent field is enabled.
+            LOG.debug("Condition is met, checking parent dependencies");
+            return areDependenciesFulfilled(dependency.getDependantField(), fieldValues);
+        } finally {
+            LOG.trace("Ending FormValidations.areDependenciesFulfilled");
+        }
+    }
+
+    private String trimQuotes(String string) {
+        if(string == null) {
+            return null;
         }
 
-        String[] values = fieldValues.get(field);
-        boolean fulfilled = dependency.isFulfilled(values);
-        if(fulfilled == false) {
-            return false;
+        string = string.trim();
+        if(string.length() >= 2 && string.charAt(0) == '"' && string.charAt(string.length() -1) == '"') {
+            LOG.debug("Trimming external quotes");
+            return string.substring(1, string.length() -1);
         }
 
-        // make sure the dependent field is enabled.
-        return areDependenciesFulfilled(dependency.getDependantField(), fieldValues);
+        return string;
     }
 
     public String toString() {

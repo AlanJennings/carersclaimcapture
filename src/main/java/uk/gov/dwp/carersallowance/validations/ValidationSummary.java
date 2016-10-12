@@ -3,9 +3,13 @@ package uk.gov.dwp.carersallowance.validations;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 public class ValidationSummary {
+    private static final Logger LOG = LoggerFactory.getLogger(ValidationSummary.class);
+
     private List<ValidationError> formErrors;
 
     public ValidationSummary() {
@@ -15,7 +19,9 @@ public class ValidationSummary {
     public List<ValidationError> getFormErrors()  { return formErrors; }
 
     public void addFormError(String id, String displayName, String errorMessage) {
-        formErrors.add(new FormValidationError(id, displayName, errorMessage));
+        FormValidationError error = new FormValidationError(id, displayName, errorMessage);
+        LOG.debug("Adding form error {}", error);
+        formErrors.add(error);
     }
 
     public void reset() {

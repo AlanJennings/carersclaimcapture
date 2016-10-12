@@ -1,13 +1,15 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %> 
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.your-course-details" currentPage="${currentPage}" analytics="true">
+<t:mainPage analytics="true">
 
-    <t:pageContent errors="${validationErrors}" page="page.your-course-details" backLink="${previousPage}">
-
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
+        
         <t:yesnofield name="beenInEducationSinceClaimDate" />
 
         <t:hiddenPanel id="educationWrap" triggerId="beenInEducationSinceClaimDate" triggerValue="yes">

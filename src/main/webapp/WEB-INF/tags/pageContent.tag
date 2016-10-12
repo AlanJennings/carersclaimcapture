@@ -9,7 +9,7 @@
 <%@ attribute name="backLink" %>
 <%@ attribute name="nextButtonTextKey" %>
     
-<%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+<%@ attribute name="errors" type="uk.gov.dwp.carersallowance.validations.ValidationSummary"%>
 <t:defaultValue value="${pageScope.page}" defaultValue="${requestScope['javax.servlet.forward.servlet_path']}" var="page" />
 <t:defaultValue value="${pageScope.nextButtonTextKey}" defaultValue="next" var="nextButtonTextKey" />
 <t:defaultValue value="${pageScope.pageTitleKey}" defaultValue="${page}.pageTitle" var="pageTitleKey" />

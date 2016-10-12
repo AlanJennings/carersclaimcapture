@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.retired;
+package uk.gov.dwp.carersallowance.controller_retired;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -10,10 +10,10 @@ import org.springframework.ui.Model;
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
-public class EligibilityController extends AbstractFormController {
+public class BenefitsController extends AbstractFormController {
 
     @Autowired
-    public EligibilityController(SessionManager sessionManager, MessageSource messageSource) {
+    public BenefitsController(SessionManager sessionManager, MessageSource messageSource) {
         super(sessionManager, messageSource);
     }
 
@@ -25,4 +25,3 @@ public class EligibilityController extends AbstractFormController {
         return super.postForm(request, session, model);
     }
 }
-

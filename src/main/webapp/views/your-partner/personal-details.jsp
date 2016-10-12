@@ -4,9 +4,9 @@
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.personal-details" currentPage="${currentPage}">
+<t:mainPage>
 
-    <t:pageContent errors="${validationErrors}" page="page.personal-details" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
     
         <t:pre>
             <p>We look at any money your partner gets from benefits when we work out if you can get Carer's Allowance.</p>

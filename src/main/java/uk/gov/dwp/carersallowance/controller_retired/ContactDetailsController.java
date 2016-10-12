@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller;
+package uk.gov.dwp.carersallowance.controller_retired;
 
 import java.util.Map;
 
@@ -14,7 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
+import uk.gov.dwp.carersallowance.validations.ValidationPatterns;
 
 @Controller
 public class ContactDetailsController extends AbstractFormController {
@@ -74,7 +76,7 @@ public class ContactDetailsController extends AbstractFormController {
 
         if(fieldValue_Equals(fieldValues, CARER_WANTS_EMAIL_CONTACT, "yes")) {
             validateMandatoryField(fieldValues,CARER_MAIL);
-            validateRegexField(fieldValues,"Your email address", CARER_MAIL, AbstractFormController.ValidationPatterns.EMAIL_REGEX);
+            validateRegexField(fieldValues,"Your email address", CARER_MAIL, ValidationPatterns.EMAIL_REGEX);
 
             validateMatchingValues(fieldValues,"Your email address", CARER_MAIL, "Confirm your email address", CARER_MAIL_CONFIRMATION, true);
         }

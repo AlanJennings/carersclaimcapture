@@ -4,9 +4,9 @@
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.more-about-the-care" currentPage="${currentPage}">
+<t:mainPage>
 
-    <t:pageContent errors="${validationErrors}" page="page.more-about-the-care" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
         <t:yesnofield name="spent35HoursCaring" />
 
         <t:group name="otherResidenceGroup" >

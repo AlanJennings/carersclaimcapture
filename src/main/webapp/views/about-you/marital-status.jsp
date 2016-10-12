@@ -4,9 +4,9 @@
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.marital-status" currentPage="${currentPage}">
+<t:mainPage>
 
-    <t:pageContent errors="${validationErrors}" page="page.marital-status" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
         
         <t:radiobuttons name="maritalStatus" 
                         optionValues="Married or civil partner|Single|Divorced or civil partnership dissolved|Widowed or surviving civil partner|Separated|Living with partner"

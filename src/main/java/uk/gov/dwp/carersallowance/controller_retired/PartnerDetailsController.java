@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller;
+package uk.gov.dwp.carersallowance.controller_retired;
 
 import java.util.Map;
 
@@ -14,7 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
+import uk.gov.dwp.carersallowance.validations.ValidationPatterns;
 
 @Controller
 public class PartnerDetailsController extends AbstractFormController {
@@ -63,7 +65,7 @@ public class PartnerDetailsController extends AbstractFormController {
             validateMandatoryField(fieldValues, "partnerFirstName");
             validateMandatoryField(fieldValues, "partnerSurname");
             validateMandatoryField(fieldValues, "partnerNatioNalInsuranceNumber");
-            validateRegexField(fieldValues,"National Insurance number", "partnernatioNalInsuranceNumber", AbstractFormController.ValidationPatterns.NINO_REGEX);
+            validateRegexField(fieldValues,"National Insurance number", "partnernatioNalInsuranceNumber", ValidationPatterns.NINO_REGEX);
             validateMandatoryDateField(fieldValues, "partnerDateOfBirth");
             validateMandatoryField(fieldValues, "partnerNationality");
             validateMandatoryField(fieldValues, "partnerSeparated");

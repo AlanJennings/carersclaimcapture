@@ -4,9 +4,9 @@
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.your-details" currentPage="${currentPage}">
+<t:mainPage>
 
-    <t:pageContent errors="${validationErrors}" page="page.your-details" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
     
         <t:textedit name="carerTitle" maxLength="20" />
         <t:textedit name="carerFirstName" maxLength="17" />

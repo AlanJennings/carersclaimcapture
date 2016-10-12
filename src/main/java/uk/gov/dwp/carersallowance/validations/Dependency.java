@@ -49,7 +49,7 @@ public class Dependency {
         }
 
         if(fieldNames.contains(dependantField) == false) {
-            throw new UnknownFieldException("Unknown field name: " + dependantField, dependantField);
+            throw new UnknownFieldException("Unknown field name: '" + dependantField + "'", dependantField);
         }
     }
 

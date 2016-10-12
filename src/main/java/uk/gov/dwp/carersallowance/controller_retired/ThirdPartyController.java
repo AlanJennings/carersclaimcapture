@@ -1,19 +1,17 @@
-package uk.gov.dwp.carersallowance.controller.retired;
+package uk.gov.dwp.carersallowance.controller_retired;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
-public class ApproveContoller extends AbstractFormController {
+public class ThirdPartyController extends AbstractFormController {
 
-    @Autowired
-    public ApproveContoller(SessionManager sessionManager, MessageSource messageSource) {
+    public ThirdPartyController(SessionManager sessionManager, MessageSource messageSource) {
         super(sessionManager, messageSource);
     }
 

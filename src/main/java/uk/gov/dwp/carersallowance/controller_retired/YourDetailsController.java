@@ -1,6 +1,5 @@
-package uk.gov.dwp.carersallowance.controller;
+package uk.gov.dwp.carersallowance.controller_retired;
 
-import java.util.Arrays;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 @Controller
@@ -67,15 +67,4 @@ public class YourDetailsController extends AbstractFormController {
         LOG.trace("Ending YourDetailsController.validate");
     }
 
-    protected void validate(Map<String, String[]> fieldValues, String[] fields, String[] enabledFields) {
-
-        LOG.info("EnabledFields = {}", enabledFields == null ? null : Arrays.asList(enabledFields));
-
-        if(enabledFields != null) {
-            for(String field: enabledFields) {
-                LOG.debug("validating enabled field {}", field);
-                validateField(fieldValues, field);
-            }
-        }
-    }
 }

@@ -13,7 +13,7 @@
 <%@ attribute name="labelKeyArgs" %>
 <%@ attribute name="hintBeforeKey"%>
 <%@ attribute name="hintAfterKey"%>
-<%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+<%@ attribute name="errors" type="uk.gov.dwp.carersallowance.validations.ValidationSummary"%>
     
 <%@ attribute name="value"%>
 <%@ attribute name="useRawValue"%>

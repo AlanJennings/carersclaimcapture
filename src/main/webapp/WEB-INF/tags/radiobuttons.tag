@@ -16,7 +16,7 @@
 <%@ attribute name="outerStyle" %>
 <%@ attribute name="value" %>
     
-<%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+<%@ attribute name="errors" type="uk.gov.dwp.carersallowance.validations.ValidationSummary"%>
 
 <t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
 <t:defaultValue value="${pageScope.useRawValue}" defaultValue="false" var="useRawValue" />

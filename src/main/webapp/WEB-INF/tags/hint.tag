@@ -5,6 +5,7 @@
 <%@ attribute name="tagNested" %>
 <%@ attribute name="hintText" %>
 <%@ attribute name="hintTextKey" %>
+<%@ attribute name="args" %>
 <%@ attribute name="parentName" %>
 <%@ attribute name="element" %>
 
@@ -17,10 +18,13 @@
 <%--TODO need to add support for args here --%>
 <c:if test="${empty pageScope.hintText}">
     <c:if test="${not empty pageScope.hintTextKey}">
-        <c:set var="hintText"><t:message code="${pageScope.hintTextKey}" /></c:set>
+        <c:set var="hintText"><t:message code="${pageScope.hintTextKey}" args="${pageScope.args}" /></c:set>
     </c:if>
     <c:if test="${empty pageScope.hintTextKey}">
-        <c:set var="hintText"><t:message parentName="${pageScope.parentName}" element="${pageScope.element}" /></c:set>
+        <c:if test="${empty pageScope.args}">
+            <c:set var="args"><t:message parentName="${pageScope.parentName}" element="${pageScope.element}.args" /></c:set>
+        </c:if>
+        <c:set var="hintText"><t:message parentName="${pageScope.parentName}" element="${pageScope.element}" args="${pageScope.args}" /></c:set>
     </c:if>    
 </c:if>
 

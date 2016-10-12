@@ -11,7 +11,7 @@
 <%@ attribute name="hintBeforeKey" %>
 <%@ attribute name="hintAfterKey" %>
 
-<%@ attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+<%@ attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.validations.ValidationSummary"%>
 
 <t:component tagType="group"
              name="${pageScope.name}" 

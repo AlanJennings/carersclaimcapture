@@ -1,21 +1,42 @@
 <%-- 
     Wrapper for spring resource bundle message
-    There are a load of jsp comments in here to avoid adding a load of whitespace to the output
+    There are a load of jsp comments in here to avoid adding lots of whitespace to the output
  
 --%><%@ tag description="Message Tag" pageEncoding="UTF-8"%><%--
 --%><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><%--
 --%><%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%><%--
-       
---%><%@ attribute name="code" required="false" type="java.lang.String"%><%-- 
---%><%@ attribute name="parentName" required="false" type="java.lang.String"%><%--
---%><%@ attribute name="element" required="false" type="java.lang.String"%><%--
---%><%@ attribute name="args" required="false" type="java.lang.String"%><%--
---%><c:if test="${not empty pageScope.code}"><%--
-    --%><spring:message code="${pageScope.code}" text="\${${pageScope.code}}" var="messageText" arguments="${pageScope.args}" argumentSeparator="|" /><%--
---%></c:if><%-- 
---%><c:if test="${empty pageScope.message && not empty pageScope.parentName && not empty pageScope.element}"><%-- 
-    --%><spring:message code="${pageScope.parentName}.${pageScope.element}" text="" var="messageText" arguments="${pageScope.args}" argumentSeparator="|" /><%-- 
---%></c:if><%-- 
+--%><%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %><%--
+--%><%@ taglib prefix="t" tagdir="/WEB-INF/tags" %><%--
+
+--%><%@ attribute name="code" %><%-- 
+--%><%@ attribute name="parentName" %><%--
+--%><%@ attribute name="element" %><%--
+--%><%@ attribute name="args" %><%--
+--%><%--
+        If code is defined, then set empty value to a text representation of code, as it should exist
+        if args is not predefined, then load is from the messageSource by appending .args to the 'code' key,
+        this populates args with the value in the message properties, but does not interpret them 
+--%><%--
+--%><c:if test="${not empty pageScope.code}">
+        <c:set var="emptyValue" value="\${${pageScope.code}}" />
+        <c:if test="${not empty pageScope.args}">
+            <spring:message code="${pageScope.code}.args" text="" var="args" />
+        </c:if>
+    </c:if><%--
+--%><%--
+        If code is not populated then set code to parentName.element and use that instead, set the emptyValue
+        to blank as it is optional.  Also set args to parentName.element.args and ignore args even if it is populated
+--%><%--
+--%><c:if test="${empty pageScope.code}"><%--
+    --%><c:set var="emptyValue" value="" /><%--
+    --%><c:set var="code" value="${pageScope.parentName}.${pageScope.element}" /><%--
+    --%><spring:message code="${pageScope.code}.args" text="" var="args" /><%--
+--%></c:if><%--
+    
+    pass the un-interpreted args into the message, then interpret them after they have been embedded in the output
+    
+--%><spring:message code="${pageScope.code}" text="${emptyValue}" arguments="${args}" argumentSeparator="|" var="messageText" /><%-- 
 --%><%-- 
-    Don't use c:out as it escapes html, and sometimes we watn to use html
---%>${pageScope.messageText}
+    Don't use c:out as it escapes html, and sometimes we want to use html
+--%><cads:resolveArgs>${pageScope.messageText}</cads:resolveArgs>
+

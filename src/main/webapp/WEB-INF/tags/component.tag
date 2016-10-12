@@ -9,7 +9,7 @@
 <%@ attribute name="id" %>
 <%@ attribute name="outerClass" %>
 <%@ attribute name="outerStyle" %>
-<%@ attribute name="errors" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+<%@ attribute name="errors" type="uk.gov.dwp.carersallowance.validations.ValidationSummary"%>
 
 <t:defaultValue value='${pageScope.outerClass}' defaultValue='form-group' var='outerClass' />
 <t:defaultValue value='${pageScope.tagNested}' defaultValue='false' var='tagNested' />

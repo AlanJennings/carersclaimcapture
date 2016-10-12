@@ -6,10 +6,36 @@
     <tlib-version>1.0</tlib-version>
     <uri>http://uk.gov.dwp.carersallowance/functions</uri>
 
+    <tag>
+        <name>date</name>
+        <description>
+            Collect the three separate dateName_day, dateName_month, dateName_year fields from the request
+            using the supplied dateName and render them as a display date using the supplied format
+        </description>
+        <tag-class>uk.gov.dwp.carersallowance.jsp.Date</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>dateName</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>format</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>resolveArgs</name>
+        <tag-class>uk.gov.dwp.carersallowance.jsp.ResolveArgs</tag-class>
+        <body-content>tagdependent</body-content>
+    </tag> 
+
     <function>
         <name>dateOffset</name>
-        <function-class>uk.gov.dwp.carersallowance.JspFunctions</function-class>
+        <function-class>uk.gov.dwp.carersallowance.jsp.Functions</function-class>
         <function-signature>java.lang.String dateOffset(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)</function-signature>
     </function>
-
+    
 </taglib> 

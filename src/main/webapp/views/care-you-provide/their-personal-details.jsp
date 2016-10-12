@@ -4,9 +4,9 @@
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.their-personal-details" currentPage="${currentPage}">
+<t:mainPage>
 
-    <t:pageContent errors="${validationErrors}" page="page.their-personal-details" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
 
         <t:textedit name="careeTitle" maxLength="20" /> 
         <t:textedit name="careeFirstName" maxLength="17" />
@@ -17,7 +17,7 @@
         <t:textedit name="careeRelationship" maxLength="35" />
         <t:yesnofield name="careeSameAddress" />
 
-        <t:hiddenPanel id="addressWrapper" triggerId="sameAddress" triggerValue="no">
+        <t:hiddenPanel id="addressWrapper" triggerId="careeSameAddress" triggerValue="no">
             <t:address name="careeAddress" maxlength="35" />
             <t:textedit name="careePostcode" maxLength="10" />
         </t:hiddenPanel>

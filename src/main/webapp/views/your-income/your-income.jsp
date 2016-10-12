@@ -8,7 +8,7 @@
 
     <t:pageContent errors="${validationErrors}" page="page.your-income" backLink="${previousPage}">
 
-        <t:yesnofield name="beenSelfEmployedSince1WeekBeforeClaim" labelKeyArgs="${cads:dateOffset(dateOfClaim_day, dateOfClaim_month, dateOfClaim_year, 'dd MMMMMMMMMM yyyy', '-1week')}"/>
+        <t:yesnofield name="beenSelfEmployedSince1WeekBeforeClaim" labelKeyArgs="${cads:dateOffset(dateOfClaim, 'dd MMMMMMMMMM yyyy', '-1week')}"/>
         <t:yesnofield name="beenEmployedSince6MonthsBeforeClaim" />
         <t:yesnofield name="hadOtherIncomeSinceClaimDate" />
 

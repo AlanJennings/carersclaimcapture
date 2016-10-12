@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller.retired;
+package uk.gov.dwp.carersallowance.controller_retired;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -10,10 +10,10 @@ import org.springframework.ui.Model;
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
-public class DisclaimerController extends AbstractFormController {
+public class ApproveContoller extends AbstractFormController {
 
     @Autowired
-    public DisclaimerController(SessionManager sessionManager, MessageSource messageSource) {
+    public ApproveContoller(SessionManager sessionManager, MessageSource messageSource) {
         super(sessionManager, messageSource);
     }
 

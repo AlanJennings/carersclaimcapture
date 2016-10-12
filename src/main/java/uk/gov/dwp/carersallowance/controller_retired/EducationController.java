@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller;
+package uk.gov.dwp.carersallowance.controller_retired;
 
 import java.util.Map;
 
@@ -14,18 +14,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 @Controller
-public class CareeDetailsController extends AbstractFormController {
-    private static final Logger LOG = LoggerFactory.getLogger(CareeDetailsController.class);
+public class EducationController extends AbstractFormController {
+    private static final Logger LOG = LoggerFactory.getLogger(EducationController.class);
 
-    private static final String PAGE_NAME     = "page.their-personal-details";
-    private static final String CURRENT_PAGE  = "/care-you-provide/their-personal-details";
+    private static final String PAGE_NAME     = "page.your-course-details";
+    private static final String CURRENT_PAGE  = "/education/your-course-details";
 
-// careeTitle, careeFirstName, careeMiddleName, careeSurname, careeNationalInsuranceNumber, careeDateOfBirth_day, careeDateOfBirth_month, careeDateOfBirth_year, careeRelationship, careeSameAddress, careeAddressLineOne, careeAddressLineTwo, careeAddressLineThree, careePostcode};
     @Autowired
-    public CareeDetailsController(SessionManager sessionManager, MessageSource messageSource) {
+    public EducationController(SessionManager sessionManager, MessageSource messageSource) {
         super(sessionManager, messageSource);
     }
 
@@ -58,13 +58,16 @@ public class CareeDetailsController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "careeTitle");
-        validateMandatoryField(fieldValues, "careeFirstName");
-        validateMandatoryField(fieldValues, "careeSurname");
-        validateMandatoryDateField(fieldValues, "careeDateOfBirth");
-        validateMandatoryField(fieldValues, "careeRelationship");
-        validateMandatoryField(fieldValues, "careeSameAddress");
-        // address and postcode are not mandatory
+        validateMandatoryField(fieldValues, "beenInEducationSinceClaimDate");
+
+        if(fieldValue_Equals(fieldValues, "beenInEducationSinceClaimDate", "yes")) {
+            validateMandatoryField(fieldValues, "courseTitle");
+            validateMandatoryField(fieldValues, "nameOfSchoolCollegeOrUniversity");
+            validateMandatoryField(fieldValues, "nameOfMainTeacherOrTutor");
+
+            validateMandatoryDateField(fieldValues, "educationStartDate");
+            validateMandatoryDateField(fieldValues, "educationeducationExpectedEndDate");
+        }
 
         LOG.trace("Ending BenefitsController.validate");
     }

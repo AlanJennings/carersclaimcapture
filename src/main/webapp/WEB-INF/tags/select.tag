@@ -13,7 +13,7 @@
 <%@ attribute name="additionalClasses" required="false" type="java.lang.String"%>
 <%@ attribute name="outerClass" required="false" type="java.lang.String"%>
 <%@ attribute name="outerStyle" required="false" type="java.lang.String"%>
-<%@ attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.controller.AbstractFormController.ValidationSummary"%>
+<%@ attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.validations.ValidationSummary"%>
 <%@ attribute name="optionLabelKeys" required="false" type="java.lang.String"%>
 <%@ attribute name="value" required="false" type="java.lang.String"%>
     

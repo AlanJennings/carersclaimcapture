@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller;
+package uk.gov.dwp.carersallowance.controller_retired;
 
 import java.util.Map;
 
@@ -14,17 +14,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 @Controller
-public class NationalityController extends AbstractFormController {
-    private static final Logger LOG = LoggerFactory.getLogger(NationalityController.class);
+public class CareeDetailsController extends AbstractFormController {
+    private static final Logger LOG = LoggerFactory.getLogger(CareeDetailsController.class);
 
-    private static final String PAGE_NAME     = "page.nationality-and-residency";
-    private static final String CURRENT_PAGE  = "/about-you/nationality-and-residency";
+    private static final String PAGE_NAME     = "page.their-personal-details";
+    private static final String CURRENT_PAGE  = "/care-you-provide/their-personal-details";
 
+// careeTitle, careeFirstName, careeMiddleName, careeSurname, careeNationalInsuranceNumber, careeDateOfBirth_day, careeDateOfBirth_month, careeDateOfBirth_year, careeRelationship, careeSameAddress, careeAddressLineOne, careeAddressLineTwo, careeAddressLineThree, careePostcode};
     @Autowired
-    public NationalityController(SessionManager sessionManager, MessageSource messageSource) {
+    public CareeDetailsController(SessionManager sessionManager, MessageSource messageSource) {
         super(sessionManager, messageSource);
     }
 
@@ -57,31 +59,13 @@ public class NationalityController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        super.validate(fieldValues, fields);
-//        validateMandatoryField(fieldValues, "nationality");
-//        validateMandatoryField(fieldValues, "alwaysLivedInUK");
-//        validateMandatoryField(fieldValues, "trip52Weeks");
-//
-//        if(fieldValue_Equals(fieldValues, "nationality", "Another nationality")) {
-//            validateMandatoryField(fieldValues, "actualnationality");
-//        }
-//
-//        if(fieldValue_Equals(fieldValues, "alwaysLivedInUK", "no")) {
-//            validateMandatoryField(fieldValues, "liveInUKNow");
-//
-//            if(fieldValue_Equals(fieldValues, "liveInUKNow", "yes")) {
-//                validateMandatoryField(fieldValues, "arrivedInUK");
-//
-//                if(fieldValue_Equals(fieldValues, "arrivedInUK", "less")) {
-//                    validateMandatoryDateField(fieldValues, "arrivedInUKDate");
-//                    validateMandatoryField(fieldValues, "arrivedInUKFrom");
-//                }
-//            }
-//        }
-//
-//        if(fieldValue_Equals(fieldValues, "trip52Weeks", "yes")) {
-//            validateMandatoryField(fieldValues, "tripDetails");
-//        }
+        validateMandatoryField(fieldValues, "careeTitle");
+        validateMandatoryField(fieldValues, "careeFirstName");
+        validateMandatoryField(fieldValues, "careeSurname");
+        validateMandatoryDateField(fieldValues, "careeDateOfBirth");
+        validateMandatoryField(fieldValues, "careeRelationship");
+        validateMandatoryField(fieldValues, "careeSameAddress");
+        // address and postcode are not mandatory
 
         LOG.trace("Ending BenefitsController.validate");
     }
