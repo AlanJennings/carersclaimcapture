@@ -30,6 +30,11 @@
         <name>resolveArgs</name>
         <tag-class>uk.gov.dwp.carersallowance.jsp.ResolveArgs</tag-class>
         <body-content>tagdependent</body-content>
+        <attribute>
+            <name>var</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag> 
 
     <function>

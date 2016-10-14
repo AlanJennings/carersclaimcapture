@@ -19,7 +19,7 @@
 --%><%--
 --%><c:if test="${not empty pageScope.code}">
         <c:set var="emptyValue" value="\${${pageScope.code}}" />
-        <c:if test="${not empty pageScope.args}">
+        <c:if test="${empty pageScope.args}">
             <spring:message code="${pageScope.code}.args" text="" var="args" />
         </c:if>
     </c:if><%--
@@ -33,10 +33,12 @@
     --%><spring:message code="${pageScope.code}.args" text="" var="args" /><%--
 --%></c:if><%--
     
-    pass the un-interpreted args into the message, then interpret them after they have been embedded in the output
+    interpreted args before passing to spring, to avoid confusing it
     
---%><spring:message code="${pageScope.code}" text="${emptyValue}" arguments="${args}" argumentSeparator="|" var="messageText" /><%-- 
+--%><cads:resolveArgs var="args">${pageScope.args}</cads:resolveArgs><%--
+--%><spring:message code="${pageScope.code}" text="${pageScope.emptyValue}" arguments="${pageScope.args}" argumentSeparator="|" var="messageText" /><%-- 
 --%><%-- 
     Don't use c:out as it escapes html, and sometimes we want to use html
+    interpret the message again, to support embedding arguments directly in the message
 --%><cads:resolveArgs>${pageScope.messageText}</cads:resolveArgs>
 

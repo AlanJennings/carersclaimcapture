@@ -21,10 +21,17 @@ import org.slf4j.LoggerFactory;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
 public class ResolveArgs extends BodyTagSupport {
-    private static final String CADS_TLD_PREFIX_END = "}";
-    private static final String CADS_TLD_PREFIX_START = "${cads:";
     private static final long serialVersionUID = 3407131412410043137L;
     private static final Logger LOG = LoggerFactory.getLogger(ResolveArgs.class);
+
+    private static final String CADS_TLD_PREFIX_END = "}";
+    private static final String CADS_TLD_PREFIX_START = "${cads:";
+
+    private String varName;
+
+    public void setVar(String value) {
+        varName = value;
+    }
 
     @Override
     public int doAfterBody() throws JspException {
@@ -39,7 +46,11 @@ public class ResolveArgs extends BodyTagSupport {
             String parsedString = evaluateExpression(jspAppContext, elContext, rawString);
             LOG.debug("parsedString = {}", parsedString);
 
-            getPreviousOut().print(parsedString);
+            if(StringUtils.isBlank(varName)) {
+                getPreviousOut().print(parsedString);
+            } else {
+                pageContext.setAttribute(varName, parsedString);
+            }
             return SKIP_BODY;
         } catch(IOException | RuntimeException e) {
             LOG.error("Unexpected exception: ", e);
@@ -215,7 +226,13 @@ public class ResolveArgs extends BodyTagSupport {
             return null;
         }
 
-        if(string.length() >= 2 && string.charAt(0) == '"' && string.charAt(string.length() - 1) == '"') {
+        if(string.length() < 2) {
+            return string;
+        }
+
+        // either single or double quotes
+        if((string.charAt(0) == '"' && (string.charAt(string.length() - 1) == '"'))
+        || (string.charAt(0) == '\'' && (string.charAt(string.length() - 1) == '\''))) {
             String trimmed = string.substring(1, string.length() - 1);
             LOG.debug("trimmed = '{}'", trimmed);
             return trimmed;

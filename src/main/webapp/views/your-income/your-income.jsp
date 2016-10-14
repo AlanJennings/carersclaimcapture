@@ -4,14 +4,18 @@
 <%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %> 
 <!DOCTYPE html>
 
-<t:mainPage page="page.your-income" currentPage="${currentPage}">
+<t:mainPage>
 
-    <t:pageContent errors="${validationErrors}" page="page.your-income" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
 
-        <t:yesnofield name="beenSelfEmployedSince1WeekBeforeClaim" labelKeyArgs="${cads:dateOffset(dateOfClaim, 'dd MMMMMMMMMM yyyy', '-1week')}"/>
+        <t:yesnofield name="beenSelfEmployedSince1WeekBeforeClaim"/>
         <t:yesnofield name="beenEmployedSince6MonthsBeforeClaim" />
         <t:yesnofield name="hadOtherIncomeSinceClaimDate" />
-
+<%--       
+        <spring:message code="ibeenInEducationSinceClaimDate.hintBefore.args" />
+        <spring:message code="ibeenInEducationSinceClaimDate.hintBefore.args" var="args"/>
+        <cads:resolveArgs var="args">${pageScope.args}</cads:resolveArgs>
+ --%>         
         <t:hiddenPanel id="otherIncomeWrap" triggerId="hadOtherIncomeSinceClaimDate" triggerValue="yes">
             <t:group name="otherIncomeGroup">
                 <t:checkbox name="yourIncome_sickpay" outerClass="no-class" />
