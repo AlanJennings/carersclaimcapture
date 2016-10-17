@@ -56,15 +56,4 @@ public class ConfirmValidation extends AbstractValidation {
             LOG.trace("Ending ConfirmValidation.validate");
         }
     }
-
-    /**
-     * true if case-insensitive 'true', otherwise false (uses {@link Boolean#parseBoolean(String)})
-     * Note: condition is null safe trimmed before comparison
-     */
-    public static boolean isEnabled(String condition) {
-        if(condition != null) {
-            condition = condition.trim();
-        }
-        return Boolean.parseBoolean(condition);
-    }
 }

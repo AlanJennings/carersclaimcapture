@@ -15,7 +15,7 @@ import uk.gov.dwp.carersallowance.utils.Parameters;
 public class RegexValidation extends AbstractValidation {
     private static final Logger LOG = LoggerFactory.getLogger(RegexValidation.class);
 
-    private String regex;
+    private String  regex;
     private Pattern pattern;
 
     public RegexValidation(String regex) {

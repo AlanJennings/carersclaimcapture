@@ -11,11 +11,7 @@
         <t:yesnofield name="beenSelfEmployedSince1WeekBeforeClaim"/>
         <t:yesnofield name="beenEmployedSince6MonthsBeforeClaim" />
         <t:yesnofield name="hadOtherIncomeSinceClaimDate" />
-<%--       
-        <spring:message code="ibeenInEducationSinceClaimDate.hintBefore.args" />
-        <spring:message code="ibeenInEducationSinceClaimDate.hintBefore.args" var="args"/>
-        <cads:resolveArgs var="args">${pageScope.args}</cads:resolveArgs>
- --%>         
+
         <t:hiddenPanel id="otherIncomeWrap" triggerId="hadOtherIncomeSinceClaimDate" triggerValue="yes">
             <t:group name="otherIncomeGroup">
                 <t:checkbox name="yourIncome_sickpay" outerClass="no-class" />

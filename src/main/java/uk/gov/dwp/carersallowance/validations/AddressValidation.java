@@ -41,22 +41,11 @@ public class AddressValidation extends AbstractValidation {
             }
 
             LOG.debug("insufficient address fields: {}", fieldName);
-            failValidation(validationSummary, messageSource, fieldName, ValidationType.ADDRESS.getProperty());
+            failValidation(validationSummary, messageSource, fieldName, ValidationType.ADDRESS_MANDATORY.getProperty());
 
             return false;
         } finally {
             LOG.trace("Ending AddressValidation.validate");
         }
-    }
-
-    /**
-     * true if case-insensitive 'true', otherwise false (uses {@link Boolean#parseBoolean(String)})
-     * Note: condition is null safe trimmed before comparison
-     */
-    public static boolean isEnabled(String condition) {
-        if(condition != null) {
-            condition = condition.trim();
-        }
-        return Boolean.parseBoolean(condition);
     }
 }

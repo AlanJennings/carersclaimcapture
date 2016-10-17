@@ -14,13 +14,18 @@ import uk.gov.dwp.carersallowance.utils.Parameters;
 public class DateValidation extends AbstractValidation {
     private static final Logger LOG = LoggerFactory.getLogger(DateValidation.class);
 
-    public static DateValidation INSTANCE = new DateValidation();
+    public static DateValidation MANDATORY_INSTANCE = new DateValidation(true);
+    public static DateValidation OPTIONAL_INSTANCE  = new DateValidation(false);
 
-    private DateValidation() {
+    private boolean mandatory;
+
+    private DateValidation(boolean mandatory) {
+        this.mandatory = mandatory;
     }
 
     /**
-     * Validate that all date fields are populated (field is mandatory) and they form a valid date
+     * Validate that all date fields are populated and they form a valid date
+     * We handle mandatory validation here as it is multiple fields, so can't use the mandatory validation
      * @param allfieldValues
      * @param id
      * @param fieldTitle
@@ -55,18 +60,21 @@ public class DateValidation extends AbstractValidation {
                 LOG.debug("Empty field");
                 if(populatedField) {
                     LOG.debug("also populated field");
-                    failValidation(validationSummary, messageSource, id, ValidationType.DATE.getProperty());
-                } else {
+                    failValidation(validationSummary, messageSource, id, ValidationType.DATE_MANDATORY.getProperty());
+                    LOG.debug("date is incomplete, returning false");
+                    return false;
+
+                } else if(mandatory) {
                     failValidation(validationSummary, messageSource, id, ValidationType.MANDATORY.getProperty());
+                    LOG.debug("date is mandatory, but empty, returning false");
+                    return false;
+                } else {
+                    LOG.debug("skipping date validation");
                 }
 
-                LOG.debug("Return false, date is incomplete");
-                return false;
-            }
-
-            if(isValidDate(day, month, year) == false) {
+            } else if(isValidDate(day, month, year) == false) {
                 LOG.debug("date is not valid, returning false");
-                failValidation(validationSummary, messageSource, id, ValidationType.DATE.getProperty());
+                failValidation(validationSummary, messageSource, id, ValidationType.DATE_MANDATORY.getProperty());
                 return false;
             }
 
@@ -144,17 +152,6 @@ public class DateValidation extends AbstractValidation {
         }
 
         return singleValue;
-    }
-
-    /**
-     * true if case-insensitive 'true', otherwise false (uses {@link Boolean#parseBoolean(String)})
-     * Note: condition is null safe trimmed before comparison
-     */
-    public static boolean isEnabled(String condition) {
-        if(condition != null) {
-            condition = condition.trim();
-        }
-        return Boolean.parseBoolean(condition);
     }
 
     public static void main(String[] args) {

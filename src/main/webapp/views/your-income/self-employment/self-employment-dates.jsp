@@ -4,9 +4,9 @@
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.self-employment-dates" currentPage="${currentPage}">
+<t:mainPage currentPage="${currentPage}">
 
-    <t:pageContent errors="${validationErrors}" page="page.self-employment-dates" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
         
         <t:yesnofield name="stillSelfEmployed" />
         
@@ -37,9 +37,9 @@
             <t:datefield name="startThisWork" />
             <t:yesnofield name="paidMoney" />
              
-             <t:hiddenPanel id="paidMoneyWrap" triggerId="paidMoney" triggerValue="yes" >
+            <t:hiddenPanel id="paidMoneyWrap" triggerId="paidMoney" triggerValue="yes" >
                 <t:datefield name="paidMoneyDate" />
-             </t:hiddenPanel>
+            </t:hiddenPanel>
                     
         </t:hiddenPanel>
 

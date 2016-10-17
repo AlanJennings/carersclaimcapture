@@ -1,8 +1,11 @@
 package uk.gov.dwp.carersallowance.validations;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.MessageSource;
 
 import uk.gov.dwp.carersallowance.utils.Parameters;
@@ -64,5 +67,22 @@ public abstract class AbstractValidation implements Validation {
         }
 
         return null;
+    }
+
+    public List<String> csvToList(String string) {
+        if(string == null) {
+            return null;
+        }
+    
+        String[] strings = string.split(",");
+        List<String> results = new ArrayList<>();
+        for(String result : strings) {
+            result = result.trim();
+            if(StringUtils.isEmpty(result) == false) {
+                results.add(result);
+            }
+        }
+    
+        return results;
     }
 }

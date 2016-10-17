@@ -27,24 +27,39 @@ public class ValidationFactory {
         switch(type) {
             case MANDATORY:
                 LOG.debug("Mandatory Validation");
-                if(MandatoryValidation.isEnabled(condition)) {
+                if(isValidationEnabled(condition)) {
                     return MandatoryValidation.INSTANCE;
                 }
                 break;
 
-            case DATE:
+            case DATE_MANDATORY:
                 LOG.debug("Date Validation");
-                if(DateValidation.isEnabled(condition)) {
-                    return DateValidation.INSTANCE;
+                if(isValidationEnabled(condition)) {
+                    return DateValidation.MANDATORY_INSTANCE;
                 }
                 break;
+
+            case DATE_OPTIONAL:
+                LOG.debug("Date Validation");
+                if(isValidationEnabled(condition)) {
+                    return DateValidation.OPTIONAL_INSTANCE;
+                }
+                break;
+
             case REGEX:
                 LOG.debug("Regex Validation");
                 return new RegexValidation(cleanupConditionValue(condition));
 
-            case ADDRESS:
+            case ADDRESS_MANDATORY:
                 LOG.debug("Address Validation");
-                if(AddressValidation.isEnabled(condition)) {
+                if(isValidationEnabled(condition)) {
+                    return AddressValidation.INSTANCE;
+                }
+                break;
+
+            case ADDRESS_OPTIONAL:
+                LOG.debug("Address Validation");
+                if(isValidationEnabled(condition)) {
                     return AddressValidation.INSTANCE;
                 }
                 break;
@@ -54,16 +69,33 @@ public class ValidationFactory {
                 return new ConfirmValidation(condition);
 
             case MAX_LENGTH:
+                LOG.debug("MaxLength Validation");
+                return new MaxLengthValidation(condition);
+
             case GROUP_ANY:
+                LOG.debug("GroupAny Validation");
+                return new GroupAnyValidation(condition);
+
             case GROUP_ALL:
-                LOG.error("Unsupported type: " + type);
-                break;
+                LOG.debug("Confirm Validation");
+                return new GroupAllValidation(condition);
 
             default:
                 throw new IllegalArgumentException("Unknown validation type: " + type);
         }
 
         return null;
+    }
+
+    /**
+     * true if case-insensitive 'true', otherwise false (uses {@link Boolean#parseBoolean(String)})
+     * Note: condition is null safe trimmed before comparison
+     */
+    private boolean isValidationEnabled(String condition) {
+        if(condition != null) {
+            condition = condition.trim();
+        }
+        return Boolean.parseBoolean(condition);
     }
 
     /**

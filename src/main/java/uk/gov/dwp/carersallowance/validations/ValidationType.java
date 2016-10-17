@@ -4,14 +4,16 @@ package uk.gov.dwp.carersallowance.validations;
  * In priority order, TODO this appears in AbstractFormController as well, and needs moving out of there
  */
 public enum ValidationType {
-    MANDATORY("mandatory", "%s.validation.mandatory"),              // done
+    MANDATORY("mandatory", "%s.validation.mandatory"),
     MAX_LENGTH("maxLength", "%s.validation.maxlength"),
-    DATE("date", "%s.validation.date"),                             // done
-    ADDRESS("address", "%s.validation.address"),                    // doing
+    DATE_MANDATORY("date", "%s.validation.date.mandatory"),             // These have to handle mandatory as they are multi-field validations
+    DATE_OPTIONAL("date", "%s.validation.date.optional"),               // These have to handle mandatory as they are multi-field validations
+    ADDRESS_MANDATORY("address", "%s.validation.address.mandatory"),    // These have to handle mandatory as they are multi-field validations
+    ADDRESS_OPTIONAL("address", "%s.validation.address.optional"),      // These have to handle mandatory as they are multi-field validations
     GROUP_ANY("group_any", "%s.validation.group_any"),
     GROUP_ALL("group_all", "%s.validation.group_all"),
-    REGEX("regex", "%s.validation.regex"),                          // done
-    CONFIRM_FIELD("confirm_field", "%s.validation.confirm_field");  // doing
+    REGEX("regex", "%s.validation.regex"),                              // note blank values are not checked against regex.
+    CONFIRM_FIELD("confirm_field", "%s.validation.confirm_field");
 
     private String property;
     private String keyFormat;
