@@ -54,10 +54,14 @@
                                <%-- TODO trim the optionValue before comparing --%> 
                                <c:if test="${pageScope.value==pageScope.optionValue}">checked</c:if>  
                         >
-                        <%-- A bit inefficient, but less hacky than the alternatives --%>
+                        <%-- 
+                             both lists use the same ordering, but we can't access the element directly as it is a string
+                             not an array, so we can iterate over the labels using c:forTokens until the index matches the 
+                             value index.  A bit inefficient, but less hacky than the alternatives.
+                        --%>
                         <c:forTokens items="${pageScope.optionLabelKeys}" delims="|" var="optionLabelKey" varStatus="optionLabelIndex">
                             <c:if test="${pageScope.optionValueIndex.index==pageScope.optionLabelIndex.index}">
-                                <span><t:message code="${pageScope.optionLabelKey}" parentName="${pageScope.name}" element="optionLabels.${pageScope.optionLabelKey}"/></span>
+                                <span><t:message parentName="${pageScope.name}" element="optionLabels.${pageScope.optionLabelKey}"/></span>
                             </c:if>
                         </c:forTokens>
                     </label>

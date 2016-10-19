@@ -12,7 +12,7 @@
 
         <t:textedit name="employerName" maxLength="60" />
         <t:textedit name="employmentPhoneNumber" maxLength="20" />
-        <t:address name="employerAddress" maxlength="35" />
+        <t:address name="employmentAddress" maxlength="35" />
         <t:textedit name="employmentPostcode" maxLength="10" />
         <t:yesnofield name="startJobBeforeClaimDate" />
 

@@ -23,7 +23,11 @@
 <t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
 <t:defaultValue value="${pageScope.useRawValue}" defaultValue="false" var="useRawValue" />
 <t:defaultValue value="${pageScope.showRemainingChars}" defaultValue="false" var="showRemainingChars" />
-<t:defaultValue value="${pageScope.maxLength}" defaultValue="false" var="showRemainingChars" />
+
+<%-- turn showRemainingChars off if maxLength has not been set --%>
+<c:if test="${empty pageScope.maxLength}">
+    <c:set var="showRemainingChars" value="false" />
+</c:if>
 
 <%-- If not using raw values, then use the name attribute to locate the value --%>
 <c:if test="${pageScope.useRawValue!='true'}" >

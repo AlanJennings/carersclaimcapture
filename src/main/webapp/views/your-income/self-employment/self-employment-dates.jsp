@@ -4,7 +4,7 @@
 
 <!DOCTYPE html>
 
-<t:mainPage currentPage="${currentPage}">
+<t:mainPage>
 
     <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
         

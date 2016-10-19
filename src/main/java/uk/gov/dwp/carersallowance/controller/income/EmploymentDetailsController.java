@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller;
+package uk.gov.dwp.carersallowance.controller.income;
 
 import java.util.List;
 import java.util.Map;
@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 
+import uk.gov.dwp.carersallowance.controller.AbstractFormController;
+import uk.gov.dwp.carersallowance.controller.EmploymentSummaryController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 @Controller
@@ -43,31 +45,4 @@ public class EmploymentDetailsController extends AbstractFormController {
     public String getNextPage(HttpServletRequest request) {
         return NEXT_PAGE;
     }
-
-//    /**
-//     * Might use BindingResult, and spring Validator, not sure yet
-//     * don't want to perform type conversion prior to controller as we have no control
-//     * over the (rather poor) reporting behaviour
-//     * @return
-//     */
-//    protected void validate(Map<String, String[]> fieldValues, String[] fields) {
-//        LOG.trace("Started EmploymentDetailsController.validate");
-//        // TODO the dates are from earlier in the claim
-//
-//        validateMandatoryField(fieldValues, "employerName");
-//        validateMandatoryField(fieldValues, "employmentPhoneNumber");
-//        validateRegexField(fieldValues, "Contact number", "phoneNumber", PHONE_REGEX);
-//        validateAddressFields(fieldValues, "Address", "employerAddress", new String[]{"employmentAddressLineOne", "employmentAddressLineTwo", "employmentAddressLineThree"});
-//        validateMandatoryField(fieldValues, "startJobBeforeClaimDate");
-//        validateMandatoryField(fieldValues, "finishedThisJob");
-//
-//        if(fieldValue_Equals(fieldValues, "startJobBeforeClaimDate", "no")) {
-//            validateMandatoryDateField(fieldValues, "jobStartDate");
-//        }
-//        if(fieldValue_Equals(fieldValues, "finishedThisJob", "yes")) {
-//            validateMandatoryDateField(fieldValues, "lastWorkDate");
-//        }
-//
-//        LOG.trace("Ending EmploymentDetailsController.validate");
-//    }
 }

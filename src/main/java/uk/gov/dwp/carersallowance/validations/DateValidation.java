@@ -32,7 +32,7 @@ public class DateValidation extends AbstractValidation {
      */
     public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String id, Map<String, String[]> allFieldValues) {
         Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, id, allFieldValues}, new String[]{"validationSummary", "messageSource", "id", "allFieldValues"});
-        LOG.trace("Starting MandatoryValidation.validate");
+        LOG.trace("Starting DateValidation.validate");
         try {
             String dayFieldName = id + "_day";
             String monthFieldName = id + "_month";
@@ -81,7 +81,7 @@ public class DateValidation extends AbstractValidation {
             LOG.debug("date is valid");
             return true;
         } finally {
-            LOG.trace("Ending AbstractFormController.validateMandatoryDateField");
+            LOG.trace("Ending DateValidation.DateValidation");
         }
     }
 

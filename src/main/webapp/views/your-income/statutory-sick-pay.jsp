@@ -4,22 +4,21 @@
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.statutory-sick-pay" currentPage="${currentPage}">
+<t:mainPage>
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
 
-    <t:pageContent errors="${validationErrors}" page="page.statutory-sick-pay" backLink="${previousPage}">
-
-        <t:yesnofield name="stillBeingPaidThisPay" />
+        <t:yesnofield name="sickPayStillBeingPaidThisPay" />
         
-        <t:hiddenPanel id="stillBeingPaidThisPayWrap" triggerId="stillBeingPaidThisPay" triggerValue="no">
-            <t:datefield name="whenDidYouLastGetPaid" />
+        <t:hiddenPanel id="sickPaySstillBeingPaidThisPayWrap" triggerId="sickPayStillBeingPaidThisPay" triggerValue="no">
+            <t:datefield name="sickPayWhenDidYouLastGetPaid" />
         </t:hiddenPanel>
 
-        <t:textedit name="whoPaidYouThisPay" maxLength="60" />
-        <t:textedit name="amountOfThisPay" maxLength="12" />
-        <t:radiobuttons name="howOftenPaidThisPay" optionValues="Weekly|Fortnightly|Four-Weekly|Monthly|Other" />
+        <t:textedit name="sickPayWhoPaidYouThisPay" maxLength="60" />
+        <t:textedit name="sickPayAmountOfThisPay" maxLength="12" />
+        <t:radiobuttons name="sickPayHowOftenPaidThisPay" optionValues="Weekly|Fortnightly|Four-Weekly|Monthly|Other" />
 
-        <t:hiddenPanel id="howOftenPaidThisPayWrap" triggerId="howOftenPaidThisPay" triggerValue="Other">
-            <t:textedit name="howOftenPaidThisPayOther" maxLength="60" />
+        <t:hiddenPanel id="sickPayHowOftenPaidThisPayWrap" triggerId="sickPayHowOftenPaidThisPay" triggerValue="Other">
+            <t:textedit name="sickPayHowOftenPaidThisPayOther" maxLength="60" />
         </t:hiddenPanel>
         
     </t:pageContent>

@@ -4,9 +4,9 @@
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.smp-spa-sap" currentPage="${currentPage}">
+<t:mainPage>
 
-    <t:pageContent errors="${validationErrors}" page="page.smp-spa-sap" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
 
         <t:radiobuttons name="otherStatPaymentPaymentTypesForThisPay" optionValues="MaternityOrPaternityPay|AdoptionPay" />
         <t:yesnofield name="otherStatPaymentStillBeingPaidThisPay" />
@@ -16,7 +16,7 @@
         </t:hiddenPanel>
 
         <t:textedit name="otherStatPaymentWhoPaidYouThisPay" maxLength="60" /> 
-        <t:textedit name="otherStatPaymentAmountOfThisPay" maxLength="12" outerClass="short-field" />
+        <t:textedit name="otherStatPaymentAmountOfThisPay" maxLength="12" outerClass="form-group short-field" />
         <t:radiobuttons name="otherStatPaymentHowOftenPaidThisPay" optionValues="Weekly|Fortnightly|Four-weekly|Monthly|Other" />
 
         <t:hiddenPanel id="otherStatPaymentHowOftenPaidThisPayWrap" triggerId="otherStatPaymentHowOftenPaidThisPay" triggerValue="Other">

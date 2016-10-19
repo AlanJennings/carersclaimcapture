@@ -4,9 +4,9 @@
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.fostering-allowance" currentPage="${currentPage}">
+<t:mainPage>
 
-    <t:pageContent errors="${validationErrors}" page="page.fostering-allowance" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
 
         <t:radiobuttons name="fosteringAllowancePay" optionValues="LocalAuthority|FosteringAllowance|Other" />
 
@@ -21,7 +21,7 @@
         </t:hiddenPanel>
 
         <t:textedit name="fosteringAllowanceWhoPaidYouThisPay" maxLength="60" /> 
-        <t:textedit name="fosteringAllowanceAmountOfThisPay" maxLength="12" outerClass="short-field" />
+        <t:textedit name="fosteringAllowanceAmountOfThisPay" maxLength="12" outerClass="form-group short-field" />
         <t:radiobuttons name="fosteringAllowanceHowOftenPaidThisPay" optionValues="Weekly|Fortnightly|Four-weekly|Monthly|Other" />
 
         <t:hiddenPanel id="fosteringAllowanceHowOftenPaidThisPayWrap" triggerId="fosteringAllowanceHowOftenPaidThisPay" triggerValue="Other">
