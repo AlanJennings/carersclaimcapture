@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller;
+package uk.gov.dwp.carersallowance.controller.breaks;
 
 import java.util.Map;
 
@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 /**
@@ -22,19 +23,18 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
  * @author drh
  */
 @Controller
-public class BreakInRespiteCareController extends AbstractFormController {
-    public static final Logger LOG = LoggerFactory.getLogger(BreakInRespiteCareController.class);
+public class BreakInHospitalController extends AbstractFormController {
+    public static final Logger LOG = LoggerFactory.getLogger(BreakInHospitalController.class);
 
-    private static final String PAGE_NAME     = "page.break-in-respite-care";
-    private static final String CURRENT_PAGE  = "/breaks/break-in-respite-care";    // this has an argument
+    private static final String PAGE_NAME     = "page.break-in-hospital";
+    private static final String CURRENT_PAGE  = "/breaks/break-in-hospital";    // this has an argument
     private static final String NEXT_PAGE     = "/breaks/breaks-in-care/update";
     private static final String PARENT_PAGE   = "/breaks/breaks-in-care";
 
     public static final String[] SHARED_FIELDS = {"break_id", "breakInCareType"};
 
-// FIELDS = respiteBreakWhoInRespite, respiteBreakCarerRespiteStartDate_day, respiteBreakCarerRespiteStartDate_month, respiteBreakCarerRespiteStartDate_year, respiteBreakCarerRespiteStayEnded, respiteBreakCarerRespiteEndDate_day, respiteBreakCarerRespiteEndDate_month, respiteBreakCarerRespiteEndDate_year, respiteBreakCarerRespiteStayMedicalCare, respiteBreakCareeRespiteStartDate_day, respiteBreakCareeRespiteStartDate_month, respiteBreakCareeRespiteStartDate_year, respiteBreakCareeRespiteStayEnded, respiteBreakCareeRespiteEndDate_day, respiteBreakCareeRespiteEndDate_month, respiteBreakCareeRespiteEndDate_year, respiteBreakCareeRespiteStayMedicalCare, respiteBreakCareeRespiteCarerStillCaring
     @Autowired
-    public BreakInRespiteCareController(SessionManager sessionManager, MessageSource messageSource) {
+    public BreakInHospitalController(SessionManager sessionManager, MessageSource messageSource) {
         super(sessionManager, messageSource);
     }
 
@@ -90,25 +90,24 @@ public class BreakInRespiteCareController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "respiteBreakWhoInRespite");
-        if(fieldValue_Equals(fieldValues, "respiteBreakWhoInRespite", "Carer")) {
-            validateMandatoryDateField(fieldValues, "respiteBreakCarerRespiteStartDate");
-            validateMandatoryField(fieldValues, "respiteBreakCarerRespiteStayEnded");
+        validateMandatoryField(fieldValues, "hospitalBreakWhoInHospital");
 
-            if(fieldValue_Equals(fieldValues, "respiteBreakCarerRespiteStayEnded", "yes")) {
-                validateMandatoryDateField(fieldValues, "respiteBreakCarerRespiteEndDate");
-                validateMandatoryField(fieldValues, "respiteBreakCarerRespiteStayMedicalCare");
+        if(fieldValue_Equals(fieldValues, "hospitalBreakWhoInHospital", "Carer")) {
+            validateMandatoryDateField(fieldValues, "hospitalBreakCarerHospitalStartDate");
+            validateMandatoryField(fieldValues, "hospitalBreakCarerHospitalStayEnded");
+
+            if(fieldValue_Equals(fieldValues, "hospitalBreakCarerHospitalStayEnded", "yes")) {
+                validateMandatoryDateField(fieldValues, "hospitalBreakCarerHospitalEndDate");
             }
         }
 
-        if(fieldValue_Equals(fieldValues, "respiteBreakWhoInRespite", "Caree")) {
-            validateMandatoryDateField(fieldValues, "respiteBreakCareeRespiteStartDate");
-            validateMandatoryField(fieldValues, "respiteBreakCareeRespiteStayEnded");
+        if(fieldValue_Equals(fieldValues, "hospitalBreakWhoInHospital", "Caree")) {
+            validateMandatoryDateField(fieldValues, "hospitalBreakCareeHospitalStartDate");
+            validateMandatoryField(fieldValues, "hospitalBreakCareeHospitalStayEnded");
 
-            if(fieldValue_Equals(fieldValues, "respiteBreakCareeRespiteStayEnded", "yes")) {
-                validateMandatoryDateField(fieldValues, "respiteBreakCareeRespiteEndDate");
-                validateMandatoryField(fieldValues, "respiteBreakCareeRespiteStayMedicalCare");
-                validateMandatoryField(fieldValues, "respiteBreakCareeRespiteCarerStillCaring");
+            if(fieldValue_Equals(fieldValues, "hospitalBreakCareeHospitalStayEnded", "yes")) {
+                validateMandatoryDateField(fieldValues, "hospitalBreakCareeHospitalEndDate");
+                validateMandatoryField(fieldValues, "hospitalBreakCareeHospitalCarerStillCaring");
             }
         }
 

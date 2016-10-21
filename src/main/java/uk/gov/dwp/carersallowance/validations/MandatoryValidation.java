@@ -3,7 +3,6 @@ package uk.gov.dwp.carersallowance.validations;
 import java.util.Arrays;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -29,7 +28,7 @@ public class MandatoryValidation extends AbstractValidation {
             LOG.debug("fieldValues  {}", fieldValues == null ? null : Arrays.asList(fieldValues));
             if(fieldValues != null) {
                 for(String fieldValue: fieldValues) {
-                    if(StringUtils.isBlank(fieldValue) == false) {
+                    if(fieldValue != null && fieldValue.trim().equals("") == false) {   // whitespace is not content
                         LOG.debug("populated field({}), returning", fieldValue);
                         return true;
                     }

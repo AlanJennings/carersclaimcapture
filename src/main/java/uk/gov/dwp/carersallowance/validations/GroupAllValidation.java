@@ -20,7 +20,7 @@ public class GroupAllValidation extends AbstractValidation {
     }
 
     /**
-     * validate that at least one of the fields is populated
+     * validate that all the fields are populated
      */
     public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> allFieldValues) {
         Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName, allFieldValues}, new String[]{"validationSummary", "messageSource", "fieldName", "allFieldValues"});

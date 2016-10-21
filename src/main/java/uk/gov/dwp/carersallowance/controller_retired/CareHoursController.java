@@ -1,11 +1,10 @@
-package uk.gov.dwp.carersallowance.controller.income;
+package uk.gov.dwp.carersallowance.controller_retired;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,28 +12,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
-@Controller
-public class OtherIncomeController extends AbstractFormController {
-    private static final String CURRENT_PAGE  = "/your-income/other-income";
+public class CareHoursController extends AbstractFormController {
+    private static final String CURRENT_PAGE  = "/care-you-provide/more-about-the-care";
 
     @Autowired
-    public OtherIncomeController(SessionManager sessionManager, MessageSource messageSource) {
+    public CareHoursController(SessionManager sessionManager, MessageSource messageSource) {
         super(sessionManager, messageSource);
-    }
-
-    @Override
-    public String getPreviousPage(HttpServletRequest request) {
-        return super.getPreviousPage(request, YourIncomeController.getIncomePageList(request.getSession()));
     }
 
     @Override
     public String getCurrentPage(HttpServletRequest request) {
         return CURRENT_PAGE;
-    }
-
-    @Override
-    public String getNextPage(HttpServletRequest request) {
-        return super.getNextPage(request, YourIncomeController.getIncomePageList(request.getSession()));
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -56,7 +44,16 @@ public class OtherIncomeController extends AbstractFormController {
 //    protected void validate(Map<String, String[]> fieldValues, String[] fields) {
 //        LOG.trace("Starting BenefitsController.validate");
 //
-//        validateMandatoryField(fieldValues, "otherPaymentsInfo");
+//        validateMandatoryField(fieldValues, "spent35HoursCaring");
+//        validateMandatoryFieldGroupAnyField(fieldValues,
+//                                            "otherResidenceGroup",
+//                                            "Since 16 October 2015, have you or John Smith been in any of the following for at least a week",
+//                                            "otherResidence_hospital",
+//                                            "otherResidence_respite",
+//                                            "otherResidence_none",
+//                                            "weeksNotCaring");
+//
+//        validateMandatoryField(fieldValues, "weeksNotCaring");
 //
 //        LOG.trace("Ending BenefitsController.validate");
 //    }

@@ -49,17 +49,18 @@
     
     window.hidePanel = function(panelId, clearOnHide) {
         if(clearOnHide === "true") {
-            $("#" + panelId).find('input')
-                            .not('input[type="hidden"]')
-                            .not('input[type="radio"]')
-                            .not('input[type="checkbox"]')
-                            .add('textarea')
-                            .add('select')
-                            .val('');
+            var panel = $("#" + panelId);
+            panel.find('input')
+                 .not('input[type="hidden"]')
+                 .not('input[type="radio"]')
+                 .not('input[type="checkbox"]').val('');
             
-            $("#" + panelId).find('input[type="radio"]')
-                            .add('input[type="checkbox"]')
-                            .removeAttr('checked');
+            panel.find('textarea').val('');
+            panel.find('select').val('');
+            
+            panel.find('input[type="radio"]').removeAttr('checked');
+            panel.find('input[type="checkbox"]').removeAttr('checked');
+                            
         } else {
             // TODO, disable fields
         }

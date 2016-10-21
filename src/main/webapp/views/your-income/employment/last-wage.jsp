@@ -4,11 +4,11 @@
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.last-wage" currentPage="${currentPage}">
+<t:mainPage>
 
-    <t:pageContent errors="${validationErrors}" page="page.last-wage" pageTitle="${employerName}" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
 
-        <t:select name="employmentPaymentFrequency" optionValues="|Single|Weekly|Fortnightly|Four-weekly|Monthly|Other" />
+        <t:select name="employmentPaymentFrequency" optionValues="Weekly|Fortnightly|Four-weekly|Monthly|Other" includeBlank="yes"/>
 
         <t:hiddenPanel id="employmentPaymentFrequencyOtherWrap" triggerId="employmentPaymentFrequency" triggerValue="Other">
             <t:textarea name="employmentPaymentFrequencyOtherText" maxLength="60" showRemainingChars="true" additionalClasses="textarea-reduced" />

@@ -23,9 +23,9 @@
 
 <%-- If not using raw values, then use the name attribute to locate the value --%>
 <c:if test="${empty pageScope.nameBlock1}">
-    <c:set var="nameBlock1" value="${pageScope.name}_block1" />
-    <c:set var="nameBlock2" value="${pageScope.name}_block2" />
-    <c:set var="nameBlock3" value="${pageScope.name}_block3" />
+    <c:set var="nameBlock1" value="${pageScope.name}_1" />
+    <c:set var="nameBlock2" value="${pageScope.name}_2" />
+    <c:set var="nameBlock3" value="${pageScope.name}_3" />
 </c:if>
 
 <c:if test="${pageScope.useRawValue!='true'}" >
@@ -50,7 +50,7 @@
             <li class="form-group">
                 <input type="tel" 
                        class="form-control"
-                       id="${pageScope.id}_block1"
+                       id="${pageScope.id}_1"
                        name="${pageScope.nameBlock1}"
                        title="${pageScope.numbersWarning}" 
                        value="${pageScope.valueBlock1}" 
@@ -61,7 +61,7 @@
             <li class="form-group">
                 <input type="tel"
                        class="form-control"
-                       id="${pageScope.id}_block2"
+                       id="${pageScope.id}_2"
                        name="${pageScope.nameBlock2}"
                        title="${pageScope.numbersWarning}"
                        value="${pageScope.valueBlock2}" 
@@ -72,7 +72,7 @@
             <li class="form-group">
                 <input type="tel"
                        class="form-control"
-                       id="${pageScope.id}_block3"
+                       id="${pageScope.id}_3"
                        name="${pageScope.nameBlock3}"
                        title="${pageScope.numbersWarning}"
                        value="${pageScope.valueBlock3}" 

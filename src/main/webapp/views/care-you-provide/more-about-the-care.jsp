@@ -13,9 +13,9 @@
             <t:checkbox name="otherResidence_hospital" outerClass="no-class" />
             <t:checkbox name="otherResidence_respite" outerClass="no-class" />
             <t:checkbox name="otherResidence_none" outerClass="no-class" />
-       </t:group>
+        </t:group>
 
-       <t:yesnofield name="weeksNotCaring" />
+        <t:yesnofield name="weeksNotCaring" />
 
     </t:pageContent>
 

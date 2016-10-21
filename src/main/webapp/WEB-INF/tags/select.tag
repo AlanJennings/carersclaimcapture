@@ -2,24 +2,28 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<%@ attribute name="name" required="true" type="java.lang.String"%>
-<%@ attribute name="optionValues" required="true" type="java.lang.String"%> <!-- Note optionValues are white-space sensitive -->
+<%@ attribute name="name" required="true" %>
+<%@ attribute name="optionValues" required="true" %> <!-- Note optionValues are white-space sensitive -->
     
-<%@ attribute name="id" required="false" type="java.lang.String"%>
-<%@ attribute name="labelKey" required="false" type="java.lang.String"%>
+<%@ attribute name="id"%>
+<%@ attribute name="labelKey"%>
 <%@ attribute name="labelKeyArgs" %>
-<%@ attribute name="hintBeforeKey" required="false" type="java.lang.String"%>
-<%@ attribute name="hintAfterKey" required="false" type="java.lang.String"%>
-<%@ attribute name="additionalClasses" required="false" type="java.lang.String"%>
-<%@ attribute name="outerClass" required="false" type="java.lang.String"%>
-<%@ attribute name="outerStyle" required="false" type="java.lang.String"%>
+<%@ attribute name="hintBeforeKey"%>
+<%@ attribute name="hintAfterKey"%>
+<%@ attribute name="additionalClasses"%>
+<%@ attribute name="outerClass"%>
+<%@ attribute name="outerStyle"%>
+<%@ attribute name="optionLabelKeys"%>
+<%@ attribute name="value"%>
+<%@ attribute name="includeBlank" %>
+
 <%@ attribute name="errors" required="false" type="uk.gov.dwp.carersallowance.validations.ValidationSummary"%>
-<%@ attribute name="optionLabelKeys" required="false" type="java.lang.String"%>
-<%@ attribute name="value" required="false" type="java.lang.String"%>
     
 <t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
 <t:defaultValue value="${pageScope.useRawValue}" defaultValue="false" var="useRawValue" />
 <t:defaultValue value="${pageScope.optionLabelKeys}" defaultValue="${pageScope.optionValues}" var="optionLabelKeys" />
+<t:defaultValue value="${pageScope.includeBlank}" defaultValue="false" var="includeBlank" />
+
 
 <%-- If not using raw values, then use the name attribute to locate the value --%>
 <c:if test="${pageScope.useRawValue!='true'}" >
@@ -36,14 +40,22 @@
     <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
     
     <select id="${pageScope.id}" name="${pageScope.name}" class="form-control ${pageScope.additionalClasses}">
+        <c:if test="${pageScope.includeBlank='true'}" >
+            <option value="">Select</option>
+        </c:if>
+        
         <c:forTokens items="${pageScope.optionValues}" delims="|" var="optionValue" varStatus="optionValueIndex">
             <option value="${pageScope.optionValue}" 
-                    <c:if test="${pageScope.value==optionValue}">selected</c:if>
+                <c:if test="${pageScope.value==optionValue}">selected</c:if>
             >
-                <%-- A bit inefficient, but less hacky than the alternatives --%>
-                <c:forTokens items="${pageScope.optionLabelKeys}" delims="|" var="optionLabel" varStatus="optionLabelIndex">
+                <%-- 
+                     both lists use the same ordering, but we can't access the element directly as it is a string
+                     not an array, so we can iterate over the labels using c:forTokens until the index matches the 
+                     value index.  A bit inefficient, but less hacky than the alternatives.
+                --%>
+                <c:forTokens items="${pageScope.optionLabelKeys}" delims="|" var="optionLabelKey" varStatus="optionLabelIndex">
                     <c:if test="${pageScope.optionValueIndex.index==pageScope.optionLabelIndex.index}">
-                        <span><t:message code="${pageScope.optionLabelKey}" parentName="${pageScope.name}" element="optionLabels.${pageScope.optionLabelKey}"/></span>
+                        <span><t:message parentName="${pageScope.name}" element="optionLabels.${pageScope.optionLabelKey}"/></span>
                     </c:if>
                 </c:forTokens>
             </option>

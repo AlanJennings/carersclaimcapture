@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller;
+package uk.gov.dwp.carersallowance.controller.breaks;
 
 import java.util.Map;
 
@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 /**
@@ -22,18 +23,18 @@ import uk.gov.dwp.carersallowance.session.SessionManager;
  * @author drh
  */
 @Controller
-public class BreakInHospitalController extends AbstractFormController {
-    public static final Logger LOG = LoggerFactory.getLogger(BreakInHospitalController.class);
+public class BreakSomewhereElseController extends AbstractFormController {
+    public static final Logger LOG = LoggerFactory.getLogger(BreakSomewhereElseController.class);
 
-    private static final String PAGE_NAME     = "page.break-in-hospital";
-    private static final String CURRENT_PAGE  = "/breaks/break-in-hospital";    // this has an argument
+    private static final String PAGE_NAME     = "page.break-somewhere-else";
+    private static final String CURRENT_PAGE  = "/breaks/break-somewhere-else";    // this has an argument
     private static final String NEXT_PAGE     = "/breaks/breaks-in-care/update";
     private static final String PARENT_PAGE   = "/breaks/breaks-in-care";
 
     public static final String[] SHARED_FIELDS = {"break_id", "breakInCareType"};
 
     @Autowired
-    public BreakInHospitalController(SessionManager sessionManager, MessageSource messageSource) {
+    public BreakSomewhereElseController(SessionManager sessionManager, MessageSource messageSource) {
         super(sessionManager, messageSource);
     }
 
@@ -89,25 +90,20 @@ public class BreakInHospitalController extends AbstractFormController {
     protected void validate(Map<String, String[]> fieldValues, String[] fields) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "hospitalBreakWhoInHospital");
-
-        if(fieldValue_Equals(fieldValues, "hospitalBreakWhoInHospital", "Carer")) {
-            validateMandatoryDateField(fieldValues, "hospitalBreakCarerHospitalStartDate");
-            validateMandatoryField(fieldValues, "hospitalBreakCarerHospitalStayEnded");
-
-            if(fieldValue_Equals(fieldValues, "hospitalBreakCarerHospitalStayEnded", "yes")) {
-                validateMandatoryDateField(fieldValues, "hospitalBreakCarerHospitalEndDate");
-            }
+        validateMandatoryDateField(fieldValues, "careeSomewhereElseStartDate");
+        validateMandatoryField(fieldValues, "careeSomewhereElseEndedTime");
+        if(fieldValue_Equals(fieldValues, "careeSomewhereElseEndedTime", "yes")) {
+            validateMandatoryDateField(fieldValues, "careeSomewhereElseEndDate");
         }
 
-        if(fieldValue_Equals(fieldValues, "hospitalBreakWhoInHospital", "Caree")) {
-            validateMandatoryDateField(fieldValues, "hospitalBreakCareeHospitalStartDate");
-            validateMandatoryField(fieldValues, "hospitalBreakCareeHospitalStayEnded");
+        validateMandatoryField(fieldValues, "carerSomewhereElseWhereYou");
+        if(fieldValue_Equals(fieldValues, "carerSomewhereElseWhereYou", "elsewhere")) {
+            validateMandatoryField(fieldValues, "carerSomewhereElseWhereYouOtherText");
+        }
 
-            if(fieldValue_Equals(fieldValues, "hospitalBreakCareeHospitalStayEnded", "yes")) {
-                validateMandatoryDateField(fieldValues, "hospitalBreakCareeHospitalEndDate");
-                validateMandatoryField(fieldValues, "hospitalBreakCareeHospitalCarerStillCaring");
-            }
+        validateMandatoryField(fieldValues, "carerSomewhereElseWhereCaree");
+        if(fieldValue_Equals(fieldValues, "carerSomewhereElseWhereCaree", "elsewhere")) {
+            validateMandatoryField(fieldValues, "carerSomewhereElseWhereCareeOtherText");
         }
 
         LOG.trace("Ending BenefitsController.validate");
