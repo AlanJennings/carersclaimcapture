@@ -130,6 +130,10 @@ public class AbstractFormController {
     }
 
     public String[] getFields(String pageName) {
+        return getFields(messageSource, pageName);
+    }
+
+    public static String[] getFields(MessageSource messageSource, String pageName) {
         if(pageName == null) {
             return null;
         }

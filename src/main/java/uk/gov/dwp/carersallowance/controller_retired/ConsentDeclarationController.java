@@ -34,21 +34,4 @@ public class ConsentDeclarationController extends AbstractFormController {
     public String postForm(HttpServletRequest request, HttpSession session, Model model) {
         return super.postForm(request, session, model);
     }
-
-//    /**
-//     * Might use BindingResult, and spring Validator, not sure yet
-//     * don't want to perform type conversion prior to controller as we have no control
-//     * over the (rather poor) reporting behaviour
-//     * @return
-//     */
-//    protected void validate(Map<String, String[]> fieldValues, String[] fields) {
-//        LOG.trace("Starting BenefitsController.validate");
-//
-//        validateMandatoryField(fieldValues, "tellUsWhyInformation");
-//        if(fieldValue_Equals(fieldValues, "tellUsWhyInformation", "no")) {
-//            validateMandatoryField(fieldValues, "tellUsWhyPerson");
-//        }
-//
-//        LOG.trace("Ending BenefitsController.validate");
-//    }
 }

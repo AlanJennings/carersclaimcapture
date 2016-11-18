@@ -1,0 +1,749 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DWPBody xmlns="http://www.govtalk.gov.uk/dwp/carers-allowance" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.govtalk.gov.uk/dwp/carers-allowance file:/future/schema/ca/CarersAllowance_Schema.xsd">
+
+    <Version>{xmlVersion}</Version>
+    <ClaimVersion>{appVersion}</ClaimVersion>
+    <Origin>{origin}</Origin>
+
+    <DWPCATransaction id="{transactionId}">
+
+        <TransactionId>{transactionId}</TransactionId>
+        <DateTimeGenerated>{fn:now()}</DateTimeGenerated>
+        <LanguageUsed>{language}</LanguageUsed>
+
+        <DWPCAClaim>
+
+            <DateOfClaim>
+                <QuestionLabel>{dateOfClaim.label}</QuestionLabel>
+                <Answer>{dateOfClaim_day}-{dateOfClaim_month}-{dateOfClaim_year}</Answer>
+            </DateOfClaim>
+            
+            <QualifyingBenefit>
+                <QuestionLabel>{benefitsAnswer.label}</QuestionLabel>
+                <Answer>{benefitsAnswer}</Answer>
+            </QualifyingBenefit>
+            
+            <Claimant>
+                <Surname>
+                    <QuestionLabel>{carerSurname.label}</QuestionLabel>
+                    <Answer>{carerSurname}</Answer>
+                </Surname>
+                <OtherNames>
+                    <QuestionLabel>{carerFirstName.label}</QuestionLabel>
+                    <Answer>{carerFirstName}</Answer>
+                </OtherNames>
+                <MiddleNames>
+                    <QuestionLabel>{carerMiddleName.label}</QuestionLabel>
+                    <Answer>{carerMiddleName}</Answer>
+                </MiddleNames>
+                <Title>
+                    <QuestionLabel>{carerTitle.label}</QuestionLabel>
+                    <Answer>{carerTitle}</Answer>
+                </Title>
+                <DateOfBirth>
+                    <QuestionLabel>{carerDateOfBirth.label}</QuestionLabel>
+                    <Answer>{carerDateOfBirth_day}-{carerDateOfBirth_month}-{carerDateOfBirth_year}</Answer>
+                </DateOfBirth>
+                <NationalInsuranceNumber>
+                    <QuestionLabel>{carerNationalInsuranceNumber.label}</QuestionLabel>
+                    <Answer>{carerNationalInsuranceNumber}</Answer>
+                </NationalInsuranceNumber>
+                <Address>
+                    <QuestionLabel>{carerAddress.label}</QuestionLabel>
+                    <Answer>
+                        <Line>{carerAddressLineOne}</Line>
+                        <Line>{carerAddressLineTwo}</Line>
+                        <Line>{carerAddressLineThree}</Line>
+                        <PostCode>{carerPostcode}</PostCode>
+                    </Answer>
+                </Address>
+                <Cared35HoursBefore>
+                    <QuestionLabel>{beforeClaimCaring.label}</QuestionLabel>
+                    <Answer>{beforeClaimCaring}</Answer>
+                </Cared35HoursBefore>
+                <DateStartCaring>
+                    <QuestionLabel>{beforeClaimCaringDate.label}</QuestionLabel>
+                    <Answer>{beforeClaimCaringDate_day}-{beforeClaimCaringDate_month}-{beforeClaimCaringDate_year}</Answer>
+                </DateStartCaring>
+                <MaritalStatus>
+                    <QuestionLabel>{maritalStatus.label}</QuestionLabel>
+                    <Answer>{maritalStatus}</Answer>
+                </MaritalStatus>
+                <TextPhoneContact>
+                    <QuestionLabel>{carerContactYouByTextPhone.text}</QuestionLabel>
+                    <Answer>{carerContactYouByTextPhone}</Answer>
+                </TextPhoneContact>
+                <WantsContactEmail>
+                    <QuestionLabel>{carerWantsEmailContact.label}</QuestionLabel>
+                    <Answer>{carerWantsEmailContact}</Answer>
+                </WantsContactEmail>
+                <Email>
+                    <QuestionLabel>{carerMail.label}</QuestionLabel>
+                    <Answer>{carerMail}</Answer>
+                </Email>
+            </Claimant>
+            
+            <Caree>
+                <Surname>
+                    <QuestionLabel>{careeSurname.label}</QuestionLabel>
+                    <Answer>{careeSurname}</Answer>
+                </Surname>
+                <OtherNames>
+                    <QuestionLabel>{careeFirstName.label}</QuestionLabel>
+                    <Answer>{careeFirstName}</Answer>
+                </OtherNames>
+                <MiddleNames>
+                    <QuestionLabel>{careeMiddleName.label}</QuestionLabel>
+                    <Answer>{careeMiddleName}</Answer>
+                </MiddleNames>
+                <Title>
+                    <QuestionLabel>{careeTitle.label}</QuestionLabel>
+                    <Answer>{careeTitle}</Answer>
+                </Title>
+                <DateOfBirth>
+                    <QuestionLabel>{careeDateOfBirth.label}</QuestionLabel>
+                    <Answer>{careeDateOfBirth_day}-{careeDateOfBirth_month}-{careeDateOfBirth_year}</Answer>
+                </DateOfBirth>
+                <NationalInsuranceNumber>
+                    <QuestionLabel>{careeNationalInsuranceNumber.label}</QuestionLabel>
+                    <Answer>{careeNationalInsuranceNumber}</Answer>
+                </NationalInsuranceNumber>
+                <Address>
+                    <QuestionLabel>{careeAddress.label}</QuestionLabel>
+                    <Answer>
+                        <Line>{careeAddressLineOne}</Line>
+                        <Line>{careeAddressLineTwo}</Line>
+                        <Line>{careeAddressLineThree}</Line>
+                        <PostCode>{careePostcode}</PostCode>
+                    </Answer>
+                </Address>
+                <RelationToClaimant>
+                    <QuestionLabel>{careeRelationship.label}</QuestionLabel>
+                    <Answer>{careeRelationship}</Answer>
+                </RelationToClaimant>
+                <Cared35Hours>
+                    <QuestionLabel>{spent35HoursCaring.label}</QuestionLabel>
+                    <Answer>{spent35HoursCaring}</Answer>
+                </Cared35Hours>
+<!--  
+                <OtherCarer>
+                    <QuestionLabel>Does anyone else spend 35 hours or more each week providing care for Jane Bloggs?{}</QuestionLabel>
+                    <Answer>No{}</Answer>
+                </OtherCarer>
+-->
+                <!-- repeatable block, not sure how going to do this yet -->
+                <!-- and of course this has changed as well -->
+                <CareBreak>
+                    <BreaksSinceClaim>
+                        <QuestionLabel>Since 8 January 2016 have there been any times you or Jane Bloggs have been in hospital, respite or care home for at least a week?{}</QuestionLabel>
+                        <Answer>Hospital, Respite or care home{}</Answer>
+                    </BreaksSinceClaim>
+                    <BreaksOtherSinceClaim>
+                        <QuestionLabel>Have there been any times you've not provided care for Jane Bloggs for 35 hours a week?{}</QuestionLabel>
+                        <Answer>Yes{}</Answer>
+                    </BreaksOtherSinceClaim>
+                </CareBreak>
+                
+                <CareBreak>
+                    <BreaksType>
+                        <QuestionLabel>Type of Break{}</QuestionLabel>
+                        <Answer>DPHospital{}</Answer>
+                    </BreaksType>
+                    <WhoWasAway>
+                        <QuestionLabel>Who was in hospital?{}</QuestionLabel>
+                        <Answer>Jane Bloggs{}</Answer>
+                    </WhoWasAway>
+                    <StartDate>
+                        <QuestionLabel>When was Jane Bloggs admitted?{}</QuestionLabel>
+                        <Answer>09-07-2016{}</Answer>
+                    </StartDate>
+                    <BreakEnded>
+                        <QuestionLabel>Has the hospital stay ended?{}</QuestionLabel>
+                        <Answer>Yes{}</Answer>
+                    </BreakEnded>
+                    <EndDate>
+                        <QuestionLabel>When was Jane Bloggs discharged?{}</QuestionLabel>
+                        <Answer>09-07-2016{}</Answer>
+                    </EndDate>
+                    <BreaksInCareRespiteStillCaring>
+                        <QuestionLabel>During this time in hospital, were you still providing care for Jane Bloggs for 35 hours a week?{}</QuestionLabel>
+                        <Answer>Yes{}</Answer>
+                    </BreaksInCareRespiteStillCaring>
+                </CareBreak>
+                
+                <CareBreak>
+                    <BreaksType>
+                        <QuestionLabel>Type of Break{}</QuestionLabel>
+                        <Answer>DPRespite{}</Answer>
+                    </BreaksType>
+                    <WhoWasAway>
+                        <QuestionLabel>Who was in respite or a care home?{}</QuestionLabel>
+                        <Answer>Jane Bloggs{}</Answer>
+                    </WhoWasAway>
+                    <StartDate>
+                        <QuestionLabel>When was Jane Bloggs admitted?{}</QuestionLabel>
+                        <Answer>09-07-2016{}</Answer>
+                    </StartDate>
+                    <BreakEnded>
+                        <QuestionLabel>Has the respite or care home stay ended?{}</QuestionLabel>
+                        <Answer>Yes{}</Answer>
+                    </BreakEnded>
+                    <EndDate>
+                        <QuestionLabel>When was Jane Bloggs discharged?{}</QuestionLabel>
+                        <Answer>09-07-2016{}</Answer>
+                    </EndDate>
+                    <DpMedicalCare>
+                        <QuestionLabel>Did Jane Bloggs receive care from a medical professional during this time?{}</QuestionLabel>
+                        <Answer>Yes{}</Answer>
+                    </DpMedicalCare>
+                    <BreaksInCareRespiteStillCaring>
+                        <QuestionLabel>During this time in hospital, were you still providing care for Jane Bloggs for 35 hours a week?{}</QuestionLabel>
+                        <Answer>Yes{}</Answer>
+                    </BreaksInCareRespiteStillCaring>
+                </CareBreak>
+                
+                <CareBreak>
+                    <BreaksType>
+                        <QuestionLabel>Type of Break{}</QuestionLabel>
+                        <Answer>Other{}</Answer>
+                    </BreaksType>
+                    <BreakStarted>
+                        <QuestionLabel>Have you started providing care again?{}</QuestionLabel>
+                        <Answer>Yes{}</Answer>
+                    </BreakStarted>
+                    <StartDate>
+                        <QuestionLabel>What date did you start to provide care again?{}</QuestionLabel>
+                        <Answer>09-07-2016{}</Answer>
+                    </StartDate>
+                    <EndDate>
+                        <QuestionLabel>What date did you start to provide care again?{}</QuestionLabel>
+                        <Answer>09-07-2016{}</Answer>
+                    </EndDate>
+                    <ReasonClaimant>
+                        <QuestionLabel>Where were you during this time?{}</QuestionLabel>
+                        <Other>Test1{}</Other>
+                        <Answer>Somewhere else{}</Answer>
+                    </ReasonClaimant>
+                    <ReasonCaree>
+                        <QuestionLabel>Where was Jane Bloggs during this time?{}</QuestionLabel>
+                        <Other>Test2{}</Other>
+                        <Answer>Somewhere else{}</Answer>
+                    </ReasonCaree>
+                </CareBreak>
+                
+                <CareBreak>
+                    <BreaksSinceClaim>
+                        <QuestionLabel>Since 8 January 2016 have there been any other times you or Jane Bloggs have been in hospital, respite or care home for at least a week?{}</QuestionLabel>
+                        <Answer>None{}</Answer>
+                    </BreaksSinceClaim>
+                    <BreaksOtherSinceClaim>
+                        <QuestionLabel>Have there been any other times you've not provided care for Jane Bloggs for 35 hours a week?{}</QuestionLabel>
+                        <Answer>No{}</Answer>
+                    </BreaksOtherSinceClaim>
+                </CareBreak>
+                
+                <LiveSameAddress>
+                    <QuestionLabel>{careeSameAddress.label}</QuestionLabel>
+                    <Answer>{careeSameAddress}</Answer>
+                </LiveSameAddress>
+            </Caree>
+            
+            <Residency>
+                <Nationality>
+                    <QuestionLabel>{nationality.label}</QuestionLabel>
+                    <Answer>{nationality}</Answer>
+                </Nationality>
+                <AlwaysLivedInUK>
+                    <QuestionLabel>{alwaysLivedInUK.label}</QuestionLabel>
+                    <Answer>{alwaysLivedInUK}</Answer>
+                </AlwaysLivedInUK>
+                <TimeOutsideGBLast3Years>
+                    <QuestionLabel>{trip52Weeks.label}</QuestionLabel>
+                    <Answer>{trip52Weeks}</Answer>
+                </TimeOutsideGBLast3Years>
+            </Residency>
+            
+            <CourseOfEducation>
+                <QuestionLabel>{beenInEducationSinceClaimDate.label}</QuestionLabel>
+                <Answer>{beenInEducationSinceClaimDate}</Answer>
+            </CourseOfEducation>
+            
+            <FullTimeEducation>
+                <CourseDetails>
+                    <Title>
+                        <QuestionLabel>{courseTitle.label}</QuestionLabel>
+                        <Answer>{courseTitle}</Answer>
+                    </Title>
+                    <DateStarted>
+                        <QuestionLabel>{educationStartDate.label}</QuestionLabel>
+                        <Answer>{educationStartDate_day}-{educationStartDate_month}-{educationStartDate_year}</Answer>
+                    </DateStarted>
+                    <ExpectedEndDate>
+                        <QuestionLabel>{educationExpectedEndDate.label}</QuestionLabel>
+                        <Answer>{educationExpectedEndDate_day}-{educationExpectedEndDate_month}-{educationExpectedEndDate_year}</Answer>
+                    </ExpectedEndDate>
+                </CourseDetails>
+                <LocationDetails>
+                    <Name>
+                        <QuestionLabel>{nameOfSchoolCollegeOrUniversity.label}</QuestionLabel>
+                        <Answer>{nameOfSchoolCollegeOrUniversity.label}</Answer>
+                    </Name>
+                    <Tutor>
+                        <QuestionLabel>{nameOfMainTeacherOrTutor.label}</QuestionLabel>
+                        <Answer>{nameOfMainTeacherOrTutor}</Answer>
+                    </Tutor>
+                </LocationDetails>
+            </FullTimeEducation>
+            
+            <Incomes>
+                <Employed>
+                    <QuestionLabel>{beenEmployedSince6MonthsBeforeClaim.label}</QuestionLabel>
+                    <Answer>{beenEmployedSince6MonthsBeforeClaim}</Answer>
+                </Employed>
+                <SelfEmployed>
+                    <QuestionLabel>{beenSelfEmployedSince1WeekBeforeClaim.label}</QuestionLabel>
+                    <Answer>{beenSelfEmployedSince1WeekBeforeClaim}</Answer>
+                </SelfEmployed>
+                <OtherPaymentQuestion>
+                    <QuestionLabel>{hadOtherIncomeSinceClaimDate.label}</QuestionLabel>
+                    <Answer>{hadOtherIncomeSinceClaimDate}</Answer>
+                </OtherPaymentQuestion>
+                <SickPayment>
+                    <QuestionLabel>{yourIncome_sickpay.text}</QuestionLabel>
+                    <Answer>{yourIncome_sickpay}</Answer>
+                </SickPayment>
+                <PatMatAdopPayment>
+                    <QuestionLabel>{yourIncome_patmatadoppay.text}</QuestionLabel>
+                    <Answer>{yourIncome_patmatadoppay}</Answer>
+                </PatMatAdopPayment>
+                <FosteringPayment>
+                    <QuestionLabel>{yourIncome_fostering.text}</QuestionLabel>
+                    <Answer>{yourIncome_fostering}</Answer>
+                </FosteringPayment>
+                <DirectPayment>
+                    <QuestionLabel>{yourIncome_directpay.text}</QuestionLabel>
+                    <Answer>{yourIncome_directpay}</Answer>
+                </DirectPayment>
+                <AnyOtherPayment>
+                    <QuestionLabel>{yourIncome_anyother.text}</QuestionLabel>
+                    <Answer>{yourIncome_anyother.text}</Answer>
+                </AnyOtherPayment>
+
+                <Employment>
+                    <JobDetails>
+                        <Employer>
+                            <CurrentlyEmployed>
+                                <QuestionLabel>{finishedThisJob.label}</QuestionLabel>
+                                <Answer>{finishedThisJob}</Answer>
+                            </CurrentlyEmployed>
+                            <DidJobStartBeforeClaimDate>
+                                <QuestionLabel>{startJobBeforeClaimDate.label}</QuestionLabel>
+                                <Answer>{startJobBeforeClaimDate.label}</Answer>
+                            </DidJobStartBeforeClaimDate>
+                            <Name>
+                                <QuestionLabel>{employerName.label}</QuestionLabel>
+                                <Answer>{employerName}</Answer>
+                            </Name>
+                            <Address>
+                                <QuestionLabel>{employerAddress.label}</QuestionLabel>
+                                <Answer>
+                                    <Line>{employerAddressLineOne}</Line>
+                                    <Line>{employerAddressLineTwo}</Line>
+                                    <Line>{employerAddressLineThree}</Line>
+                                    <PostCode>{employmentPostcode}</PostCode>
+                                </Answer>
+                            </Address>
+                            <EmployersPhoneNumber>
+                                <QuestionLabel>{employmentPhoneNumber.label}</QuestionLabel>
+                                <Answer>{employmentPhoneNumber}</Answer>
+                            </EmployersPhoneNumber>
+                        </Employer>
+                        <Pay>
+                            <DateLastPaid>
+                                <QuestionLabel>{employmentLastPaidDate.label}</QuestionLabel>
+                                <Answer>{employmentLastPaidDate_day}-{employmentLastPaidDate_month}-{employmentLastPaidDate_year}</Answer>
+                            </DateLastPaid>
+                            <GrossPayment>
+                                <QuestionLabel>{employmentGrossPay.label}</QuestionLabel>
+                                <Answer>
+                                    <Currency>GBP</Currency>
+                                    <Amount>{employmentGrossPay}</Amount>
+                                </Answer>
+                            </GrossPayment>
+                            <IncludedInWage>
+                                <QuestionLabel>{employmentPayInclusions.label}</QuestionLabel>
+                                <Answer>{employmentPayInclusions}</Answer>
+                            </IncludedInWage>
+                            <PayFrequency>
+                                <QuestionLabel>{employmentPaymentFrequencyOtherText.label}</QuestionLabel>
+                                <Answer>{employmentPaymentFrequencyOtherText}</Answer>
+                            </PayFrequency>
+                            <UsualPayDay>
+                                <QuestionLabel>{employmentwhenGetPaid.label}</QuestionLabel>
+                                <Answer>{employmentwhenGetPaid}</Answer>
+                            </UsualPayDay>
+                            <ConstantEarnings>
+                                <QuestionLabel>{employmentSameAmountEachTime.label}</QuestionLabel>
+                                <Answer>{employmentSameAmountEachTime}</Answer>
+                            </ConstantEarnings>
+                        </Pay>
+                        <PaidForPension>
+                            <QuestionLabel>{payPensionScheme.label}</QuestionLabel>
+                            <Answer>{payPensionScheme}</Answer>
+                        </PaidForPension>
+                        <PaidForThingsToDoJob>
+                            <QuestionLabel>{payForThings.label}</QuestionLabel>
+                            <Answer>{payForThings}</Answer>
+                        </PaidForThingsToDoJob>
+                        <PaidForJobExpenses>
+                            <QuestionLabel>{haveExpensesForJob.label}</QuestionLabel>
+                            <Answer>{haveExpensesForJob.label}</Answer>
+                        </PaidForJobExpenses>
+                        <OtherEmployment>
+                            <QuestionLabel>{moreEmployment.label}</QuestionLabel>
+                            <Answer>{moreEmployment}</Answer>
+                        </OtherEmployment>
+                    </JobDetails>
+                </Employment>
+
+                <SelfEmployment>
+                    <SelfEmployedNow>
+                        <QuestionLabel>{stillSelfEmployed.label}</QuestionLabel>
+                        <Answer>{stillSelfEmployed.label}</Answer>
+                    </SelfEmployedNow>
+                    <MoreThanYearAgo>
+                        <QuestionLabel>{moreThanYearAgo.label}</QuestionLabel>
+                        <Answer>{moreThanYearAgo.label}</Answer>
+                    </MoreThanYearAgo>
+                    <DateStarted>
+                        <QuestionLabel>{startThisWork.label}</QuestionLabel>
+                        <Answer>{startThisWork_day}-{startThisWork_month}-{startThisWork_year}</Answer>
+                    </DateStarted>
+                    <DateEnded>
+                        <QuestionLabel>{finishThisWork.label}</QuestionLabel>
+                        <Answer>{finishThisWork_day}-{finishThisWork_month}-{finishThisWork_year}</Answer>
+                    </DateEnded>
+                    <PaidMoneyYet>
+                        <QuestionLabel>{paidMoney.label}</QuestionLabel>
+                        <Answer>{paidMoney}</Answer>
+                    </PaidMoneyYet>
+                    <PaidMoneyDate>
+                        <QuestionLabel>{paidMoneyDate.label}</QuestionLabel>
+                        <Answer>{paidMoneyDate_day}-{paidMoneyDate_month}-{paidMoneyDate_year}</Answer>
+                    </PaidMoneyDate>
+                    <PaidForPension>
+                        <QuestionLabel>{selfEmployedPayPensionScheme.label}</QuestionLabel>
+                        <Answer>{selfEmployedPayPensionScheme}</Answer>
+                    </PaidForPension>
+                    <PaidForJobExpenses>
+                        <QuestionLabel>{selfEmployedHaveExpensesForJob.label}</QuestionLabel>
+                        <Answer>{selfEmployedHaveExpensesForJob}</Answer>
+                    </PaidForJobExpenses>
+                </SelfEmployment>
+
+                <EmploymentAdditionalInfo>
+                    <QuestionLabel>{empAdditionalInfo.label}</QuestionLabel>
+                    <Answer>{empAdditionalInfo}</Answer>
+                </EmploymentAdditionalInfo>
+                
+                <SickPay>
+                    <StillBeingPaidThisPay>
+                        <QuestionLabel>{sickPayStillBeingPaidThisPay.label}</QuestionLabel>
+                        <Answer>{sickPayStillBeingPaidThisPay}</Answer>
+                    </StillBeingPaidThisPay>
+                    <WhenDidYouLastGetPaid>
+                        <QuestionLabel>{sickPayWhenDidYouLastGetPaid.label}</QuestionLabel>
+                        <Answer>{sickPayWhenDidYouLastGetPaid_day}-{sickPayWhenDidYouLastGetPaid_month}-{sickPayWhenDidYouLastGetPaid_year}</Answer>
+                    </WhenDidYouLastGetPaid>
+                    <WhoPaidYouThisPay>
+                        <QuestionLabel>{sickPayWhoPaidYouThisPay.label}</QuestionLabel>
+                        <Answer>{sickPayWhoPaidYouThisPay}</Answer>
+                    </WhoPaidYouThisPay>
+                    <AmountOfThisPay>
+                        <QuestionLabel>{sickPayAmountOfThisPay.label}</QuestionLabel>
+                        <Answer>{sickPayAmountOfThisPay}</Answer>
+                    </AmountOfThisPay>
+                    <HowOftenPaidThisPay>
+                        <QuestionLabel>{sickPayHowOftenPaidThisPay.label}</QuestionLabel>
+                        <Answer>{sickPayHowOftenPaidThisPay}</Answer>
+                    </HowOftenPaidThisPay>
+                </SickPay>
+                
+                <StatutoryMaternityPaternityAdopt>
+                    <PaymentType>
+                        <QuestionLabel>{otherStatPaymentPaymentTypesForThisPay.label}</QuestionLabel>
+                        <Answer>{otherStatPaymentPaymentTypesForThisPay}</Answer>
+                    </PaymentType>
+<!--
+                    <PaymentTypesForThisPay>
+                        <QuestionLabel>{otherStatPaymentPaymentTypesForThisPay.label}</QuestionLabel>
+                        <Answer>{otherStatPaymentPaymentTypesForThisPay}</Answer>
+                    </PaymentTypesForThisPay>
+-->
+                    <StillBeingPaidThisPay>
+                        <QuestionLabel>{otherStatPaymentStillBeingPaidThisPay.label}</QuestionLabel>
+                        <Answer>{otherStatPaymentStillBeingPaidThisPay}</Answer>
+                    </StillBeingPaidThisPay>
+                    <WhenDidYouLastGetPaid>
+                        <QuestionLabel>{otherStatPaymentWhenDidYouLastGetPaid.label}</QuestionLabel>
+                        <Answer>{otherStatPaymentWhenDidYouLastGetPaid_day}-{otherStatPaymentWhenDidYouLastGetPaid_month}-{otherStatPaymentWhenDidYouLastGetPaid_year}</Answer>
+                    </WhenDidYouLastGetPaid>
+                    <WhoPaidYouThisPay>
+                        <QuestionLabel>{otherStatPaymentWhoPaidYouThisPay.label}</QuestionLabel>
+                        <Answer>{otherStatPaymentWhoPaidYouThisPay}</Answer>
+                    </WhoPaidYouThisPay>
+                    <AmountOfThisPay>
+                        <QuestionLabel>{otherStatPaymentAmountOfThisPay.label}</QuestionLabel>
+                        <Answer>{otherStatPaymentAmountOfThisPay}</Answer>
+                    </AmountOfThisPay>
+                    <HowOftenPaidThisPay>
+                        <QuestionLabel>{otherStatPaymentHowOftenPaidThisPay}</QuestionLabel>
+                        <Answer>{otherStatPaymentHowOftenPaidThisPay.label}</Answer>
+                    </HowOftenPaidThisPay>
+                </StatutoryMaternityPaternityAdopt>
+                
+                <FosteringAllowance>
+                    <PaymentType>
+                        <QuestionLabel>{fosteringAllowancePay.label}</QuestionLabel>
+                        <Answer>{fosteringAllowancePay}</Answer>
+                    </PaymentType>
+<!--  
+                    <PaymentTypesForThisPay>
+                        <QuestionLabel>{fosteringAllowancePay.label}</QuestionLabel>
+                        <Answer>{fosteringAllowancePay}</Answer>
+                    </PaymentTypesForThisPay>
+-->
+                    <StillBeingPaidThisPay>
+                        <QuestionLabel>{fosteringAllowanceStillBeingPaidThisPay.label}</QuestionLabel>
+                        <Answer>{fosteringAllowanceStillBeingPaidThisPay}</Answer>
+                    </StillBeingPaidThisPay>
+                    <WhoPaidYouThisPay>
+                        <QuestionLabel>{fosteringAllowanceWhoPaidYouThisPay.label}</QuestionLabel>
+                        <Answer>{fosteringAllowanceWhoPaidYouThisPay}</Answer>
+                    </WhoPaidYouThisPay>
+                    <AmountOfThisPay>
+                        <QuestionLabel>{fosteringAllowanceAmountOfThisPay.label}</QuestionLabel>
+                        <Answer>{fosteringAllowanceAmountOfThisPay}</Answer>
+                    </AmountOfThisPay>
+                    <HowOftenPaidThisPay>
+                        <QuestionLabel>{fosteringAllowanceHowOftenPaidThisPay.label}</QuestionLabel>
+                        <Answer>{fosteringAllowanceHowOftenPaidThisPay}</Answer>
+                    </HowOftenPaidThisPay>
+                </FosteringAllowance>
+                
+                <DirectPay>
+                    <StillBeingPaidThisPay>
+                        <QuestionLabel>{directPaymentStillBeingPaidThisPay.label}</QuestionLabel>
+                        <Answer>{directPaymentStillBeingPaidThisPay}</Answer>
+                    </StillBeingPaidThisPay>
+                    <WhenDidYouLastGetPaid>
+                        <QuestionLabel>{directPaymentWhenDidYouLastGetPaid.label}</QuestionLabel>
+                        <Answer>{directPaymentWhenDidYouLastGetPaid_day}-{directPaymentWhenDidYouLastGetPaid_month}-{directPaymentWhenDidYouLastGetPaid_year}</Answer>
+                    </WhenDidYouLastGetPaid>
+                    <WhoPaidYouThisPay>
+                        <QuestionLabel>{directPaymentWhoPaidYouThisPay.label}</QuestionLabel>
+                        <Answer>{directPaymentWhoPaidYouThisPay}</Answer>
+                    </WhoPaidYouThisPay>
+                    <AmountOfThisPay>
+                        <QuestionLabel>{directPaymentAmountOfThisPay.label}</QuestionLabel>
+                        <Answer>{directPaymentAmountOfThisPay}</Answer>
+                    </AmountOfThisPay>
+                    <HowOftenPaidThisPay>
+                        <QuestionLabel>{directPaymentHowOftenPaidThisPay.label}</QuestionLabel>
+                        <Answer>{directPaymentHowOftenPaidThisPay}</Answer>
+                    </HowOftenPaidThisPay>
+                    <HowOftenPaidThisPayOther>
+                        <QuestionLabel>{directPaymentHowOftenPaidThisPayOther.label}</QuestionLabel>
+                        <Answer>{directPaymentHowOftenPaidThisPayOther}</Answer>
+                    </HowOftenPaidThisPayOther>
+                </DirectPay>
+<!--                  
+                <RentalIncomeInfo>
+                    <QuestionLabel>What rental income have you had since 08/04/2016?{}</QuestionLabel>
+                    <Answer>Some money paid by tenants{}</Answer>
+                </RentalIncomeInfo>
+-->
+                <OtherPaymentsInfo>
+                    <QuestionLabel>{otherPaymentsInfo.label}</QuestionLabel>
+                    <Answer>{otherPaymentsInfo}</Answer>
+                </OtherPaymentsInfo>
+                
+            </Incomes>
+            
+            <HavePartner>
+                <QuestionLabel>{hadPartnerSinceClaimDate.label}</QuestionLabel>
+                <Answer>{hadPartnerSinceClaimDate}</Answer>
+            </HavePartner>
+            
+            <Partner>
+                <Surname>
+                    <QuestionLabel>{partnerDetailsSurname.label}</QuestionLabel>
+                    <Answer>{partnerDetailsSurname}</Answer>
+                </Surname>
+                <OtherNames>
+                    <QuestionLabel>{partnerDetailsFirstName.label}</QuestionLabel>
+                    <Answer>{partnerDetailsFirstName}</Answer>
+                </OtherNames>
+                <MiddleNames>
+                    <QuestionLabel>{partnerDetailsMiddleName.label}</QuestionLabel>
+                    <Answer>{partnerDetailsMiddleName}</Answer>
+                </MiddleNames>
+                <Title>
+                    <QuestionLabel>{partnerDetailsTitle.label}</QuestionLabel>
+                    <Answer>{partnerDetailsTitle}</Answer>
+                </Title>
+                <DateOfBirth>
+                    <QuestionLabel>{partnerDetailsDateOfBirth.label}</QuestionLabel>
+                    <Answer>{partnerDetailsDateOfBirth_day}-{partnerDetailsDateOfBirth_month}-{partnerDetailsDateOfBirth_year}</Answer>
+                </DateOfBirth>
+                <NationalInsuranceNumber>
+                    <QuestionLabel>{partnerDetailsNationalInsuranceNumber.label}</QuestionLabel>
+                    <Answer>{partnerDetailsNationalInsuranceNumber}</Answer>
+                </NationalInsuranceNumber>
+                <NationalityPartner>
+                    <QuestionLabel>{partnerDetailsNationality.label}</QuestionLabel>
+                    <Answer>{partnerDetailsNationality}</Answer>
+                </NationalityPartner>
+                <RelationshipStatus>
+                    <SeparatedFromPartner>
+                        <QuestionLabel>{partnerDetailsSeparated.label}</QuestionLabel>
+                        <Answer>{partnerDetailsSeparated}</Answer>
+                    </SeparatedFromPartner>
+                </RelationshipStatus>
+                <IsCaree>
+                    <QuestionLabel>{isPartnerPersonYouCareFor.label}</QuestionLabel>
+                    <Answer>{isPartnerPersonYouCareFor}</Answer>
+                </IsCaree>
+            </Partner>
+            
+            <OtherBenefits>
+                <EEA>
+                    <EEAGuardQuestion>
+                        <QuestionLabel>{eeaGuardQuestion.label}</QuestionLabel>
+                        <Answer>{eeaGuardQuestion}</Answer>
+                    </EEAGuardQuestion>
+                    <EEAReceivePensionsBenefits>
+                        <QuestionLabel>{benefitsFromEEADetails.label}</QuestionLabel>
+                        <Answer>{benefitsFromEEADetails}</Answer>
+                    </EEAReceivePensionsBenefits>
+                    <EEAWorkingInsurance>
+                        <QuestionLabel>{workingForEEADetails.label}</QuestionLabel>
+                        <Answer>{workingForEEADetails}</Answer>
+                    </EEAWorkingInsurance>
+                </EEA>
+            </OtherBenefits>
+            
+            <Payment>
+                <PaymentFrequency>
+                    <QuestionLabel>{paymentFrequency.label}</QuestionLabel>
+                    <Answer>{paymentFrequency}</Answer>
+                </PaymentFrequency>
+                <InitialAccountQuestion>
+                    <QuestionLabel>{likeToPay.label}</QuestionLabel>
+                    <Answer>{likeToPay.label}</Answer>
+                </InitialAccountQuestion>
+            </Payment>
+            
+            <OtherInformation>
+                <WelshCommunication>
+                    <QuestionLabel>{welshCommunication.label}</QuestionLabel>
+                    <Answer>{welshCommunication}</Answer>
+                </WelshCommunication>
+                <AdditionalInformation>
+                    <QuestionLabel>{anythingElse.label}</QuestionLabel>
+                    <Answer>{anythingElse}</Answer>
+                </AdditionalInformation>
+            </OtherInformation>
+            
+            <Declaration>
+                <DeclarationStatement>
+                    <Content>{declarationText.line1}</Content>
+                    <Content>{declarationText.line2}</Content>
+                    <Content>{declarationText.line3}</Content>
+                    <Content>{declarationText.line4}</Content>
+                    <Content>{declarationText.line5}</Content>
+                    <Content>{declarationText.line8}</Content>
+                </DeclarationStatement>
+                <DeclarationQuestion>
+                    <QuestionLabel>{thirdParty.label}</QuestionLabel>
+                    <Answer>{thirdParty}</Answer>
+                </DeclarationQuestion>
+<!--
+                <DeclarationQuestion>
+                    <QuestionLabel>I agree{}</QuestionLabel>
+                    <Answer>Yes{}</Answer>
+                </DeclarationQuestion>
+-->
+                <DeclarationNameOrg>
+                    <QuestionLabel>{nameAndOrganisation.label}</QuestionLabel>
+                    <Answer>{nameAndOrganisation}</Answer>
+                </DeclarationNameOrg>
+            </Declaration>
+            
+            <Disclaimer>
+                <DisclaimerStatement>
+                    <Title>This is my claim for Carer's Allowance.{}</Title>
+                    <Content>{disclaimer.section1.line1}</Content>
+                    <Content>{disclaimer.section2.line1}</Content>
+                    <Content>{disclaimer.section2.line2}</Content>
+                    <Content>{disclaimer.section2.line3} {disclaimer.section2.line4} {disclaimer.section2.line5}</Content>
+                    <Content>{disclaimer.section3.line1} {disclaimer.section3.line2}</Content>
+                    <Content>{disclaimer.section4.line1}</Content>
+                </DisclaimerStatement>
+<!-- 
+                <DisclaimerQuestion>
+                    <QuestionLabel>I agree{}</QuestionLabel>
+                    <Answer>Yes{}</Answer>
+                </DisclaimerQuestion>
+-->
+            </Disclaimer>
+            
+            <EvidenceList>
+                <RecipientAddress>
+                    <QuestionLabel>{evidenceAddress.label}</QuestionLabel>
+                    <Answer>
+                        <Line>{evidenceAddressLineOne}</Line>
+                        <Line>{evidenceAddressLineTwo}</Line>
+                        <Line>{evidenceAddressLineThree}</Line>
+                        <PostCode>{evidencePostcode}</PostCode>
+                    </Answer>
+                </RecipientAddress>
+                <Evidence>
+                    <Title>{evidenceText.section1.line1}</Title>
+                </Evidence>
+                <Evidence>
+                    <Title>{evidenceText.section2.line1}</Title>
+                </Evidence>
+                <Evidence>
+                    <Title>{evidenceText.section3.line1}</Title>
+                </Evidence>
+                <Evidence>
+                    <Title>{evidenceText.section4.line1}</Title>
+                    <Content>{evidenceText.section4.line2}</Content>
+                    <Content>{evidenceText.section4.line3}</Content>
+                    <Content>{evidenceText.section4.line4}</Content>
+                    <Content>{evidenceText.section4.line5}</Content>
+                    <Content>{evidenceText.section4.line6}</Content>
+                    <Content>{evidenceText.section4.line7}</Content>
+                    <Content>{evidenceText.section4.line8}</Content>
+                    <Content>{evidenceText.section4.line9}</Content>
+                </Evidence>
+            </EvidenceList>
+            
+            <Consents>
+                <Consent>
+                    <QuestionLabel>{tellUsWhyInformation.label}</QuestionLabel>
+                    <Answer>{tellUsWhyInformation}</Answer>
+                </Consent>
+            </Consents>
+            
+            <AssistedDecisions>
+                <AssistedDecision>
+                    <Reason>{assistedDecisionReason}</Reason>
+                    <RecommendedDecision>{assistedDecisionDecision}</RecommendedDecision>
+                </AssistedDecision>
+            </AssistedDecisions>
+            
+        </DWPCAClaim>
+    </DWPCATransaction>
+</DWPBody>

@@ -10,7 +10,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
-import uk.gov.dwp.carersallowance.controller.EmploymentSummaryController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 @Controller

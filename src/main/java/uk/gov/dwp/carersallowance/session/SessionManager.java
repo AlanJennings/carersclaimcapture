@@ -1,8 +1,12 @@
 package uk.gov.dwp.carersallowance.session;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Service;
 
@@ -17,6 +21,14 @@ public class SessionManager {
     }
 
     public Session getSession(String sessionId) { return getSession(sessionId, false); }
+
+    public Session createSession() {
+        Session session = new Session();
+        sessions.put(session.getSessionId(),  session);
+
+        return session;
+    }
+
     /**
      * We don't need to synchronize this as new sessions are created using statistically
      * unique IDs that don't overlap
@@ -32,6 +44,19 @@ public class SessionManager {
             }
         }
 
+        return session;
+    }
+
+    public Session createFromHttpSession(HttpSession httpSession) {
+        Session session = createSession();
+        if(httpSession != null) {
+            Map<String, Object> sessionData = session.getData();
+
+            List<String> attrNames = Collections.list(httpSession.getAttributeNames());
+            for(String attrName: attrNames) {
+                sessionData.put(attrName,  httpSession.getAttribute(attrName));
+            }
+        }
         return session;
     }
 
