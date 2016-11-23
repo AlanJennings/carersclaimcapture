@@ -18,7 +18,7 @@ import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.validations.ValidationPatterns;
 
-@Controller
+//@Controller
 public class ContactDetailsController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(ContactDetailsController.class);
 

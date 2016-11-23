@@ -32,7 +32,7 @@
         </t:hiddenPanel>
     </t:pageContent>
 
-    <script type="text/javascript" src="<c:url value='/assets/javascript/s_claim_date/g_claimDate.js' />"></script>
+    <script type="text/javascript" src="<c:url value='/javascript/s_claim_date/g_claimDate.js' />"></script>
 
     <script type="text/javascript">
         $(function() {

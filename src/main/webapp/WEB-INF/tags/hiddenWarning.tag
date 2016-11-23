@@ -8,7 +8,7 @@
 <%@ attribute name="triggerValue" %>
 <%@ attribute name="outerClass" %>
 
-<script type="text/javascript" src="<c:url value='/assets/javascript/hiddenPanel.js' />" ></script>
+<script type="text/javascript" src="<c:url value='/javascript/hiddenPanel.js' />" ></script>
 
 <t:defaultValue value="${pageScope.outerClass}" defaultValue="validation-summary" var="outerClass" />
 

@@ -2527,7 +2527,7 @@ input[id*="nino"], input[name*="nino"], input[id*="nationalInsurance"],
 
 #global-browser-prompt .dismiss {
     background-image:
-        url(https://assets.digital.cabinet-office.gov.uk/static/close-d05b62d4287151f959ffdcf2387898f7.png);
+        url(https:/.digital.cabinet-office.gov.uk/static/close-d05b62d4287151f959ffdcf2387898f7.png);
     background-color: transparent;
     background-repeat: no-repeat;
     background-position: center right;
@@ -2572,7 +2572,7 @@ input[id*="nino"], input[name*="nino"], input[id*="nationalInsurance"],
     font-weight: 300;
     text-transform: none;
     background-image:
-        url(https://assets.digital.cabinet-office.gov.uk/static/separator-73822610794bc3a64871f144d93d6526.png);
+        url(https:/.digital.cabinet-office.gov.uk/static/separator-73822610794bc3a64871f144d93d6526.png);
     background-position: 100% 50%;
     background-repeat: no-repeat;
     float: left;
@@ -2602,7 +2602,7 @@ input[id*="nino"], input[name*="nino"], input[id*="nationalInsurance"],
         192dpi) , only screen and (min-resolution: 2dppx) {
     #global-breadcrumb nav ol li {
         background-image:
-            url(https://assets.digital.cabinet-office.gov.uk/static/separator-2x-2ff66846b80b66edba8ce56d29daa935.png);
+            url(https:/.digital.cabinet-office.gov.uk/static/separator-2x-2ff66846b80b66edba8ce56d29daa935.png);
         background-size: 6px 11px
     }
 }

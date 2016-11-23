@@ -9,7 +9,7 @@
 <%@ attribute name="outerClass" %>
 <%@ attribute name="clearOnHide" %>
 
-<script type="text/javascript" src="<c:url value='/assets/javascript/hiddenPanel.js' />" ></script>
+<script type="text/javascript" src="<c:url value='/javascript/hiddenPanel.js' />" ></script>
 
 <t:defaultValue value="${pageScope.clearOnHide}" defaultValue="true" var="clearOnHide" />
 <t:defaultValue value="${pageScope.outerClass}" defaultValue="form-group" var="outerClass" />

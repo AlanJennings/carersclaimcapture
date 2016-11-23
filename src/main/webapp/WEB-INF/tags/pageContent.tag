@@ -64,7 +64,7 @@
                 </h1>
                 
                 <form action="<c:url value='${pageScope.currentPage}' />" method="POST" role="form" style="margin-bottom: 30px;">
-                    <input type="hidden" name="csrfToken" value="1b8e21408cf8c53aeaf62e523f4af3e8b7fe4b6a-1460720627654-dfd779df76ec152c0ae4d491"/>    
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <input type="hidden" name="pageName" value="${pageScope.page}"/>    
                     
                     <t:validationSummary errors="${pageScope.errors}" />

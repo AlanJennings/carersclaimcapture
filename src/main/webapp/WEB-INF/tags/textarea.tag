@@ -18,7 +18,7 @@
 
 <%@ attribute name="errors" type="uk.gov.dwp.carersallowance.validations.ValidationSummary"%>
 
-<script type="text/javascript" src="<c:url value='/assets/javascript/textAreaCounter.js' />" ></script>
+<script type="text/javascript" src="<c:url value='/javascript/textAreaCounter.js' />" ></script>
 
 <t:defaultValue value="${pageScope.id}" defaultValue="${pageScope.name}" var="id" />
 <t:defaultValue value="${pageScope.useRawValue}" defaultValue="false" var="useRawValue" />

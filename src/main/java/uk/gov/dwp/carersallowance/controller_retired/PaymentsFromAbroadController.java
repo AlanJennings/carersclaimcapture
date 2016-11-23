@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
-@Controller
+//@Controller
 public class PaymentsFromAbroadController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(PaymentsFromAbroadController.class);
 

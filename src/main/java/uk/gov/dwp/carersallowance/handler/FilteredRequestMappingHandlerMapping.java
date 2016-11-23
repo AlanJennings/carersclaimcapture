@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.method.HandlerMethod;
@@ -25,6 +26,7 @@ import uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultFormControl
  *
  * @author drh
  */
+@Component
 public class FilteredRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
     private static final Logger LOG = LoggerFactory.getLogger(FilteredRequestMappingHandlerMapping.class);
 

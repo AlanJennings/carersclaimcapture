@@ -150,7 +150,7 @@
         
     </t:pageContent>
     
-    <script type="text/javascript" src="<c:url value='/assets/javascript/s_breaks/g_breaksInCare.js' />"></script>
+    <script type="text/javascript" src="<c:url value='/javascript/s_breaks/g_breaksInCare.js' />"></script>
 </t:mainPage>
 
 

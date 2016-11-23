@@ -31,12 +31,12 @@
         <title>${pageScope.pageTitle}</title>
 
         <!-- Styles for old Internet Explorer Browsers -->
-        <!--[if IE 6]><link href="/assets/stylesheet/header-footer-only-ie6.css" media="screen" rel="stylesheet" type="text/css"><![endif]-->
-        <!--[if IE 7]><link href="/assets/stylesheet/header-footer-only-ie7.css" media="screen" rel="stylesheet" type="text/css"><![endif]-->
-        <!--[if IE 8]><link href="/assets/stylesheet/header-footer-only-ie8.css" media="screen" rel="stylesheet" type="text/css"><![endif]-->
+        <!--[if IE 6]><link href="/stylesheet/header-footer-only-ie6.css" media="screen" rel="stylesheet" type="text/css"><![endif]-->
+        <!--[if IE 7]><link href="/stylesheet/header-footer-only-ie7.css" media="screen" rel="stylesheet" type="text/css"><![endif]-->
+        <!--[if IE 8]><link href="/stylesheet/header-footer-only-ie8.css" media="screen" rel="stylesheet" type="text/css"><![endif]-->
 
         <!-- Carer's Allowance stylesheet -->
-        <link rel="stylesheet" media="screen" href="<c:url value='/assets/stylesheet/app_t.min.css' />" />
+        <link rel="stylesheet" media="screen" href="/stylesheet/app_t.min.css" />
 <style>
     /* See breaks in care etc. */
     .actions button {
@@ -65,7 +65,7 @@
 </style>
 
         <!-- Print stylesheet -->
-        <link href="<c:url value='/assets/stylesheet/print.css' />" media="print" rel="stylesheet" type="text/css">
+        <link href="/stylesheet/print.css" media="print" rel="stylesheet" type="text/css">
 
         <!-- To prevent call to /browserconfig.xml from IE11 and higher. We do not use notifications. -->
         <meta name="msapplication-config" content="none" />
@@ -74,8 +74,8 @@
         <script type="text/javascript">
             (function(){if(window.opera){return;}
             setTimeout(function(){var a=document,g,b={families:(g=
-            ["nta"]),urls:["<link href="<c:url value='/assets/stylesheet/fonts-ie8.css' />" ]},
-            c="<c:url value='/assets/javascript/webfont-debug.js' />",d="script",
+            ["nta"]),urls:["<link href='/stylesheet/fonts-ie8.css'" ]},
+            c="/javascript/webfont-debug.js",d="script",
             e=a.createElement(d),formData=a.getElementsByTagName(d)[0],h=g.length;WebFontConfig
             ={custom:b},e.src=c,formData.parentNode.insertBefore(e,formData);for(;h=h-1;a.documentElement
             .className+=' wf-'+g[h].replace(/\s/g,'').toLowerCase()+'-n4-loading');},0)
@@ -85,24 +85,24 @@
         <![endif]-->
 
         <!--[if gte IE 9]><!-->
-        <link href="<c:url value='/assets/stylesheet/fonts.css' />" media="all" rel="stylesheet" type="text/css">
+        <link href="/stylesheet/fonts.css" media="all" rel="stylesheet" type="text/css">
         <!--<![endif]-->
 
         <!--[if lt IE 9]>
-        <script src="<c:url value='/assets/javascript/ie.js' />" type="text/javascript"></script>
+        <script src="/javascript/ie.js" type="text/javascript"></script>
         <![endif]-->
 
-        <link rel="shortcut icon" href="<c:url value='/assets/images/favicon-447e4ac1ab790342660eacfe3dcce264.ico' />" type="image/x-icon">
-        <link rel="icon"  href="<c:url value='/assets/images/favicon-447e4ac1ab790342660eacfe3dcce264.ico' />" type="image/x-icon">
+        <link rel="shortcut icon" href="/images/favicon-447e4ac1ab790342660eacfe3dcce264.ico" type="image/x-icon">
+        <link rel="icon"  href="/images/favicon-447e4ac1ab790342660eacfe3dcce264.ico" type="image/x-icon">
 
         <!-- For third-generation iPad with high-resolution Retina display: -->
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="<c:url value='/assets/images/apple-touch-icon-144x144-4e306e01c31e237722b82b7aa7130082.png' />">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/apple-touch-icon-144x144-4e306e01c31e237722b82b7aa7130082.png">
         <!-- For iPhone with high-resolution Retina display: -->
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="<c:url value='/assets/images/apple-touch-icon-114x114-f1d7ccdc7b86d923386b373a9ba5e3db.png' />">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/apple-touch-icon-114x114-f1d7ccdc7b86d923386b373a9ba5e3db.png">
         <!-- For first- and second-generation iPad: -->
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="<c:url value='/assets/images/apple-touch-icon-72x72-2ddbe540853e3ba0d30fbad2a95eab3c.png' />">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/apple-touch-icon-72x72-2ddbe540853e3ba0d30fbad2a95eab3c.png">
         <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
-        <link rel="apple-touch-icon-precomposed" href="<c:url value='/assets/images/apple-touch-icon-57x57-37527434942ed8407b091aae5feff3f3.png' />">
+        <link rel="apple-touch-icon-precomposed" href="/images/apple-touch-icon-57x57-37527434942ed8407b091aae5feff3f3.png">
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -110,15 +110,15 @@
            var landingURL = "http://www.gov.uk/carers-allowance/how-to-claim"
         </script>
 
-        <script type="text/javascript" src="<c:url value='/assets/javascript/jquery/jquery-1.9.1.js' />" ></script>
-        <script type="text/javascript" src="<c:url value='/assets/javascript/date.js' />" ></script>
-        <script type="text/javascript" src="<c:url value='/assets/javascript/bb.js' />" ></script>
-        <script type="text/javascript" src="<c:url value='/assets/javascript/stageprompt-2.0.1.js' />" ></script>
-        <script type="text/javascript" src="<c:url value='/assets/javascript/custom.js' />" ></script>
-        <script type="text/javascript" src="<c:url value='/assets/javascript/respond.min.js' />" ></script>
+        <script type="text/javascript" src="/javascript/jquery/jquery-1.9.1.js" ></script>
+        <script type="text/javascript" src="/javascript/date.js" ></script>
+        <script type="text/javascript" src="/javascript/bb.js" ></script>
+        <script type="text/javascript" src="/javascript/stageprompt-2.0.1.js" ></script>
+        <script type="text/javascript" src="/javascript/custom.js" ></script>
+        <script type="text/javascript" src="/javascript/respond.min.js" ></script>
 
         <!--[if (lt IE 9) & (!IEMobile)]>
-        <script src="<c:url value='/assets/javascript/respond.min.js' />" ></script>
+        <script src="/javascript/respond.min.js" ></script>
         <![endif]-->
 
         <c:set var="analyticsId"     value="UA-57523228-19" />
