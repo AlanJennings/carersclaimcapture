@@ -5,14 +5,17 @@ import org.apache.commons.lang3.ObjectUtils;
 public class XPathMapping implements Comparable<XPathMapping> {
     private String xpath;
     private String value;
+    private String processingInstruction;
 
-    public XPathMapping(String value, String xpath) {
+    public XPathMapping(String value, String xpath, String processingInstruction) {
         this.xpath = xpath;
         this.value = value;
+        this.processingInstruction = processingInstruction;
     }
 
-    public String getXpath() { return xpath; }
-    public String getValue() { return value; }
+    public String getXpath()                 { return xpath; }
+    public String getValue()                 { return value; }
+    public String getProcessingInstruction() { return processingInstruction; }
 
     /**
      * Compare using xpath field
@@ -41,6 +44,7 @@ public class XPathMapping implements Comparable<XPathMapping> {
         buffer.append("=[");
         buffer.append("data = ").append(value);
         buffer.append(", xpath = ").append(xpath);
+        buffer.append(", processingInstruction = ").append(processingInstruction);
         buffer.append("]");
 
         return buffer.toString();

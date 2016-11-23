@@ -131,9 +131,10 @@
                     <Answer>No{}</Answer>
                 </OtherCarer>
 -->
-                <!-- repeatable block, not sure how going to do this yet -->
+                <!-- repeatable block, output the enclosing tag, map the fieldCollectionName to the enclosing tag name, include order attribute -->
                 <!-- and of course this has changed as well -->
-                <CareBreak>
+                <CareBreak order="1">
+                    <!-- Inner fields are from map, as enclosing map -->
                     <BreaksSinceClaim>
                         <QuestionLabel>Since 8 January 2016 have there been any times you or Jane Bloggs have been in hospital, respite or care home for at least a week?{}</QuestionLabel>
                         <Answer>Hospital, Respite or care home{}</Answer>
@@ -144,7 +145,7 @@
                     </BreaksOtherSinceClaim>
                 </CareBreak>
                 
-                <CareBreak>
+                <CareBreak order="2">
                     <BreaksType>
                         <QuestionLabel>Type of Break{}</QuestionLabel>
                         <Answer>DPHospital{}</Answer>
@@ -171,7 +172,7 @@
                     </BreaksInCareRespiteStillCaring>
                 </CareBreak>
                 
-                <CareBreak>
+                <CareBreak order="3">
                     <BreaksType>
                         <QuestionLabel>Type of Break{}</QuestionLabel>
                         <Answer>DPRespite{}</Answer>
@@ -202,7 +203,7 @@
                     </BreaksInCareRespiteStillCaring>
                 </CareBreak>
                 
-                <CareBreak>
+                <CareBreak order="4">
                     <BreaksType>
                         <QuestionLabel>Type of Break{}</QuestionLabel>
                         <Answer>Other{}</Answer>
@@ -231,7 +232,7 @@
                     </ReasonCaree>
                 </CareBreak>
                 
-                <CareBreak>
+                <CareBreak order="5">
                     <BreaksSinceClaim>
                         <QuestionLabel>Since 8 January 2016 have there been any other times you or Jane Bloggs have been in hospital, respite or care home for at least a week?{}</QuestionLabel>
                         <Answer>None{}</Answer>
