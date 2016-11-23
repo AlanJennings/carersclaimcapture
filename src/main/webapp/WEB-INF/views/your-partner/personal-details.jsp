@@ -21,7 +21,7 @@
             <t:textedit name="partnerDetailsMiddleName" maxLength="17" />
             <t:textedit name="partnerDetailsSurname" maxLength="35" />
             <t:textedit name="partnerDetailsOtherNames" maxLength="35" />
-            <t:textedit name="partnerDetailsNationalInsuranceNumber" maxLength="19" />  <!-- We accept a possible space around each character with 9 max in nino ie. AB010203D so 9*2+1 ==> 19 chars max -->
+            <t:textedit name="partnerDetailsNationalInsuranceNumber" maxLength="19"  additionalClasses="ni-number" />  <!-- We accept a possible space around each character with 9 max in nino ie. AB010203D so 9*2+1 ==> 19 chars max -->
             <t:datefield name="partnerDetailsDateOfBirth" />
             <t:textedit name="partnerDetailsNationality" maxLength="35" />
             <t:yesnofield name="partnerDetailsSeparated" />            

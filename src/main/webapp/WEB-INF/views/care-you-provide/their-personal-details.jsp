@@ -19,7 +19,7 @@
 
         <t:hiddenPanel id="addressWrapper" triggerId="careeSameAddress" triggerValue="no">
             <t:address name="careeAddress" maxlength="35" />
-            <t:textedit name="careePostcode" maxLength="10" />
+            <t:textedit name="careePostcode" maxLength="10" additionalClasses="postcode" />
         </t:hiddenPanel>
 
     </t:pageContent>

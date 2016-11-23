@@ -13,7 +13,7 @@
         <t:textedit name="employerName" maxLength="60" />
         <t:textedit name="employmentPhoneNumber" maxLength="20" />
         <t:address name="employmentAddress" maxlength="35" />
-        <t:textedit name="employmentPostcode" maxLength="10" />
+        <t:textedit name="employmentPostcode" maxLength="10" additionalClasses="postcode" />
         <t:yesnofield name="startJobBeforeClaimDate" />
 
         <t:hiddenPanel id="startJobBeforeClaimDateWrap" triggerId="startJobBeforeClaimDate" triggerValue="no">

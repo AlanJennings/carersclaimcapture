@@ -10,7 +10,7 @@
 
         <!-- validationErrors = '${validationErrors}' -->
         <t:address name="carerAddress" maxlength="35"/>
-        <t:textedit name="carerPostcode" maxLength="10" />
+        <t:textedit name="carerPostcode" maxLength="10" additionalClasses="postcode" />
         <t:textedit name="carerHowWeContactYou" maxLength="20" />
         <t:checkbox name="carerContactYouByTextPhone" additionalClasses="checkbox-single" outerClass="form-group checkbox-single" blockLabel="false" />
         <t:yesnofield name="carerWantsEmailContact"/>
