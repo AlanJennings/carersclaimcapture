@@ -117,7 +117,7 @@ publishing {
 
         }
         distribution(MavenPublication) {
-            artifact ("${libsDir}/${archivesBaseName}-${version}-full.jar") {
+            artifact ("${libsDir}/${archivesBaseName}-${version}-full.war") {
                 classifier = 'full'
             }
         }
