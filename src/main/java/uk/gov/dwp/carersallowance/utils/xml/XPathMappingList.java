@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import uk.gov.dwp.carersallowance.controller.SubmitClaimController;
+import uk.gov.dwp.carersallowance.utils.KeyValue;
 
 public class XPathMappingList {
     private static final String DEFAULT_SEPARATOR = "=";
@@ -49,25 +50,15 @@ public class XPathMappingList {
             return;
         }
 
-        XPathMapping item;
-        if(separator == null) {
-            item = new XPathMapping(line, null);
-        } else {
-            int pos = line.indexOf(separator);
-            if(pos < 0) {
-                item = new XPathMapping(line, null);
-            } else {
-                String fieldName = line.substring(0, pos).trim();
-                String xpath;
-                if(pos == (line.length() -1)) {
-                    xpath = null;
-                } else {
-                    xpath = line.substring(pos + 1).trim();
-                }
+        KeyValue valueAndXpath = new KeyValue(line, separator);
+        String value = valueAndXpath.getKey();
+        String rawXPath = valueAndXpath.getValue();
 
-                item = new XPathMapping(fieldName, xpath);
-            }
-        }
+        KeyValue xPathAndProcessingInstruction = new KeyValue(rawXPath, "[", "]");
+        String xPath = xPathAndProcessingInstruction.getKey();
+        String processingInstruction = xPathAndProcessingInstruction.getValue();
+
+        XPathMapping item = new XPathMapping(value, xPath, processingInstruction);
         add(item);
     }
 
@@ -80,14 +71,25 @@ public class XPathMappingList {
             XPathMapping existingItem = valueMap.get(item.getValue());
             throw new MappingException("value(" + item.getValue() + ") is already mapped to: " + existingItem.getXpath());
         }
-        if(xpathMap.containsKey(item.getXpath())) {
-            XPathMapping existingItem = xpathMap.get(item.getXpath());
-            throw new MappingException("value(" + item.getXpath() + ") is already mapped to: " + existingItem.getValue());
+
+        // e.g value                 = carerAddressLineOne
+        //     xpath                 = DWPBody/.../Answer/Line
+        //     processingInstruction = @order=1
+        // if processingInstruction starts with @ then append to xpath e.g. DWPBody/.../Answer/Line[@order="1"]
+        String qualifiedXPath = item.getXpath();
+        if(qualifiedXPath != null && item.getProcessingInstruction() != null) {
+            if(item.getProcessingInstruction().startsWith("messages(") == false) {
+                qualifiedXPath = qualifiedXPath + "[" + item.getProcessingInstruction() + "]";
+            }
+        }
+        if(xpathMap.containsKey(qualifiedXPath)) {
+            XPathMapping existingItem = xpathMap.get(qualifiedXPath);
+            throw new MappingException("value(" + qualifiedXPath + ") is already mapped to: " + existingItem.getValue());
         }
 
         list.add(item);
         valueMap.put(item.getValue(), item);
-        xpathMap.put(item.getXpath(), item);
+        xpathMap.put(qualifiedXPath, item);
 
         immutableList = null;
         immutableValueMap = null;

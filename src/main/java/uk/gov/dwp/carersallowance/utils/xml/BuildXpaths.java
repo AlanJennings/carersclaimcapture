@@ -57,7 +57,7 @@ public class BuildXpaths {
                     LOG.debug("found form variable");
                     String data = extractFormVariable(value);
                     if(data.endsWith(".label") == false) {
-                        XPathMapping item = new XPathMapping(data, xpath);
+                        XPathMapping item = new XPathMapping(data, xpath, null);
                         list.add(item);
                     }
                 }
