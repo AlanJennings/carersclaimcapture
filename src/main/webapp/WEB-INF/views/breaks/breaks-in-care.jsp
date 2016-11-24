@@ -5,7 +5,6 @@
 <%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %> 
 
 <!DOCTYPE html>
-
 <t:mainPage page="page.breaks-in-care" currentPage="${currentPage}">
 
     <t:pageContent errors="${validationErrors}" page="page.breaks-in-care" backLink="${previousPage}">
@@ -142,7 +141,8 @@
             </t:panel>
         </c:if>
 
-        <t:yesnofield name="moreBreaksInCare" labelKeyArgs="${cads:dateOffset(dateOfClaim, 'd MMMMMMMMMM yyyy', '')}|${careeFirstName} ${careeSurname}"/>
+        <%-- ${cads:dateOffset(dateOfClaim, 'd MMMMMMMMMM yyyy', '')}| --%>
+        <t:yesnofield name="moreBreaksInCare" labelKeyArgs="${careeFirstName} ${careeSurname}"/>
         
         <t:hiddenPanel id="moreBreaksInCareWrap" triggerId="moreBreaksInCare" triggerValue="yes">
             <t:radiobuttons name="moreBreaksInCareResidence" optionValues="hospital|respite|somewhere else" optionLabelKeys="hospital|respite|elsewhere" />
