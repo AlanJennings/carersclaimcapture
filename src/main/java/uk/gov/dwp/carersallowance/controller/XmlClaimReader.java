@@ -44,17 +44,22 @@ public class XmlClaimReader {
     private Set<String>              NOT_SUPPORTED  = new HashSet<>(Arrays.asList(new String[]{"DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak"}));
     private static final Set<String> ACTIVE_ATTRS   = new HashSet<>(Arrays.asList(new String[]{"type", "order"}));
     private static final String      PATH_SEPARATOR = "/";
+    private static final Set<String> IGNORE_MAPPING = new HashSet<>(Arrays.asList(new String[]{
+            "DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/Evidence/Title"       // TODO
+    }));
 
     private XPathMappingList    valueMappings;
     private Map<String, Object> values;
     private List<String>        errors;
+    private boolean             sessionVariablesOnly;
 
-    public XmlClaimReader(String xml, XPathMappingList valueMappings) throws InstantiationException {
-        this((Document)XmlPrettyPrinter.stringToNode(xml), valueMappings);
+    public XmlClaimReader(String xml, XPathMappingList valueMappings, boolean sessionVariablesOnly) throws InstantiationException {
+        this((Document)XmlPrettyPrinter.stringToNode(xml), valueMappings, sessionVariablesOnly);
     }
 
-    public XmlClaimReader(Document xml, XPathMappingList valueMappings) {
+    public XmlClaimReader(Document xml, XPathMappingList valueMappings, boolean sessionVariablesOnly) {
         this.valueMappings = valueMappings;
+        this.sessionVariablesOnly = sessionVariablesOnly;
 
         errors = new ArrayList<>();
         values = new HashMap<>();
@@ -119,13 +124,19 @@ public class XmlClaimReader {
         String data = ((CharacterData)xml).getData();
         LOG.debug("Found Text: {}", data);
         XPathMapping mapping = valueMappings.getXPathMap().get(parentPath);
-        if(mapping == null) {
+        if(IGNORE_MAPPING.contains(parentPath)) {
+            return; // do nothing
+        } else if(mapping == null) {
             LOG.error("Unknown mapping for {}", parentPath);
             errors.add("Unknown mapping for " + parentPath);
             throw new IllegalStateException("Unknown mapping for " + parentPath);
         } else {
             String key = mapping.getValue();
-            values.put(key, data);
+            if(sessionVariablesOnly && key != null && (key.startsWith("/") || key.contains("."))) {
+                // do not store non-session variables
+            } else {
+                values.put(key, data);
+            }
         }
     }
 
@@ -196,7 +207,10 @@ public class XmlClaimReader {
             separator = "";
         }
 
-        List<String> keys = new ArrayList<String>(map.keySet());
+        Set<String> keySet = map.keySet();
+        keySet.remove(null);    // null causes a problem for sort
+        List<String> keys = new ArrayList<String>(keySet);
+
         Collections.sort(keys);
         StringBuffer buffer = new StringBuffer();
         for(String key : keys) {
@@ -229,7 +243,7 @@ public class XmlClaimReader {
         String filename = "/Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/data/decrypted.xml";
         String xml = FileUtils.readFileToString(new File(filename), Charset.defaultCharset());
 
-        XmlClaimReader claimReader = new XmlClaimReader(xml, valueMappings);
+        XmlClaimReader claimReader = new XmlClaimReader(xml, valueMappings, true);
         System.out.println("\nERRORS");
         System.out.println("======");
         System.out.println(StringUtils.join(claimReader.getErrors(), '\n'));

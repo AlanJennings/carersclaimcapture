@@ -1,7 +1,9 @@
 package uk.gov.dwp.carersallowance.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -11,9 +13,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import uk.gov.dwp.carersallowance.session.IllegalFieldValueException;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMapping;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
@@ -21,13 +25,17 @@ import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
 
 public class XmlBuilder {
     private static final String PATH_SEPARATOR = "/";
-    private Document document;
 
-    public XmlBuilder(String rootNodeName, Map<String, String> namespaces, Map<String, Object> values, XPathMappingList valueMappings) throws ParserConfigurationException {
+    private Document                      document;
+    private Map<String, XPathMappingList> valueMappings;
+
+    public XmlBuilder(String rootNodeName, Map<String, String> namespaces, Map<String, Object> values, Map<String, XPathMappingList> valueMappings) throws ParserConfigurationException {
         Parameters.validateMandatoryArgs(new Object[]{rootNodeName}, new String[]{"rootNodeName"});
 
         document = createDocument(rootNodeName, namespaces);
-        add(values, valueMappings);
+        this.valueMappings = valueMappings;
+
+        add(values, null, document);
     }
 
     private Document createDocument(String rootNodeName, Map<String, String> namespaces) throws ParserConfigurationException {
@@ -49,18 +57,39 @@ public class XmlBuilder {
         return doc;
     }
 
-    private void add(Map<String, Object> values, XPathMappingList valueMappings) {
-        if(values == null || valueMappings == null) {
+    /**
+     * Render the contents of "values" as an XML document by iterating over XPathMappingList; which maps a named
+     * value (in values) to a Node at a specific XPath location, populating the nodes with the corresponding values
+     *
+     * @param values
+     * @param valueMappings
+     * @param localRootNode XPath calculations use this as the root location, usually document, but can be different for FieldCollections
+     */
+    private void add(Map<String, Object> values, String mappingName, Node localRootNode) {
+        if(values == null) {
             return;
         }
 
-        List<XPathMapping> list = valueMappings.getList();
+        XPathMappingList mappingList = valueMappings.get(mappingName);
+        if(mappingList == null) {
+            throw new IllegalArgumentException("Unknown mapping: " + mappingName);
+        }
+
+        List<XPathMapping> list = mappingList.getList();
         for(XPathMapping mapping : list) {
             String valueKey = mapping.getValue();
             Object value = values.get(valueKey);
             String xpath = mapping.getXpath();
-            if(StringUtils.isNotBlank(xpath)) {
-                add(value, mapping.getXpath(), true);
+            if(StringUtils.isNotBlank(xpath) && isValueEmpty(value) == false) {
+                if(value instanceof String) {
+                    add((String)value, mapping.getXpath(), true, localRootNode);   // create leaf node
+                } else if(value instanceof List){
+                    // field collection, we can't reliably assert the parameterized types, so will go with <?>
+                    List<Map<String, String>> fieldCollectionList = castFieldCollectionList(value);
+                    add(fieldCollectionList, mapping.getXpath());
+                } else {
+                    throw new IllegalFieldValueException("Unsupported value class: " + value.getClass().getName(), (String)null, (String[])null);
+                }
             }
         }
     }
@@ -71,30 +100,64 @@ public class XmlBuilder {
      * @param Xpath e.g. DWPBody/DWPCATransaction/DWPCAClaim/QualifyingBenefit/Answer
      * @return the newly created node
      */
-    private Node add(Object value, String xPath, boolean createEmptyNodes) {
-        if(xPath == null || value == null || (createEmptyNodes == false && isValueEmpty(value))) {
+    private Node add(String value, String xPath, boolean createEmptyNodes, Node localRootNode) {
+        if(xPath == null || (createEmptyNodes == false && isValueEmpty(value))) {
             return null;
         }
 
-        String[] pathElements = xPath.split(PATH_SEPARATOR);
-        Node current = document;
-        for(int index = 0; index < pathElements.length; index++) {
-            String element = pathElements[index];
-            Node childNode = getNamedNode(current, element, true);
-            if(childNode == null) {
-                throw new IllegalStateException("Unable to create node(" + element + ") at: " + subpath(xPath, 0, index));
-            }
-            current = childNode;
-        }
-
-        // by this stage we should have the node we require.
+        Node node = getNamedNode(xPath, null, false, localRootNode);
         if(isValueEmpty(value) == false) {
-            String text = String.valueOf(value);
-            Node textNode = document.createTextNode(text);
-            current.appendChild(textNode);
+            add((String)value, node);
         }
 
-        return current;
+        return node;
+    }
+
+    private void add(List<Map<String, String>> fieldCollectionList, String xPath) {
+//        // create enclosing node, one per list item using order attribute, then create the inner values
+//        if(fieldCollectionList == null) {
+//            return;
+//        }
+//
+//        for(int index = 0; index < fieldCollectionList.size(); index++) {
+//            Map<String, String> fieldCollection = fieldCollectionList.get(index);
+//            Node collectionNode = getNamedNode(xPath, addToAttrMap(null, "order", Integer.toString(index)), false, document);
+//            this.add(fieldCollection, valueMappings, collectionNode);
+//            Node textNode = document.createTextNode(value);
+//            current.appendChild(textNode);
+//        }
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
+    private List<Map<String, String>> castFieldCollectionList(Object untypedfieldCollection) {
+        if((untypedfieldCollection instanceof List) == false) {
+            throw new IllegalArgumentException("field collection list is not a 'List'");
+        }
+        List<?> list = (List<?>)untypedfieldCollection;
+        for(Object item : list) {
+            if(item != null && (item instanceof Map<?, ?>) == false) {
+                throw new IllegalArgumentException("item in the field collection list is not a 'Map'");
+            }
+            Map<?, ?> map = (Map<?, ?>)item;
+            for(Map.Entry<?, ?> entry: map.entrySet()) {
+                if(entry.getKey() != null && (entry.getKey() instanceof String) == false) {
+                    throw new IllegalArgumentException("key in map instance in field collection is not a String");
+                }
+                if(entry.getValue() != null && (entry.getValue() instanceof String) == false) {
+                    throw new IllegalArgumentException("value in map instance in field collection is not a String");
+                }
+            }
+        }
+
+        @SuppressWarnings("unchecked")
+        List<Map<String, String>> result = (List<Map<String, String>>)list;
+
+        return result;
+    }
+
+    private void add(String value, Node current) {
+        Node textNode = document.createTextNode(value);
+        current.appendChild(textNode);
     }
 
     private String subpath(String path, int start, int end) {
@@ -125,7 +188,34 @@ public class XmlBuilder {
         return substring;
     }
 
-    private Node getNamedNode(Node node, String childName, boolean create) {
+    /**
+     * Return a pre-existing child to this specific node that matches the childName and attributes, or if
+     * it does not exist: create a new child node if create = true, otherwise return null;
+     *
+     * @param localRootNode the rootNode used for xPath calculations
+     * @return
+     */
+    private Node getNamedNode(String xPath, Map<String, String> attributes, boolean attrExactMatch, Node localRootNode) {
+        String[] pathElements = xPath.split(PATH_SEPARATOR);
+        Node current = localRootNode;
+        for(int index = 0; index < pathElements.length; index++) {
+            String element = pathElements[index];
+            Node childNode = getNamedNode(current, element, true, attributes, attrExactMatch);
+            if(childNode == null) {
+                throw new IllegalStateException("Unable to create node(" + element + ") at: " + subpath(xPath, 0, index));
+            }
+            current = childNode;
+        }
+
+        return current;
+    }
+
+    /**
+     * Return a pre-existing child to this specific node that matches the childName and attributes, or if
+     * it does not exist: create a new child node if create = true, otherwise return null;
+     * @return
+     */
+    private Node getNamedNode(Node node, String childName, boolean create, Map<String, String> attributes, boolean attrExactMatch) {
         if(node == null || childName == null) {
             return null;
         }
@@ -135,6 +225,12 @@ public class XmlBuilder {
             Node child = children.item(index);
             String name = child.getNodeName();
             if(childName.equals(name)) {
+                if(attributes != null || attrExactMatch) {
+                    Map<String, String> childAttrMap = attrsToMap(child.getAttributes());
+                    if(attrsMatch(childAttrMap, attributes, attrExactMatch) == false) {
+                        break;
+                    }
+                }
                 return child;
             }
         }
@@ -143,10 +239,57 @@ public class XmlBuilder {
             // we can use node.getOwnerDocument also
             Element childNode = document.createElement(childName);
             node.appendChild(childNode);
+            if(attributes != null) {
+                for(Map.Entry<String, String> attribute: attributes.entrySet()) {
+                    childNode.setAttribute(attribute.getKey(), attribute.getValue());
+                }
+            }
             return childNode;
         }
 
         return null;
+    }
+
+    private boolean attrsMatch(Map<String, String> childAttrs, Map<String, String> attributes, boolean attrExactMatch) {
+        if(attrExactMatch) {
+            return childAttrs.equals(attributes);
+        }
+
+        for(Map.Entry<String, String> entry : attributes.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if((childAttrs.containsKey(key) == false)
+            || (Objects.equals(childAttrs.get(key), value) == false)) {
+                return false;
+            }
+        }
+        return true;
+
+    }
+
+    private Map<String, String> addToAttrMap(Map<String, String> map, String name, String value) {
+        Parameters.validateMandatoryArgs(name, "name");
+        if(map == null) {
+            map = new HashMap<>();
+        }
+        map.put(name, value);
+        return map;
+    }
+
+    private Map<String, String> attrsToMap(NamedNodeMap rawAttrMap) {
+        if(rawAttrMap == null) {
+            return null;
+        }
+
+        Map<String, String> map = new HashMap<>();
+        for(int index = 0; index < rawAttrMap.getLength(); index++) {
+            Node attr = rawAttrMap.item(index);
+            String name = attr.getNodeName();
+            String value = attr.getNodeValue();
+            map.put(name, value);
+        }
+
+        return map;
     }
 
     private boolean isValueEmpty(Object value) {

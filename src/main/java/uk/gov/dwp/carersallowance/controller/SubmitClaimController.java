@@ -37,7 +37,9 @@ import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList.MappingException;
 public class SubmitClaimController {
     private static final Logger LOG = LoggerFactory.getLogger(SubmitClaimController.class);
 
-    private static final String XML_MAPPING__CLAIM = "xml.mapping.claim";
+    private static final String XML_MAPPING__CLAIM           = "xml.mapping.claim";
+    private static final String XML_MAPPING__CLAIM_CAREBREAK = "xml.mapping.claim.careBreak";
+
     private static final String CURRENT_PAGE       = "/submit-claim";
 //    private static final String SUCESS_PAGE        = "/thankyou/apply-carers";
 //    private static final String FAILED_PAGE        = "/oh-no-its-all-gone-horribly-wrong";
@@ -102,10 +104,9 @@ public class SubmitClaimController {
     private String buildClaimXml(Session session) throws IOException, InstantiationException, ParserConfigurationException, MappingException {
         Parameters.validateMandatoryArgs(session, "session");
 
-        URL claimTemplateUrl = this.getClass().getClassLoader().getResource(XML_MAPPING__CLAIM);
-        List<String> xmlMappings = readLines(claimTemplateUrl);
-        XPathMappingList valueMappings = new XPathMappingList();
-        valueMappings.add(xmlMappings);
+        Map<String, XPathMappingList> mappings = new HashMap<>();
+        loadXPathMappings(mappings, null, XML_MAPPING__CLAIM);
+        loadXPathMappings(mappings, "CareBreak", XML_MAPPING__CLAIM_CAREBREAK);
 
         Map<String, Object> sessionMap = new HashMap<>(session.getData());
 
@@ -124,10 +125,20 @@ public class SubmitClaimController {
         namespaces.put("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
         namespaces.put("xsi:schemaLocation", "http://www.govtalk.gov.uk/dwp/carers-allowance file:/future/schema/ca/CarersAllowance_Schema.xsd");
 
-        XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", namespaces, sessionMap, valueMappings);
+        XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", namespaces, sessionMap, mappings);
         String xml = xmlBuilder.render(true, false);
 
         return xml;
+    }
+
+    private void loadXPathMappings(Map<String, XPathMappingList> mappings, String name, String resourceName)
+            throws IOException, MappingException {
+
+        URL claimTemplateUrl = this.getClass().getClassLoader().getResource(XML_MAPPING__CLAIM);
+        List<String> xmlMappings = readLines(claimTemplateUrl);
+        XPathMappingList valueMappings = new XPathMappingList();
+        valueMappings.add(xmlMappings);
+        mappings.put(null, valueMappings);
     }
 
     public static String currentDateTime(String format) {

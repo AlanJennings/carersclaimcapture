@@ -142,7 +142,7 @@
             </t:panel>
         </c:if>
 
-        <t:yesnofield name="moreBreaksInCare" labelKeyArgs="${cads:dateOffset(dateOfClaim, 'd MMMMMMMMMM yyyy', '')}|${careeFirstName} ${careeSurname}"/>
+        <t:yesnofield name="moreBreaksInCare" labelKeyArgs="${cads:dateOffset(dateOfClaim_day, dateOfClaim_month, dateOfClaim_year, 'd MMMMMMMMMM yyyy', '')}|${careeFirstName} ${careeSurname}"/>
         
         <t:hiddenPanel id="moreBreaksInCareWrap" triggerId="moreBreaksInCare" triggerValue="yes">
             <t:radiobuttons name="moreBreaksInCareResidence" optionValues="hospital|respite|somewhere else" optionLabelKeys="hospital|respite|elsewhere" />
@@ -150,7 +150,6 @@
         
     </t:pageContent>
     
-    <script type="text/javascript" src="<c:url value='/javascript/s_breaks/g_breaksInCare.js' />"></script>
 </t:mainPage>
 
 

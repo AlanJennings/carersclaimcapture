@@ -88,7 +88,10 @@ public class XPathMappingList {
         }
 
         list.add(item);
-        valueMap.put(item.getValue(), item);
+        if(item.getValue() != null) {
+            valueMap.put(item.getValue(), item);
+        }
+
         xpathMap.put(qualifiedXPath, item);
 
         immutableList = null;

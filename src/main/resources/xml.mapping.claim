@@ -222,6 +222,8 @@ workingForEEADetails                            = DWPBody/DWPCATransaction/DWPCA
 workingForEEADetails.label                      = DWPBody/DWPCATransaction/DWPCAClaim/OtherBenefits/EEA/EEAWorkingInsurance/QuestionLabel[messages("workingForEEADetails.label")]
 paymentFrequency                                = DWPBody/DWPCATransaction/DWPCAClaim/Payment/PaymentFrequency/Answer
 paymentFrequency.label                          = DWPBody/DWPCATransaction/DWPCAClaim/Payment/PaymentFrequency/QuestionLabel[messages("paymentFrequency.label")]
+likeToPay                                       = DWPBody/DWPCATransaction/DWPCAClaim/Payment/InitialAccountQuestion/Answer
+likeToPay.label                                 = DWPBody/DWPCATransaction/DWPCAClaim/Payment/InitialAccountQuestion/QuestionLabel[messages("likeToPay.label")]
 welshCommunication                              = DWPBody/DWPCATransaction/DWPCAClaim/OtherInformation/WelshCommunication/Answer
 welshCommunication.label                        = DWPBody/DWPCATransaction/DWPCAClaim/OtherInformation/WelshCommunication/QuestionLabel[messages("welshCommunication.label")]
 anythingElse                                    = DWPBody/DWPCATransaction/DWPCAClaim/OtherInformation/AdditionalInformation/Answer
@@ -236,6 +238,7 @@ thirdParty                                      = DWPBody/DWPCATransaction/DWPCA
 thirdParty.label                                = DWPBody/DWPCATransaction/DWPCAClaim/Declaration/DeclarationQuestion/QuestionLabel[messages("thirdParty.label")]
 nameAndOrganisation                             = DWPBody/DWPCATransaction/DWPCAClaim/Declaration/DeclarationNameOrg/Answer
 nameAndOrganisation.label                       = DWPBody/DWPCATransaction/DWPCAClaim/Declaration/DeclarationNameOrg/QuestionLabel[messages("nameAndOrganisation.label")]
+/disclaimer/disclaimer.pageTitle                = DWPBody/DWPCATransaction/DWPCAClaim/Disclaimer/DisclaimerStatement/Title
 disclaimer.section1.line1                       = DWPBody/DWPCATransaction/DWPCAClaim/Disclaimer/DisclaimerStatement/Content[@order="1"]
 disclaimer.section2.line1                       = DWPBody/DWPCATransaction/DWPCAClaim/Disclaimer/DisclaimerStatement/Content[@order="2"]
 disclaimer.section2.line2                       = DWPBody/DWPCATransaction/DWPCAClaim/Disclaimer/DisclaimerStatement/Content[@order="3"]
@@ -245,15 +248,19 @@ disclaimer.section2.line5                       = DWPBody/DWPCATransaction/DWPCA
 disclaimer.section3.line1                       = DWPBody/DWPCATransaction/DWPCAClaim/Disclaimer/DisclaimerStatement/Content[@order="7"]
 disclaimer.section3.line2                       = DWPBody/DWPCATransaction/DWPCAClaim/Disclaimer/DisclaimerStatement/Content[@order="8"]
 disclaimer.section4.line1                       = DWPBody/DWPCATransaction/DWPCAClaim/Disclaimer/DisclaimerStatement/Content[@order="9"]
+                                                = DWPBody/DWPCATransaction/DWPCAClaim/Disclaimer/DisclaimerQuestion/QuestionLabel
+                                                = DWPBody/DWPCATransaction/DWPCAClaim/Disclaimer/DisclaimerQuestion/Answer
 evidenceAddressLineOne                          = DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/RecipientAddress/Answer/Line[@order="1"]
 evidenceAddressLineOne.label                    = DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/RecipientAddress/QuestionLabel[messages("evidenceAddress.label")]
 evidenceAddressLineTwo                          = DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/RecipientAddress/Answer/Line[@order="2"]
 evidenceAddressLineThree                        = DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/RecipientAddress/Answer/Line[@order="3"]
 evidencePostcode                                = DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/RecipientAddress/Answer/PostCode
-evidenceText.section1.line1                     = DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/Evidence/Title[@order="1"]
-evidenceText.section2.line1                     = DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/Evidence/Title[@order="2"]
-evidenceText.section3.line1                     = DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/Evidence/Title[@order="3"]
-evidenceText.section4.line1                     = DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/Evidence/Title[@order="4"]
+
+evidenceText.section1.line1                     = DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/Evidence[@order="1"]/Title
+evidenceText.section2.line1                     = DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/Evidence[@order="2"]/Title
+evidenceText.section3.line1                     = DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/Evidence[@order="3"]/Title
+evidenceText.section4.line1                     = DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/Evidence[@order="4"]/Title
+
 evidenceText.section4.line2                     = DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/Evidence/Content[@order="1"]
 evidenceText.section4.line3                     = DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/Evidence/Content[@order="2"]
 evidenceText.section4.line4                     = DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/Evidence/Content[@order="3"]

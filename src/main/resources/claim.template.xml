@@ -641,7 +641,7 @@
                 </PaymentFrequency>
                 <InitialAccountQuestion>
                     <QuestionLabel>{likeToPay.label}</QuestionLabel>
-                    <Answer>{likeToPay.label}</Answer>
+                    <Answer>{likeToPay}</Answer>
                 </InitialAccountQuestion>
             </Payment>
             
@@ -683,7 +683,7 @@
             
             <Disclaimer>
                 <DisclaimerStatement>
-                    <Title>This is my claim for Carer's Allowance.{}</Title>
+                    <Title>{/disclaimer/disclaimer.pageTitle}</Title>
                     <Content>{disclaimer.section1.line1}</Content>
                     <Content>{disclaimer.section2.line1}</Content>
                     <Content>{disclaimer.section2.line2}</Content>
