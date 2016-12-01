@@ -35,16 +35,13 @@ public class ResolveArgs extends BodyTagSupport {
 
     @Override
     public int doAfterBody() throws JspException {
-        LOG.trace("Started ResolveArgs.doAfterBody");
         try {
             String rawString = getBodyContent().getString();
-            LOG.debug("rawString = {}", rawString);
 
             ServletContext servletContext = pageContext.getServletContext();
             JspApplicationContext jspAppContext = JspFactory.getDefaultFactory().getJspApplicationContext(servletContext);
             ELContext elContext = pageContext.getELContext();
             String parsedString = evaluateExpression(jspAppContext, elContext, rawString);
-            LOG.debug("parsedString = {}", parsedString);
 
             if(StringUtils.isBlank(varName)) {
                 getPreviousOut().print(parsedString);
@@ -55,8 +52,6 @@ public class ResolveArgs extends BodyTagSupport {
         } catch(IOException | RuntimeException e) {
             LOG.error("Unexpected exception: ", e);
             throw new JspException("Unexpected Exception: ", e);
-        } finally {
-            LOG.trace("Ending ResolveArgs.doAfterBody");
         }
     }
 
@@ -119,66 +114,51 @@ public class ResolveArgs extends BodyTagSupport {
      * Also it seems very difficult to get the tag-lib information, which we sort of need (it all gets very app-server specific).
      */
     private String evaluateExpression(JspApplicationContext jspAppContext, ELContext elContext, String expressionStr) {
-        LOG.trace("Started ResolveArgs.evaluateExpression");
         Parameters.validateMandatoryArgs(expressionStr, "expressionStr");
-        try {
-            LOG.debug("expressionStr = {}", expressionStr);
-            List<String> subExpressions = splitExpressions(expressionStr);
-            if(subExpressions == null || subExpressions.isEmpty()) {
-                return "";
+        List<String> subExpressions = splitExpressions(expressionStr);
+        if(subExpressions == null || subExpressions.isEmpty()) {
+            return "";
+        }
+
+        if(subExpressions.size() > 1) {
+            StringBuffer buffer = new StringBuffer();
+            for(String subExpression :subExpressions) {
+                String result = evaluateExpression(jspAppContext, elContext, subExpression);
+                buffer.append(result);
             }
 
-            if(subExpressions.size() > 1) {
-                StringBuffer buffer = new StringBuffer();
-                for(String subExpression :subExpressions) {
-                    String result = evaluateExpression(jspAppContext, elContext, subExpression);
-                    buffer.append(result);
-                }
+            return buffer.toString();
+        }
 
-                return buffer.toString();
-            }
-
-            if(expressionStr != null && expressionStr.startsWith(CADS_TLD_PREFIX_START)) {
-                return evaluateCadsExpression(jspAppContext, elContext, expressionStr);
-            } else {
-                return evaluateSingleExpression(jspAppContext, elContext, expressionStr);
-            }
-
-        } finally {
-            LOG.trace("Ending ResolveArgs.evaluateExpression");
+        if(expressionStr != null && expressionStr.startsWith(CADS_TLD_PREFIX_START)) {
+            return evaluateCadsExpression(jspAppContext, elContext, expressionStr);
+        } else {
+            return evaluateSingleExpression(jspAppContext, elContext, expressionStr);
         }
     }
 
     private String evaluateSingleExpression(JspApplicationContext jspAppContext, ELContext elContext, String expression) {
-        LOG.trace("Started ResolveArgs.evaluateSingleExpression");
-        try {
-            LOG.debug("expressionStr = {}", expression);
+        ValueExpression valueExpression = jspAppContext.getExpressionFactory().createValueExpression(elContext, expression, String.class);
+        Object evaluatedValue =  valueExpression.getValue(elContext);
 
-            ValueExpression valueExpression = jspAppContext.getExpressionFactory().createValueExpression(elContext, expression, String.class);
-            Object evaluatedValue =  valueExpression.getValue(elContext);
-            LOG.debug("evaluatedValue = {}", evaluatedValue);
-
-            if(evaluatedValue == null) {
-                return "";
-            }
-
-            String evaluatedExpression;
-            if(evaluatedValue instanceof String) {
-                evaluatedExpression = (String)evaluatedValue;
-            } else {
-                evaluatedExpression = evaluatedValue.toString();
-            }
-
-            if(evaluatedExpression.equals(expression)) {
-                // this results in at least one evaluation more than is needed, but allows for recursive evaluation
-                return evaluatedExpression;
-            }
-
-            // re-evaluate in case the results contains further expressions to be evaluated
-            return evaluateExpression(jspAppContext, elContext, evaluatedExpression);
-        } finally {
-            LOG.trace("Ending ResolveArgs.evaluateSingleExpression");
+        if(evaluatedValue == null) {
+            return "";
         }
+
+        String evaluatedExpression;
+        if(evaluatedValue instanceof String) {
+            evaluatedExpression = (String)evaluatedValue;
+        } else {
+            evaluatedExpression = evaluatedValue.toString();
+        }
+
+        if(evaluatedExpression.equals(expression)) {
+            // this results in at least one evaluation more than is needed, but allows for recursive evaluation
+            return evaluatedExpression;
+        }
+
+        // re-evaluate in case the results contains further expressions to be evaluated
+        return evaluateExpression(jspAppContext, elContext, evaluatedExpression);
     }
 
     private String evaluateCadsExpression(JspApplicationContext jspAppContext, ELContext elContext, String expression) {
@@ -221,7 +201,6 @@ public class ResolveArgs extends BodyTagSupport {
     }
 
     private String stripEnclosingQuotes(String string) {
-        LOG.debug("string = '{}'", string);
         if(string == null) {
             return null;
         }
@@ -234,7 +213,6 @@ public class ResolveArgs extends BodyTagSupport {
         if((string.charAt(0) == '"' && (string.charAt(string.length() - 1) == '"'))
         || (string.charAt(0) == '\'' && (string.charAt(string.length() - 1) == '\''))) {
             String trimmed = string.substring(1, string.length() - 1);
-            LOG.debug("trimmed = '{}'", trimmed);
             return trimmed;
         }
 

@@ -82,6 +82,12 @@ public class DefaultFormController extends AbstractFormController {
                 throw new NoSuchRequestHandlingMethodException(request);
             }
 
+        } catch(NoSuchRequestHandlingMethodException e) {
+            LOG.error("NoSuchRequestHandlingMethodException", e);
+            throw e;
+        } catch(RuntimeException e) {
+            LOG.error("Unexpected RuntimeException", e);
+            throw e;
         } finally {
             LOG.trace("Ending DefaultFormController.defaultShowForm");
         }

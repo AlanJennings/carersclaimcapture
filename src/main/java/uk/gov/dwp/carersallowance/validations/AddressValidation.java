@@ -20,8 +20,8 @@ public class AddressValidation extends AbstractValidation {
     /**
      * validate that at least two address rows are populated
      */
-    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> allFieldValues) {
-        Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName, allFieldValues}, new String[]{"validationSummary", "messageSource", "fieldName", "allFieldValues"});
+    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> allFieldValues) {
+        Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName, requestFieldValues}, new String[]{"validationSummary", "messageSource", "fieldName", "allFieldValues"});
         LOG.trace("Starting AddressValidation.validate");
         try {
             String[] addressFields = new String[]{fieldName + "LineOne", fieldName + "LineTwo", fieldName + "LineThree"};
@@ -29,7 +29,7 @@ public class AddressValidation extends AbstractValidation {
 
             int count = 0;
             for(String addressField: addressFields) {
-                if(isEmpty(allFieldValues.get(addressField)) == false) {
+                if(isEmpty(requestFieldValues.get(addressField)) == false) {
                     LOG.debug("Address field({}) is populated", addressField);
                     count++;
                 }
@@ -41,7 +41,7 @@ public class AddressValidation extends AbstractValidation {
             }
 
             LOG.debug("insufficient address fields: {}", fieldName);
-            failValidation(validationSummary, messageSource, fieldName, ValidationType.ADDRESS_MANDATORY.getProperty());
+            failValidation(validationSummary, messageSource, fieldName, ValidationType.ADDRESS_MANDATORY.getProperty(), allFieldValues);
 
             return false;
         } finally {

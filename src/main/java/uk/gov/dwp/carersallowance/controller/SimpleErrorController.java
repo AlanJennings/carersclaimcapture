@@ -1,24 +1,23 @@
 package uk.gov.dwp.carersallowance.controller;
 
-import org.apache.commons.lang3.StringUtils;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
-
 /**
  * Created by peterwhitehead on 12/10/2016.
  */
-@Controller
+//@Controller
 @RequestMapping("/error")
 public class SimpleErrorController implements ErrorController {
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleErrorController.class);
@@ -40,11 +39,9 @@ public class SimpleErrorController implements ErrorController {
 
     @RequestMapping
     public String error(final HttpServletRequest request) {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("/error called");
-        }
+        LOGGER.info("/error called");
         final Map<String, Object> body = getErrorAttributes(request, false);
-        LOGGER.error("Unable to process request. error:" + body.get("message"));
+        LOGGER.error("Unable to process request. error: {}", body.get("message"));
         request.setAttribute("error", body.get("status") + ": " + body.get("error"));
         return MAIN_ERROR_PAGE;
     }
@@ -54,3 +51,4 @@ public class SimpleErrorController implements ErrorController {
         return errorAttributes.getErrorAttributes(requestAttributes, includeStackTrace);
     }
 }
+

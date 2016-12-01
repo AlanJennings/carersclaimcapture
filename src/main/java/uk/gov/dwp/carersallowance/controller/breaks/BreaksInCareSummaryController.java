@@ -30,12 +30,11 @@ import uk.gov.dwp.carersallowance.utils.Parameters;
 public class BreaksInCareSummaryController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(BreaksInCareSummaryController.class);
 
-    private static final String BREAK_SOMEWHERE_ELSE_PAGE_NAME  = "page.break-somewhere-else";
-    private static final String BREAK_IN_RESPITE_CARE_PAGE_NAME = "page.break-in-respite-care";
-    private static final String BREAK_IN_HOSPITAL_PAGE_NAME     = "page.break-in-hospital";
+    private static final String BREAK_SOMEWHERE_ELSE_PAGE_NAME  = "/breaks/break-somewhere-else";
+    private static final String BREAK_IN_RESPITE_CARE_PAGE_NAME = "/breaks/break-in-respite-care";
+    private static final String BREAK_IN_HOSPITAL_PAGE_NAME     = "/breaks/break-in-hospital";
     private static final String BREAK_IN_CARE_TYPE    = "breakInCareType";
 
-    private static final String PAGE_NAME             = "page.breaks-in-care";
     private static final String CURRENT_PAGE          = "/breaks/breaks-in-care";
 
     private static final String BREAKS_IN_HOSPITAL    = "/breaks/break-in-hospital";
@@ -106,11 +105,6 @@ public class BreaksInCareSummaryController extends AbstractFormController {
     @Override
     public String[] getReadOnlyFields() {
         return READONLY_FIELDS;
-    }
-
-    @Override
-    protected String getPageName() {
-        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -236,7 +230,7 @@ public class BreaksInCareSummaryController extends AbstractFormController {
      * over the (rather poor) reporting behaviour
      * @return
      */
-    protected void validate(Map<String, String[]> fieldValues, String[] fields) {
+    protected void validate(String[] fields, Map<String, String[]> fieldValues, Map<String, String[]> allFieldValues) {
         LOG.trace("Starting BenefitsController.validate");
 
         validateMandatoryField(fieldValues, "moreBreaksInCare");

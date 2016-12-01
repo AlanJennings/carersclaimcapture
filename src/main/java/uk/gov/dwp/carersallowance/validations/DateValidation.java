@@ -30,17 +30,21 @@ public class DateValidation extends AbstractValidation {
      * @param id
      * @param fieldTitle
      */
-    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String id, Map<String, String[]> allFieldValues) {
-        Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, id, allFieldValues}, new String[]{"validationSummary", "messageSource", "id", "allFieldValues"});
+    public boolean validate(ValidationSummary validationSummary,
+                            MessageSource messageSource,
+                            String id,
+                            Map<String, String[]> requestFieldValues,
+                            Map<String, String[]> allFieldValues) {
+        Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, id, requestFieldValues}, new String[]{"validationSummary", "messageSource", "id", "allFieldValues"});
         LOG.trace("Starting DateValidation.validate");
         try {
             String dayFieldName = id + "_day";
             String monthFieldName = id + "_month";
             String yearFieldName = id + "_year";
 
-            String day = getSingleValue(dayFieldName, allFieldValues.get(dayFieldName));
-            String month = getSingleValue(monthFieldName, allFieldValues.get(monthFieldName));
-            String year = getSingleValue(yearFieldName, allFieldValues.get(yearFieldName));
+            String day = getSingleValue(dayFieldName, requestFieldValues.get(dayFieldName));
+            String month = getSingleValue(monthFieldName, requestFieldValues.get(monthFieldName));
+            String year = getSingleValue(yearFieldName, requestFieldValues.get(yearFieldName));
 
             boolean emptyField = false;
             boolean populatedField = false;
@@ -60,12 +64,12 @@ public class DateValidation extends AbstractValidation {
                 LOG.debug("Empty field");
                 if(populatedField) {
                     LOG.debug("also populated field");
-                    failValidation(validationSummary, messageSource, id, ValidationType.DATE_MANDATORY.getProperty());
+                    failValidation(validationSummary, messageSource, id, ValidationType.DATE_MANDATORY.getProperty(), allFieldValues);
                     LOG.debug("date is incomplete, returning false");
                     return false;
 
                 } else if(mandatory) {
-                    failValidation(validationSummary, messageSource, id, ValidationType.MANDATORY.getProperty());
+                    failValidation(validationSummary, messageSource, id, ValidationType.MANDATORY.getProperty(), allFieldValues);
                     LOG.debug("date is mandatory, but empty, returning false");
                     return false;
                 } else {
@@ -74,7 +78,7 @@ public class DateValidation extends AbstractValidation {
 
             } else if(isValidDate(day, month, year) == false) {
                 LOG.debug("date is not valid, returning false");
-                failValidation(validationSummary, messageSource, id, ValidationType.DATE_MANDATORY.getProperty());
+                failValidation(validationSummary, messageSource, id, ValidationType.DATE_MANDATORY.getProperty(), allFieldValues);
                 return false;
             }
 

@@ -1,26 +1,53 @@
 <configuration>
     <springProperty name="application" source="application.name"/>
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+
+    <appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH:-${user.home}}/logs/${application}-application.log</file>
         <encoder>
-            <pattern>%date - [%level] - [%thread] - %logger - %message%n%xException</pattern>
+            <pattern>%date [%thread] %-5level %logger - %message%n</pattern>
         </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <maxIndex>20</maxIndex>
+            <FileNamePattern>${LOG_PATH:-${user.home}}/logs/${application}-application.%i.log</FileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>100MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+    
+    <appender name="errorFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH:-${user.home}}/logs/${application}-application_errors.log</file>
+        <encoder>
+            <pattern>%date [%thread] %-5level %logger - %message%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <maxIndex>20</maxIndex>
+            <FileNamePattern>${LOG_PATH:-${user.home}}/logs/${application}-application_errors.%i.log</FileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>100MB</MaxFileSize>
+        </triggeringPolicy>
     </appender>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%date - [%level] - [%thread] - %logger{36} - %message%n%xException{5}</pattern>
+            <pattern>%date [%thread] %-5level %logger - %message%n</pattern>
         </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
     </appender>
 
-    <!--
-      The logger name is typically the Java package name.
-      This configures the log level to log at for a package and its children packages.
-    -->
-    <logger name="application" level="DEBUG" />
-    <root level="DEBUG">
+    <logger name="uk.gov.dwp" level="TRACE" />
+    
+    <!-- Probably best to set this to ERROR, but for now stick with INFO -->
+    <root level="INFO">
+        <appender-ref ref="rollingFile" />
+        <appender-ref ref="errorFile" />        
         <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
     </root>
 
 </configuration>

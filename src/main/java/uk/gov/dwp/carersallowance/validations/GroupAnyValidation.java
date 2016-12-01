@@ -22,13 +22,13 @@ public class GroupAnyValidation extends AbstractValidation {
     /**
      * validate that at least one of the fields is populated
      */
-    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> allFieldValues) {
-        Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName, allFieldValues}, new String[]{"validationSummary", "messageSource", "fieldName", "allFieldValues"});
+    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> allFieldValues) {
+        Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName, requestFieldValues}, new String[]{"validationSummary", "messageSource", "fieldName", "allFieldValues"});
         LOG.trace("Starting GroupAnyValidation.validate");
         try {
             LOG.debug("groupFields = {}", groupFields);
             for(String field: groupFields) {
-                String[] fieldValues = allFieldValues.get(field);
+                String[] fieldValues = requestFieldValues.get(field);
                 if(getFirstPopulatedValue(fieldValues) != null) {
                     LOG.debug("Found populated value for: {}", field);
                     return true;
@@ -36,7 +36,7 @@ public class GroupAnyValidation extends AbstractValidation {
             }
 
             LOG.debug("No populated field for group: {}, fields = {}", fieldName, groupFields);
-            failValidation(validationSummary, messageSource, fieldName, ValidationType.GROUP_ANY.getProperty());
+            failValidation(validationSummary, messageSource, fieldName, ValidationType.GROUP_ANY.getProperty(), allFieldValues);
             return false;
         } finally {
             LOG.trace("Ending GroupAnyValidation.validate");

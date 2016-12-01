@@ -101,32 +101,23 @@ public class FilteredRequestMappingHandlerMapping extends RequestMappingHandlerM
      */
     @Override
     protected HandlerMethod getHandlerInternal(HttpServletRequest request) throws Exception {
-        LOG.trace("Started FilteredRequestMappingHandlerMapping.getHandlerInternal");
-        try {
-            if(request == null) {
+        if(request == null) {
+            return null;
+        }
+
+        String path = request.getServletPath(); // from the end of the application path until the args
+        for(String pattern: excludePatterns) {
+            if(pathMatcher.match(pattern, path)) {
+                LOG.debug("Excluding Path({}) as it matches {}", path, pattern);
                 return null;
             }
-
-            String path = request.getServletPath(); // from the end of the application path until the args
-            for(String pattern: excludePatterns) {
-                if(pathMatcher.match(pattern, path)) {
-                    LOG.debug("Excluding Path({}) as it matches {}", path, pattern);
-                    return null;
-                }
-            }
-            LOG.debug("path = {}", path);
-
-            HandlerMethod method = super.getHandlerInternal(request);
-            if(method == null) {
-                method = getDefaultControllerMethod(request);
-            }
-
-            LOG.info("handler bean = {}", method == null ? null : method.getBean());
-            LOG.info("hander method = {}", method);
-            return method;
-
-        } finally {
-            LOG.trace("Ending FilteredRequestMappingHandlerMapping.getHandlerInternal");
         }
+
+        HandlerMethod method = super.getHandlerInternal(request);
+        if(method == null) {
+            method = getDefaultControllerMethod(request);
+        }
+
+        return method;
     }
 }

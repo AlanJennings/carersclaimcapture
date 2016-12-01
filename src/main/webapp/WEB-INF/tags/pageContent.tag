@@ -20,7 +20,11 @@
     <c:set var='pageTitle' ><t:message code="${pageScope.pageTitleKey}" parentName="${pageScope.page}" element="pageTitle" /></c:set>
 </c:if>
 
-<t:adminInterface />
+<%--
+    If this is uncommented, you can drag controls around, which we probably don't want anymore
+    either no editing, or full editing, in which case problably move control using up/down arrows, or index position or something
+    <t:adminInterface />
+ --%>
 <%-- ************************** start 'pageContent' context object ************************************ --%>
 
 <%-- We need to use 'jsp:useBean' to create the map in the first place, as 'variable' can't create variables directly --%>

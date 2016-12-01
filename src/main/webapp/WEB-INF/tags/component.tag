@@ -40,7 +40,7 @@
     <c:if test="${pageScope.hasError}" >
         <p class="validation-message">${pageScope.errorMessage}</p>
     </c:if>
-    <input type="hidden" name="field" value="${pageScope.name}" />
+<%--    <input type="hidden" name="field" value="${pageScope.name}" />   --%>
 
     <jsp:doBody />
 </li>

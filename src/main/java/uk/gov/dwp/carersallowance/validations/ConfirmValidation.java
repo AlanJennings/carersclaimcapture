@@ -23,12 +23,12 @@ public class ConfirmValidation extends AbstractValidation {
     /**
      * validate that every non-null value of the confirmation field matches every non-null value of the comparison field
      */
-    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> allFieldValues) {
-        Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName, allFieldValues}, new String[]{"validationSummary", "messageSource", "fieldName", "allFieldValues"});
+    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> allFieldValues) {
+        Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName, requestFieldValues}, new String[]{"validationSummary", "messageSource", "fieldName", "allFieldValues"});
         LOG.trace("Starting ConfirmValidation.validate");
         try {
             LOG.debug("Comparing with {}", comparisonField);
-            String comparisonValue = getFirstPopulatedValue(allFieldValues.get(comparisonField));
+            String comparisonValue = getFirstPopulatedValue(requestFieldValues.get(comparisonField));
             LOG.debug("comparison value = '{}'", comparisonValue);
             if(comparisonValue == null) {
                 LOG.debug("Nothing to compare to, bailing");
@@ -36,7 +36,7 @@ public class ConfirmValidation extends AbstractValidation {
             }
 
             // only compare the values for this field
-            String[] fieldValues = allFieldValues.get(fieldName);
+            String[] fieldValues = requestFieldValues.get(fieldName);
             LOG.debug("fieldValues  {}", fieldValues == null ? null : Arrays.asList(fieldValues));
             if(fieldValues != null) {
                 for(String fieldValue: fieldValues) {
@@ -44,7 +44,7 @@ public class ConfirmValidation extends AbstractValidation {
                     if(StringUtils.isBlank(fieldValue) == false) {
                         if(comparisonValue.equals(fieldValue) == false) {
                             LOG.debug("field value({}) does not match comparison field value({})", fieldValue, comparisonValue);
-                            failValidation(validationSummary, messageSource, fieldName, ValidationType.CONFIRM_FIELD.getProperty());
+                            failValidation(validationSummary, messageSource, fieldName, ValidationType.CONFIRM_FIELD.getProperty(), allFieldValues);
                             return false;
                         }
                     }

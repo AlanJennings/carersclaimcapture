@@ -5,9 +5,9 @@
 <%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %> 
 
 <!DOCTYPE html>
-<t:mainPage page="page.breaks-in-care" currentPage="${currentPage}">
+<t:mainPage>
 
-    <t:pageContent errors="${validationErrors}" page="page.breaks-in-care" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
         
         <!-- breaksInCare = '<c:out value="${breaks}" />' -->
         <c:if test="${not empty breaks}">
@@ -19,7 +19,8 @@
                     <tr>
                         <th>Who</th>
                         <th>Where</th>
-                        <th>When</th>
+                        <th>From</th>
+                        <th>To</th>
                         <th></th>
                     </tr>
                     
@@ -37,7 +38,8 @@
                                                                    careBreak['hospitalBreakCarerHospitalStartDate_year'], 
                                                                    'd MMMMMMMMMM yyyy', 
                                                                    '')} 
-                                        - 
+                                    </td>
+                                    <td> 
                                         ${cads:dateOffset(careBreak['hospitalBreakCarerHospitalEndDate_day'], 
                                                                    careBreak['hospitalBreakCarerHospitalEndDate_month'], 
                                                                    careBreak['hospitalBreakCarerHospitalEndDate_year'], 
@@ -54,7 +56,8 @@
                                                                    careBreak['hospitalBreakCareeHospitalStartDate_year'], 
                                                                    'd MMMMMMMMMM yyyy', 
                                                                    '')} 
-                                        - 
+                                    </td>
+                                    <td>
                                         ${cads:dateOffset(careBreak['hospitalBreakCareeHospitalEndDate_day'], 
                                                                    careBreak['hospitalBreakCareeHospitalEndDate_month'], 
                                                                    careBreak['hospitalBreakCareeHospitalEndDate_year'], 
@@ -80,7 +83,8 @@
                                                                    careBreak['respiteBreakCarerRespiteStartDate_year'], 
                                                                    'd MMMMMMMMMM yyyy', 
                                                                    '')} 
-                                        - 
+                                    </td>
+                                    <td>
                                         ${cads:dateOffset(careBreak['respiteBreakCarerRespiteEndDate_day'], 
                                                                    careBreak['respiteBreakCarerRespiteEndDate_month'], 
                                                                    careBreak['respiteBreakCarerRespiteEndDate_year'], 
@@ -97,7 +101,8 @@
                                                                    careBreak['respiteBreakCareeRespiteStartDate_year'], 
                                                                    'd MMMMMMMMMM yyyy', 
                                                                    '')} 
-                                        - 
+                                    </td>
+                                    <td>
                                         ${cads:dateOffset(careBreak['respiteBreakCareeRespiteEndDate_day'], 
                                                                    careBreak['respiteBreakCareeRespiteEndDate_month'], 
                                                                    careBreak['respiteBreakCareeRespiteEndDate_year'], 
@@ -122,7 +127,8 @@
                                                                careBreak['careeSomewhereElseStartDate_year'], 
                                                                'd MMMMMMMMMM yyyy', 
                                                                '')} 
-                                    - 
+                                </td>
+                                <td>
                                     ${cads:dateOffset(careBreak['careeSomewhereElseEndDate_day'], 
                                                                careBreak['careeSomewhereElseEndDate_month'], 
                                                                careBreak['careeSomewhereElseEndDate_year'], 
@@ -141,7 +147,7 @@
             </t:panel>
         </c:if>
 
-        <t:yesnofield name="moreBreaksInCare" labelKeyArgs="${cads:dateOffset(dateOfClaim_day, dateOfClaim_month, dateOfClaim_year, 'd MMMMMMMMMM yyyy', '')}|${careeFirstName} ${careeSurname}"/>
+        <t:yesnofield name="moreBreaksInCare" labelKeyArgs="${cads:dateOffset(dateOfClaim_day, dateOfClaim_month, dateOfClaim_year, 'd MMMMMMMMMM yyyy', '')}|${careeFirstName}|${careeSurname}"/>
         <t:hiddenPanel id="moreBreaksInCareWrap" triggerId="moreBreaksInCare" triggerValue="yes">
             <t:radiobuttons name="moreBreaksInCareResidence" optionValues="hospital|respite|somewhere else" optionLabelKeys="hospital|respite|elsewhere" />
         </t:hiddenPanel>

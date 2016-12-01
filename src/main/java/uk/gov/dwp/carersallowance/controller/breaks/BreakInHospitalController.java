@@ -1,7 +1,5 @@
 package uk.gov.dwp.carersallowance.controller.breaks;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -81,36 +79,36 @@ public class BreakInHospitalController extends AbstractFormController {
         }
     }
 
-    /**
-     * Might use BindingResult, and spring Validator, not sure yet
-     * don't want to perform type conversion prior to controller as we have no control
-     * over the (rather poor) reporting behaviour
-     * @return
-     */
-    protected void validate(Map<String, String[]> fieldValues, String[] fields) {
-        LOG.trace("Starting BenefitsController.validate");
-
-        validateMandatoryField(fieldValues, "hospitalBreakWhoInHospital");
-
-        if(fieldValue_Equals(fieldValues, "hospitalBreakWhoInHospital", "Carer")) {
-            validateMandatoryDateField(fieldValues, "hospitalBreakCarerHospitalStartDate");
-            validateMandatoryField(fieldValues, "hospitalBreakCarerHospitalStayEnded");
-
-            if(fieldValue_Equals(fieldValues, "hospitalBreakCarerHospitalStayEnded", "yes")) {
-                validateMandatoryDateField(fieldValues, "hospitalBreakCarerHospitalEndDate");
-            }
-        }
-
-        if(fieldValue_Equals(fieldValues, "hospitalBreakWhoInHospital", "Caree")) {
-            validateMandatoryDateField(fieldValues, "hospitalBreakCareeHospitalStartDate");
-            validateMandatoryField(fieldValues, "hospitalBreakCareeHospitalStayEnded");
-
-            if(fieldValue_Equals(fieldValues, "hospitalBreakCareeHospitalStayEnded", "yes")) {
-                validateMandatoryDateField(fieldValues, "hospitalBreakCareeHospitalEndDate");
-                validateMandatoryField(fieldValues, "hospitalBreakCareeHospitalCarerStillCaring");
-            }
-        }
-
-        LOG.trace("Ending BenefitsController.validate");
-    }
+//    /**
+//     * Might use BindingResult, and spring Validator, not sure yet
+//     * don't want to perform type conversion prior to controller as we have no control
+//     * over the (rather poor) reporting behaviour
+//     * @return
+//     */
+//    protected void validate(Map<String, String[]> fieldValues, String[] fields) {
+//        LOG.trace("Starting BenefitsController.validate");
+//
+//        validateMandatoryField(fieldValues, "hospitalBreakWhoInHospital");
+//
+//        if(fieldValue_Equals(fieldValues, "hospitalBreakWhoInHospital", "Carer")) {
+//            validateMandatoryDateField(fieldValues, "hospitalBreakCarerHospitalStartDate");
+//            validateMandatoryField(fieldValues, "hospitalBreakCarerHospitalStayEnded");
+//
+//            if(fieldValue_Equals(fieldValues, "hospitalBreakCarerHospitalStayEnded", "yes")) {
+//                validateMandatoryDateField(fieldValues, "hospitalBreakCarerHospitalEndDate");
+//            }
+//        }
+//
+//        if(fieldValue_Equals(fieldValues, "hospitalBreakWhoInHospital", "Caree")) {
+//            validateMandatoryDateField(fieldValues, "hospitalBreakCareeHospitalStartDate");
+//            validateMandatoryField(fieldValues, "hospitalBreakCareeHospitalStayEnded");
+//
+//            if(fieldValue_Equals(fieldValues, "hospitalBreakCareeHospitalStayEnded", "yes")) {
+//                validateMandatoryDateField(fieldValues, "hospitalBreakCareeHospitalEndDate");
+//                validateMandatoryField(fieldValues, "hospitalBreakCareeHospitalCarerStillCaring");
+//            }
+//        }
+//
+//        LOG.trace("Ending BenefitsController.validate");
+//    }
 }

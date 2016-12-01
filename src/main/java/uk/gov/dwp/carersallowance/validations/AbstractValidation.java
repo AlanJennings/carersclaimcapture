@@ -1,30 +1,79 @@
 package uk.gov.dwp.carersallowance.validations;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
 public abstract class AbstractValidation implements Validation {
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractValidation.class);
+
+    private static final String ARG_SEPARATOR = "\\|";
     private static final String ERROR_TEXT_KEY_FORMAT = "%s.error_text";
 
     @Override
-    public abstract boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> allFieldValues);
+    public abstract boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> allFieldValues);
 
     /**
      * @return the message or null if it does not exist
-     * TODO need a way to configure message arguments, by referencing form values only (which i think we can)
-     *      this will obviously need access to all the form values.
      */
-    protected String getFieldLabel(MessageSource messageSource, String fieldName, Object... args) {
+    protected String getFieldLabel(MessageSource messageSource, String fieldName, String...args) {
         Locale locale  = null;
         String fieldTitle = messageSource.getMessage(fieldName + ".label", args, "{" + fieldName + ".label}", locale);
         return fieldTitle;
+    }
+
+    private String[] getFieldLabelArgs(MessageSource messageSource, String fieldName, Map<String, String[]> allFieldValues) {
+        try {
+            Locale locale  = null;
+
+            String fieldTitleArgs = messageSource.getMessage(fieldName + ".label.args", null, null, locale);
+
+            if(StringUtils.isBlank(fieldTitleArgs)) {
+                return null;
+            }
+
+            LOG.debug("fieldTitleArgs = {}", fieldTitleArgs);
+            String[] args = fieldTitleArgs.split(ARG_SEPARATOR);
+            String[] decodedArgs = new String[args.length];
+            for(int index = 0; index < args.length; index++) {
+                String arg = args[index].trim();
+                LOG.debug("arg = {}", arg);
+                if(StringUtils.isBlank(arg)) {
+                    decodedArgs[index] = "";
+                } else if(arg.startsWith("${") && arg.endsWith("}")) {
+                    LOG.debug("extracting field value");
+                    String argFieldName = arg.substring("${".length(), arg.length() - "}".length());
+                    LOG.debug("argFieldName = {}", argFieldName);
+                    String[] values = allFieldValues.get(argFieldName);
+                    if(values == null || values.length == 0) {
+                        decodedArgs[index] = "";
+                    } else if(values.length == 1) {
+                        decodedArgs[index] = values[0];
+                    } else {
+                        LOG.error("Multiple field values not supported for: {}", fieldName);
+                        throw new IllegalArgumentException("Multiple field values not supported");
+                    }
+                } else {
+                    LOG.warn("field label argument({}) is not a fieldName, using literal value", arg);
+                    decodedArgs[index] = arg;
+                }
+                LOG.debug("decodeArg = {}", decodedArgs[index]);    // TODO remove this later, leaks claim data
+            }
+
+            return decodedArgs;
+        } catch(RuntimeException e) {
+            LOG.error("Unexpected RuntimeException: ", e);
+            throw e;
+        }
     }
 
     protected boolean isEmpty(String[] values) {
@@ -41,13 +90,23 @@ public abstract class AbstractValidation implements Validation {
         return true;
     }
 
-    protected void failValidation(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, String errorKeyPrefix) {
-        Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName}, new String[]{"validationSummary", "messageSource", "fieldName"});
+    protected void failValidation(ValidationSummary validationSummary,
+                                  MessageSource messageSource,
+                                  String fieldName,
+                                  String errorKeyPrefix,
+                                  Map<String, String[]> allFieldValues) {
 
-        Object args = null; // TODO need a way to configure message arguments, by referencing form values only (which i think we can) this will obviously need access to all the form values.
-        String fieldTitle = getFieldLabel(messageSource, fieldName, args);
-        String errorText = getErrorText(messageSource, errorKeyPrefix);
-        validationSummary.addFormError(fieldName, fieldTitle, errorText);
+        Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName}, new String[]{"validationSummary", "messageSource", "fieldName"});
+        LOG.trace("Started AbstractValidation.failValidation");
+        try {
+            String[] args = getFieldLabelArgs(messageSource, fieldName, allFieldValues);
+            LOG.debug("fieldName = {}, args = {}", fieldName, args == null ? null : Arrays.asList(args));
+            String fieldTitle = getFieldLabel(messageSource, fieldName, args);
+            String errorText = getErrorText(messageSource, errorKeyPrefix);
+            validationSummary.addFormError(fieldName, fieldTitle, errorText);
+        } finally {
+            LOG.trace("Ending AbstractValidation.failValidation");
+        }
     }
 
     private String getErrorText(MessageSource messageSource, String errorType) {
@@ -73,7 +132,7 @@ public abstract class AbstractValidation implements Validation {
         if(string == null) {
             return null;
         }
-    
+
         String[] strings = string.split(",");
         List<String> results = new ArrayList<>();
         for(String result : strings) {
@@ -82,7 +141,7 @@ public abstract class AbstractValidation implements Validation {
                 results.add(result);
             }
         }
-    
+
         return results;
     }
 }

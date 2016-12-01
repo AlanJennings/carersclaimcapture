@@ -88,7 +88,7 @@ public class BreakInRespiteCareController extends AbstractFormController {
      * over the (rather poor) reporting behaviour
      * @return
      */
-    protected void validate(Map<String, String[]> fieldValues, String[] fields) {
+    protected void validate(String[] fields, Map<String, String[]> fieldValues, Map<String, String[]> allFieldValues) {
         LOG.trace("Starting BenefitsController.validate");
 
         validateMandatoryField(fieldValues, "respiteBreakWhoInRespite");

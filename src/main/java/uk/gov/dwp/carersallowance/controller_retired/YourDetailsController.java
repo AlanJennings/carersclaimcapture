@@ -53,7 +53,7 @@ public class YourDetailsController extends AbstractFormController {
         return super.postForm(request, session, model);
     }
 
-    protected void validate(Map<String, String[]> fieldValues, String[] fields) {
+    protected void validate(String[] fields, Map<String, String[]> fieldValues, Map<String, String[]> allFieldValues) {
         LOG.trace("Starting YourDetailsController.validate");
 
         validateField(fieldValues, "carerTitle");

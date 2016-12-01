@@ -22,16 +22,16 @@ public class GroupAllValidation extends AbstractValidation {
     /**
      * validate that all the fields are populated
      */
-    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> allFieldValues) {
-        Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName, allFieldValues}, new String[]{"validationSummary", "messageSource", "fieldName", "allFieldValues"});
+    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> allFieldValues) {
+        Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName, requestFieldValues}, new String[]{"validationSummary", "messageSource", "fieldName", "allFieldValues"});
         LOG.trace("Starting GroupAllValidation.validate");
         try {
             LOG.debug("groupFields = {}", groupFields);
             for(String field: groupFields) {
-                String[] fieldValues = allFieldValues.get(field);
+                String[] fieldValues = requestFieldValues.get(field);
                 if(getFirstPopulatedValue(fieldValues) == null) {
                     LOG.debug("Found empty value for: {}", field);
-                    failValidation(validationSummary, messageSource, fieldName, ValidationType.GROUP_ALL.getProperty());
+                    failValidation(validationSummary, messageSource, fieldName, ValidationType.GROUP_ALL.getProperty(), allFieldValues);
                     return false;
                 }
             }

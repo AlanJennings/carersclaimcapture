@@ -159,7 +159,10 @@ public class FormValidations {
         }
     }
 
-    public ValidationSummary validate(ValidationSummary validationSummary, MessageSource messageSource, Map<String, String[]> allFieldValues) {
+    public ValidationSummary validate(ValidationSummary validationSummary,
+                                      MessageSource messageSource,
+                                      Map<String, String[]> requestFieldValues,
+                                      Map<String, String[]> allFieldValues) {
         LOG.trace("Started FormValidations.validate");
         try{
             if(validationSummary == null) {
@@ -174,7 +177,7 @@ public class FormValidations {
                     continue;
                 }
 
-                if(areDependenciesFulfilled(field, allFieldValues) == false) {
+                if(areDependenciesFulfilled(field, requestFieldValues) == false) {
                     LOG.debug("Skipping. Unfulfilled dependencies for field {}: it is not enabled", field);
                     continue;
                 }
@@ -182,7 +185,7 @@ public class FormValidations {
                 List<Validation> fieldValidations = validations.get(field);
                 LOG.info("fieldValidations: {}", fieldValidations);
                 for(Validation validation: fieldValidations) {
-                    validation.validate(validationSummary, messageSource, field, allFieldValues);
+                    validation.validate(validationSummary, messageSource, field, requestFieldValues, allFieldValues);
                 }
             }
 

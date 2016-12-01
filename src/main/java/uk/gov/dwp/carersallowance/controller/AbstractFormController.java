@@ -135,11 +135,13 @@ public class AbstractFormController {
     }
 
     public static String[] getFields(MessageSource messageSource, String pageName) {
+        LOG.debug("pageName = {}", pageName);
         if(pageName == null) {
             return null;
         }
 
         String fieldNameList = messageSource.getMessage(pageName + ".fields", null, null, null);
+        LOG.debug("fieldNameList = {}", fieldNameList);
         if(fieldNameList == null) {
             return null;
         }
@@ -149,6 +151,7 @@ public class AbstractFormController {
             fieldNames[index] = fieldNames[index].trim();
         }
 
+        LOG.debug("fieldNames = {}", new LoggingObjectWrapper(fieldNames));
         return fieldNames;
     }
 
@@ -270,7 +273,7 @@ public class AbstractFormController {
 
             getValidationSummary().reset();
 
-            validate(request.getParameterMap(), fields);
+            validate(fields, request.getParameterMap(), getAllFieldValues(request));
 
             if(hasErrors()) {
                 LOG.info("there are validation errors, re-showing form");
@@ -292,6 +295,40 @@ public class AbstractFormController {
             throw e;
         } finally {
             LOG.trace("Ending AbstractFormController.postForm");
+        }
+    }
+
+    private Map<String, String[]> getAllFieldValues(HttpServletRequest request) {
+        LOG.trace("Started AbstractFormController.getAllFieldValues");
+        try {
+            if(request == null) {
+                return null;
+            }
+
+            StringBuffer buffer = new StringBuffer();
+
+            Map<String, String[]> map = new HashMap<>();
+            HttpSession session = request.getSession();
+            List<String> sessionNames = Collections.list(session.getAttributeNames());
+            Collections.sort(sessionNames);
+            for(String attrName: sessionNames) {
+                Object attrValue = session.getAttribute(attrName);
+                if(attrValue instanceof String) {
+                    buffer.append(attrName).append(" = ").append((String)attrValue).append(", ");
+                    String[] attrValues = new String[]{(String)attrValue};
+                    map.put(attrName, attrValues);
+                } else if(attrValue instanceof String[]) {
+                    buffer.append(attrName).append(" = ").append(Arrays.asList((String[])attrValue)).append(", ");
+                    map.put(attrName, (String[])attrValue);
+                } else {
+                    // do nothing
+                }
+            }
+
+            LOG.debug("all field values = {}", buffer.toString());
+            return map;
+        } finally {
+            LOG.trace("Ending AbstractFormController.getAllFieldValues");
         }
     }
 
@@ -1245,10 +1282,11 @@ public class AbstractFormController {
     }
 
     /**
-     * @param fieldValues all the values from the form being validated
      * @param fields the names of the fields the form uses (from the resource bundle)
+     * @param fieldValues all the values from the form being validated
+     * @param allFieldValues TODO
      */
-    protected void validate(Map<String, String[]> fieldValues, String[] fields) {
+    protected void validate(String[] fields, Map<String, String[]> fieldValues, Map<String, String[]> allFieldValues) {
         LOG.trace("Starting AbstractFormController.validate");
 
         if(fields == null) {
@@ -1265,7 +1303,7 @@ public class AbstractFormController {
             }
 
             LOG.debug("validation summary before = {}", getValidationSummary());
-            validations.validate(getValidationSummary(), getMessageSource(), fieldValues);
+            validations.validate(getValidationSummary(), getMessageSource(), fieldValues, allFieldValues);
             LOG.debug("validation summary after = {}", getValidationSummary());
         } catch (ParseException e) {
             throw new IllegalStateException("Unable to read validation configuration.", e);

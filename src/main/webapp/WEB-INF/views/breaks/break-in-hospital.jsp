@@ -4,14 +4,17 @@
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.break-in-hospital" currentPage="${currentPage}">
+<t:mainPage>
 
-    <t:pageContent errors="${validationErrors}" page="page.break-in-hospital" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
         <input type="hidden" name="break_id" value="${break_id}" >
         <input type="hidden" name="breakInCareType" value="hospital" >
 
         <t:htmlsection name="breakInHospitalIntro">
-            <p>You told us that you or the person you care for have been in hospital.  You could still be paid Carer's Allowance for this time</p>
+            <legend class="heading-medium form-label-bold">
+                You told us that you or the person you care for have been in hospital.  
+                You could still be paid Carer's Allowance for this time
+            </legend>
         </t:htmlsection>
 
         <t:radiobuttons name="hospitalBreakWhoInHospital" optionValues="Carer|Caree" />
@@ -35,12 +38,20 @@
             <t:hiddenPanel id="hospitalBreakCareeHospitalStayEndedWrap" triggerId="hospitalBreakCareeHospitalStayEnded" triggerValue="yes">
 
                 <t:datefield name="hospitalBreakCareeHospitalEndDate" />
-                <t:yesnofield name="hospitalBreakCareeHospitalCarerStillCaring" labelKeyArgs="${careeFirstName} ${careeSurname}"/>
 
             </t:hiddenPanel>
+            
+            <t:yesnofield name="hospitalBreakCareeHospitalCarerStillCaring"/>
             
         </t:hiddenPanel>
        
     </t:pageContent>
 
-</t:mainPage>    
+</t:mainPage>
+
+<br>hospitalBreakCareeHospitalStayEnded = ${hospitalBreakCareeHospitalStayEnded}
+<br>
+<br>hospitalBreakCareeHospitalStartDate_day = ${hospitalBreakCareeHospitalStartDate_day}
+<br>hospitalBreakCareeHospitalStartDate_month = ${hospitalBreakCareeHospitalStartDate_month}
+<br>hospitalBreakCareeHospitalStartDate_year = ${hospitalBreakCareeHospitalStartDate_year}
+
