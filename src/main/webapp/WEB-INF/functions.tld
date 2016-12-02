@@ -42,5 +42,14 @@
         <function-class>uk.gov.dwp.carersallowance.jsp.Functions</function-class>
         <function-signature>java.lang.String dateOffset(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)</function-signature>
     </function>
-    
+    <function>
+        <name>dateOffsetFromCurrent</name>
+        <function-class>uk.gov.dwp.carersallowance.jsp.Functions</function-class>
+        <function-signature>java.lang.String dateOffsetFromCurrent(java.lang.String, java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>prop</name>
+        <function-class>uk.gov.dwp.carersallowance.jsp.Functions</function-class>
+        <function-signature>java.lang.String prop(java.lang.String)</function-signature>
+    </function>
 </taglib> 

@@ -182,7 +182,7 @@ public class ResolveArgs extends BodyTagSupport {
     }
 
     private String evaluateCadsExpression(JspApplicationContext jspAppContext, ELContext elContext, String expression) {
-        // e.g ${cads:dateOffset(dateOfClaim_day, dateOfClaim_month, dateOfClaim_year, "dd MMMMMMMMMM yyyy", "")}"
+        // e.g ${cads:dateOffset(dateOfClaim_day, dateOfClaim_month, dateOfClaim_year, "d MMMMMMMMMM yyyy", "")}"
         if(StringUtils.isEmpty(expression)) {
             return "";
         }
@@ -215,8 +215,23 @@ public class ResolveArgs extends BodyTagSupport {
 
                 return Functions.dateOffset(dayField, monthField, yearField, format, offset);
             }
+            case "dateOffsetFromCurrent" : {
+                if (arguments.length != 2) {
+                    throw new IllegalArgumentException("Wrong number of arguments for dateOffsetFromCurrent. Expecting dateOffsetFromCurrent(String format, String offset)");
+                }
+                String format = stripEnclosingQuotes(arguments[0]);
+                String offset = stripEnclosingQuotes(arguments[1]);
+                return Functions.dateOffsetFromCurrent(format, offset);
+            }
+            case "prop" : {
+                if (arguments.length != 1) {
+                    throw new IllegalArgumentException("Wrong number of arguments for prop. Expecting prop(String propertyValue)");
+                }
+                String prop = stripEnclosingQuotes(arguments[0]);
+                return evaluateExpression(jspAppContext, elContext, Functions.prop(prop));
+            }
             default:
-                    throw new IllegalArgumentException("Unknown function: " + functionName);
+                throw new IllegalArgumentException("Unknown function: " + functionName);
         }
     }
 

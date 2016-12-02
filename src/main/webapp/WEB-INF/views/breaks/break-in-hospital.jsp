@@ -10,9 +10,7 @@
         <input type="hidden" name="break_id" value="${break_id}" >
         <input type="hidden" name="breakInCareType" value="hospital" >
 
-        <t:htmlsection name="breakInHospitalIntro">
-            <p>You told us that you or the person you care for have been in hospital.  You could still be paid Carer's Allowance for this time</p>
-        </t:htmlsection>
+        <p><b><t:message code="hospitalBreak.text" /></b></p>
 
         <t:radiobuttons name="hospitalBreakWhoInHospital" optionValues="Carer|Caree" />
 
