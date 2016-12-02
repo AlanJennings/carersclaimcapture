@@ -349,7 +349,7 @@ empAdditionalInfo.answer=empAdditionalInfo.label
 employment.additional.info.help=empAdditionalInfo.hintBefore
 empAdditionalInfo=empAdditionalInfoText.label
 
-s17.g1=/your-income/statutory-sick-pay.pageTitle
+s17.g1=page.statutory-sick-pay.text
 stillBeingPaidThisPay=sickPayStillBeingPaidThisPay.label
 whenDidYouLastGetPaid=sickPayWhenDidYouLastGetPaid.label
 whoPaidYouThisPay=sickPayWhoPaidYouThisPay.label
@@ -362,7 +362,7 @@ incomeMonthly=sickPayHowOftenPaidThisPay.optionLabels.Monthly
 incomeOther=sickPayHowOftenPaidThisPay.optionLabels.Other
 howOftenPaidThisPayOther=sickPayHowOftenPaidThisPayOther.label
 
-s18.g1=/your-income/smp-spa-sap.pageTitle
+s18.g1=page.smp-spa-sap.text
 paymentTypesForThisPay=otherStatPaymentPaymentTypesForThisPay.label
 maternityPaternity=otherStatPaymentPaymentTypesForThisPay.optionLabels.MaternityOrPaternityPay
 adoption=otherStatPaymentPaymentTypesForThisPay.optionLabels.AdoptionPay
@@ -378,7 +378,7 @@ incomeMonthly=otherStatPaymentHowOftenPaidThisPay.optionLabels.Monthly
 incomeOther=otherStatPaymentHowOftenPaidThisPay.optionLabels.Other
 howOftenPaidThisPayOther=otherStatPaymentHowOftenPaidThisPayOther.label
 
-s19.g1=/your-income/fostering-allowance.pageTitle
+s19.g1=page.fostering-allowance.text
 fosteringAllowancePay=fosteringAllowancePay.label
 paymentTypeLocalAuthority=fosteringAllowancePay.optionLabels.LocalAuthority
 paymentTypeMainFostering=fosteringAllowancePay.optionLabels.FosteringAllowance
@@ -396,7 +396,7 @@ incomeMonthly=fosteringAllowanceHowOftenPaidThisPay.optionLabels.Monthly
 incomeOther=fosteringAllowanceHowOftenPaidThisPay.optionLabels.Other
 howOftenPaidThisPayOther=fosteringAllowanceHowOftenPaidThisPayOther.label
 
-s20.g1=/your-income/direct-payment.pageTitle
+s20.g1=page.direct-payment.text
 stillBeingPaidThisPay_directPayment=directPaymentStillBeingPaidThisPay.label
 whenDidYouLastGetPaid=directPaymentWhenDidYouLastGetPaid.label
 whoPaidYouThisPay_directPayment=directPaymentWhoPaidYouThisPay.label
@@ -409,11 +409,11 @@ incomeMonthly=directPaymentHowOftenPaidThisPay.optionLabels.Monthly
 incomeOther=directPaymentHowOftenPaidThisPay.optionLabels.Other
 howOftenPaidThisPayOther=directPaymentHowOftenPaidThisPayOther.label
 
-s24.g1=/your-income/rental-income.pageTitle
+s24.g1=page.rental-income.text
 rentalIncomeInfo=rentalPaymentInfo.label
 rentalIncomeInfo_helper=rentalPaymentInfo.hintBefore
 
-s21.g1=/your-income/other-income.pageTitle
+s21.g1=page.other-income.text
 otherPaymentsInfo=otherPaymentsInfo.label
 otherPaymentsInfo_helper=otherPaymentsInfo.hintBefore
 
@@ -479,4 +479,26 @@ claim.next.nodocuments.1=finish-statement.line5
 thankyou.report.change=finish-statement.line6
 claim.feedback.link=finish-statement.line7
 feedback.takes30secs=finish-statement.line8
+
+s0.progressbar.name=page.eligibility.text
+s1.g1=page.disclaimer.text
+thirdParty.legend=page.third-party.text
+s1_2.g1.legend=page.claim-date.text
+s2.g1=page.your-details.text
+s2.g2=page.marital-status.text
+s2.g3=page.contact-details.text
+s2b.longName=page.nationality-and-residency.text
+s3.g1=page.personal-details.text
+s4.g1=page.their-personal-details.text
+s4.g4=page.more-about-the-care.text
+s6.g1=page.your-course-details.text
+s7.g5=page.last-wage.text
+s7.g8=page.about-expenses.text
+s8.g1=page.self-employment-dates.text
+s8.g4=page.self-employment-pensions-and-expenses.text
+s10_2.g1=page.additional-info.text
+s10.g1=page.how-we-pay-you.text
+s10_2.name=page.information-additional-info.text
+s11.g4=page.declaration.text
+
 
