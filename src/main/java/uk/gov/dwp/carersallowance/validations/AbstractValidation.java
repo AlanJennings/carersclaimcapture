@@ -20,7 +20,7 @@ public abstract class AbstractValidation implements Validation {
     private static final String ERROR_TEXT_KEY_FORMAT = "%s.error_text";
 
     @Override
-    public abstract boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> allFieldValues);
+    public abstract boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> existingFieldValues);
 
     /**
      * @return the message or null if it does not exist
@@ -31,7 +31,7 @@ public abstract class AbstractValidation implements Validation {
         return fieldTitle;
     }
 
-    private String[] getFieldLabelArgs(MessageSource messageSource, String fieldName, Map<String, String[]> allFieldValues) {
+    private String[] getFieldLabelArgs(MessageSource messageSource, String fieldName, Map<String, String[]> existingFieldValues) {
         try {
             Locale locale  = null;
 
@@ -53,7 +53,7 @@ public abstract class AbstractValidation implements Validation {
                     LOG.debug("extracting field value");
                     String argFieldName = arg.substring("${".length(), arg.length() - "}".length());
                     LOG.debug("argFieldName = {}", argFieldName);
-                    String[] values = allFieldValues.get(argFieldName);
+                    String[] values = existingFieldValues.get(argFieldName);
                     if(values == null || values.length == 0) {
                         decodedArgs[index] = "";
                     } else if(values.length == 1) {
@@ -94,12 +94,12 @@ public abstract class AbstractValidation implements Validation {
                                   MessageSource messageSource,
                                   String fieldName,
                                   String errorKeyPrefix,
-                                  Map<String, String[]> allFieldValues) {
+                                  Map<String, String[]> existingFieldValues) {
 
         Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName}, new String[]{"validationSummary", "messageSource", "fieldName"});
         LOG.trace("Started AbstractValidation.failValidation");
         try {
-            String[] args = getFieldLabelArgs(messageSource, fieldName, allFieldValues);
+            String[] args = getFieldLabelArgs(messageSource, fieldName, existingFieldValues);
             LOG.debug("fieldName = {}, args = {}", fieldName, args == null ? null : Arrays.asList(args));
             String fieldTitle = getFieldLabel(messageSource, fieldName, args);
             String errorText = getErrorText(messageSource, errorKeyPrefix);

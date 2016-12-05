@@ -16,6 +16,9 @@
 <c:if test="${empty pageTitle}" >
     <c:set var="pageTitle"><t:message parentName="${pageScope.pageTitleKey}" /></c:set>
 </c:if>
+<c:if test="${empty pageTitle}" >
+    <c:set var="pageTitle"><t:message parentName="${pageScope.page}" element="browserTitle" /></c:set>
+</c:if>
 
 <!DOCTYPE html>
 
@@ -116,6 +119,7 @@
         <script type="text/javascript" src="/javascript/stageprompt-2.0.1.js" ></script>
         <script type="text/javascript" src="/javascript/custom.js" ></script>
         <script type="text/javascript" src="/javascript/respond.min.js" ></script>
+        <script type="text/javascript" src="/javascript/cleanupHashUrl.js" ></script>
 
         <!--[if (lt IE 9) & (!IEMobile)]>
         <script src="/javascript/respond.min.js" ></script>

@@ -28,7 +28,7 @@ public class RegexValidation extends AbstractValidation {
     /**
      * validate that at least one value corresponding to fieldName is populated
      */
-    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> allFieldValues) {
+    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> existingFieldValues) {
         Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName, requestFieldValues}, new String[]{"validationSummary", "messageSource", "fieldName", "allFieldValues"});
         LOG.trace("Starting MandatoryValidation.validate");
         try {
@@ -45,7 +45,7 @@ public class RegexValidation extends AbstractValidation {
                     Matcher matcher = pattern.matcher(fieldValue);
                     if(matcher.matches() == false) {
                         LOG.debug("field value({}) does not match regular expression: {}", fieldValue, regex);
-                        failValidation(validationSummary, messageSource, fieldName, ValidationType.REGEX.getProperty(), allFieldValues);
+                        failValidation(validationSummary, messageSource, fieldName, ValidationType.REGEX.getProperty(), existingFieldValues);
                         return false;
                     }
                 }

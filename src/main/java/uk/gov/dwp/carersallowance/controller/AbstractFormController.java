@@ -268,25 +268,39 @@ public class AbstractFormController {
             String pageName = request.getParameter("pageName");
             String[] fields = getFields(pageName);
 
-            copyFromRequestToSession(request, fields);
-            copyFromRequestToSession(request, getSharedFields());
-
+            // TODO only copy to session after validation has occurred
             getValidationSummary().reset();
 
-            validate(fields, request.getParameterMap(), getAllFieldValues(request));
+            Map<String, String[]> existingFieldValues = getAllFieldValues(request);
+            validate(fields, request.getParameterMap(), existingFieldValues);
 
             if(hasErrors()) {
                 LOG.info("there are validation errors, re-showing form");
+                String form = showForm(request, model);
+
+                // add the values of the current form to the model as well as the session values
                 copyFromRequestToModel(request, fields, model);
                 copyFromRequestToModel(request, getSharedFields(), model);
                 model.addAttribute("validationErrors", getValidationSummary());
-                return showForm(request, model);
+
+                return form;
             }
+
+            copyFromRequestToSession(request, fields);
+            copyFromRequestToSession(request, getSharedFields());
 
             finalizePostForm(request);
 
             // add the fieldCollection id field to the url (if its populated)
-            String nextPage = "redirect:" + getNextPage(request);
+
+            // we need to add the # to the end of the redirect url to stop the browser from inheriting the hash url
+            // from the previous page ('cos its a redirect), see https://www.w3.org/TR/cuap#uri
+            // we needed to do a redirect so that we show the page we are on, rather than the page we submitted to
+            // and we needed to have submitted to the previous page, so we can validate and update the form, which
+            // is part of the previous screen and not the one we are going to.  We don't know if the previous page
+            // had a hash location, as the hash location is never submitted to the server
+            // there are various things we *could* do with javascript, but none of them will work in the no-javascript journey
+            String nextPage = "redirect:" + getNextPage(request) + "#";
             LOG.debug("next page = {}", nextPage);
 
             return nextPage;
@@ -1284,9 +1298,9 @@ public class AbstractFormController {
     /**
      * @param fields the names of the fields the form uses (from the resource bundle)
      * @param fieldValues all the values from the form being validated
-     * @param allFieldValues TODO
+     * @param existingFieldValues the current session values
      */
-    protected void validate(String[] fields, Map<String, String[]> fieldValues, Map<String, String[]> allFieldValues) {
+    protected void validate(String[] fields, Map<String, String[]> fieldValues, Map<String, String[]> existingFieldValues) {
         LOG.trace("Starting AbstractFormController.validate");
 
         if(fields == null) {
@@ -1303,7 +1317,7 @@ public class AbstractFormController {
             }
 
             LOG.debug("validation summary before = {}", getValidationSummary());
-            validations.validate(getValidationSummary(), getMessageSource(), fieldValues, allFieldValues);
+            validations.validate(getValidationSummary(), getMessageSource(), fieldValues, existingFieldValues);
             LOG.debug("validation summary after = {}", getValidationSummary());
         } catch (ParseException e) {
             throw new IllegalStateException("Unable to read validation configuration.", e);

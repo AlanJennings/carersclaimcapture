@@ -34,7 +34,7 @@ public class DateValidation extends AbstractValidation {
                             MessageSource messageSource,
                             String id,
                             Map<String, String[]> requestFieldValues,
-                            Map<String, String[]> allFieldValues) {
+                            Map<String, String[]> existingFieldValues) {
         Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, id, requestFieldValues}, new String[]{"validationSummary", "messageSource", "id", "allFieldValues"});
         LOG.trace("Starting DateValidation.validate");
         try {
@@ -64,12 +64,12 @@ public class DateValidation extends AbstractValidation {
                 LOG.debug("Empty field");
                 if(populatedField) {
                     LOG.debug("also populated field");
-                    failValidation(validationSummary, messageSource, id, ValidationType.DATE_MANDATORY.getProperty(), allFieldValues);
+                    failValidation(validationSummary, messageSource, id, ValidationType.DATE_MANDATORY.getProperty(), existingFieldValues);
                     LOG.debug("date is incomplete, returning false");
                     return false;
 
                 } else if(mandatory) {
-                    failValidation(validationSummary, messageSource, id, ValidationType.MANDATORY.getProperty(), allFieldValues);
+                    failValidation(validationSummary, messageSource, id, ValidationType.MANDATORY.getProperty(), existingFieldValues);
                     LOG.debug("date is mandatory, but empty, returning false");
                     return false;
                 } else {
@@ -78,7 +78,7 @@ public class DateValidation extends AbstractValidation {
 
             } else if(isValidDate(day, month, year) == false) {
                 LOG.debug("date is not valid, returning false");
-                failValidation(validationSummary, messageSource, id, ValidationType.DATE_MANDATORY.getProperty(), allFieldValues);
+                failValidation(validationSummary, messageSource, id, ValidationType.DATE_MANDATORY.getProperty(), existingFieldValues);
                 return false;
             }
 

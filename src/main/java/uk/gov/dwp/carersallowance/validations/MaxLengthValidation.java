@@ -28,7 +28,7 @@ public class MaxLengthValidation extends AbstractValidation {
     /**
      * validate the field is no more than maxLength
      */
-    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> allFieldValues) {
+    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> existingFieldValues) {
         Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName, requestFieldValues}, new String[]{"validationSummary", "messageSource", "fieldName", "allFieldValues"});
         LOG.trace("Starting GroupAllValidation.validate");
         try {
@@ -37,7 +37,7 @@ public class MaxLengthValidation extends AbstractValidation {
             for(String fieldValue : fieldValues) {
                 if(fieldValue != null && fieldValue.length() > maxLength) {
                     LOG.debug("field({}) value({}) is longer than maxLength: {}", fieldName, fieldValue, maxLength);
-                    failValidation(validationSummary, messageSource, fieldName, ValidationType.MAX_LENGTH.getProperty(), allFieldValues);
+                    failValidation(validationSummary, messageSource, fieldName, ValidationType.MAX_LENGTH.getProperty(), existingFieldValues);
                     return false;
                 }
             }

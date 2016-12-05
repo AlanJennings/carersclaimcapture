@@ -162,7 +162,7 @@ public class FormValidations {
     public ValidationSummary validate(ValidationSummary validationSummary,
                                       MessageSource messageSource,
                                       Map<String, String[]> requestFieldValues,
-                                      Map<String, String[]> allFieldValues) {
+                                      Map<String, String[]> existingFieldValues) {
         LOG.trace("Started FormValidations.validate");
         try{
             if(validationSummary == null) {
@@ -185,7 +185,7 @@ public class FormValidations {
                 List<Validation> fieldValidations = validations.get(field);
                 LOG.info("fieldValidations: {}", fieldValidations);
                 for(Validation validation: fieldValidations) {
-                    validation.validate(validationSummary, messageSource, field, requestFieldValues, allFieldValues);
+                    validation.validate(validationSummary, messageSource, field, requestFieldValues, existingFieldValues);
                 }
             }
 

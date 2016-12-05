@@ -27,17 +27,17 @@
                        onkeydown="trackEvent('/consent-and-declaration/declaration','Claim Declaration - Report change online');" 
                        rel="external" target="_blank" href="https://www.gov.uk/carers-allowance-report-change"
                     ><t:message code="declarationText.line6" /></a>
-                    <t:message code="declarationText.line1" />
+                    <t:message code="declarationText.line7" />
                     <a onmousedown="trackEvent('/consent-and-declaration/declaration','Claim Declaration - Carer's Allowance Unit');" 
                        onkeydown="trackEvent('/consent-and-declaration/declaration','Claim Declaration - Carer's Allowance Unit');" 
                        rel="external" 
                        target="_blank" 
                        href="https://www.gov.uk/carers-allowance-unit"
-                     ><t:message code="declarationText.line7" /></a>
+                     ><t:message code="declarationText.line8" /></a>
                 </li>
             </ul>
             <p class="warning-text">
-                <t:message code="declarationText.line8" />
+                <t:message code="declarationText.line9" />
             </p>
         </t:htmlsection>
 

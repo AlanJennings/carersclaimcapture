@@ -9,25 +9,38 @@
     <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
     
         <t:pre>
-            <p>We look at any money your partner gets from benefits when we work out if you can get Carer's Allowance.</p>
+            <p><t:message code="partnerDetails.intro" /></p>
         </t:pre>
-        
-        <t:yesnofield name="hadPartnerSinceClaimDate" />
-        
-        <t:hiddenPanel id="partnerDetailsWrap" triggerId="hadPartnerSinceClaimDate" triggerValue="yes">
 
-            <t:textedit name="partnerDetailsTitle" maxLength="20" /> 
-            <t:textedit name="partnerDetailsFirstName" maxLength="17" />
-            <t:textedit name="partnerDetailsMiddleName" maxLength="17" />
-            <t:textedit name="partnerDetailsSurname" maxLength="35" />
-            <t:textedit name="partnerDetailsOtherNames" maxLength="35" />
-            <t:textedit name="partnerDetailsNationalInsuranceNumber" maxLength="19" additionalClasses="ni-number" />  <!-- We accept a possible space around each character with 9 max in nino ie. AB010203D so 9*2+1 ==> 19 chars max -->
-            <t:datefield name="partnerDetailsDateOfBirth" />
-            <t:textedit name="partnerDetailsNationality" maxLength="35" />
-            <t:yesnofield name="partnerDetailsSeparated" />            
-            <t:yesnofield name="isPartnerPersonYouCareFor" />
+        <t:group name="partnerDetailsInstructions">heading-medium form-label-bold
+        
+            <t:pre>
+               <div class="prompt" style="margin-top: 30px;">
+                   <p><t:message code="partnerDetailsInstructions.line1" /></p>
+                    <ul class="list-bullet">
+                        <li><t:message code="partnerDetailsInstructions.line2" /></li>
+                        <li><t:message code="partnerDetailsInstructions.line3" /></li>
+                    </ul>
+                </div>
+            </t:pre>
+
+            <t:yesnofield name="hadPartnerSinceClaimDate" />
             
-        </t:hiddenPanel>
+            <t:hiddenPanel id="partnerDetailsWrap" triggerId="hadPartnerSinceClaimDate" triggerValue="yes">
+    
+                <t:textedit name="partnerDetailsTitle" maxLength="20" /> 
+                <t:textedit name="partnerDetailsFirstName" maxLength="17" />
+                <t:textedit name="partnerDetailsMiddleName" maxLength="17" />
+                <t:textedit name="partnerDetailsSurname" maxLength="35" />
+                <t:textedit name="partnerDetailsOtherNames" maxLength="35" />
+                <t:textedit name="partnerDetailsNationalInsuranceNumber" maxLength="19" additionalClasses="ni-number" />  <!-- We accept a possible space around each character with 9 max in nino ie. AB010203D so 9*2+1 ==> 19 chars max -->
+                <t:datefield name="partnerDetailsDateOfBirth" />
+                <t:textedit name="partnerDetailsNationality" maxLength="35" />
+                <t:yesnofield name="partnerDetailsSeparated" />            
+                <t:yesnofield name="isPartnerPersonYouCareFor" />
+                
+            </t:hiddenPanel>
+        </t:group>
 
     </t:pageContent>
 

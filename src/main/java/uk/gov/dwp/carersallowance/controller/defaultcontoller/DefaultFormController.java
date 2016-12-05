@@ -72,6 +72,7 @@ public class DefaultFormController extends AbstractFormController {
             String path = request.getServletPath();
             String method = request.getMethod();
 
+            String page = null;
             LOG.info("method = {}, path = {}", method, path);
             if(HTTP_GET.equalsIgnoreCase(method)) {
                 return super.showForm(request, model);

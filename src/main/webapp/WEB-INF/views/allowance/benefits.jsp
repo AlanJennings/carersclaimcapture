@@ -11,7 +11,7 @@
         <t:radiobuttons name="benefitsAnswer" optionValues="PIP|DLA|AA|CAA|AFIP|NONE" />
         
         <t:hiddenWarning id="answerNoMessageWrap" triggerId="benefitsAnswer" triggerValue="NONE">
-            <p>You'll only get Carer's Allowance if the person you care for gets one of these benefits.</p>
+            <p><t:message code="benefitsAnswer.warning.message" /></p>
         </t:hiddenWarning>
     
     </t:pageContent>

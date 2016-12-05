@@ -6,17 +6,17 @@
 
 <t:mainPage >
 
-    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" nextButtonTextKey="page.approve.nextButtonText" backLink="${previousPage}">
 
         <input type="hidden" id="allowedToContinue" name="allowedToContinue" value="true"/>
         <input type="hidden" id="js" name="jsEnabled" value="false">
 
-        <t:htmlsection name="approvalIncomeThreshold"> 
+        <t:htmlsection name="approvalIncomeThreshold">
             <ul class="list-bullet">
                 <li><t:message code="approvalIncomeThreshold.bullet1" /></li>
                 <li><t:message code="approvalIncomeThreshold.bullet2" /></li>
             </ul>
-        </t:htmlsection> 
+        </t:htmlsection>
 
         <t:htmlsection name="approvalDocumentationNeeded">
             <ul class="list-bullet">
@@ -24,7 +24,7 @@
                 <li><t:message code="approvalDocumentationNeeded.bullet2" /></li>
                 <li><t:message code="approvalDocumentationNeeded.bullet3" /></li>
                 <li><t:message code="approvalDocumentationNeeded.bullet4" /></li>
-            </ul> 
+            </ul>
         </t:htmlsection>
 
     </t:pageContent>

@@ -20,7 +20,7 @@ public class MandatoryValidation extends AbstractValidation {
     /**
      * validate that at least one value corresponding to fieldName is populated
      */
-    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> allFieldValues) {
+    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> existingFieldValues) {
         Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName, requestFieldValues}, new String[]{"validationSummary", "messageSource", "fieldName", "allFieldValues"});
         LOG.trace("Starting MandatoryValidation.validate");
         try {
@@ -36,7 +36,7 @@ public class MandatoryValidation extends AbstractValidation {
             }
 
             LOG.debug("missing mandatory field: {}", fieldName);
-            failValidation(validationSummary, messageSource, fieldName, ValidationType.MANDATORY.getProperty(), allFieldValues);
+            failValidation(validationSummary, messageSource, fieldName, ValidationType.MANDATORY.getProperty(), existingFieldValues);
 
             return false;
         } finally {

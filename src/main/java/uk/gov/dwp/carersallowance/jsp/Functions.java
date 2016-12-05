@@ -9,15 +9,24 @@ import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
+import javax.inject.Inject;
+
+@Component
 public class Functions {
     private static final Logger LOG = LoggerFactory.getLogger(Functions.class);
     private static final String READ_DATE_FORMAT = "dd-MM-yyyy";
+    private static transient MessageSource messageSource;
 
-    private Functions() {}
+    @Inject
+    private Functions(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     public static String dateOffset(String dayField, String monthField, String yearField, String format, String offset) {
         LOG.trace("Started Functions.dateOffset");
@@ -47,17 +56,37 @@ public class Functions {
             LOG.debug("date = {}", date);
             date = dateOffset(date, offset);
 
-            SimpleDateFormat dateFomatter;
+            SimpleDateFormat dateFormatter;
             try {
-                dateFomatter = new SimpleDateFormat(format, Locale.getDefault());
+                dateFormatter = new SimpleDateFormat(format, Locale.getDefault());
             } catch(IllegalArgumentException e) {
                 throw new TagException("Do not understand requested date format: '" + format + "'", e);
             }
-            String result = dateFomatter.format(date);
+            String result = dateFormatter.format(date);
             LOG.debug("result = {}", dateField);
             return result;
         } finally {
             LOG.trace("Ending Functions.dateOffset");
+        }
+    }
+
+    public static String dateOffsetFromCurrent(String format, String offset) {
+        LOG.trace("Started Functions.dateOffsetFromCurrent");
+        Date date = dateOffset(Calendar.getInstance().getTime(), offset);
+        LOG.debug("date = {}", date);
+        try {
+            SimpleDateFormat dateFormatter;
+            try {
+                dateFormatter = new SimpleDateFormat(format, Locale.getDefault());
+            } catch(IllegalArgumentException e) {
+                throw new TagException("Do not understand requested date format: '" + format + "'", e);
+            }
+
+            String result = dateFormatter.format(date);
+            LOG.debug("result = {}", result);
+            return result;
+        } finally {
+            LOG.trace("Ending Functions.dateOffsetFromCurrent");
         }
     }
 
@@ -188,5 +217,14 @@ public class Functions {
 
         Date result = calendar.getTime();
         return result;
+    }
+
+    public static String prop(String code) {
+        LOG.trace("Started Functions.prop");
+        try {
+            return messageSource.getMessage(code, null, null, null);
+        } finally {
+            LOG.trace("Ending Functions.prop");
+        }
     }
 }

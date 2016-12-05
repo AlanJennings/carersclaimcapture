@@ -9,3 +9,8 @@ dist
 /c3.iml
 /target/
 /bin/
+/.settings/
+/.eclipse-pmd
+/.classpath
+/.springBeans
+/.project

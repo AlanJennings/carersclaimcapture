@@ -5,5 +5,9 @@ import java.util.Map;
 import org.springframework.context.MessageSource;
 
 public interface Validation {
-    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> allFieldValues);
+    public boolean validate(ValidationSummary validationSummary,
+                            MessageSource messageSource,
+                            String fieldName,
+                            Map<String, String[]> requestFieldValues,
+                            Map<String, String[]> existingFieldValues);
 }

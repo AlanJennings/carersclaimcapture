@@ -16,6 +16,7 @@
                 You could still be paid Carer's Allowance for this time
             </legend>
         </t:htmlsection>
+        <p><b><t:message code="hospitalBreak.text" /></b></p>
 
         <t:radiobuttons name="hospitalBreakWhoInHospital" optionValues="Carer|Caree" />
 
