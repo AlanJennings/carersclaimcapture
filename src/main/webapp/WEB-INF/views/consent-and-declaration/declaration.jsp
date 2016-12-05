@@ -18,21 +18,19 @@
             <p><t:message code="declarationText.line1" /></p>
             <ul class="list-bullet">
                 <li><t:message code="declarationText.line2" /></li>
-                
-                    <li><t:message code="declarationText.line3" /></li>
-                
+                <li><t:message code="declarationText.line3" /></li>
                 <li><t:message code="declarationText.line4" /></li>
                 <li><t:message code="declarationText.line5" />
                     <a onmousedown="trackEvent('/consent-and-declaration/declaration','Claim Declaration - Report change online');" 
                        onkeydown="trackEvent('/consent-and-declaration/declaration','Claim Declaration - Report change online');" 
-                       rel="external" target="_blank" href="https://www.gov.uk/carers-allowance-report-change"
+                       rel="external" target="_blank" href="<t:message code="declarationText.line6.url" />"
                     ><t:message code="declarationText.line6" /></a>
                     <t:message code="declarationText.line7" />
                     <a onmousedown="trackEvent('/consent-and-declaration/declaration','Claim Declaration - Carer's Allowance Unit');" 
                        onkeydown="trackEvent('/consent-and-declaration/declaration','Claim Declaration - Carer's Allowance Unit');" 
                        rel="external" 
                        target="_blank" 
-                       href="https://www.gov.uk/carers-allowance-unit"
+                       href="<t:message code="declarationText.line8.url" />"
                      ><t:message code="declarationText.line8" /></a>
                 </li>
             </ul>

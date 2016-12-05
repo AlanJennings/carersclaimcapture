@@ -10,12 +10,6 @@
         <input type="hidden" name="break_id" value="${break_id}" >
         <input type="hidden" name="breakInCareType" value="hospital" >
 
-        <t:htmlsection name="breakInHospitalIntro">
-            <legend class="heading-medium form-label-bold">
-                You told us that you or the person you care for have been in hospital.  
-                You could still be paid Carer's Allowance for this time
-            </legend>
-        </t:htmlsection>
         <p><b><t:message code="hospitalBreak.text" /></b></p>
 
         <t:radiobuttons name="hospitalBreakWhoInHospital" optionValues="Carer|Caree" />
@@ -49,10 +43,3 @@
     </t:pageContent>
 
 </t:mainPage>
-
-<br>hospitalBreakCareeHospitalStayEnded = ${hospitalBreakCareeHospitalStayEnded}
-<br>
-<br>hospitalBreakCareeHospitalStartDate_day = ${hospitalBreakCareeHospitalStartDate_day}
-<br>hospitalBreakCareeHospitalStartDate_month = ${hospitalBreakCareeHospitalStartDate_month}
-<br>hospitalBreakCareeHospitalStartDate_year = ${hospitalBreakCareeHospitalStartDate_year}
-
