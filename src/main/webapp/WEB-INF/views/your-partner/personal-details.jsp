@@ -8,27 +8,17 @@
 <t:mainPage>
 
     <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
-    
+
         <t:pre>
             <p><t:message code="partnerDetails.intro" /></p>
         </t:pre>
 
-        <t:group name="partnerDetailsInstructions">heading-medium form-label-bold
+        <t:group name="partnerDetailsInstructions">
         
-            <t:pre>
-               <div class="prompt" style="margin-top: 30px;">
-                   <p><t:message code="partnerDetailsInstructions.line1" /></p>
-                    <ul class="list-bullet">
-                        <li><t:message code="partnerDetailsInstructions.line2" /></li>
-                        <li><t:message code="partnerDetailsInstructions.line3" /></li>
-                    </ul>
-                </div>
-            </t:pre>
-
             <t:yesnofield name="hadPartnerSinceClaimDate" />
             
             <t:hiddenPanel id="partnerDetailsWrap" triggerId="hadPartnerSinceClaimDate" triggerValue="yes">
-    
+
                 <t:textedit name="partnerDetailsTitle" maxLength="20" /> 
                 <t:textedit name="partnerDetailsFirstName" maxLength="17" />
                 <t:textedit name="partnerDetailsMiddleName" maxLength="17" />
@@ -39,7 +29,7 @@
                 <t:textedit name="partnerDetailsNationality" maxLength="35" />
                 <t:yesnofield name="partnerDetailsSeparated" />            
                 <t:yesnofield name="isPartnerPersonYouCareFor" />
-                
+
             </t:hiddenPanel>
         </t:group>
 

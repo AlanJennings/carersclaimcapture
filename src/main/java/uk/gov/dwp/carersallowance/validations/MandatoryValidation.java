@@ -36,7 +36,7 @@ public class MandatoryValidation extends AbstractValidation {
             }
 
             LOG.debug("missing mandatory field: {}", fieldName);
-            failValidation(validationSummary, messageSource, fieldName, ValidationType.MANDATORY.getProperty(), existingFieldValues);
+            failValidation(validationSummary, messageSource, fieldName, ValidationType.MANDATORY.getProperty(), null, existingFieldValues);
 
             return false;
         } finally {

@@ -1,6 +1,7 @@
 package uk.gov.dwp.carersallowance.validations;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -8,19 +9,35 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
-import uk.gov.dwp.carersallowance.session.InconsistentFieldValuesException;
+import uk.gov.dwp.carersallowance.utils.DateHolder;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
 public class DateValidation extends AbstractValidation {
     private static final Logger LOG = LoggerFactory.getLogger(DateValidation.class);
 
-    public static DateValidation MANDATORY_INSTANCE = new DateValidation(true);
-    public static DateValidation OPTIONAL_INSTANCE  = new DateValidation(false);
+    private static final String UPPERLIMIT_PARAM = "upperlimit";
+    private static final String LOWERLIMIT_PARAM = "lowerlimit";
+    private static final String MANDATORY_PARAM  = "mandatory";
+    private static final String DATE_FORMAT      = "yyyy-MM-dd";
 
-    private boolean mandatory;
+    private boolean    mandatory;
+    private DateHolder upperLimit;
+    private DateHolder lowerLimit;
 
-    private DateValidation(boolean mandatory) {
-        this.mandatory = mandatory;
+    public DateValidation(String condition, Map<String, String> additionalParams) {
+        this.mandatory = paramValueToBoolean(condition, MANDATORY_PARAM);
+
+        if(additionalParams != null) {
+            String lowerLimitStr = additionalParams.get(LOWERLIMIT_PARAM);
+            if(StringUtils.isNotBlank(lowerLimitStr)) {
+                lowerLimit = new DateHolder(lowerLimitStr, DATE_FORMAT);
+            }
+
+            String upperLimitStr = additionalParams.get(UPPERLIMIT_PARAM);
+            if(StringUtils.isNotBlank(upperLimitStr)) {
+                upperLimit = new DateHolder(upperLimitStr, DATE_FORMAT);
+            }
+        }
     }
 
     /**
@@ -64,32 +81,48 @@ public class DateValidation extends AbstractValidation {
                 LOG.debug("Empty field");
                 if(populatedField) {
                     LOG.debug("also populated field");
-                    failValidation(validationSummary, messageSource, id, ValidationType.DATE_MANDATORY.getProperty(), existingFieldValues);
+                    failValidation(validationSummary, messageSource, id, ValidationType.DATE.getProperty(), null, existingFieldValues);
                     LOG.debug("date is incomplete, returning false");
                     return false;
 
                 } else if(mandatory) {
-                    failValidation(validationSummary, messageSource, id, ValidationType.MANDATORY.getProperty(), existingFieldValues);
+                    failValidation(validationSummary, messageSource, id, ValidationType.MANDATORY.getProperty(), null, existingFieldValues);
                     LOG.debug("date is mandatory, but empty, returning false");
                     return false;
                 } else {
                     LOG.debug("skipping date validation");
+                    return true;
                 }
 
-            } else if(isValidDate(day, month, year) == false) {
-                LOG.debug("date is not valid, returning false");
-                failValidation(validationSummary, messageSource, id, ValidationType.DATE_MANDATORY.getProperty(), existingFieldValues);
+            } else {
+                Date date = getValidDate(day, month, year);
+
+                LOG.debug("date = {}, lowerLimit = {}, upperLimit = {}", date, lowerLimit, upperLimit);
+                String condition;
+                if(date == null) {
+                    LOG.debug("date is not valid, returning false");
+                    condition = null;
+                } else if(upperLimit != null && date.after(upperLimit.getActiveDate())) {
+                    LOG.debug("date({}) is beyond the upper limit: {}", date, upperLimit.getActiveDate());  // strictly speaking this will differ if its now(), but only by ns at the most
+                    condition = ValidationType.DATE.getProperty() + "." + UPPERLIMIT_PARAM;
+                } else if(upperLimit != null && date.before(lowerLimit.getActiveDate())) {
+                    LOG.debug("date({}) is below the lower limit: {}", date, lowerLimit.getActiveDate());  // strictly speaking this will differ if its now(), but only by ns at the most
+                    condition = ValidationType.DATE.getProperty() + "." + LOWERLIMIT_PARAM;
+                } else {
+                    LOG.debug("date is valid");
+                    return true;
+                }
+
+                failValidation(validationSummary, messageSource, id, ValidationType.DATE.getProperty(), condition, existingFieldValues);
                 return false;
             }
 
-            LOG.debug("date is valid");
-            return true;
         } finally {
             LOG.trace("Ending DateValidation.DateValidation");
         }
     }
 
-    private boolean isValidDate(String day, String month, String year) {
+    private Date getValidDate(String day, String month, String year) {
         Parameters.validateMandatoryArgs(new Object[]{day, month, year}, new String[]{"day", "month", "year"});
 
         try {
@@ -102,18 +135,17 @@ public class DateValidation extends AbstractValidation {
             calendar.set(yearInt, monthInt, dayInt, 0, 0, 0);
             try {
                 // lenient has no effect until we call getTime()
-                calendar.getTime();
+                Date date = calendar.getTime();
+                return date;
             } catch(IllegalArgumentException e) {
                 LOG.debug("Invalid date argument: {}", e.getMessage());
-                return false;
+                return null;
             }
 
-            return true;
-
         } catch(NumberFormatException e) {
-            return false;
+            LOG.debug("Unable to parse date fields", e);
+            return null;
         }
-
     }
 
     private int parseDateField(String fieldName, String fieldValue, int min, int max) {
@@ -131,31 +163,17 @@ public class DateValidation extends AbstractValidation {
         }
     }
 
-    /**
-     * @throws InconsistentFieldValuesException if not all the non-null values are the same
-     */
-    protected static String getSingleValue(String fieldName, String[] fieldValues)
-            throws InconsistentFieldValuesException {
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
 
-        if(fieldValues == null || fieldValues.length == 0) {
-            return null;
-        }
+        buffer.append(this.getClass().getName()).append("@").append(System.identityHashCode(this));
+        buffer.append("=[");
+        buffer.append("mandatory = ").append(mandatory);
+        buffer.append(", lowerLimit = ").append(lowerLimit);
+        buffer.append(", upperLimit = ").append(upperLimit);
+        buffer.append("]");
 
-        String singleValue = null;
-        for(String value: fieldValues) {
-            if(value == null) {
-                continue;
-            }
-
-            value = value.trim();
-            if(singleValue == null) {
-                singleValue = value;
-            } else if(singleValue.equals(value) == false) {
-                throw new InconsistentFieldValuesException(fieldName, fieldValues);
-            }
-        }
-
-        return singleValue;
+        return buffer.toString();
     }
 
     public static void main(String[] args) {

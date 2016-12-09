@@ -49,11 +49,13 @@
             </c:if>
         </c:forEach>
         
-        if(adminInterface) {
-            adminInterface.setDesignTimeInfo("${pageScope.name}", attributeNames, attributes);
-            console.log("adminInterface.getDesignTimeInfo");
-            console.log(adminInterface.getDesignTimeInfo("${pageScope.name}"));
-        }
+        <c:if test="${not empty pageScope.adminInterface}" >
+	        if(adminInterface) {
+	            adminInterface.setDesignTimeInfo("${pageScope.name}", attributeNames, attributes);
+	            console.log("adminInterface.getDesignTimeInfo");
+	            console.log(adminInterface.getDesignTimeInfo("${pageScope.name}"));
+	        }
+        </c:if>
     </script>
 
 

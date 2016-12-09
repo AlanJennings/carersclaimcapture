@@ -4,9 +4,11 @@
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.break-somewhere-else" currentPage="${currentPage}">
+<t:mainPage>
 
-    <t:pageContent errors="${validationErrors}" page="page.break-somewhere-else" backLink="${previousPage}">
+    <script type="text/javascript" src="<c:url value='/javascript/isMondayOrFriday.js' />" ></script>
+
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
         <input type="hidden" name="break_id" value="${break_id}" >
         <input type="hidden" name="breakInCareType" value="elsewhere" >
         
@@ -15,15 +17,20 @@
         </t:htmlsection>
 
         <t:datefield name="careeSomewhereElseStartDate" />
-        <t:textedit name="careeSomewhereElseStartTime" maxLength="10" outerStyle="display: none;" /><%-- visibility controlled by javascript --%>
+        
+        <t:hiddenPanel id="careeSomewhereElseStartTimeWrapper" triggerId="careeSomewhereElseStartDate" triggerFunction="isMondayOrFriday">
+            <t:textedit name="careeSomewhereElseStartTime" maxLength="10" />
+        </t:hiddenPanel>
+        
         <t:yesnofield name="careeSomewhereElseEndedTime" />
         
         <t:hiddenPanel id="careeSomewhereElseEndedTimeWrap" triggerId="careeSomewhereElseEndedTime" triggerValue="yes">
             <t:datefield name="careeSomewhereElseEndDate" />
-            <t:textedit name="careeSomewhereElseEndTime" maxLength="10" outerStyle="display: none;" /><%-- visibility controlled by javascript --%>
+            <t:hiddenPanel id="careeSomewhereElseEndTimeWrapper" triggerId="careeSomewhereElseEndDate" triggerFunction="isMondayOrFriday">
+                <t:textedit name="careeSomewhereElseEndTime" maxLength="10" />
+            </t:hiddenPanel>
         </t:hiddenPanel>
         
-
         <t:radiobuttons name="carerSomewhereElseWhereYou" optionValues="on holiday|at home|somewhere else" optionLabelKeys="holiday|home|elsewhere" />
 
         <t:hiddenPanel id="carerSomewhereElseWhereYouWrap" triggerId="carerSomewhereElseWhereYou" triggerValue="somewhere else">

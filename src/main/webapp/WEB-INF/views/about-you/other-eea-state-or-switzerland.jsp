@@ -25,7 +25,7 @@
            <t:yesnofield name="benefitsFromEEADetails" />
 
             <t:hiddenPanel id="benefitsFromEEADetailsWrapper" triggerId="benefitsFromEEADetails" triggerValue="yes">
-                <t:textarea name="benefitsFromEEADetails_field" maxLength="3000" />
+                <t:textarea name="benefitsFromEEADetails_field" maxLength="3000" showRemainingChars="true" />
             </t:hiddenPanel>
 
             <t:yesnofield name="workingForEEADetails" />

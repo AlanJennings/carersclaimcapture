@@ -11,11 +11,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
+import uk.gov.dwp.carersallowance.session.InconsistentFieldValuesException;
+import uk.gov.dwp.carersallowance.utils.KeyValue;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
 public abstract class AbstractValidation implements Validation {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractValidation.class);
 
+    private static final String PARAM_SEPERATOR = "=";
     private static final String ARG_SEPARATOR = "\\|";
     private static final String ERROR_TEXT_KEY_FORMAT = "%s.error_text";
 
@@ -90,28 +93,65 @@ public abstract class AbstractValidation implements Validation {
         return true;
     }
 
+    /**
+     *
+     * @param validationSummary
+     * @param messageSource
+     * @param fieldName           e.g. carerNationalInsuranceNumber
+     * @param validationName      e.g. regex
+     * @param validationCondition e.g. regex.pattern.nino
+     * @param existingFieldValues
+     */
     protected void failValidation(ValidationSummary validationSummary,
                                   MessageSource messageSource,
                                   String fieldName,
-                                  String errorKeyPrefix,
+                                  String validationName,
+                                  String validationCondition,
                                   Map<String, String[]> existingFieldValues) {
 
         Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName}, new String[]{"validationSummary", "messageSource", "fieldName"});
         LOG.trace("Started AbstractValidation.failValidation");
         try {
+            LOG.debug("fieldName = {}, validationName = {}, validationCondition = {}", fieldName, validationName, validationCondition);
             String[] args = getFieldLabelArgs(messageSource, fieldName, existingFieldValues);
             LOG.debug("fieldName = {}, args = {}", fieldName, args == null ? null : Arrays.asList(args));
             String fieldTitle = getFieldLabel(messageSource, fieldName, args);
-            String errorText = getErrorText(messageSource, errorKeyPrefix);
+            String fieldErrorKey = fieldName + ".validation." + validationName;                 // e.g. carerDateOfBirth.validation.date
+            String fieldConditionErrorKey = fieldName + ".validation." + validationCondition;   // e.g. carerDateOfBirth.validation.date.upperlimit
+            String errorText = getErrorText(messageSource, validationName, validationCondition, fieldErrorKey, fieldConditionErrorKey);
+
             validationSummary.addFormError(fieldName, fieldTitle, errorText);
         } finally {
             LOG.trace("Ending AbstractValidation.failValidation");
         }
     }
 
-    private String getErrorText(MessageSource messageSource, String errorType) {
-        String errorTextKey = String.format(ERROR_TEXT_KEY_FORMAT, errorType);
-        return messageSource.getMessage(errorTextKey, null, Locale.getDefault());
+    /**
+     * @param errorType      e.g. regex
+     * @param condition      e.g. regex.pattern.nino
+     * @param fieldName      e.g. carerNationalInsuranceNumber.validation.regex
+     * @param fieldCondition e.g. carerDateOfBirth.validation.date.upperlimit
+     * @return
+     */
+    private String getErrorText(MessageSource messageSource, String errorType, String condition, String fieldName, String fieldCondition) {
+        LOG.trace("Started AbstractValidation.getErrorText");
+        try {
+            LOG.debug("errorType = {}, condition = {}, fieldName = {}, fieldCondition = {}", errorType, condition, fieldName, fieldCondition);
+            String[] errorPrefixes = new String[]{fieldCondition, fieldName, condition, errorType};
+            for(String prefix : errorPrefixes) {
+                String errorTextKey = String.format(ERROR_TEXT_KEY_FORMAT, StringUtils.defaultString(prefix));
+                String message = messageSource.getMessage(errorTextKey, null, null, Locale.getDefault());
+                LOG.debug("errorTextKey = {}, message = {}", errorTextKey, message);
+                if(StringUtils.isNotBlank(message)) {
+                    LOG.debug("using message");
+                    return message;
+                }
+            }
+
+            return "";
+        } finally {
+            LOG.trace("Ending AbstractValidation.getErrorText");
+        }
     }
 
     protected String getFirstPopulatedValue(String[] values) {
@@ -143,5 +183,53 @@ public abstract class AbstractValidation implements Validation {
         }
 
         return results;
+    }
+
+    protected static boolean paramValueToBoolean(String param, String paramName) {
+        String value = paramValueToString(param, paramName);
+        return Boolean.parseBoolean(value);
+    }
+
+    /**
+     *
+     * @param param     e.g. mandatory=true
+     * @param paramName e.g. mandatory
+     * @return
+     */
+    protected static String paramValueToString(String param, String paramName) {
+        Parameters.validateMandatoryArgs(paramName,  "paramName");
+
+        KeyValue keyValue = new KeyValue(param, PARAM_SEPERATOR);
+        if(paramName.equalsIgnoreCase(keyValue.getKey())) {
+            return keyValue.getValue();
+        }
+
+        throw new IllegalArgumentException("Expected ParamName: " + paramName + ", but found: " + keyValue.getKey());
+    }
+
+    /**
+     * @throws InconsistentFieldValuesException if not all the non-null values are the same
+     */
+    protected static String getSingleValue(String fieldName, String[] fieldValues) throws InconsistentFieldValuesException {
+
+        if(fieldValues == null || fieldValues.length == 0) {
+            return null;
+        }
+
+        String singleValue = null;
+        for(String value: fieldValues) {
+            if(value == null) {
+                continue;
+            }
+
+            value = value.trim();
+            if(singleValue == null) {
+                singleValue = value;
+            } else if(singleValue.equals(value) == false) {
+                throw new InconsistentFieldValuesException(fieldName, fieldValues);
+            }
+        }
+
+        return singleValue;
     }
 }

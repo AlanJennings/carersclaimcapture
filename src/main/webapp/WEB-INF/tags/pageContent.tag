@@ -22,7 +22,7 @@
 
 <%--
     If this is uncommented, you can drag controls around, which we probably don't want anymore
-    either no editing, or full editing, in which case problably move control using up/down arrows, or index position or something
+    either no editing, or full editing, in which case probably move control using up/down arrows, or index position or something
     <t:adminInterface />
  --%>
 <%-- ************************** start 'pageContent' context object ************************************ --%>

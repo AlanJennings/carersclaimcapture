@@ -86,9 +86,9 @@ public class TextEditTagController {
     private String getMessage(String code, String parentName, String element) {
         try {
             if(StringUtils.isEmpty(code) == false) {
-                return messageSource.getMessage(code, null, null);
+                return messageSource.getMessage(code, null, null, null);
             } else if(StringUtils.isEmpty(parentName) == false && StringUtils.isEmpty(element) == false) {
-                return messageSource.getMessage(parentName + "." + element, null, null);
+                return messageSource.getMessage(parentName + "." + element, null, null, null);
             }
             return null;
         } catch(NoSuchMessageException e) {

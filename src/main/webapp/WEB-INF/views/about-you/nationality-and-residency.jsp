@@ -32,7 +32,7 @@
         <t:yesnofield name="trip52Weeks" />
 
         <t:hiddenPanel id="trip52WeeksYesWrap" triggerId="trip52Weeks" triggerValue="yes">
-            <t:textarea name="tripDetails" maxLength="3000" />
+            <t:textarea name="tripDetails" maxLength="3000" showRemainingChars="true" />
         </t:hiddenPanel>
         
     </t:pageContent>

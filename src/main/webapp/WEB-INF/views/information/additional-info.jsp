@@ -11,7 +11,7 @@
         <t:yesnofield name="anythingElse" />
 
         <t:hiddenPanel id="anythingElseWrap" triggerId="anythingElse" triggerValue="yes">
-            <t:textarea name="anythingElseText" maxLength="3000" />
+            <t:textarea name="anythingElseText" maxLength="3000" showRemainingChars="true" />
         </t:hiddenPanel>
 
         <t:yesnofield name="welshCommunication" />

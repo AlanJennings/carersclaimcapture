@@ -1,7 +1,22 @@
 (function() {
     // TODO: might need to clear details when it hides the inputs
 
-    window.initPanelState = function(panelId, triggerId, triggerValue, clearOnHide) {
+    window.initPanelState = function(panelId, triggerId, triggerValue, triggerFunction, clearOnHide) {
+        var show = false;        
+        if(triggerFunction) {
+            show = window[triggerFunction](triggerId);
+        } else {
+            show = inputValueEqualsTriggerValue(triggerId, triggerValue);
+        }
+        
+        if(show === true) {
+            showPanel(panelId, clearOnHide);
+        } else {
+            hidePanel(panelId, clearOnHide);
+        }
+    };
+    
+    window.inputValueEqualsTriggerValue = function(triggerId, triggerValue) {
         var show = false;
         $("#" + triggerId + " input").not('input[type="hidden"]').add("select#" + triggerId).each(function(){
             var that = $(this);
@@ -16,21 +31,20 @@
             }
         });
         
-        if(show === true) {
-            $("#" + panelId).show();
-            showPanel(panelId, clearOnHide);
-        } else {
-            $("#" + panelId).hide();
-            hidePanel(panelId, clearOnHide);
-            
-        }
-    };
+        return show;
+    }
 
-    window.initPanelEvents = function(panelId, triggerId, triggerValue, clearOnHide) {
+    window.initPanelEvents = function(panelId, triggerId, triggerValue, triggerFunction, clearOnHide) {
         return $("#" + triggerId + " input").not('input[type="hidden"]').add("select#" + triggerId).on("change", function() {
-            if ($(this).val() === triggerValue) {
-                $("#" + panelId).show();
-                showPanel("#" + panelId, clearOnHide);
+            var show = true;
+            if(triggerFunction) {
+                show = window[triggerFunction](triggerId);
+            } else {
+                show = inputValueEqualsTriggerValue(triggerId, triggerValue)
+            }
+            
+            if (show) {
+                showPanel(panelId, clearOnHide);
                 return $("#" + panelId).css('display', "block");
             } else {
                 hidePanel(panelId, clearOnHide);
@@ -40,6 +54,7 @@
     };
     
     window.showPanel = function(panelId, clearOnHide) {
+        $("#" + panelId).show();
         if(clearOnHide === "true") {
             // nothing to do
         } else {
@@ -48,6 +63,7 @@
     }
     
     window.hidePanel = function(panelId, clearOnHide) {
+        $("#" + panelId).hide();
         if(clearOnHide === "true") {
             var panel = $("#" + panelId);
             panel.find('input')

@@ -44,7 +44,7 @@ public class ConfirmValidation extends AbstractValidation {
                     if(StringUtils.isBlank(fieldValue) == false) {
                         if(comparisonValue.equals(fieldValue) == false) {
                             LOG.debug("field value({}) does not match comparison field value({})", fieldValue, comparisonValue);
-                            failValidation(validationSummary, messageSource, fieldName, ValidationType.CONFIRM_FIELD.getProperty(), existingFieldValues);
+                            failValidation(validationSummary, messageSource, fieldName, ValidationType.CONFIRM_FIELD.getProperty(), null, existingFieldValues);
                             return false;
                         }
                     }

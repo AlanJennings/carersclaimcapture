@@ -15,12 +15,14 @@ import uk.gov.dwp.carersallowance.utils.Parameters;
 public class RegexValidation extends AbstractValidation {
     private static final Logger LOG = LoggerFactory.getLogger(RegexValidation.class);
 
-    private String  regex;
+    private String  key;        // e.g. regex.pattern.phone
+    private String  regex;      // e.g. ^[^[0-9 \\-]$]{7,20}$$
     private Pattern pattern;
 
-    public RegexValidation(String regex) {
+    public RegexValidation(String key, String regex) {
         Parameters.validateMandatoryArgs(regex, "regex");
 
+        this.key = key;
         this.regex = regex;
         pattern = Pattern.compile(regex) ;
     }
@@ -45,7 +47,12 @@ public class RegexValidation extends AbstractValidation {
                     Matcher matcher = pattern.matcher(fieldValue);
                     if(matcher.matches() == false) {
                         LOG.debug("field value({}) does not match regular expression: {}", fieldValue, regex);
-                        failValidation(validationSummary, messageSource, fieldName, ValidationType.REGEX.getProperty(), existingFieldValues);
+                        failValidation(validationSummary,
+                                       messageSource,
+                                       fieldName,                           // e.g. carerNationalInsuranceNumber
+                                       ValidationType.REGEX.getProperty(),  // e.g. regex
+                                       key,                                 // e.g. regex.pattern.nino
+                                       existingFieldValues);
                         return false;
                     }
                 }

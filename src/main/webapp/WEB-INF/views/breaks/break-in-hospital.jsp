@@ -16,7 +16,7 @@
 
         <t:hiddenPanel id="hospitalBreakWhoInHospitalWrapCarer" triggerId="hospitalBreakWhoInHospital" triggerValue="Carer">
 
-            <t:datefield name="hospitalBreakCarerHospitalStartDate" />
+            <t:datefield name="hospitalBreakCarerHospitalStartDate" />            
             <t:yesnofield name="hospitalBreakCarerHospitalStayEnded" />
 
             <t:hiddenPanel id="hospitalBreakCarerHospitalStayEndedWrap" triggerId="hospitalBreakCarerHospitalStayEnded" triggerValue="yes">
@@ -27,7 +27,7 @@
 
         <t:hiddenPanel id="hospitalBreakWhoInHospitalWrapCaree" triggerId="hospitalBreakWhoInHospital" triggerValue="Caree">
 
-            <t:datefield name="hospitalBreakCareeHospitalStartDate" />
+            <t:datefield name="hospitalBreakCareeHospitalStartDate" />            
             <t:yesnofield name="hospitalBreakCareeHospitalStayEnded" />
 
             <t:hiddenPanel id="hospitalBreakCareeHospitalStayEndedWrap" triggerId="hospitalBreakCareeHospitalStayEnded" triggerValue="yes">

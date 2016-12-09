@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -17,6 +18,7 @@ import uk.gov.dwp.carersallowance.utils.Parameters;
 public class FormValidations {
     private static final Logger LOG = LoggerFactory.getLogger(FormValidations.class);
 
+    private static final String GLOBAL_REGEX_VALIDATION_KEY      = "global.validation.regex";
     private static final String VALIDATION_DEPENDENCY_KEY_FORMAT = "%s.validation.dependency";
     private static final String DEFAULT_FIELD_NAMES_KEY_FORMAT   = "%s.fields";
 
@@ -51,6 +53,7 @@ public class FormValidations {
 
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
+            throw e;
         } finally {
             LOG.trace("Ending FormValidations.FormValidations");
         }
@@ -86,6 +89,9 @@ public class FormValidations {
         }
     }
 
+    /**
+     * field validations use a fall back scheme.
+     */
     private Map<String, List<Validation>> initValidations(MessageSource messageSource, List<String> fields) {
         LOG.trace("Started FormValidations.initValidations");
         try {
@@ -93,14 +99,15 @@ public class FormValidations {
 
             for(ValidationType validationType: ValidationType.values()) {
                 // add mandatory validations
-                LOG.debug("Adding validation: {}", validationType);
+                LOG.debug("Adding validation type: {}", validationType);
                 for(String field: fields) {
                     String key = String.format(validationType.getKeyFormat(), field);    // e.g. nameAndOrganisation.validation.mandatory
                     String condition = getMessage(messageSource, key);
                     LOG.debug("{} = {}", key, condition);
 
+                    Map<String, String> additionalParameters = getAdditionalValidationParameters(messageSource, validationType, field, key);
                     ValidationFactory validationFactory = new ValidationFactory(messageSource);
-                    Validation validation = validationFactory.getValidation(validationType, condition);
+                    Validation validation = validationFactory.getValidation(validationType, key, condition, additionalParameters);
                     if(validation != null) {
                         // add to the field validations for this field
                         List<Validation> fieldValidations = results.get(field);
@@ -117,8 +124,54 @@ public class FormValidations {
             }
 
             return results;
+        } catch(RuntimeException e) {
+            LOG.error("Problems initialising validations", e);
+            throw e;
         } finally {
             LOG.trace("Ending FormValidations.initValidations");
+        }
+    }
+
+    /**
+     * e.g.
+     * carerDateOfBirth.validation.date                                 = mandatory=true
+     * carerDateOfBirth.validation.date.lowerlimit                      = 1900-01-01
+     * carerDateOfBirth.validation.date.upperlimit                      = now()
+     */
+    private Map<String, String> getAdditionalValidationParameters(MessageSource messageSource, ValidationType validationType, String field, String key) {
+        Parameters.validateMandatoryArgs(new Object[]{messageSource, validationType}, new String[]{"messageSource", "validationType"});
+        LOG.trace("Starting FormValidations.getAdditionalValidationParameters");
+        try {
+            LOG.debug("validationType = {}, field = {} key = {}", validationType, field, key);
+            if(StringUtils.isEmpty(field)) {
+                return null;
+            }
+
+            Map<String, String> params = new HashMap<>();
+            String[] additionalParamKeyFormats = validationType.getAdditionalParamKeyFormats();
+            LOG.debug("additionalParamKeyFormats = {}", additionalParamKeyFormats == null ? null : Arrays.asList(additionalParamKeyFormats));
+            if(additionalParamKeyFormats != null) {
+                for(String keyFormat: additionalParamKeyFormats) {
+                    // e.g. %s.validation.date.lowerlimit => carerDateOfBirth.validation.date.lowerlimit => 1900.01.01
+                    // ALL additional keys must use the same stem as the primary key (i.e. key parameter)
+
+                    String additionalKey = String.format(keyFormat, field);
+                    LOG.debug("additionalKey = {}", additionalKey);
+                    if(additionalKey.startsWith(key) == false) {
+                        LOG.error("additonal parameter({}) does not start key: {}", additionalKey, key);
+                        throw new IllegalStateException("additonal parameter(" + additionalKey + ") does not start key: " + key);
+                    }
+
+                    String paramName = additionalKey.substring(key.length() + 1);
+                    String paramValue = messageSource.getMessage(additionalKey, null, null, Locale.getDefault());
+                    LOG.debug("paramName = {}, paramValue = {}", paramName, paramValue);
+                    params.put(paramName, paramValue);
+                }
+            }
+            LOG.debug("returning params = {}", params);
+            return params;
+        } finally {
+            LOG.trace("Ending FormValidations.getAdditionalValidationParameters");
         }
     }
 
@@ -169,9 +222,19 @@ public class FormValidations {
                 validationSummary = new ValidationSummary();
             }
 
+            String globalRegex = trimQuotes(messageSource.getMessage(GLOBAL_REGEX_VALIDATION_KEY, null, null, Locale.getDefault()));
+            RegexValidation globalRegexValidation = new RegexValidation(GLOBAL_REGEX_VALIDATION_KEY, globalRegex);
+
             LOG.debug("Validating Fields: {}", fields);
             for(String field: fields) {
                 LOG.debug("validating {}", field);
+
+                // global validations
+                if(globalRegexValidation.validate(validationSummary, messageSource, field, requestFieldValues, existingFieldValues) == false) {
+                    LOG.debug("Failed global regex valdiation for {}", field);
+                    continue;
+                }
+
                 if(validations.containsKey(field) == false) {
                     LOG.debug("Skipping. No validations for {}", field);
                     continue;

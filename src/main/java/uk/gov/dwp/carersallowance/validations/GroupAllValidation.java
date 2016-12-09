@@ -31,7 +31,7 @@ public class GroupAllValidation extends AbstractValidation {
                 String[] fieldValues = requestFieldValues.get(field);
                 if(getFirstPopulatedValue(fieldValues) == null) {
                     LOG.debug("Found empty value for: {}", field);
-                    failValidation(validationSummary, messageSource, fieldName, ValidationType.GROUP_ALL.getProperty(), existingFieldValues);
+                    failValidation(validationSummary, messageSource, fieldName, ValidationType.GROUP_ALL.getProperty(), null, existingFieldValues);
                     return false;
                 }
             }

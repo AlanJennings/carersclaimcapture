@@ -114,104 +114,119 @@ public class ResolveArgs extends BodyTagSupport {
      * Also it seems very difficult to get the tag-lib information, which we sort of need (it all gets very app-server specific).
      */
     private String evaluateExpression(JspApplicationContext jspAppContext, ELContext elContext, String expressionStr) {
-        Parameters.validateMandatoryArgs(expressionStr, "expressionStr");
-        List<String> subExpressions = splitExpressions(expressionStr);
-        if(subExpressions == null || subExpressions.isEmpty()) {
-            return "";
-        }
-
-        if(subExpressions.size() > 1) {
-            StringBuffer buffer = new StringBuffer();
-            for(String subExpression :subExpressions) {
-                String result = evaluateExpression(jspAppContext, elContext, subExpression);
-                buffer.append(result);
+        try {
+            Parameters.validateMandatoryArgs(expressionStr, "expressionStr");
+            List<String> subExpressions = splitExpressions(expressionStr);
+            if(subExpressions == null || subExpressions.isEmpty()) {
+                return "";
             }
 
-            return buffer.toString();
-        }
+            if(subExpressions.size() > 1) {
+                StringBuffer buffer = new StringBuffer();
+                for(String subExpression :subExpressions) {
+                    String result = evaluateExpression(jspAppContext, elContext, subExpression);
+                    buffer.append(result);
+                }
 
-        if(expressionStr != null && expressionStr.startsWith(CADS_TLD_PREFIX_START)) {
-            return evaluateCadsExpression(jspAppContext, elContext, expressionStr);
-        } else {
-            return evaluateSingleExpression(jspAppContext, elContext, expressionStr);
+                return buffer.toString();
+            }
+
+            if(expressionStr != null && expressionStr.startsWith(CADS_TLD_PREFIX_START)) {
+                return evaluateCadsExpression(jspAppContext, elContext, expressionStr);
+            } else {
+                return evaluateSingleExpression(jspAppContext, elContext, expressionStr);
+            }
+        } catch(RuntimeException e) {
+            LOG.error("Unexpected RuntimeException evaluating: " + expressionStr, e);
+            throw e;
         }
     }
 
     private String evaluateSingleExpression(JspApplicationContext jspAppContext, ELContext elContext, String expression) {
-        ValueExpression valueExpression = jspAppContext.getExpressionFactory().createValueExpression(elContext, expression, String.class);
-        Object evaluatedValue =  valueExpression.getValue(elContext);
+        try {
+            ValueExpression valueExpression = jspAppContext.getExpressionFactory().createValueExpression(elContext, expression, String.class);
+            Object evaluatedValue =  valueExpression.getValue(elContext);
 
-        if(evaluatedValue == null) {
-            return "";
+            if(evaluatedValue == null) {
+                return "";
+            }
+
+            String evaluatedExpression;
+            if(evaluatedValue instanceof String) {
+                evaluatedExpression = (String)evaluatedValue;
+            } else {
+                evaluatedExpression = evaluatedValue.toString();
+            }
+
+            if(evaluatedExpression.equals(expression)) {
+                // this results in at least one evaluation more than is needed, but allows for recursive evaluation
+                return evaluatedExpression;
+            }
+
+            // re-evaluate in case the results contains further expressions to be evaluated
+            return evaluateExpression(jspAppContext, elContext, evaluatedExpression);
+        } catch(RuntimeException e) {
+            LOG.error("unexpected RuntimeException, evaluating single expression: " + expression);
+            throw e;
         }
-
-        String evaluatedExpression;
-        if(evaluatedValue instanceof String) {
-            evaluatedExpression = (String)evaluatedValue;
-        } else {
-            evaluatedExpression = evaluatedValue.toString();
-        }
-
-        if(evaluatedExpression.equals(expression)) {
-            // this results in at least one evaluation more than is needed, but allows for recursive evaluation
-            return evaluatedExpression;
-        }
-
-        // re-evaluate in case the results contains further expressions to be evaluated
-        return evaluateExpression(jspAppContext, elContext, evaluatedExpression);
     }
 
     private String evaluateCadsExpression(JspApplicationContext jspAppContext, ELContext elContext, String expression) {
-        // e.g ${cads:dateOffset(dateOfClaim_day, dateOfClaim_month, dateOfClaim_year, "d MMMMMMMMMM yyyy", "")}"
-        if(StringUtils.isEmpty(expression)) {
-            return "";
-        }
-
-        if(expression.startsWith(CADS_TLD_PREFIX_START) == false || expression.endsWith(CADS_TLD_PREFIX_END) == false) {
-            throw new IllegalArgumentException("expression(" + expression + ") is  not of the expected form: " + CADS_TLD_PREFIX_START + " ... " + CADS_TLD_PREFIX_END);
-        }
-
-        // expecting ${cads:fnName(arg, arg, ...)}
-        String function = assertNotNull(expression.substring(CADS_TLD_PREFIX_START.length(), expression.length() - CADS_TLD_PREFIX_END.length()), "Unable to locate function"); // fnName(arg, arg, ...)
-        String functionName = assertNotNull(StringUtils.substringBefore(function, "("), "unable to locate function name");           // fnName
-        String allArguments = assertNotNull(function.substring(functionName.length()), "Unable to locate function brackets");            // (arg, arg, ...)
-        String rawArguments = allArguments.substring(1, allArguments.length() - 1);
-        String[] arguments = rawArguments.split(",");
-        for(int index = 0; index < arguments.length; index++) {
-            arguments[index] = arguments[index].trim();
-        }
-
-        switch(functionName) {
-            case "dateOffset":
-            {
-                if(arguments.length != 5) {
-                    throw new IllegalArgumentException("Wrong number of arguments for dateOffset. Expecting dateOffset(String dayField, String monthField, String yearField, String format, String offset)");
-                }
-                String dayField = toString(pageContext.findAttribute(arguments[0]));
-                String monthField = toString(pageContext.findAttribute(arguments[1]));
-                String yearField = toString(pageContext.findAttribute(arguments[2]));
-                String format = stripEnclosingQuotes(arguments[3]);
-                String offset = stripEnclosingQuotes(arguments[4]);
-
-                return Functions.dateOffset(dayField, monthField, yearField, format, offset);
+        try {
+            // e.g ${cads:dateOffset(dateOfClaim_day, dateOfClaim_month, dateOfClaim_year, "d MMMMMMMMMM yyyy", "")}"
+            if(StringUtils.isEmpty(expression)) {
+                return "";
             }
-            case "dateOffsetFromCurrent" : {
-                if (arguments.length != 2) {
-                    throw new IllegalArgumentException("Wrong number of arguments for dateOffsetFromCurrent. Expecting dateOffsetFromCurrent(String format, String offset)");
-                }
-                String format = stripEnclosingQuotes(arguments[0]);
-                String offset = stripEnclosingQuotes(arguments[1]);
-                return Functions.dateOffsetFromCurrent(format, offset);
+
+            if(expression.startsWith(CADS_TLD_PREFIX_START) == false || expression.endsWith(CADS_TLD_PREFIX_END) == false) {
+                throw new IllegalArgumentException("expression(" + expression + ") is  not of the expected form: " + CADS_TLD_PREFIX_START + " ... " + CADS_TLD_PREFIX_END);
             }
-            case "prop" : {
-                if (arguments.length != 1) {
-                    throw new IllegalArgumentException("Wrong number of arguments for prop. Expecting prop(String propertyValue)");
-                }
-                String prop = stripEnclosingQuotes(arguments[0]);
-                return evaluateExpression(jspAppContext, elContext, Functions.prop(prop));
+
+            // expecting ${cads:fnName(arg, arg, ...)}
+            String function = assertNotNull(expression.substring(CADS_TLD_PREFIX_START.length(), expression.length() - CADS_TLD_PREFIX_END.length()), "Unable to locate function"); // fnName(arg, arg, ...)
+            String functionName = assertNotNull(StringUtils.substringBefore(function, "("), "unable to locate function name");           // fnName
+            String allArguments = assertNotNull(function.substring(functionName.length()), "Unable to locate function brackets");            // (arg, arg, ...)
+            String rawArguments = allArguments.substring(1, allArguments.length() - 1);
+            String[] arguments = rawArguments.split(",");
+            for(int index = 0; index < arguments.length; index++) {
+                arguments[index] = arguments[index].trim();
             }
-            default:
-                throw new IllegalArgumentException("Unknown function: " + functionName);
+
+            switch(functionName) {
+                case "dateOffset":
+                {
+                    if(arguments.length != 5) {
+                        throw new IllegalArgumentException("Wrong number of arguments for dateOffset. Expecting dateOffset(String dayField, String monthField, String yearField, String format, String offset)");
+                    }
+                    String dayField = toString(pageContext.findAttribute(arguments[0]));
+                    String monthField = toString(pageContext.findAttribute(arguments[1]));
+                    String yearField = toString(pageContext.findAttribute(arguments[2]));
+                    String format = stripEnclosingQuotes(arguments[3]);
+                    String offset = stripEnclosingQuotes(arguments[4]);
+
+                    return Functions.dateOffset(dayField, monthField, yearField, format, offset);
+                }
+                case "dateOffsetFromCurrent" : {
+                    if (arguments.length != 2) {
+                        throw new IllegalArgumentException("Wrong number of arguments for dateOffsetFromCurrent. Expecting dateOffsetFromCurrent(String format, String offset)");
+                    }
+                    String format = stripEnclosingQuotes(arguments[0]);
+                    String offset = stripEnclosingQuotes(arguments[1]);
+                    return Functions.dateOffsetFromCurrent(format, offset);
+                }
+                case "prop" : {
+                    if (arguments.length != 1) {
+                        throw new IllegalArgumentException("Wrong number of arguments for prop. Expecting prop(String propertyValue)");
+                    }
+                    String prop = stripEnclosingQuotes(arguments[0]);
+                    return evaluateExpression(jspAppContext, elContext, Functions.prop(prop));
+                }
+                default:
+                    throw new IllegalArgumentException("Unknown function: " + functionName);
+            }
+        } catch(RuntimeException e) {
+            LOG.error("Problems evaluating CADS expression: " + expression, e);
+            throw e;
         }
     }
 

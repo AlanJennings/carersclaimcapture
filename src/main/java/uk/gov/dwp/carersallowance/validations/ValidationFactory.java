@@ -1,6 +1,7 @@
 package uk.gov.dwp.carersallowance.validations;
 
 import java.util.Locale;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,14 @@ public class ValidationFactory {
         this.messageSource = messageSource;
     }
 
-    public Validation getValidation(ValidationType type, String condition) {
+    /**
+     * @param type                 - the validation type
+     * @param key                  - the fully populated message bundle key e.g. nameAndOrganisation.validation.mandatory
+     * @param condition            - the validation config, for simple types its just true/false, otherwise maxlength, regex pattern etc etc.
+     * @param additionalParameters - config as key/value paramters that do not come from the value of the 'key' field (i.e. additional key.value pairs)
+     * @return
+     */
+    public Validation getValidation(ValidationType type, String key, String condition, Map<String, String> additionalParameters) {
         LOG.debug("type = {}, condition = {}", type, condition);
         if(type == null || condition == null) {
             return null;
@@ -32,37 +40,17 @@ public class ValidationFactory {
                 }
                 break;
 
-            case DATE_MANDATORY:
+            case DATE:
                 LOG.debug("Date Validation");
-                if(isValidationEnabled(condition)) {
-                    return DateValidation.MANDATORY_INSTANCE;
-                }
-                break;
-
-            case DATE_OPTIONAL:
-                LOG.debug("Date Validation");
-                if(isValidationEnabled(condition)) {
-                    return DateValidation.OPTIONAL_INSTANCE;
-                }
-                break;
+                return new DateValidation(condition, additionalParameters);
 
             case REGEX:
                 LOG.debug("Regex Validation");
-                return new RegexValidation(cleanupConditionValue(condition));
+                return new RegexValidation(condition, cleanupConditionValue(condition));
 
-            case ADDRESS_MANDATORY:
+            case ADDRESS:
                 LOG.debug("Address Validation");
-                if(isValidationEnabled(condition)) {
-                    return AddressValidation.INSTANCE;
-                }
-                break;
-
-            case ADDRESS_OPTIONAL:
-                LOG.debug("Address Validation");
-                if(isValidationEnabled(condition)) {
-                    return AddressValidation.INSTANCE;
-                }
-                break;
+                return AddressValidation.valueOf(condition);
 
             case CONFIRM_FIELD:
                 LOG.debug("Confirm Validation");

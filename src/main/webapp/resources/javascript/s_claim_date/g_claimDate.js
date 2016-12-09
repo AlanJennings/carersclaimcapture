@@ -1,5 +1,6 @@
 (function() {
   var daysInMonth, hideCareStartDateWrap, initDateWarningOnChange, isLeapYear, isLegalDate, showCareStartDateWrap;
+  
   window.initDateWarning = function(warningId, day, month, year, text, testMode) {
     $("#" + day).on("change keyup", function() {
       return initDateWarningOnChange(warningId, day, month, year, text, testMode);

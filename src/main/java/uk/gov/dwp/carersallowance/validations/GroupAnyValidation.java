@@ -36,7 +36,7 @@ public class GroupAnyValidation extends AbstractValidation {
             }
 
             LOG.debug("No populated field for group: {}, fields = {}", fieldName, groupFields);
-            failValidation(validationSummary, messageSource, fieldName, ValidationType.GROUP_ANY.getProperty(), existingFieldValues);
+            failValidation(validationSummary, messageSource, fieldName, ValidationType.GROUP_ANY.getProperty(), null, existingFieldValues);
             return false;
         } finally {
             LOG.trace("Ending GroupAnyValidation.validate");

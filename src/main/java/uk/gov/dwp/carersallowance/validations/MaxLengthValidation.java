@@ -37,7 +37,7 @@ public class MaxLengthValidation extends AbstractValidation {
             for(String fieldValue : fieldValues) {
                 if(fieldValue != null && fieldValue.length() > maxLength) {
                     LOG.debug("field({}) value({}) is longer than maxLength: {}", fieldName, fieldValue, maxLength);
-                    failValidation(validationSummary, messageSource, fieldName, ValidationType.MAX_LENGTH.getProperty(), existingFieldValues);
+                    failValidation(validationSummary, messageSource, fieldName, ValidationType.MAX_LENGTH.getProperty(), null, existingFieldValues);
                     return false;
                 }
             }

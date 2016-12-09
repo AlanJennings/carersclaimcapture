@@ -16,10 +16,11 @@
 <c:if test="${empty pageTitle}" >
     <c:set var="pageTitle"><t:message parentName="${pageScope.pageTitleKey}" /></c:set>
 </c:if>
+<%--
 <c:if test="${empty pageTitle}" >
     <c:set var="pageTitle"><t:message parentName="${pageScope.page}" element="browserTitle" /></c:set>
 </c:if>
-
+--%>
 <!DOCTYPE html>
 
     <!--[if IE 6]>         <html class="ie ie6" lang="en"> <![endif]-->
