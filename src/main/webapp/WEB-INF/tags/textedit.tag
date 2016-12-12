@@ -21,8 +21,10 @@
 <%@ attribute name="additionalClasses"%>
 
     <script type="text/javascript">
-        // Note: NOT "errors", 
-        // we cannot do this in a tag as it changes the pageContext
+        // Gather the component information for the adminInterface (this needs work)
+        // we cannot do this in a tag as it changes the pageContext (which we need for the values)
+        //
+        // Get the attribute names (Note: NOT "errors"), 
         var attributeNames = ["name", 
                               "id", 
                               "tagNested", 
@@ -36,11 +38,15 @@
                               "useRawValue", 
                               "maxLength", 
                               "additionalClasses"];
+        
+        // construct the object (aka map) and create the keys
         var attributes = {};
         for(var index in attributeNames) {
             var attrName = attributeNames[index];
             attributes[attrName] = null;
         }
+        
+        // populate the values for each of the keys
         <c:forEach items="${pageScope}" var="p">
             <c:if test="${p.value.getClass().getName()=='java.lang.String'}" >
                 if(attributeNames.indexOf("${p.key}") != -1) {
