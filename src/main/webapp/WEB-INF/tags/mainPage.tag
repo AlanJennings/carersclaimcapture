@@ -128,7 +128,7 @@
         <c:set var="analyticsId"     value="UA-57523228-19" />
         <c:set var="testAnalyticsId" value="UA-83580544-1" />
 
-        <t:googleAnalytics trackingId="UA-83580544-1" />
+        <t:googleAnalyticsInit trackingId="UA-83580544-1" />
     </head>
 
     <body>
