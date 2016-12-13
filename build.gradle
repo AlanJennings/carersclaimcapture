@@ -96,6 +96,7 @@ dependencies {
     compile("org.apache.httpcomponents:httpclient")
     compile("org.apache.commons:commons-lang3:3.4")
     compile("commons-io:commons-io:2.5")
+    compile("javax.inject:javax.inject:1")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     runtime("me.moocar:logback-gelf:0.3")
     testCompile (
