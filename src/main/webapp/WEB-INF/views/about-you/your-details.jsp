@@ -8,13 +8,13 @@
 
     <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
     
-        <t:textedit name="carerTitle" maxLength="20" />
-        <t:textedit name="carerFirstName" maxLength="17" />
-        <t:textedit name="carerMiddleName" maxLength="17" />
-        <t:textedit name="carerSurname" maxLength="35" />
+        <t:textedit name="carerTitle" />
+        <t:textedit name="carerFirstName" />
+        <t:textedit name="carerMiddleName" />
+        <t:textedit name="carerSurname" />
         
         <!-- We accept a possible space around each character with 9 max in nino ie. AB010203D so 9*2+1 ==> 19 chars max -->
-        <t:textedit name="carerNationalInsuranceNumber" maxLength="19" additionalClasses="ni-number" />
+        <t:textedit name="carerNationalInsuranceNumber" additionalClasses="ni-number" />
         
         <t:datefield name="carerDateOfBirth" />
 

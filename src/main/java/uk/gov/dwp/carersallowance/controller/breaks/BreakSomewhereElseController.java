@@ -90,20 +90,20 @@ public class BreakSomewhereElseController extends AbstractFormController {
     protected void validate(String[] fields, Map<String, String[]> fieldValues, Map<String, String[]> allFieldValues) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryDateField(fieldValues, "careeSomewhereElseStartDate");
-        validateMandatoryField(fieldValues, "careeSomewhereElseEndedTime");
-        if(fieldValue_Equals(fieldValues, "careeSomewhereElseEndedTime", "yes")) {
-            validateMandatoryDateField(fieldValues, "careeSomewhereElseEndDate");
+        getLegacyValidation().validateMandatoryDateField(fieldValues, "careeSomewhereElseStartDate");
+        getLegacyValidation().validateMandatoryField(fieldValues, "careeSomewhereElseEndedTime");
+        if(getLegacyValidation().fieldValue_Equals(fieldValues, "careeSomewhereElseEndedTime", "yes")) {
+            getLegacyValidation().validateMandatoryDateField(fieldValues, "careeSomewhereElseEndDate");
         }
 
-        validateMandatoryField(fieldValues, "carerSomewhereElseWhereYou");
-        if(fieldValue_Equals(fieldValues, "carerSomewhereElseWhereYou", "elsewhere")) {
-            validateMandatoryField(fieldValues, "carerSomewhereElseWhereYouOtherText");
+        getLegacyValidation().validateMandatoryField(fieldValues, "carerSomewhereElseWhereYou");
+        if(getLegacyValidation().fieldValue_Equals(fieldValues, "carerSomewhereElseWhereYou", "elsewhere")) {
+            getLegacyValidation().validateMandatoryField(fieldValues, "carerSomewhereElseWhereYouOtherText");
         }
 
-        validateMandatoryField(fieldValues, "carerSomewhereElseWhereCaree");
-        if(fieldValue_Equals(fieldValues, "carerSomewhereElseWhereCaree", "elsewhere")) {
-            validateMandatoryField(fieldValues, "carerSomewhereElseWhereCareeOtherText");
+        getLegacyValidation().validateMandatoryField(fieldValues, "carerSomewhereElseWhereCaree");
+        if(getLegacyValidation().fieldValue_Equals(fieldValues, "carerSomewhereElseWhereCaree", "elsewhere")) {
+            getLegacyValidation().validateMandatoryField(fieldValues, "carerSomewhereElseWhereCareeOtherText");
         }
 
         LOG.trace("Ending BenefitsController.validate");

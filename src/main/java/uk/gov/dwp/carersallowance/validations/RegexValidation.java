@@ -12,6 +12,9 @@ import org.springframework.context.MessageSource;
 
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
+/**
+ * thread safe
+ */
 public class RegexValidation extends AbstractValidation {
     private static final Logger LOG = LoggerFactory.getLogger(RegexValidation.class);
 
@@ -32,7 +35,7 @@ public class RegexValidation extends AbstractValidation {
      */
     public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> existingFieldValues) {
         Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName, requestFieldValues}, new String[]{"validationSummary", "messageSource", "fieldName", "allFieldValues"});
-        LOG.trace("Starting MandatoryValidation.validate");
+        LOG.trace("Starting RegexValidation.validate");
         try {
             String[] fieldValues = requestFieldValues.get(fieldName);
             LOG.debug("fieldValues  {}", fieldValues == null ? null : Arrays.asList(fieldValues));
@@ -60,7 +63,7 @@ public class RegexValidation extends AbstractValidation {
 
             return true;
         } finally {
-            LOG.trace("Ending MandatoryValidation.validate");
+            LOG.trace("Ending RegexValidation.validate");
         }
     }
 }

@@ -11,7 +11,7 @@
         <t:radiobuttons name="fosteringAllowancePay" optionValues="LocalAuthority|FosteringAllowance|Other" />
 
         <t:hiddenPanel id="fosteringAllowancePayWrap" triggerId="fosteringAllowancePay" triggerValue="Other">
-            <t:textedit name="fosteringAllowancePayOther" maxLength="60" /> 
+            <t:textedit name="fosteringAllowancePayOther" />
         </t:hiddenPanel>
 
         <t:yesnofield name="fosteringAllowanceStillBeingPaidThisPay" />
@@ -20,13 +20,15 @@
             <t:datefield name="fosteringAllowanceWhenDidYouLastGetPaid" />
         </t:hiddenPanel>
 
-        <t:textedit name="fosteringAllowanceWhoPaidYouThisPay" maxLength="60" /> 
-        <t:textedit name="fosteringAllowanceAmountOfThisPay" maxLength="12" outerClass="form-group short-field" />
+        <t:textedit name="fosteringAllowanceWhoPaidYouThisPay" />
+        <t:textedit name="fosteringAllowanceAmountOfThisPay" outerClass="form-group short-field" />
         <t:radiobuttons name="fosteringAllowanceHowOftenPaidThisPay" optionValues="Weekly|Fortnightly|Four-weekly|Monthly|Other" />
 
         <t:hiddenPanel id="fosteringAllowanceHowOftenPaidThisPayWrap" triggerId="fosteringAllowanceHowOftenPaidThisPay" triggerValue="Other">
-            <t:textedit name="fosteringAllowanceHowOftenPaidThisPayOther" maxLength="60" /> 
+            <t:textedit name="fosteringAllowanceHowOftenPaidThisPayOther" />
         </t:hiddenPanel>
 
     </t:pageContent>
 </t:mainPage>
+
+

@@ -14,12 +14,12 @@
             <t:datefield name="directPaymentWhenDidYouLastGetPaid" />
         </t:hiddenPanel>
 
-        <t:textedit name="directPaymentWhoPaidYouThisPay" maxLength="60" /> 
-        <t:textedit name="directPaymentAmountOfThisPay" maxLength="12" />
+        <t:textedit name="directPaymentWhoPaidYouThisPay" />
+        <t:textedit name="directPaymentAmountOfThisPay" />
         <t:radiobuttons name="directPaymentHowOftenPaidThisPay" optionValues="Weekly|Fortnightly|Four-weekly|Monthly|Other" />
 
         <t:hiddenPanel id="directPaymentHowOftenPaidThisPayWrap" triggerId="directPaymentHowOftenPaidThisPay" triggerValue="Other">
-            <t:textedit name="directPaymentHowOftenPaidThisPayOther" maxLength="60" /> 
+            <t:textedit name="directPaymentHowOftenPaidThisPayOther" />
         </t:hiddenPanel>
 
     </t:pageContent>

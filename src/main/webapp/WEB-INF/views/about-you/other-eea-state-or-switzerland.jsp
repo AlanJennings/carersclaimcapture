@@ -25,16 +25,16 @@
            <t:yesnofield name="benefitsFromEEADetails" />
 
             <t:hiddenPanel id="benefitsFromEEADetailsWrapper" triggerId="benefitsFromEEADetails" triggerValue="yes">
-                <t:textarea name="benefitsFromEEADetails_field" maxLength="3000" showRemainingChars="true" />
+                <t:textarea name="benefitsFromEEADetails_field" showRemainingChars="true" />
             </t:hiddenPanel>
 
             <t:yesnofield name="workingForEEADetails" />
 
             <t:hiddenPanel id="workingForEEADetailsWrapper" triggerId="workingForEEADetails" triggerValue="yes">
-                <t:textarea name="workingForEEADetails_field" maxLength="3000" showRemainingChars="true" />
+                <t:textarea name="workingForEEADetails_field" showRemainingChars="true" />
             </t:hiddenPanel>
 
         </t:hiddenPanel>
 
     </t:pageContent>
-</t:mainPage>    
+</t:mainPage>   

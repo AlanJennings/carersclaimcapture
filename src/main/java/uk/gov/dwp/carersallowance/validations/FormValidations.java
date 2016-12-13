@@ -26,6 +26,7 @@ public class FormValidations {
     private List<String>                  fields;
     private Map<String, Dependency>       dependencies;
     private Map<String, List<Validation>> validations;
+    private RegexValidation               globalRegexValidation;
 
     public FormValidations(MessageSource messageSource, String formName) throws ParseException {
         this(messageSource,
@@ -50,6 +51,10 @@ public class FormValidations {
             fields = fieldNames;
             dependencies = initDependencies(messageSource, fields);
             validations = initValidations(messageSource, fields);
+
+            LOG.debug("Configuring global regex");
+            String globalRegex = trimQuotes(messageSource.getMessage(GLOBAL_REGEX_VALIDATION_KEY, null, null, Locale.getDefault()));
+            globalRegexValidation = new RegexValidation(GLOBAL_REGEX_VALIDATION_KEY, globalRegex);
 
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
@@ -221,9 +226,6 @@ public class FormValidations {
             if(validationSummary == null) {
                 validationSummary = new ValidationSummary();
             }
-
-            String globalRegex = trimQuotes(messageSource.getMessage(GLOBAL_REGEX_VALIDATION_KEY, null, null, Locale.getDefault()));
-            RegexValidation globalRegexValidation = new RegexValidation(GLOBAL_REGEX_VALIDATION_KEY, globalRegex);
 
             LOG.debug("Validating Fields: {}", fields);
             for(String field: fields) {

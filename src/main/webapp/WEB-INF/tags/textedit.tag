@@ -73,6 +73,11 @@
     <c:set var="value" value="${requestScope[pageScope.name]}" />
 </c:if>
 
+<c:if test="${empty pageScope.maxLength}" >
+    <c:set var="maxLength"><t:message parentName="${pageScope.name}" element="validation.maxlength" /></c:set>
+</c:if>
+
+
 <t:component tagType="textedit"
              tagNested="${pageScope.tagNested}"
              name="${pageScope.name}" 

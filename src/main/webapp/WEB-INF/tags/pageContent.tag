@@ -8,7 +8,7 @@
 <%@ attribute name="pageSectionKey" %>
 <%@ attribute name="backLink" %>
 <%@ attribute name="nextButtonTextKey" %>
-    
+
 <%@ attribute name="errors" type="uk.gov.dwp.carersallowance.validations.ValidationSummary"%>
 <t:defaultValue value="${pageScope.page}" defaultValue="${requestScope['javax.servlet.forward.servlet_path']}" var="page" />
 <t:defaultValue value="${pageScope.nextButtonTextKey}" defaultValue="next" var="nextButtonTextKey" />
@@ -40,12 +40,13 @@
 <main class="container" role="main" id="main">
     <div class="carers-allowance clearfix">
 
-<%--    
-                <section class="js-message">
-                    <h2>Javascript is currently disabled</h2>
-                    <p>For full functionality of this website it is necessary to enable JavaScript, not doing so will result in a reduced user experience.</p>
-                </section>
---%>
+<noscript>
+        <section class="js-message">
+            <h2><t:message code="noJavascript.title" /></h2>
+            <p><t:message code="noJavascript.text" /></p>
+        </section>
+</noscript>
+        
         <div class="helper-mobile" id="helper-toggle">
             <a class="help">Get help</a>
         </div>

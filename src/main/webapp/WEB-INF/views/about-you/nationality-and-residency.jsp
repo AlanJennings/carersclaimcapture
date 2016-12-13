@@ -11,7 +11,7 @@
         <t:radiobuttons name="nationality"  optionValues="British|Another nationality" optionLabelKeys="British|Other"/>
 
         <t:hiddenPanel id="actualNationalityWrap" triggerId="nationality" triggerValue="Another nationality">
-            <t:textedit name="actualnationality" maxLength="35" />
+            <t:textedit name="actualnationality" />
         </t:hiddenPanel>
 
         <t:yesnofield name="alwaysLivedInUK" />
@@ -24,7 +24,7 @@
 
                 <t:hiddenPanel id="arrivedInUKRecentWrap" triggerId="arrivedInUK" triggerValue="less">
                     <t:datefield name="arrivedInUKDate" />
-                    <t:textedit name="arrivedInUKFrom" maxLength="60" />
+                    <t:textedit name="arrivedInUKFrom" />
                 </t:hiddenPanel>
             </t:hiddenPanel>
         </t:hiddenPanel>
@@ -32,9 +32,9 @@
         <t:yesnofield name="trip52Weeks" />
 
         <t:hiddenPanel id="trip52WeeksYesWrap" triggerId="trip52Weeks" triggerValue="yes">
-            <t:textarea name="tripDetails" maxLength="3000" showRemainingChars="true" />
+            <t:textarea name="tripDetails" showRemainingChars="true" />
         </t:hiddenPanel>
         
     </t:pageContent>
     
-</t:mainPage>    
+</t:mainPage>

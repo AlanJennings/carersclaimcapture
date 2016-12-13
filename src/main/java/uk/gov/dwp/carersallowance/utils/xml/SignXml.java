@@ -5,8 +5,8 @@ import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
 
-import gov.dwp.carers.xml.signing.XmlSignature;
-import gov.dwp.carers.xml.signing.XmlSignatureFactory;
+//import gov.dwp.carers.xml.signing.XmlSignature;  TODO artifactory
+//import gov.dwp.carers.xml.signing.XmlSignatureFactory;  TODO artifactory
 
 /**
  * TODO add some code to reformat the XML before it is signed, to be called separately from the signing, almot definitly no whitespace (i.e. compact mode)
@@ -15,11 +15,11 @@ public class SignXml {
     private static final String KEYSTORE_SYSTEM_KEY = "carers.keystore";
     private static final String KEYSTORE            = "/Users/drh/carerskeystore";
 
-    private XmlSignature xmlSignature;
+//    private XmlSignature xmlSignature;  TODO artifactory
 
     public SignXml(String keystoreLocation) {
         System.setProperty(KEYSTORE_SYSTEM_KEY, keystoreLocation);
-        xmlSignature = XmlSignatureFactory.buildRsaSha1Generator();
+//        xmlSignature = XmlSignatureFactory.buildRsaSha1Generator();  TODO artifactory
     }
 
     public String signClaimXml(String xml) throws IOException {
@@ -33,10 +33,12 @@ public class SignXml {
             throw new IOException("Too many matches for transaction Id");
         }
 
-        String transactionId = transactionIds[0];
-        String signedXml = xmlSignature.sign(xml, transactionId);
+//        String transactionId = transactionIds[0];  TODO artifactory
+//        String signedXml = xmlSignature.sign(xml, transactionId);  TODO artifactory
+//
+//        return signedXml;  TODO artifactory
 
-        return signedXml;
+        return null;
     }
 
     private static File deriveNewFilename(File file, String newFilenameElement) {

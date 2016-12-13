@@ -19,7 +19,7 @@
         <t:datefield name="careeSomewhereElseStartDate" />
         
         <t:hiddenPanel id="careeSomewhereElseStartTimeWrapper" triggerId="careeSomewhereElseStartDate" triggerFunction="isMondayOrFriday">
-            <t:textedit name="careeSomewhereElseStartTime" maxLength="10" />
+            <t:textedit name="careeSomewhereElseStartTime" />
         </t:hiddenPanel>
         
         <t:yesnofield name="careeSomewhereElseEndedTime" />
@@ -27,22 +27,22 @@
         <t:hiddenPanel id="careeSomewhereElseEndedTimeWrap" triggerId="careeSomewhereElseEndedTime" triggerValue="yes">
             <t:datefield name="careeSomewhereElseEndDate" />
             <t:hiddenPanel id="careeSomewhereElseEndTimeWrapper" triggerId="careeSomewhereElseEndDate" triggerFunction="isMondayOrFriday">
-                <t:textedit name="careeSomewhereElseEndTime" maxLength="10" />
+                <t:textedit name="careeSomewhereElseEndTime" />
             </t:hiddenPanel>
         </t:hiddenPanel>
         
         <t:radiobuttons name="carerSomewhereElseWhereYou" optionValues="on holiday|at home|somewhere else" optionLabelKeys="holiday|home|elsewhere" />
 
         <t:hiddenPanel id="carerSomewhereElseWhereYouWrap" triggerId="carerSomewhereElseWhereYou" triggerValue="somewhere else">
-            <t:textarea name="carerSomewhereElseWhereYouOtherText" maxLength="60" showRemainingChars="true" />
+            <t:textarea name="carerSomewhereElseWhereYouOtherText" showRemainingChars="true" />
         </t:hiddenPanel>
 
         <t:radiobuttons name="carerSomewhereElseWhereCaree" optionValues="on holiday|at home|somewhere else" optionLabelKeys="holiday|home|elsewhere"/>
 
         <t:hiddenPanel id="carerSomewhereElseWhereCareeWrap" triggerId="carerSomewhereElseWhereCaree" triggerValue="somewhere else">
-            <t:textarea name="carerSomewhereElseWhereCareeOtherText" maxLength="60" showRemainingChars="true" />
+            <t:textarea name="carerSomewhereElseWhereCareeOtherText" showRemainingChars="true" />
         </t:hiddenPanel>
 
     </t:pageContent>
 
-</t:mainPage>    
+</t:mainPage>   

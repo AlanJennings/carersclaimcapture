@@ -1,7 +1,9 @@
 package uk.gov.dwp.carersallowance.controller.started;
 
-import gov.dwp.carers.CarersScheduler;
-import gov.dwp.carers.monitor.MonitorRegistration;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,11 +13,7 @@ import org.springframework.boot.system.ApplicationPidFileWriter;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.inject.Inject;
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
+//import gov.dwp.carers.monitor.MonitorRegistration; TODO artifactory
 
 /**
  * Created by peterwhitehead on 10/11/2016.
@@ -36,7 +34,7 @@ public class C3Application {
     private String appName;
 
     @Inject
-    private MonitorRegistration monitorRegistration;
+//    private MonitorRegistration monitorRegistration;  TODO artifactory
 
     //private CarersScheduler carersScheduler;
 
@@ -47,7 +45,7 @@ public class C3Application {
             LOGGER.info(appName + " is now starting.");
         }
 
-        monitorRegistration.registerReporters();
+//        monitorRegistration.registerReporters();  TODO artifactory
 
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info(appName + " started.");
@@ -56,8 +54,8 @@ public class C3Application {
 
     @PreDestroy
     public void onStop() {
-        monitorRegistration.unRegisterReporters();
-        monitorRegistration.unRegisterHealthChecks();
+//        monitorRegistration.unRegisterReporters();  TODO artifactory
+//        monitorRegistration.unRegisterHealthChecks();  TODO artifactory
         //carersScheduler.stop();
     }
 

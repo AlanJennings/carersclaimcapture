@@ -28,11 +28,11 @@
 
         <t:hiddenPanel id="empAdditionalInfoWrap" triggerId="likeToPay" triggerValue="yes">
 
-            <t:textedit name="accountHolderName" maxLength="60" />
-            <t:textedit name="bankFullName" maxLength="60" />
+            <t:textedit name="accountHolderName" />
+            <t:textedit name="bankFullName" />
             <t:sortcode name="sortcode" />
-            <t:textedit name="accountNumber" maxLength="10" />
-            <t:textedit name="rollOrReferenceNumber" maxLength="18" />
+            <t:textedit name="accountNumber" />
+            <t:textedit name="rollOrReferenceNumber" />
 
         </t:hiddenPanel>
 

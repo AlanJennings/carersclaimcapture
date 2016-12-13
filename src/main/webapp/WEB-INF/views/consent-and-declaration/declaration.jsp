@@ -5,13 +5,13 @@
 <!DOCTYPE html>
 
 <t:mainPage>
-
+ 
     <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
-        
+
         <t:yesnofield name="tellUsWhyInformation" />
-        
+
         <t:hiddenPanel id="tellUsWhyInformationWrap" triggerId="tellUsWhyInformation" triggerValue="no" >
-            <t:textarea name="tellUsWhyPerson" maxLength="3000" showRemainingChars="true" />
+            <t:textarea name="tellUsWhyPerson" showRemainingChars="true" />
         </t:hiddenPanel>
 
         <t:htmlsection name="declarationText">

@@ -7,7 +7,7 @@
 <t:mainPage>
 
     <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
-        <t:textarea name="otherPaymentsInfo" maxLength="3000" showRemainingChars="true" />
+        <t:textarea name="otherPaymentsInfo" showRemainingChars="true" />
     </t:pageContent>
 
 </t:mainPage>

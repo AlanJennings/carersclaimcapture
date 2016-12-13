@@ -80,8 +80,10 @@ configurations {
 }
 
 dependencies {
+/*
     compile("gov.dwp.carers:xmlcommons:8.28-SNAPSHOT")
     compile("gov.dwp.carers:carerscommon:8.08-SNAPSHOT")
+*/
     compile("com.zaxxer:HikariCP")
     compile("org.springframework.boot:spring-boot-starter-jetty")
     compile("org.springframework.boot:spring-boot-starter-data-rest")
@@ -95,6 +97,9 @@ dependencies {
     compile("org.apache.tomcat.embed:tomcat-embed-jasper")
     compile("org.apache.httpcomponents:httpclient")
     compile("commons-io:commons-io:2.5")
+    compile("commons-lang:commons-lang:2.6")
+    compile("org.apache.commons:commons-lang3:3.5")
+    compile("javax.inject:javax.inject:1")
     compile("org.springframework.boot:spring-boot-starter-actuator")
     runtime("me.moocar:logback-gelf:0.3")
     testCompile (
@@ -102,7 +107,7 @@ dependencies {
             'org.assertj:assertj-core:3.5.2',
             'org.springframework.security:spring-security-test'
     )
-    testCompile("gov.dwp.carers:testcommons:1.08-SNAPSHOT")
+//    testCompile("gov.dwp.carers:testcommons:1.08-SNAPSHOT")
 }
 
 

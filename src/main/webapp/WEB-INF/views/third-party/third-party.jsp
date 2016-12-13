@@ -11,9 +11,9 @@
         <t:radiobuttons name="thirdParty" optionValues="yes|no" />
 
         <t:hiddenPanel id="thirdPartyWrap" triggerId="thirdParty" triggerValue="no">
-            <t:textedit name="nameAndOrganisation" maxLength="60" />
+            <t:textedit name="nameAndOrganisation" />
         </t:hiddenPanel>
     
     </t:pageContent>
 
-</t:mainPage>                
+</t:mainPage>

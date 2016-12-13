@@ -10,10 +10,10 @@
 
         <t:pre><p id="jobDetailsIntro"><t:message code="jobDetailsIntro.text" /></p></t:pre>
 
-        <t:textedit name="employerName" maxLength="60" />
-        <t:textedit name="employmentPhoneNumber" maxLength="20" />
-        <t:address name="employmentAddress" maxlength="35" />
-        <t:textedit name="employmentPostcode" maxLength="10" additionalClasses="postcode" />
+        <t:textedit name="employerName" />  
+        <t:textedit name="employmentPhoneNumber" />
+        <t:address name="employmentAddress" />
+        <t:textedit name="employmentPostcode" additionalClasses="postcode" />
         <t:yesnofield name="startJobBeforeClaimDate" />
 
         <t:hiddenPanel id="startJobBeforeClaimDateWrap" triggerId="startJobBeforeClaimDate" triggerValue="no">
@@ -27,7 +27,7 @@
             <t:datefield name="p45LeavingDate" />
         </t:hiddenPanel>
 
-        <t:textedit name="employmentHoursPerWeek" maxLength="5" />
+        <t:textedit name="employmentHoursPerWeek" />
 
     </t:pageContent>
 

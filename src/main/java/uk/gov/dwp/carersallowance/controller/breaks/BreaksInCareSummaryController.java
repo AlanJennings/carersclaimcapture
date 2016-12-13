@@ -168,7 +168,7 @@ public class BreaksInCareSummaryController extends AbstractFormController {
                 try {
                     return editFieldCollectionRecord(request, idToChange, FIELD_COLLECTION_NAME, ID_FIELD);
                 } catch(UnknownRecordException e) {
-                    addFormError(idToChange, "break from care", "Unable to edit item");
+                    getLegacyValidation().addFormError(idToChange, "break from care", "Unable to edit item");
                 }
             }
 
@@ -176,7 +176,7 @@ public class BreaksInCareSummaryController extends AbstractFormController {
                 try {
                     return deleteFieldCollectionRecord(idToDelete, request, FIELD_COLLECTION_NAME, ID_FIELD);
                 } catch(UnknownRecordException e) {
-                    addFormError(idToDelete, "break from care", "Unable to delete item");
+                    getLegacyValidation().addFormError(idToDelete, "break from care", "Unable to delete item");
                 }
             }
 
@@ -233,7 +233,7 @@ public class BreaksInCareSummaryController extends AbstractFormController {
     protected void validate(String[] fields, Map<String, String[]> fieldValues, Map<String, String[]> allFieldValues) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "moreBreaksInCare");
+        getLegacyValidation().validateMandatoryField(fieldValues, "moreBreaksInCare");
 
         LOG.trace("Ending BenefitsController.validate");
     }

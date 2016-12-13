@@ -91,25 +91,25 @@ public class BreakInRespiteCareController extends AbstractFormController {
     protected void validate(String[] fields, Map<String, String[]> fieldValues, Map<String, String[]> allFieldValues) {
         LOG.trace("Starting BenefitsController.validate");
 
-        validateMandatoryField(fieldValues, "respiteBreakWhoInRespite");
-        if(fieldValue_Equals(fieldValues, "respiteBreakWhoInRespite", "Carer")) {
-            validateMandatoryDateField(fieldValues, "respiteBreakCarerRespiteStartDate");
-            validateMandatoryField(fieldValues, "respiteBreakCarerRespiteStayEnded");
+        getLegacyValidation().validateMandatoryField(fieldValues, "respiteBreakWhoInRespite");
+        if(getLegacyValidation().fieldValue_Equals(fieldValues, "respiteBreakWhoInRespite", "Carer")) {
+            getLegacyValidation().validateMandatoryDateField(fieldValues, "respiteBreakCarerRespiteStartDate");
+            getLegacyValidation().validateMandatoryField(fieldValues, "respiteBreakCarerRespiteStayEnded");
 
-            if(fieldValue_Equals(fieldValues, "respiteBreakCarerRespiteStayEnded", "yes")) {
-                validateMandatoryDateField(fieldValues, "respiteBreakCarerRespiteEndDate");
-                validateMandatoryField(fieldValues, "respiteBreakCarerRespiteStayMedicalCare");
+            if(getLegacyValidation().fieldValue_Equals(fieldValues, "respiteBreakCarerRespiteStayEnded", "yes")) {
+                getLegacyValidation().validateMandatoryDateField(fieldValues, "respiteBreakCarerRespiteEndDate");
+                getLegacyValidation().validateMandatoryField(fieldValues, "respiteBreakCarerRespiteStayMedicalCare");
             }
         }
 
-        if(fieldValue_Equals(fieldValues, "respiteBreakWhoInRespite", "Caree")) {
-            validateMandatoryDateField(fieldValues, "respiteBreakCareeRespiteStartDate");
-            validateMandatoryField(fieldValues, "respiteBreakCareeRespiteStayEnded");
+        if(getLegacyValidation().fieldValue_Equals(fieldValues, "respiteBreakWhoInRespite", "Caree")) {
+            getLegacyValidation().validateMandatoryDateField(fieldValues, "respiteBreakCareeRespiteStartDate");
+            getLegacyValidation().validateMandatoryField(fieldValues, "respiteBreakCareeRespiteStayEnded");
 
-            if(fieldValue_Equals(fieldValues, "respiteBreakCareeRespiteStayEnded", "yes")) {
-                validateMandatoryDateField(fieldValues, "respiteBreakCareeRespiteEndDate");
-                validateMandatoryField(fieldValues, "respiteBreakCareeRespiteStayMedicalCare");
-                validateMandatoryField(fieldValues, "respiteBreakCareeRespiteCarerStillCaring");
+            if(getLegacyValidation().fieldValue_Equals(fieldValues, "respiteBreakCareeRespiteStayEnded", "yes")) {
+                getLegacyValidation().validateMandatoryDateField(fieldValues, "respiteBreakCareeRespiteEndDate");
+                getLegacyValidation().validateMandatoryField(fieldValues, "respiteBreakCareeRespiteStayMedicalCare");
+                getLegacyValidation().validateMandatoryField(fieldValues, "respiteBreakCareeRespiteCarerStillCaring");
             }
         }
 

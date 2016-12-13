@@ -10,12 +10,12 @@ import org.springframework.context.MessageSource;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
 public class AddressValidation extends AbstractValidation {
-    private static final String MANDATORY_PARAM = "mandatory";
-
     private static final Logger LOG = LoggerFactory.getLogger(AddressValidation.class);
 
     public static AddressValidation MANDATORY_INSTANCE = new AddressValidation(true);
     public static AddressValidation OPTIONAL_INSTANCE  = new AddressValidation(false);
+
+    private static final String MANDATORY_PARAM = "mandatory";
 
     private boolean mandatory;
 

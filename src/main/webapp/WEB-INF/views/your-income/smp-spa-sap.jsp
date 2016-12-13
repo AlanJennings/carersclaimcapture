@@ -15,12 +15,12 @@
             <t:datefield name="otherStatPaymentWhenDidYouLastGetPaid" />
         </t:hiddenPanel>
 
-        <t:textedit name="otherStatPaymentWhoPaidYouThisPay" maxLength="60" /> 
-        <t:textedit name="otherStatPaymentAmountOfThisPay" maxLength="12" outerClass="form-group short-field" />
+        <t:textedit name="otherStatPaymentWhoPaidYouThisPay" />
+        <t:textedit name="otherStatPaymentAmountOfThisPay" outerClass="form-group short-field" />
         <t:radiobuttons name="otherStatPaymentHowOftenPaidThisPay" optionValues="Weekly|Fortnightly|Four-weekly|Monthly|Other" />
 
         <t:hiddenPanel id="otherStatPaymentHowOftenPaidThisPayWrap" triggerId="otherStatPaymentHowOftenPaidThisPay" triggerValue="Other">
-            <t:textedit name="otherStatPaymentHowOftenPaidThisPayOther" maxLength="60" /> 
+            <t:textedit name="otherStatPaymentHowOftenPaidThisPayOther" />
         </t:hiddenPanel>
 
     </t:pageContent>

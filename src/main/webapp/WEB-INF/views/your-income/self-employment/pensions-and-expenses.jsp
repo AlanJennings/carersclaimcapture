@@ -11,13 +11,13 @@
         <t:yesnofield name="selfEmployedPayPensionScheme" />
 
         <t:hiddenPanel id="selfEmployedPayPensionSchemeTextWrap" triggerId="selfEmployedPayPensionScheme" triggerValue="yes" >
-            <t:textarea name="selfEmployedPayPensionSchemeText" maxLength="300" showRemainingChars="true" />
+            <t:textarea name="selfEmployedPayPensionSchemeText" showRemainingChars="true" />
         </t:hiddenPanel>
 
         <t:yesnofield name="selfEmployedHaveExpensesForJob" />
 
         <t:hiddenPanel id="selfEmployedHaveExpensesForJobTextWrap" triggerId="selfEmployedHaveExpensesForJob" triggerValue="yes" >
-            <t:textarea name="selfEmployedHaveExpensesForJobText" maxLength="300" showRemainingChars="true" />
+            <t:textarea name="selfEmployedHaveExpensesForJobText" showRemainingChars="true" />
         </t:hiddenPanel>
 
     </t:pageContent>
