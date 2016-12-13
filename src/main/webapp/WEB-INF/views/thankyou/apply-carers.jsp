@@ -51,4 +51,6 @@
                 </article>
             </div>
         </main>
+        <t:googleAnalyticsSendEvent action="Assisted-Decision" label="TODO-ASSISTED-DECISION" />
+        <t:googleAnalyticsTiming tracktype="ENDCLAIM" />
 </t:mainPage>

@@ -5,16 +5,11 @@
 <!DOCTYPE html>
 
 <t:mainPage>
-    
     <t:pageContent errors="${validationErrors}">
-        
         <t:radiobuttons name="benefitsAnswer" optionValues="PIP|DLA|AA|CAA|AFIP|NONE" />
-        
         <t:hiddenWarning id="answerNoMessageWrap" triggerId="benefitsAnswer" triggerValue="NONE">
             <p><t:message code="benefitsAnswer.warning.message" /></p>
         </t:hiddenWarning>
-    
     </t:pageContent>
-    
+    <t:googleAnalyticsTiming tracktype="STARTELIGIBLE"/>
 </t:mainPage>
-

@@ -5,7 +5,6 @@
 <!DOCTYPE html>
 
 <t:mainPage>
-
     <t:pageContent errors="${validationErrors}" backLink="${previousPage}"> 
         
         <t:radiobuttons name="thirdParty" optionValues="yes|no" />
@@ -15,5 +14,5 @@
         </t:hiddenPanel>
     
     </t:pageContent>
-
-</t:mainPage>
+    <t:googleAnalyticsTiming tracktype="STARTCLAIM"/>
+</t:mainPage>    

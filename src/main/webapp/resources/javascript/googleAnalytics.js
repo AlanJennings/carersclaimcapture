@@ -48,10 +48,12 @@ googleAnalytics.trackTiming = function (category, variable, timemeasured) {
     }
 }
 
-googleAnalytics.sendTrackEvent = function (action, label) {
-    var cat = location.pathname;
+googleAnalytics.sendTrackEvent = function (category, action, label) {
+    if( category == ""){
+        category=location.pathname;
+    }
     var v = "";
-    trackEvent(cat, action, label, v);
+    trackEvent(category, action, label, v);
 }
 
 function trackEvent(category, action, label, value) {
