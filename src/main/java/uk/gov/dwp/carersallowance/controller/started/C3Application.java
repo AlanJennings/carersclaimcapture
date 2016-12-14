@@ -13,6 +13,8 @@ import org.springframework.boot.system.ApplicationPidFileWriter;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 
+import gov.dwp.carers.monitor.MonitorRegistration;
+
 //import gov.dwp.carers.monitor.MonitorRegistration; TODO artifactory
 
 /**
@@ -34,7 +36,7 @@ public class C3Application {
     private String appName;
 
     @Inject
-//    private MonitorRegistration monitorRegistration;  TODO artifactory
+    private MonitorRegistration monitorRegistration;
 
     //private CarersScheduler carersScheduler;
 
@@ -45,7 +47,7 @@ public class C3Application {
             LOGGER.info(appName + " is now starting.");
         }
 
-//        monitorRegistration.registerReporters();  TODO artifactory
+        monitorRegistration.registerReporters();
 
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info(appName + " started.");
@@ -54,8 +56,8 @@ public class C3Application {
 
     @PreDestroy
     public void onStop() {
-//        monitorRegistration.unRegisterReporters();  TODO artifactory
-//        monitorRegistration.unRegisterHealthChecks();  TODO artifactory
+        monitorRegistration.unRegisterReporters();
+        monitorRegistration.unRegisterHealthChecks();
         //carersScheduler.stop();
     }
 

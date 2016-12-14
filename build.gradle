@@ -80,35 +80,33 @@ configurations {
 }
 
 dependencies {
-/*
-    compile("gov.dwp.carers:xmlcommons:8.28-SNAPSHOT")
-    compile("gov.dwp.carers:carerscommon:8.08-SNAPSHOT")
-*/
     compile("com.zaxxer:HikariCP")
-    compile("org.springframework.boot:spring-boot-starter-jetty")
-    compile("org.springframework.boot:spring-boot-starter-data-rest")
-    compile("org.springframework.boot:spring-boot-starter-jdbc")
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.boot:spring-boot-starter-websocket")
-    compile("org.springframework.boot:spring-boot-devtools")
-    compile("org.springframework.boot:spring-boot-starter-security")
-    compile("org.postgresql:postgresql")
-    compile("javax.servlet:jstl")
-    compile("org.apache.tomcat.embed:tomcat-embed-jasper")
-    compile("org.apache.httpcomponents:httpclient")
-    compile("org.apache.commons:commons-lang3:3.4")
     compile("commons-io:commons-io:2.5")
     compile("commons-lang:commons-lang:2.6")
-    compile("org.apache.commons:commons-lang3:3.5")
+    compile("gov.dwp.carers:carerscommon:8.08-SNAPSHOT")
+    compile("gov.dwp.carers:xmlcommons:8.28-SNAPSHOT")
+    compile "io.dropwizard.metrics:metrics-core:3.1.2"
     compile("javax.inject:javax.inject:1")
+    compile("javax.servlet:jstl")
+    compile("org.apache.commons:commons-lang3:3.5")
+    compile("org.apache.httpcomponents:httpclient")
+    compile("org.apache.tomcat.embed:tomcat-embed-jasper")
+    compile("org.postgresql:postgresql")
+    compile("org.springframework.boot:spring-boot-devtools")
     compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-data-rest")
+    compile("org.springframework.boot:spring-boot-starter-jdbc")
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-websocket")
     runtime("me.moocar:logback-gelf:0.3")
     testCompile (
             'org.springframework.boot:spring-boot-starter-test',
             'org.assertj:assertj-core:3.5.2',
             'org.springframework.security:spring-security-test'
     )
-//    testCompile("gov.dwp.carers:testcommons:1.09-SNAPSHOT")
+    testCompile("gov.dwp.carers:testcommons:1.09-SNAPSHOT")
 }
 
 
