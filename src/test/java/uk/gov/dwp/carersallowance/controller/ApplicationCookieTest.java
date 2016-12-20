@@ -7,14 +7,11 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.MessageSource;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.ui.Model;
 import uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultFormController;
 import uk.gov.dwp.carersallowance.controller.started.C3Application;
-import uk.gov.dwp.carersallowance.session.SessionManager;
 
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
