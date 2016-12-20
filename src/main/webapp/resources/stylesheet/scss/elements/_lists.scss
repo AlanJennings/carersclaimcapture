@@ -1,0 +1,47 @@
+
+// Lists
+// ================================================================
+
+// basic reset
+ul,
+ol {
+    list-style-type: none;
+    padding: 0;
+}
+
+// remove default list-style
+li {
+    display: block;
+    position: relative;
+}
+
+// Bulleted lists
+.list-bullet {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+// Numbered lists
+.list-number {
+    list-style-type: decimal;
+    padding-left: 20px;
+    @include ie-lte(7) {
+        padding-left: 28px;
+    }
+}
+
+.list-bullet,
+.list-number {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    @include vertical-rhythm;
+}
+
+.list-bullet li,
+.list-number li {
+    margin-bottom: 5px;
+    display: list-item;
+    &:last-child {
+        margin-bottom: 0;
+    }
+}

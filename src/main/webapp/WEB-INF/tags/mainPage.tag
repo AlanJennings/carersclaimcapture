@@ -40,7 +40,7 @@
         <!--[if IE 8]><link href="/stylesheet/header-footer-only-ie8.css" media="screen" rel="stylesheet" type="text/css"><![endif]-->
 
         <!-- Carer's Allowance stylesheet -->
-        <link rel="stylesheet" media="screen" href="/stylesheet/app_t.min.css" />
+        <link rel="stylesheet" media="screen" href="/stylesheet/app_t.css" />
 <style>
     /* See breaks in care etc. */
     .actions button {
