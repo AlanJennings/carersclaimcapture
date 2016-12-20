@@ -45,7 +45,7 @@ public class DefaultFormController extends AbstractFormController {
         try {
             String method = request.getMethod();
             if (HTTP_GET.equalsIgnoreCase(method) == false && HTTP_POST.equalsIgnoreCase(method) == false) {
-                LOG.info("Unsupported request method: {}", method);
+                LOG.error("Unsupported request method: {}", method);
                 return false;
             }
 
