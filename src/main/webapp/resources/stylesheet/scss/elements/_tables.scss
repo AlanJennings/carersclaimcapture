@@ -1,0 +1,135 @@
+
+// Tables
+// ==========================================================================
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+	th, td {
+	    @include core-16;
+	    padding: em(12, 16) em(20, 16) em(9, 16) 0;
+	    text-align: left;
+	    color: #0b0c0c;
+	    border-bottom: 1px solid $border-colour;
+	}
+	th {
+    	font-weight: 700;
+		// Right align headings for numeric content
+		&.numeric {
+   			text-align: right;
+		}
+	}
+	td {
+		// Use tabular numbers for numeric table cells
+		&.numeric {
+		    @include core-16($tabular-numbers: true);
+		    text-align: right;
+		}
+	}
+}
+
+// Data Table
+
+.break-data,
+.trip-data {
+    border-bottom: 1px solid $grey-3;
+}
+    
+.data-table {
+    
+    dl {
+        overflow: hidden;
+        margin: 6px 0 0 0;
+    }
+    
+    dt {
+        display: inline-block;
+        width: 46%;
+        padding: .4em 0;
+        vertical-align: top;
+        line-height: 1.25em;
+    }
+    
+    dd {
+        display: inline-block;
+        width: 49%;
+        margin: 0;
+        padding: .4em 0 .4em 4%;
+        vertical-align: top;
+        line-height: 1.25em;
+    }
+    
+    .actions {
+        overflow: hidden;
+        margin: 1em 0;
+        input {
+            float: right;
+            font-size: 16px;
+            width: auto;
+            background: none;
+            padding: 0;
+            border: 0;
+            color: $link-colour;
+            text-decoration: underline;
+            cursor: pointer;
+            text-align: right;
+            &:hover {
+                color: $link-hover-colour;
+            }
+            &:first-child {
+                float: left;
+                text-align: left;
+            }
+        }
+    }
+
+} // end .data-table
+
+.summary {
+	.accordion:not(.accordion-open):not(:last-child) {
+		margin-bottom: 0;
+	}
+}
+
+.review-label {
+	width: 45%;
+}
+.review-action {
+	text-align: right;
+}
+	
+.review {
+	th {
+		border-bottom: none;
+	}
+    td {
+		padding: 0.75em 0;
+    }
+	.review-value {
+		padding-left: $gutter;
+	}
+	.review-change {
+		@extend %contain-floats;
+	}
+	@include media(mobile) {
+		margin-top: $gutter;
+		.review-label {
+			display: block;
+			width: 100%;
+		}
+		.review-value {
+			padding-left: 0;
+			line-height: 2;
+			width:100%;
+		}
+		.review-change {
+			margin-bottom: $gutter;
+			display: block;
+			width: 100%;
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+}

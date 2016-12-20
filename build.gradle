@@ -16,6 +16,7 @@ buildscript {
     dependencies {
         classpath(group: 'org.jfrog.buildinfo', name: 'build-info-extractor-gradle', version: '4.4.9')
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "com.github.robfletcher:compass-gradle-plugin:2.0.6"
     }
 }
 
@@ -23,6 +24,7 @@ allprojects {
     apply plugin: 'com.jfrog.artifactory'
     apply plugin: 'java'
     apply plugin: 'idea'
+    apply plugin: "com.github.robfletcher.compass"
     apply plugin: 'eclipse'
     apply plugin: 'maven-publish'
     apply plugin: 'spring-boot'
@@ -33,6 +35,11 @@ allprojects {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
     description = 'c3 Gradle Webapp'
+}
+
+compass {
+    sassDir = file("$projectDir/src/main/webapp/resources/stylesheet/scss")
+    cssDir = file("$projectDir/src/main/webapp/resources/stylesheet")
 }
 
 String repo = version.endsWith('SNAPSHOT') ? 'libs-snapshot-local' : 'libs-release-local'
