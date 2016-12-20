@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -72,7 +73,7 @@ public class FilteredRequestMappingHandlerMapping extends RequestMappingHandlerM
                         return null;
                     }
                 }
-                HandlerMethod handlerMethod = new HandlerMethod(controller, "handleRequest", HttpServletRequest.class, Model.class);
+                HandlerMethod handlerMethod = new HandlerMethod(controller, "handleRequest", HttpServletRequest.class, HttpServletResponse.class, Model.class);
                 return handlerMethod;
             } catch (NoSuchMethodException e) {
                 LOG.error("Unsupported request", e);
