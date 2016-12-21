@@ -1,5 +1,17 @@
 
 protoType.message=prototype.message
+s11.g7.help1=async.submitting.help1
+s11.g7.help1.c=async.submitting.circs
+s11.g7.help2=async.submitting.help2
+s11.g7.help2.c=async.submitting.help2.circs
+s11.g7.help3=async.submitting.help3
+s11.g7.refresh=async.submitting.refresh
+s11.g7.refresh1=async.submitting.refresh1
+s11.g7.refresh2=async.submitting.refresh2
+s11.g7.refresh2.c=async.submitting.refresh.circs
+
+
+
 s0.longName=/allowance/benefits.pageTitle
 s0.g1.help13=benefitsAnswer.hintBefore
 benefitsAnswer=benefitsAnswer.label

@@ -34,6 +34,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/images/**").addResourceLocations("classpath:/resources/images/", "/resources/images/");
         registry.addResourceHandler("/stylesheet/**").addResourceLocations("classpath:/resources/stylesheet/", "/resources/stylesheet/");
         registry.addResourceHandler("/icons/**").addResourceLocations("classpath:/resources/icons/", "/resources/icons/");
+        registry.addResourceHandler("/assets/images/**").addResourceLocations("classpath:/resources/images/", "/resources/images/");
     }
 
     @Bean
@@ -59,6 +60,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         filteredRequestMappingHandlerMapping.setExclude("/stylesheet/**");
         filteredRequestMappingHandlerMapping.setExclude("/images/**");
         filteredRequestMappingHandlerMapping.setExclude("/icons/**");
+        filteredRequestMappingHandlerMapping.setExclude("/assets/images/**");
+        filteredRequestMappingHandlerMapping.setExclude("/async-submitting");
         return filteredRequestMappingHandlerMapping;
     }
 

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import uk.gov.dwp.carersallowance.controller.SubmitClaimController;
+import uk.gov.dwp.carersallowance.controller.submission.SubmitClaimController;
 import uk.gov.dwp.carersallowance.utils.KeyValue;
 
 public class XPathMappingList {

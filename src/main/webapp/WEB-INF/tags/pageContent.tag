@@ -8,6 +8,7 @@
 <%@ attribute name="pageTitleKey" %>
 <%@ attribute name="pageSectionKey" %>
 <%@ attribute name="backLink" %>
+<%@ attribute name="nextLink" %>
 <%@ attribute name="nextButtonTextKey" %>
 
 <%@ attribute name="errors" type="uk.gov.dwp.carersallowance.validations.ValidationSummary"%>
@@ -74,7 +75,7 @@
                     ${pageScope.pageTitle}
                 </h1>
                 
-                <form action="<c:url value='${pageScope.currentPage}' />" method="POST" role="form" style="margin-bottom: 30px;">
+                <form action="<c:url value='${currentPage}' />" method="POST" role="form" style="margin-bottom: 30px;">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <input type="hidden" name="pageName" value="${pageScope.page}"/>    
                     
@@ -87,12 +88,14 @@
                             
                         </ul>
                     </fieldset>
-            
+
+                    <c:if test="${empty pageScope.nextLink}">
                     <nav class="form-steps" role="navigation">
                         <ul>
                             <li><button type="submit" name="action" value="next" class="button"><t:message code="${pageScope.nextButtonTextKey}" /></button></li>
                         </ul>
-                    </nav>   
+                    </nav>
+                    </c:if>
                 </form>
                 
                 <c:if test="${not empty pageScope.backLink}">

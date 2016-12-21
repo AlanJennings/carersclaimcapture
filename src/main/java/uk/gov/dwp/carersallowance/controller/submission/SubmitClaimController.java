@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller;
+package uk.gov.dwp.carersallowance.controller.submission;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,10 +18,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import uk.gov.dwp.carersallowance.TransactionIdService;
+import uk.gov.dwp.carersallowance.controller.XmlBuilder;
+import uk.gov.dwp.carersallowance.database.TransactionIdService;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.session.SessionManager.Session;
 import uk.gov.dwp.carersallowance.utils.Parameters;
@@ -34,6 +36,7 @@ import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList.MappingException;
  * It just creates the claim XML and sends it.  If is successful, then it redirects to a success page
  * otherwise it redirects to a retry page.  We may do a waiting page, as we currently do. (TODO)
  */
+@Controller
 public class SubmitClaimController {
     private static final Logger LOG = LoggerFactory.getLogger(SubmitClaimController.class);
 
@@ -41,7 +44,7 @@ public class SubmitClaimController {
     private static final String XML_MAPPING__CLAIM_CAREBREAK = "xml.mapping.claim.careBreak";
 
     private static final String CURRENT_PAGE       = "/submit-claim";
-//    private static final String SUCESS_PAGE        = "/thankyou/apply-carers";
+    private static final String SUCCESS_PAGE       = "/async-submitting";
 //    private static final String FAILED_PAGE        = "/oh-no-its-all-gone-horribly-wrong";
 
     private SessionManager       sessionManager;
@@ -49,9 +52,10 @@ public class SubmitClaimController {
     private TransactionIdService transactionIdService;
 
     @Autowired
-    public SubmitClaimController(SessionManager sessionManager, MessageSource messageSource, TransactionIdService TransactionService) {
+    public SubmitClaimController(SessionManager sessionManager, MessageSource messageSource, TransactionIdService transactionIdService) {
         this.sessionManager = sessionManager;
         this.messageSource = messageSource;
+        this.transactionIdService = transactionIdService;
     }
 
     /**
@@ -62,24 +66,17 @@ public class SubmitClaimController {
         return postForm(request);
     }
 
-    /**
-     *
-     * @param request
-     * @param session
-     * @param model
-     * @return
-     */
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
     public String postForm(HttpServletRequest request) {
 
-        LOG.trace("Starting AbstractFormController.postForm");
+        LOG.trace("Starting SubmitClaimController.postForm");
         try {
             LOG.debug("request.getParameterMap() = {}", request.getParameterMap()); // log these jsut in case
             Session session = sessionManager.createFromHttpSession(request.getSession());
 
             String xml = buildClaimXml(session);
-            return xml;
-//            return SUCESS_PAGE;
+            //return xml;
+            return "redirect:" + SUCCESS_PAGE;
         } catch(IOException | InstantiationException | ParserConfigurationException | MappingException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw new RuntimeException("Oh no its all gone horribly wrong", e);
@@ -87,14 +84,14 @@ public class SubmitClaimController {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
         } finally {
-            LOG.trace("Ending AbstractFormController.postForm");
+            LOG.trace("Ending SubmitClaimController.postForm");
         }
     }
 
     /**
      * Build the Claim XML and add the digital signature
      * flatten the XML and send it
-     * @param sessionManager
+     * @param session
      * @return
      * @throws IOException
      * @throws InstantiationException
@@ -127,7 +124,7 @@ public class SubmitClaimController {
 
         XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", namespaces, sessionMap, mappings);
         String xml = xmlBuilder.render(true, false);
-
+        LOG.debug("xml:{}", xml);
         return xml;
     }
 
