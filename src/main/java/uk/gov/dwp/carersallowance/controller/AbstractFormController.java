@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
 
+import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 import uk.gov.dwp.carersallowance.session.FieldCollection;
 import uk.gov.dwp.carersallowance.session.IllegalFieldValueException;
 import uk.gov.dwp.carersallowance.session.InconsistentFieldValuesException;
@@ -49,48 +50,13 @@ public class AbstractFormController {
     @Value("${application.version}")
     private String applicationVersion;
 
-    private static final String[] PAGES = {
-            "/allowance/benefits",
-            "/allowance/eligibility",
-            "/allowance/approve",
-            "/disclaimer/disclaimer",
-            "/third-party/third-party",
-            "/your-claim-date/claim-date",
-            "/about-you/your-details",
-            "/about-you/marital-status",
-            "/about-you/contact-details",
-            "/about-you/nationality-and-residency",
-            "/about-you/other-eea-state-or-switzerland",
-            "/your-partner/personal-details",
-            "/care-you-provide/their-personal-details",
-            "/care-you-provide/more-about-the-care",
-            "/breaks/breaks-in-care",
-            "/education/your-course-details",
-            "/your-income/your-income",
-            //removed to get through journey
-//            "/your-income/employment/been-employed",
-//            "/your-income/self-employment/self-employment-dates",
-//            "/your-income/self-employment/pensions-and-expenses",
-//            "/your-income/employment/additional-info",
-//            "/your-income/statutory-sick-pay",
-//            "/your-income/smp-spa-sap",
-//            "/your-income/fostering-allowance",
-//            "/your-income/direct-payment",
-//            "/your-income/other-income",
-            "/pay-details/how-we-pay-you",
-            "/information/additional-info",
-            "/preview",
-            "/consent-and-declaration/declaration",
-            "/submit-claim"
-        };
-
     public static final String   PHONE_REGEX = "[ 0123456789]{0,20}";       // probably convert to an enum
     public static final String   EMAIL_REGEX = "[ 0123456789]{0,20}";       // probably convert to an enum
 
     private MessageSource     messageSource;
     private SessionManager    sessionManager;
     private ValidationSummary validationSummary;
-    private List<String>      pageList;
+    protected List<String>      pageList;
 
     private LegacyValidation  legacyValidation; //  TODO remove this
 
@@ -100,7 +66,6 @@ public class AbstractFormController {
 
         validationSummary = new ValidationSummary();
         legacyValidation = new LegacyValidation(messageSource, validationSummary);
-        pageList = new ArrayList<>(Arrays.asList(PAGES));
     }
 
     protected LegacyValidation getLegacyValidation() { return legacyValidation; }
@@ -1050,7 +1015,7 @@ public class AbstractFormController {
     }
 
     public boolean supportsRequest(HttpServletRequest request) {
-        LOG.info("Started DefaultFormController.supportsRequest");
+        LOG.info("Started AbstractFormController.supportsRequest");
         Parameters.validateMandatoryArgs(request, "request");
         try {
             String method = request.getMethod();
@@ -1071,6 +1036,41 @@ public class AbstractFormController {
 
         } finally {
             LOG.info("Ending DefaultFormController.supportsRequest");
+        }
+    }
+
+    /**
+     * Data driven request holder
+     * @throws NoSuchRequestHandlingMethodException
+     */
+    public String handleRequest(HttpServletRequest request, HttpServletResponse response, Model model) throws NoSuchRequestHandlingMethodException {
+        LOG.info("Started DefaultFormController.handleRequest");
+        Parameters.validateMandatoryArgs(request, "request");
+        try {
+            checkVersionCookie(request);
+            addVersionCookie(response);
+
+            String path = request.getServletPath();
+            String method = request.getMethod();
+
+            String page = null;
+            LOG.info("method = {}, path = {}", method, path);
+            if (HTTP_GET.equalsIgnoreCase(method)) {
+                return showForm(request, model);
+            } else if (HTTP_POST.equalsIgnoreCase(method)) {
+                return postForm(request, request.getSession(), model);
+            } else {
+                LOG.error("Request method {} is not supported in request: {}", method, path);
+                throw new NoSuchRequestHandlingMethodException(request);
+            }
+        } catch (NoSuchRequestHandlingMethodException e) {
+            LOG.error("NoSuchRequestHandlingMethodException", e);
+            throw e;
+        } catch (RuntimeException e) {
+            LOG.error("Unexpected RuntimeException", e);
+            throw e;
+        } finally {
+            LOG.info("Ending DefaultFormController.handleRequest");
         }
     }
 

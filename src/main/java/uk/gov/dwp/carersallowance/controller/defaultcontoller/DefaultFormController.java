@@ -1,5 +1,7 @@
 package uk.gov.dwp.carersallowance.controller.defaultcontoller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 
 import javax.servlet.http.Cookie;
@@ -32,43 +34,49 @@ public class DefaultFormController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultFormController.class);
 
     @Autowired
+    private DefaultFormController defaultFormController;
+
+    private static final String[] PAGES = {
+        "/allowance/benefits",
+        "/allowance/eligibility",
+        "/allowance/approve",
+        "/disclaimer/disclaimer",
+        "/third-party/third-party",
+        "/your-claim-date/claim-date",
+        "/about-you/your-details",
+        "/about-you/marital-status",
+        "/about-you/contact-details",
+        "/about-you/nationality-and-residency",
+        "/about-you/other-eea-state-or-switzerland",
+        "/your-partner/personal-details",
+        "/care-you-provide/their-personal-details",
+        "/care-you-provide/more-about-the-care",
+        "/breaks/breaks-in-care",
+        "/education/your-course-details",
+        "/your-income/your-income",
+        //removed to get through journey
+//            "/your-income/employment/been-employed",
+//            "/your-income/self-employment/self-employment-dates",
+//            "/your-income/self-employment/pensions-and-expenses",
+//            "/your-income/employment/additional-info",
+//            "/your-income/statutory-sick-pay",
+//            "/your-income/smp-spa-sap",
+//            "/your-income/fostering-allowance",
+//            "/your-income/direct-payment",
+//            "/your-income/other-income",
+        "/pay-details/how-we-pay-you",
+        "/information/additional-info",
+        "/preview",
+        "/consent-and-declaration/declaration",
+        "/submit-claim"
+    };
+
+    @Autowired
     public DefaultFormController(SessionManager sessionManager, MessageSource messageSource) {
         super(sessionManager, messageSource);
+        pageList = new ArrayList<>(Arrays.asList(PAGES));
     }
 
-    /**
-     * Data driven request holder
-     * @throws NoSuchRequestHandlingMethodException
-     */
-    public String handleRequest(HttpServletRequest request, HttpServletResponse response, Model model) throws NoSuchRequestHandlingMethodException {
-        LOG.info("Started DefaultFormController.handleRequest");
-        Parameters.validateMandatoryArgs(request, "request");
-        try {
-            checkVersionCookie(request);
-            addVersionCookie(response);
 
-            String path = request.getServletPath();
-            String method = request.getMethod();
-
-            String page = null;
-            LOG.info("method = {}, path = {}", method, path);
-            if (HTTP_GET.equalsIgnoreCase(method)) {
-                return super.showForm(request, model);
-            } else if (HTTP_POST.equalsIgnoreCase(method)) {
-                return super.postForm(request, request.getSession(), model);
-            } else {
-                LOG.error("Request method {} is not supported in request: {}", method, path);
-                throw new NoSuchRequestHandlingMethodException(request);
-            }
-        } catch (NoSuchRequestHandlingMethodException e) {
-            LOG.error("NoSuchRequestHandlingMethodException", e);
-            throw e;
-        } catch (RuntimeException e) {
-            LOG.error("Unexpected RuntimeException", e);
-            throw e;
-        } finally {
-            LOG.info("Ending DefaultFormController.handleRequest");
-        }
-    }
 }
 
