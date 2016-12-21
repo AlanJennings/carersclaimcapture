@@ -38,4 +38,10 @@ node ('master') {
     stage ('Publish build info') {
         server.publishBuildInfo buildInfo
     }
+    stage ('Deploy to lab') {
+        sshagent(['8b4a081b-f1d6-424d-959f-ae9279d08b3b']) {
+        }
+    }
+
+
 }
