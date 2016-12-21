@@ -10,14 +10,8 @@ import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.xpath.XPathFactory;
 import javax.xml.xpath.XPath;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 
 public class ClaimXmlTest {
     @Mock
