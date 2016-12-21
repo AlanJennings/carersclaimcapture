@@ -4,8 +4,14 @@
 
 <!DOCTYPE html>
 
-
-
-        <p>Oh yeah!</p>
+<t:mainPage>
+    <t:pageContent errors="${validationErrors}">
+        <t:radiobuttons name="countryAnswer" optionValues="NI|ESW|AO" />
+        <t:hiddenWarning id="answerNoMessageWrap" triggerId="benefitsAnswer" triggerValue="NONE">
+            <p><t:message code="countryAnswer.warning.message" /></p>
+        </t:hiddenWarning>
+    </t:pageContent>
+    <t:googleAnalyticsTiming tracktype="STARTELIGIBLE"/>
+</t:mainPage>
 
 

@@ -90,7 +90,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public ReloadableResourceBundleMessageSource messageSource() {
         final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:messages");
+        messageSource.setBasenames("classpath:messages","classpath:circs_messages");
         messageSource.setCacheSeconds(10); //reload messages every 10 seconds
         return messageSource;
     }
