@@ -1,3 +1,5 @@
+
+protoType.message=prototype.message
 s0.longName=/allowance/benefits.pageTitle
 s0.g1.help13=benefitsAnswer.hintBefore
 benefitsAnswer=benefitsAnswer.label

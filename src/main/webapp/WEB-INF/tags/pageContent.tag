@@ -1,6 +1,7 @@
 <%-- See http://docs.oracle.com/javaee/5/tutorial/doc/bnamu.html --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <%@ attribute name="page" %>
 <%@ attribute name="pageTitle" %>
@@ -34,12 +35,17 @@
 <%@ variable name-given="pageContent" declare="false" variable-class="java.lang.Map" scope="NESTED" %> <%-- TODO this is not working, the use:Bean and c:set is doing ALL the work --%>
 <c:set var="pageContent" value="${_pageContentMap}" scope="request"/>
 <c:set target="${pageContent}" property="errors" value="${pageScope.errors}"/>
+<spring:eval var="isPrototype" expression="@environment.getProperty('prototype.disclaimer')"/>
 
 <%-- *************************** end 'pageContent' context object ************************************* --%>
 
 <main class="container" role="main" id="main">
     <div class="carers-allowance clearfix">
-
+        <c:if test="${isPrototype == true}">
+        <div class="prototype">
+            <p><t:message code="prototype.message" /></p>
+        </div>
+        </c:if>
 <noscript>
         <section class="js-message">
             <h2><t:message code="noJavascript.title" /></h2>
