@@ -58,6 +58,41 @@ public class AbstractFormController {
     private ValidationSummary validationSummary;
     protected List<String>      pageList;
 
+    protected static final String[] PAGES = {
+            "/allowance/benefits",
+            "/allowance/eligibility",
+            "/allowance/approve",
+            "/disclaimer/disclaimer",
+            "/third-party/third-party",
+            "/your-claim-date/claim-date",
+            "/about-you/your-details",
+            "/about-you/marital-status",
+            "/about-you/contact-details",
+            "/about-you/nationality-and-residency",
+            "/about-you/other-eea-state-or-switzerland",
+            "/your-partner/personal-details",
+            "/care-you-provide/their-personal-details",
+            "/care-you-provide/more-about-the-care",
+            "/breaks/breaks-in-care",
+            "/education/your-course-details",
+            "/your-income/your-income",
+            //removed to get through journey
+//            "/your-income/employment/been-employed",
+//            "/your-income/self-employment/self-employment-dates",
+//            "/your-income/self-employment/pensions-and-expenses",
+//            "/your-income/employment/additional-info",
+//            "/your-income/statutory-sick-pay",
+//            "/your-income/smp-spa-sap",
+//            "/your-income/fostering-allowance",
+//            "/your-income/direct-payment",
+//            "/your-income/other-income",
+            "/pay-details/how-we-pay-you",
+            "/information/additional-info",
+            "/preview",
+            "/consent-and-declaration/declaration",
+            "/submit-claim"
+    };
+
     private LegacyValidation  legacyValidation; //  TODO remove this
 
     public AbstractFormController(SessionManager sessionManager, MessageSource messageSource) {
@@ -66,6 +101,7 @@ public class AbstractFormController {
 
         validationSummary = new ValidationSummary();
         legacyValidation = new LegacyValidation(messageSource, validationSummary);
+        pageList = Arrays.asList(PAGES);
     }
 
     protected LegacyValidation getLegacyValidation() { return legacyValidation; }

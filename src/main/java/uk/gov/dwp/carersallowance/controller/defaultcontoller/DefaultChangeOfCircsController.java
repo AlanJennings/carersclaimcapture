@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 @Controller
-public class DefaultChangeOfCircsController extends AbstractFormController{
+public class DefaultChangeOfCircsController extends AbstractFormController {
 
     private static final String[] PAGES = {
         "/circumstances/report-changes/selection"
@@ -19,7 +19,6 @@ public class DefaultChangeOfCircsController extends AbstractFormController{
     @Autowired
     public DefaultChangeOfCircsController(SessionManager sessionManager, MessageSource messageSource) {
         super(sessionManager, messageSource);
-        pageList = new ArrayList<>(Arrays.asList(PAGES));
+        pageList = Arrays.asList(DefaultChangeOfCircsController.PAGES);
     }
-
 }
