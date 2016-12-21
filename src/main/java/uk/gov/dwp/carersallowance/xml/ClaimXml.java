@@ -55,13 +55,12 @@ public class ClaimXml {
 
     private Element addNode(Document document, Node parent, String tagName, String value) {
         Parameters.validateMandatoryArgs(new Object[]{document, parent, tagName}, new String[]{"document", "parent", "tagName"});
-
         Element element = document.createElement(tagName);
-        parent.appendChild(element);
         if(StringUtils.isNotEmpty(value)) {
             Text textNode = document.createTextNode(value);    // TODO should this be a CDATA element?
-            parent.appendChild(textNode);
+            element.appendChild(textNode);
         }
+        parent.appendChild(element);
 
         return element;
     }
@@ -76,7 +75,7 @@ public class ClaimXml {
         Parameters.validateMandatoryArgs(new Object[]{document, parent, tagName}, new String[]{"document", "parent", "tagName"});
         Element node = addNode(document, parent, tagName, null);
         if(attributes != null) {
-            for(Map.Entry<String, String> entry: attributes.entrySet()) {
+            for (Map.Entry<String, String> entry : attributes.entrySet()) {
                 node.setAttribute(entry.getKey(), entry.getValue());
             }
         }
@@ -103,7 +102,6 @@ public class ClaimXml {
      * @param document
      * @param parent
      * @param tagName
-     * @param address
      *
      * TODO probably use OrderedMap for this
      */
@@ -119,18 +117,23 @@ public class ClaimXml {
     }
 
     private Element addDateQuestionNode(Document document, Node parent, String tagName, String questionLabelKey, Object addressObj) {
-        throw new UnsupportedOperationException("addDateQuestionNode");
+        /*
+                Parameters.validateMandatoryArgs(questionLabelKey, "questionLabel");
+         */
+        Element dateNode = addNode(document, parent, tagName, null);
+        addNode(document, dateNode, "QuestionLabel", getResourceMessage(questionLabelKey));
+        addNode(document, dateNode, "Answer", "TODO");
+        return dateNode;
     }
 
-    public Document buildXml(Object claim, String transactionId, String schemaLocation, String version, String claimVersion, String origin, String language) {
-
+    public Document buildXml(Object claim, String transactionId, String version, String claimVersion, String origin, String language) {
         Document document = docBuilder.newDocument();
         Element dwpBody = document.createElement("DWPBody");
         document.appendChild(dwpBody);
         dwpBody.setAttribute("xmlns:ds", "http://www.w3.org/2000/09/xmldsig#");
         dwpBody.setAttribute("xmlns", "http://www.govtalk.gov.uk/dwp/carers-allowance");
         dwpBody.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        dwpBody.setAttribute("xsi:schemaLocation", schemaLocation);
+        dwpBody.setAttribute("xsi:schemaLocation", "http://www.govtalk.gov.uk/dwp/carers-allowance file:/future/schema/ca/CarersAllowance_Schema.xsd");
 
         addNode(document, dwpBody, "Version", version);
         addNode(document, dwpBody, "ClaimVersion", claimVersion);
