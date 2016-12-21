@@ -31,37 +31,9 @@ import uk.gov.dwp.carersallowance.utils.Parameters;
 public class DefaultFormController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultFormController.class);
 
-    private static final String HTTP_POST = "POST";
-    private static final String HTTP_GET = "GET";
-
     @Autowired
     public DefaultFormController(SessionManager sessionManager, MessageSource messageSource) {
         super(sessionManager, messageSource);
-    }
-
-    public boolean supportsRequest(HttpServletRequest request) {
-        LOG.info("Started DefaultFormController.supportsRequest");
-        Parameters.validateMandatoryArgs(request, "request");
-        try {
-            String method = request.getMethod();
-            if (HTTP_GET.equalsIgnoreCase(method) == false && HTTP_POST.equalsIgnoreCase(method) == false) {
-                LOG.error("Unsupported request method: {}", method);
-                return false;
-            }
-
-            String path = request.getServletPath();
-            LOG.info("method = {}, path = {}", method, path);
-            String fieldsKey = path + ".fields";
-            String fields = getMessageSource().getMessage(fieldsKey, null, null, Locale.getDefault()); // If there are no fields, but is an entry do we get null or ""?
-            if (fields == null) {
-                LOG.info("Unsupported request: {}", path);
-                return false;
-            }
-            return true;
-
-        } finally {
-            LOG.info("Ending DefaultFormController.supportsRequest");
-        }
     }
 
     /**
@@ -97,32 +69,6 @@ public class DefaultFormController extends AbstractFormController {
         } finally {
             LOG.info("Ending DefaultFormController.handleRequest");
         }
-    }
-
-
-    private final String APPVERSIONCOOKIENAME = "C3Version";
-
-    private void checkVersionCookie(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        for (int n = 0; n < (cookies==null ? 0 : cookies.length); n++) {
-            if (cookies[n].getName().equals(APPVERSIONCOOKIENAME)) {
-                // What to do if incorrect version ?? Let just log the error and write the new cookie version.
-                if (!cookies[n].getValue().equals(appVersionNumber())) {
-                    LOG.error("ApplicationVersion cookie {}  value:{} does not match expected version:{}", APPVERSIONCOOKIENAME, cookies[n].getValue(), appVersionNumber());
-                }
-            }
-        }
-    }
-
-    private void addVersionCookie(HttpServletResponse response) {
-        response.addCookie(new Cookie(APPVERSIONCOOKIENAME, appVersionNumber()));
-    }
-
-    @Value("${application.version}")
-    private String applicationVersion;
-
-    private String appVersionNumber() {
-        return (applicationVersion.replaceAll("-.*", ""));
     }
 }
 

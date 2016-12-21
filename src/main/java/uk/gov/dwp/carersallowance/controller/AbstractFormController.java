@@ -14,11 +14,13 @@ import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
 
@@ -40,6 +42,12 @@ public class AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractFormController.class);
 
     private static final String SESSION_TRANSFORMATIONS_KEY = "%s.transformations";
+
+    protected static final String HTTP_POST = "POST";
+    protected static final String HTTP_GET = "GET";
+
+    @Value("${application.version}")
+    private String applicationVersion;
 
     private static final String[] PAGES = {
             "/allowance/benefits",
@@ -73,7 +81,7 @@ public class AbstractFormController {
             "/information/additional-info",
             "/preview",
             "/consent-and-declaration/declaration",
-            "/thankyou/apply-carers"
+            "/submit-claim"
         };
 
     public static final String   PHONE_REGEX = "[ 0123456789]{0,20}";       // probably convert to an enum
@@ -1039,5 +1047,52 @@ public class AbstractFormController {
 
     public interface Validation {
         boolean validate(String value);
+    }
+
+    public boolean supportsRequest(HttpServletRequest request) {
+        LOG.info("Started DefaultFormController.supportsRequest");
+        Parameters.validateMandatoryArgs(request, "request");
+        try {
+            String method = request.getMethod();
+            if (HTTP_GET.equalsIgnoreCase(method) == false && HTTP_POST.equalsIgnoreCase(method) == false) {
+                LOG.error("Unsupported request method: {}", method);
+                return false;
+            }
+
+            String path = request.getServletPath();
+            LOG.info("method = {}, path = {}", method, path);
+            String fieldsKey = path + ".fields";
+            String fields = getMessageSource().getMessage(fieldsKey, null, null, Locale.getDefault()); // If there are no fields, but is an entry do we get null or ""?
+            if (fields == null) {
+                LOG.info("Unsupported request: {}", path);
+                return false;
+            }
+            return true;
+
+        } finally {
+            LOG.info("Ending DefaultFormController.supportsRequest");
+        }
+    }
+
+    private final String APPVERSIONCOOKIENAME = "C3Version";
+
+    protected void checkVersionCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        for (int n = 0; n < (cookies==null ? 0 : cookies.length); n++) {
+            if (cookies[n].getName().equals(APPVERSIONCOOKIENAME)) {
+                // What to do if incorrect version ?? Let just log the error and write the new cookie version.
+                if (!cookies[n].getValue().equals(appVersionNumber())) {
+                    LOG.error("ApplicationVersion cookie {}  value:{} does not match expected version:{}", APPVERSIONCOOKIENAME, cookies[n].getValue(), appVersionNumber());
+                }
+            }
+        }
+    }
+
+    protected void addVersionCookie(HttpServletResponse response) {
+        response.addCookie(new Cookie(APPVERSIONCOOKIENAME, appVersionNumber()));
+    }
+
+    private String appVersionNumber() {
+        return (applicationVersion.replaceAll("-.*", ""));
     }
 }
