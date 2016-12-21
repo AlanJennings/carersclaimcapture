@@ -1,8 +1,5 @@
 package uk.gov.dwp.carersallowance.xml;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -11,6 +8,11 @@ import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathFactory;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.greaterThan;
@@ -74,13 +76,13 @@ public class ClaimHeaderItemsTest {
         String dateTimeGenerated = getNodeValue("/DWPBody/DWPCATransaction/DateTimeGenerated");
         long dtgMillis = 0;
         try {
-            DateTimeFormatter dtf = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm");
-            DateTime dt = dtf.parseDateTime(dateTimeGenerated);
-            dtgMillis = dt.getMillis();
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm", Locale.getDefault());
+            LocalDateTime dt = LocalDateTime.parse(dateTimeGenerated, dtf);
+            dtgMillis = dt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         } catch (Exception e) {
             System.out.println("Exception parsing DateTimeGenerated:" + dateTimeGenerated + " " + e.toString());
         }
-        long nowmillis = DateTime.now().getMillis();
+        long nowmillis = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         assertThat("Datetime generated is after 70 secs ago", dtgMillis, greaterThan(nowmillis - 70000));
         assertThat("Datetime generated before now", dtgMillis, lessThanOrEqualTo(nowmillis));
     }
