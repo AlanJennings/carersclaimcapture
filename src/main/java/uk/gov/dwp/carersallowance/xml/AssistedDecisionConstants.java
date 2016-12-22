@@ -4,6 +4,7 @@ public class AssistedDecisionConstants {
     public static final int FIFTEENYEARSAND9MONTHS=15*12+9;
     public static final String YESANSWER = "yes";
     public static final String NOANSWER = "no";
+    public static final String QBPIP = "PIP";
     public static final String QBAFIP = "AFIP";
     public static final String BRITISH = "British";
     public static final String ANOTHERNATIONALITY = "Another nationality";

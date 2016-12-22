@@ -3,13 +3,8 @@ package uk.gov.dwp.carersallowance.xml;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import java.util.Map;
 import static uk.gov.dwp.carersallowance.xml.AssistedDecisionConstants.*;
 
@@ -51,7 +46,6 @@ public class AssistedDecision {
     private boolean isTooYoungDecision() {
         LocalDate carersDob = getDateFromClaim("carerDateOfBirth");
         LocalDate today=LocalDate.now();
-        System.out.println("COMPING dob:"+carersDob+" with today:"+today);
         if(carersDob!=null && carersDob.plusMonths(FIFTEENYEARSAND9MONTHS).compareTo(today)>0){
             setDecision("TOOYOUNG", "Customer does not turn 16 in next 3 months. Send Proforma 491 to customer.", "Potential disallowance decision,no table");
             return true;
@@ -194,7 +188,6 @@ public class AssistedDecision {
     }
 
     private String getFromClaim(String key) {
-        System.out.println("getFromClaim checking key:" + key + "->" + claimvalues.get(key));
         if (claimvalues.containsKey(key) && claimvalues.get(key).getClass().equals(String.class)) {
             return (String) claimvalues.get(key);
         }
@@ -202,7 +195,6 @@ public class AssistedDecision {
     }
 
     private Integer getIntFromClaim(String key) {
-        System.out.println("getIntFromClaim checking key:" + key + "->" + claimvalues.get(key));
         if (claimvalues.containsKey(key) && claimvalues.get(key).getClass().equals(Integer.class)) {
             return (Integer) claimvalues.get(key);
         } else if (claimvalues.containsKey(key) && claimvalues.get(key).getClass().equals(String.class)) {
