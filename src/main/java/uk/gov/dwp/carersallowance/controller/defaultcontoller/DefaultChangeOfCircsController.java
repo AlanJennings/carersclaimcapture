@@ -13,7 +13,7 @@ import java.util.Arrays;
 public class DefaultChangeOfCircsController extends AbstractFormController {
 
     private static final String[] PAGES = {
-        "/circumstances/report-changes/selection",
+        "/circumstances/report-changes/origin",
         "/circumstances/report-changes/change-selection"
     };
 
