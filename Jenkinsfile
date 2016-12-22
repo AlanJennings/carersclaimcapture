@@ -46,5 +46,8 @@ node ('master') {
             }
         }
     }
+    if (env.BRANCH_NAME == 'feature/packaging') {
+        artifactoryGradle.run switches: '-Dgradle.user.home=$JENKINS_HOME/.gradle', buildFile: 'build.gradle', tasks: 'rpm', server: server
+    }
 
 }
