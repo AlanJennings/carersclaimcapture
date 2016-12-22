@@ -40,7 +40,7 @@ node ('master') {
     }
     stage ('Deploy to lab') {
         sshagent(['8b4a081b-f1d6-424d-959f-ae9279d08b3b']) {
-            sh 'scp c3-*-SNAPSHOT-full.war c3javalab@37.26.89.94:c3java-latest-SNAPSHOT-full.war'
+            sh 'scp build/libs/c3-*-SNAPSHOT-full.war c3javalab@37.26.89.94:c3java-latest-SNAPSHOT-full.war'
             sh 'ssh c3javalab@37.26.89.94 "sudo /home/c3javalab/deploy.sh restart"'
         }
     }
