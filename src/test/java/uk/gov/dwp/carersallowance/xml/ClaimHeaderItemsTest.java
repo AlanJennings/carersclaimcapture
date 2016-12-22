@@ -2,7 +2,10 @@ package uk.gov.dwp.carersallowance.xml;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
 import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
 
 import javax.xml.xpath.XPath;
@@ -11,6 +14,7 @@ import javax.xml.xpath.XPathFactory;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -18,9 +22,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assert.assertThat;
-
+import static uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil.getNodeValue;
 
 public class ClaimHeaderItemsTest {
+    private static final Logger LOG = LoggerFactory.getLogger(ClaimHeaderItemsTest.class);
+
     private Document document;
     private XPath xpath;
     private String appVersion = "3.14";
@@ -48,57 +54,46 @@ public class ClaimHeaderItemsTest {
 
     @Test
     public void checkClaimXmlContainsC3AppVersion() {
-        assertThat(getNodeValue("/DWPBody/Version"), is(appVersion));
+        assertThat(getNodeValue(document, "/DWPBody/Version"), is(appVersion));
     }
 
     @Test
     public void checkClaimXmlContainsSchemaVersion() {
-        assertThat(getNodeValue("/DWPBody/ClaimVersion"), is(schemaVersion));
+        assertThat(getNodeValue(document, "/DWPBody/ClaimVersion"), is(schemaVersion));
     }
 
     @Test
     public void checkClaimXmlContainsOrigin() {
-        assertThat(getNodeValue("/DWPBody/Origin"), is(origin));
+        assertThat(getNodeValue(document, "/DWPBody/Origin"), is(origin));
     }
 
     @Test
     public void checkClaimXmlContainsDWPCATransactionIdAttribute() {
-        assertThat(getNodeValue("/DWPBody/DWPCATransaction/@id"), is(transactionId));
+        assertThat(getNodeValue(document, "/DWPBody/DWPCATransaction/@id"), is(transactionId));
     }
 
     @Test
     public void checkClaimXmlContainsTransactionId() {
-        assertThat(getNodeValue("/DWPBody/DWPCATransaction/TransactionId"), is(transactionId));
+        assertThat(getNodeValue(document, "/DWPBody/DWPCATransaction/TransactionId"), is(transactionId));
     }
 
     @Test
     public void checkClaimXmlContainsDateTimeGeneratedWithCorrectFormat() {
-        String dateTimeGenerated = getNodeValue("/DWPBody/DWPCATransaction/DateTimeGenerated");
-        long dtgMillis = 0;
+        String dateTimeGenerated = getNodeValue(document, "/DWPBody/DWPCATransaction/DateTimeGenerated");
+        long dtgSecs = 0;
         try {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm", Locale.getDefault());
-            LocalDateTime dt = LocalDateTime.parse(dateTimeGenerated, dtf);
-            dtgMillis = dt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+            dtgSecs = LocalDateTime.parse(dateTimeGenerated, dtf).toEpochSecond(ZoneOffset.UTC);
         } catch (Exception e) {
-            System.out.println("Exception parsing DateTimeGenerated:" + dateTimeGenerated + " " + e.toString());
+            LOG.error("Exception parsing DateTimeGenerated:{}", dateTimeGenerated, e);
         }
-        long nowmillis = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        assertThat("Datetime generated is after 70 secs ago", dtgMillis, greaterThan(nowmillis - 70000));
-        assertThat("Datetime generated before now", dtgMillis, lessThanOrEqualTo(nowmillis));
+        long nowsecs = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
+        assertThat("Datetime generated is after 70 secs ago", dtgSecs, greaterThan(nowsecs - 70));
+        assertThat("Datetime generated before now", dtgSecs, lessThanOrEqualTo(nowsecs));
     }
 
     @Test
     public void checkClaimXmlContainsLanguage() {
-        assertThat(getNodeValue("/DWPBody/DWPCATransaction/LanguageUsed"), is(language));
-    }
-
-    private String getNodeValue(String nodepath) {
-        String nodevalue = null;
-        try {
-            nodevalue = xpath.compile(nodepath).evaluate(document);
-        } catch (XPathException e) {
-            System.out.println("Exception compiling xpath:" + e.toString());
-        }
-        return nodevalue;
+        assertThat(getNodeValue(document, "/DWPBody/DWPCATransaction/LanguageUsed"), is(language));
     }
 }

@@ -1,6 +1,27 @@
 package uk.gov.dwp.carersallowance.utils.xml;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathException;
+import javax.xml.xpath.XPathFactory;
+
 public class ClaimXmlUtil {
+    private static final Logger LOG = LoggerFactory.getLogger(ClaimXmlUtil.class);
+
+    static public String getNodeValue(Document document, String nodepath) {
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        String nodevalue = null;
+        try {
+            nodevalue = xpath.compile(nodepath).evaluate(document);
+        } catch (XPathException e) {
+            LOG.error("Exception compiling xpath:{}", e.toString(), e);
+        }
+        return nodevalue;
+    }
+
 //    private static final Logger  LOG                  = LoggerFactory.getLogger(ClaimXmlUtil.class);
 //
 //    private static final String KEYSTORE_SYSTEM_KEY = "carers.keystore";
