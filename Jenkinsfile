@@ -46,7 +46,7 @@ node ('master') {
             }
         }
     }
-    if (env.BRANCH_NAME == 'feature/packaging') {
+    if (env.BRANCH_NAME == 'int-release') {
         stage ('Build RPM') {
             artifactoryGradle.run switches: '-Dgradle.user.home=$JENKINS_HOME/.gradle', buildFile: 'build.gradle', tasks: 'rpm', server: server
         }
