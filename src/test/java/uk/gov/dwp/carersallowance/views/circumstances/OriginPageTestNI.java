@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,7 +22,9 @@ import java.net.URISyntaxException;
 @SpringBootTest(classes = C3Application.class)
 @ContextConfiguration
 @WebAppConfiguration
-public class OriginPageTest {
+
+@TestPropertySource(properties = { "origin.tag=GB-NIR"})
+public class OriginPageTestNI {
 
     private static final String ORIGIN_PAGE = "/circumstances/report-changes/origin";
 
