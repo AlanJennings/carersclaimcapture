@@ -114,7 +114,7 @@ dependencies {
             'org.assertj:assertj-core:3.5.2',
             'org.springframework.security:spring-security-test'
     )
-    testCompile("gov.dwp.carers:testcommons:1.09-SNAPSHOT")
+    testCompile("gov.dwp.carers:testcommons:1.10-SNAPSHOT")
 }
 
 
