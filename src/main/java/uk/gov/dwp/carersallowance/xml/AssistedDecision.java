@@ -3,9 +3,11 @@ package uk.gov.dwp.carersallowance.xml;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
+
 import static uk.gov.dwp.carersallowance.xml.AssistedDecisionConstants.*;
 
 public class AssistedDecision {
@@ -45,8 +47,8 @@ public class AssistedDecision {
     // If carers is 15 years and 9 months then OK. If younger than this then raise decision.
     private boolean isTooYoungDecision() {
         LocalDate carersDob = getDateFromClaim("carerDateOfBirth");
-        LocalDate today=LocalDate.now();
-        if(carersDob!=null && carersDob.plusMonths(FIFTEENYEARSAND9MONTHS).compareTo(today)>0){
+        LocalDate today = LocalDate.now();
+        if (carersDob != null && carersDob.plusMonths(FIFTEENYEARSAND9MONTHS).compareTo(today) > 0) {
             setDecision("TOOYOUNG", "Customer does not turn 16 in next 3 months. Send Proforma 491 to customer.", "Potential disallowance decision,no table");
             return true;
         }
@@ -80,7 +82,7 @@ public class AssistedDecision {
     private boolean eeaPaymentsAbroad() {
         if ((getFromClaim("eeaGuardQuestion").equals(YESANSWER) && getFromClaim("benefitsFromEEADetails").equals(YESANSWER)) ||
                 (getFromClaim("eeaGuardQuestion").equals(YESANSWER) && getFromClaim("workingForEEADetails").equals(YESANSWER))) {
-            setDecision("EEAPAYMENTS","Assign to Exportability in CAMLite workflow.", "None,show table");
+            setDecision("EEAPAYMENTS", "Assign to Exportability in CAMLite workflow.", "None,show table");
             return true;
         }
         return false;
@@ -88,7 +90,7 @@ public class AssistedDecision {
 
     private boolean isInEducationDecision() {
         if (getFromClaim("beenInEducationSinceClaimDate").equals(YESANSWER)) {
-            setDecision("EDUCATION","Send DS790/790B COMB to customer.", "None,show table");
+            setDecision("EDUCATION", "Send DS790/790B COMB to customer.", "None,show table");
             return true;
         }
         return false;
@@ -114,46 +116,42 @@ public class AssistedDecision {
     }
 
     // If we got something unusual such as Trips52weeks, Additional Info, Employed, No Bank details etc.
-    private boolean isBlankShowTableDecision(){
-        //nationality->British
-        // nationality->Another nationality
-        // nationality, actualnationality
-        if(getFromClaim("nationality").equals(ANOTHERNATIONALITY) && getFromClaim("actualnationality")!=null && getFromClaim("actualnationality").length()>0){
+    private boolean isBlankShowTableDecision() {
+        if (getFromClaim("nationality").equals(ANOTHERNATIONALITY) && getFromClaim("actualnationality") != null && getFromClaim("actualnationality").length() > 0) {
             setDecision("ANOTHER-NATIONALITY", "None", "None,show table");
             return true;
-        }
-        else if(getFromClaim("xxxtrip52").equals(YESANSWER)){
+        } else if (getFromClaim("trip52Weeks").equals(YESANSWER) && getFromClaim("tripDetails").length() > 0) {
             setDecision("TRIP52WEEKS", "None", "None,show table");
             return true;
         }
         // TODO AFTER BREAKS
-        else if(getFromClaim("xxx got breaks").equals(YESANSWER)){
+        else if (getFromClaim("xxx got breaks").equals(YESANSWER)) {
             setDecision("BREAKS", "None", "None,show table");
             return true;
-        }
-        else if(getFromClaim("beenEmployedSince6MonthsBeforeClaim").equals(YESANSWER)){
+        } else if (getFromClaim("beenEmployedSince6MonthsBeforeClaim").equals(YESANSWER)) {
             setDecision("EMPLOYED", "None", "None,show table");
             return true;
-        }
-        else if(getFromClaim("beenSelfEmployedSince1WeekBeforeClaim").equals(YESANSWER)){
+        } else if (getFromClaim("beenSelfEmployedSince1WeekBeforeClaim").equals(YESANSWER)) {
             setDecision("SELFEMPLOYED", "None", "None,show table");
             return true;
-        }
-        // TODO AFTER INCOME
-        else if(getFromClaim("beenSelfEmployedSince1WeekBeforeClaim").equals(YESANSWER)){
-            setDecision("SELFEMPLOYED", "None", "None,show table");
+        } else if (getFromClaim("yourIncome_sickpay").equals(YESANSWER)
+                || getFromClaim("yourIncome_patmatadoppay").equals(YESANSWER)
+                || getFromClaim("yourIncome_fostering").equals(YESANSWER)
+                || getFromClaim("yourIncome_directpay").equals(YESANSWER)
+                || getFromClaim("yourIncome_rentalincome").equals(YESANSWER)
+                || getFromClaim("yourIncome_anyother").equals(YESANSWER)) {
+            setDecision("INCOME", "None", "None,show table");
             return true;
-        }
-        else if(getFromClaim("likeToPay").equals(NOANSWER)){
+        } else if (getFromClaim("likeToPay").equals(NOANSWER)) {
             setDecision("NOBANKDETAILS", "None", "None,show table");
             return true;
-        }
-        else if(getFromClaim("anythingElse").equals(YESANSWER) && getFromClaim("anythingElse").length()>0){
+        } else if (getFromClaim("anythingElse").equals(YESANSWER) && getFromClaim("anythingElseText").length() > 0) {
             setDecision("ADDITIONALINFO", "None", "None,show table");
             return true;
         }
         return false;
     }
+
     private boolean defaultDecision() {
         setDecision("DEFAULT", "Check CIS for benefits. Send Pro517 if relevant.", "Potential award,show table");
         return true;
