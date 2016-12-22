@@ -38,12 +38,13 @@ node ('master') {
     stage ('Publish build info') {
         server.publishBuildInfo buildInfo
     }
-    stage ('Deploy to lab') {
-        sshagent(['8b4a081b-f1d6-424d-959f-ae9279d08b3b']) {
-            sh 'scp build/libs/c3-*-SNAPSHOT-full.war c3javalab@37.26.89.94:c3java-latest-SNAPSHOT-full.war'
-            sh 'ssh c3javalab@37.26.89.94 "./deploy.sh restart > output.log 2>&1 &"'
+    if (env.BRANCH_NAME == 'integration') {
+        stage ('Deploy to lab') {
+            sshagent(['8b4a081b-f1d6-424d-959f-ae9279d08b3b']) {
+                sh 'scp build/libs/c3-*-SNAPSHOT-full.war c3javalab@37.26.89.94:c3java-latest-SNAPSHOT-full.war'
+                sh 'ssh c3javalab@37.26.89.94 "./deploy.sh restart > output.log 2>&1 &"'
+            }
         }
     }
-
 
 }
