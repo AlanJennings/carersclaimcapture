@@ -20,7 +20,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
 
@@ -47,14 +46,11 @@ public class AbstractFormController {
     protected static final String HTTP_POST = "POST";
     protected static final String HTTP_GET = "GET";
 
-    @Value("${application.version}")
-    private String applicationVersion;
-
     public static final String   PHONE_REGEX = "[ 0123456789]{0,20}";       // probably convert to an enum
     public static final String   EMAIL_REGEX = "[ 0123456789]{0,20}";       // probably convert to an enum
 
     private MessageSource     messageSource;
-    private SessionManager    sessionManager;
+    protected SessionManager    sessionManager;
     private ValidationSummary validationSummary;
     protected List<String>      pageList;
 
@@ -1083,9 +1079,6 @@ public class AbstractFormController {
         LOG.info("Started DefaultFormController.handleRequest");
         Parameters.validateMandatoryArgs(request, "request");
         try {
-            checkVersionCookie(request);
-            addVersionCookie(response);
-
             String path = request.getServletPath();
             String method = request.getMethod();
 
@@ -1108,27 +1101,5 @@ public class AbstractFormController {
         } finally {
             LOG.info("Ending DefaultFormController.handleRequest");
         }
-    }
-
-    private final String APPVERSIONCOOKIENAME = "C3Version";
-
-    protected void checkVersionCookie(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        for (int n = 0; n < (cookies==null ? 0 : cookies.length); n++) {
-            if (cookies[n].getName().equals(APPVERSIONCOOKIENAME)) {
-                // What to do if incorrect version ?? Let just log the error and write the new cookie version.
-                if (!cookies[n].getValue().equals(appVersionNumber())) {
-                    LOG.error("ApplicationVersion cookie {}  value:{} does not match expected version:{}", APPVERSIONCOOKIENAME, cookies[n].getValue(), appVersionNumber());
-                }
-            }
-        }
-    }
-
-    protected void addVersionCookie(HttpServletResponse response) {
-        response.addCookie(new Cookie(APPVERSIONCOOKIENAME, appVersionNumber()));
-    }
-
-    private String appVersionNumber() {
-        return (applicationVersion.replaceAll("-.*", ""));
     }
 }

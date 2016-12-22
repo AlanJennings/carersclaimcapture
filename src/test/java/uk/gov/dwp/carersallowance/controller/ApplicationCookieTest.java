@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.ui.Model;
 import uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultFormController;
 import uk.gov.dwp.carersallowance.controller.started.C3Application;
+import uk.gov.dwp.carersallowance.controller.started.ClaimStartedController;
 
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
@@ -20,9 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static org.junit.Assert.assertEquals;
-
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource(locations="classpath:test.application.properties")
@@ -30,7 +29,7 @@ import static org.mockito.Mockito.when;
 @DirtiesContext(classMode= DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ApplicationCookieTest {
     @Inject
-    private DefaultFormController formController;
+    private ClaimStartedController formController;
 
     @Mock
     private HttpServletRequest request;
@@ -56,13 +55,13 @@ public class ApplicationCookieTest {
     public void testCookieSet() {
         try {
             when(request.getMethod()).thenReturn("GET");
-            formController.handleRequest(request, response, model);
+            formController.showForm(request, response, model);
         } catch (Exception e) {
 
         }
         System.out.println("Response status:" + response.getStatus());
-        verify(response).addCookie(cookieCaptor.capture());
-        assertEquals("C3Version", cookieCaptor.getValue().getName());
-        assertEquals("4.02", cookieCaptor.getValue().getValue());
+        verify(response, times(3)).addCookie(cookieCaptor.capture());
+        assertEquals("C3Version", cookieCaptor.getAllValues().get(0).getName());
+        assertEquals("4.02", cookieCaptor.getAllValues().get(0).getValue());
     }
 }

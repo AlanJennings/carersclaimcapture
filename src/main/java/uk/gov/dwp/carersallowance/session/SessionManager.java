@@ -29,6 +29,10 @@ public class SessionManager {
         return session;
     }
 
+    public String createSessionId() {
+        return UUID.randomUUID().toString();
+    }
+
     /**
      * We don't need to synchronize this as new sessions are created using statistically
      * unique IDs that don't overlap
