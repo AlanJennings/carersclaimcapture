@@ -50,6 +50,10 @@ public class Session {
         data.remove(fieldName);
     }
 
+    public String getSessionId() {
+        return sessionId;
+    }
+
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         buffer.append(this.getClass().getName()).append("@").append(System.identityHashCode(this));

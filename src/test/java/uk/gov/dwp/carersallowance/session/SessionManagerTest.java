@@ -84,4 +84,13 @@ public class SessionManagerTest {
         when(cookieManager.getSessionIdFromCookie(request)).thenReturn(sessionId);
         assertThat(sessionManager.getSessionIdFromCookie(request), is(sessionId));
     }
+
+    @Test
+    public void testSaveSession() throws Exception {
+        final String sessionId = "1234";
+        final Session session1 = sessionDataService.createSessionData("1234");
+        session1.setAttribute("test", "test2");
+        sessionManager.saveSession(session1);
+        org.assertj.core.api.Assertions.assertThat(session1).isEqualToComparingFieldByField(sessionManager.getSession(sessionId));
+    }
 }

@@ -35,6 +35,7 @@ public class SessionDataServiceImpl implements SessionDataService {
 
     @Override
     public Session saveSessionData(final Session session) {
+        sessions.put(session.getSessionId(), session);
         return session;
     }
 
