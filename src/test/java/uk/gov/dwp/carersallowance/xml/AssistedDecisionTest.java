@@ -157,14 +157,14 @@ public class AssistedDecisionTest {
         assertThat(assistedDecision.getDecision(), is(NONESHOWTABLEDECISION));
     }
 
-    // "lived in UK less than 3 years then create an exportability assisted decision section "
+    // "lived in UK less than 3 years then create an exportability assisted decision section with refugee flag"
     @Test
     public void livedInUKlessThan3Years() {
         claimvalues.put("alwaysLivedInUK", NOANSWER);
         claimvalues.put("liveInUKNow", YESANSWER);
         claimvalues.put("arrivedInUK", "less");
         AssistedDecision assistedDecision = new AssistedDecision(65, claimvalues);
-        assertThat(assistedDecision.getReason(), is("Assign to Exportability in CAMLite workflow."));
+        assertThat(assistedDecision.getReason(), is("Assign to Exportability in CAMLite workflow. (Consider refugee status)"));
         assertThat(assistedDecision.getDecision(), is(NONESHOWTABLEDECISION));
     }
 

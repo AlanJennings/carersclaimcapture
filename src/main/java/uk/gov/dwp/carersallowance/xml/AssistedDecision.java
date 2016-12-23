@@ -96,10 +96,13 @@ public class AssistedDecision {
         return false;
     }
 
+    // Assign to Exportability in CAMLite workflow. (Consider refugee status)
     private boolean residencyDecision() {
-        if ((getFromClaim("alwaysLivedInUK").equals(NOANSWER) && getFromClaim("liveInUKNow").equals(NOANSWER)) ||
-                (getFromClaim("alwaysLivedInUK").equals(NOANSWER) && getFromClaim("liveInUKNow").equals(YESANSWER) && getFromClaim("arrivedInUK").equals("less"))) {
+        if (getFromClaim("alwaysLivedInUK").equals(NOANSWER) && getFromClaim("liveInUKNow").equals(NOANSWER)) {
             setDecision("RESIDENCY", "Assign to Exportability in CAMLite workflow.", "None,show table");
+            return true;
+        } else if (getFromClaim("alwaysLivedInUK").equals(NOANSWER) && getFromClaim("liveInUKNow").equals(YESANSWER) && getFromClaim("arrivedInUK").equals("less")) {
+            setDecision("RESIDENCY", "Assign to Exportability in CAMLite workflow. (Consider refugee status)", "None,show table");
             return true;
         }
         return false;
