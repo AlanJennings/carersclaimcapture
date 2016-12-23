@@ -51,6 +51,8 @@ public class ClaimStartedControllerTest {
 
     @Before
     public void setUp() throws Exception {
+        when(sessionManager.getSessionIdFromCookie(request)).thenReturn("12345");
+        when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))).thenReturn(session);
         claimStartedController = new ClaimStartedController(defaultFormController);
         attributes = new ArrayList<>();
     }
@@ -62,8 +64,6 @@ public class ClaimStartedControllerTest {
 
     @Test
     public void testPostForm() throws Exception {
-        when(sessionManager.getSessionIdFromCookie(request)).thenReturn("12345");
-        when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))).thenReturn(session);
         when(session.getAttributeNames()).thenReturn(attributes);
         when(request.getServletPath()).thenReturn("/allowance/benefits");
         assertThat(claimStartedController.postForm(request, model), is("redirect:/allowance/eligibility#"));

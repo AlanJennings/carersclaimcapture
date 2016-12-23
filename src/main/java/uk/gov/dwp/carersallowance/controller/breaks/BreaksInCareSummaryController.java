@@ -24,6 +24,7 @@ import uk.gov.dwp.carersallowance.session.FieldCollection;
 import uk.gov.dwp.carersallowance.session.FieldCollection.FieldCollectionComparator;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.session.UnknownRecordException;
+import uk.gov.dwp.carersallowance.sessiondata.Session;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
 @Controller
@@ -134,10 +135,12 @@ public class BreaksInCareSummaryController extends AbstractFormController {
     public String saveFieldCollection(HttpServletRequest request, Model model) {
         LOG.trace("Started BreaksInCareController.saveFieldCollection");
         try {
+            final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
             // put the type in the session (so we can get it back)
             String[] fieldCollectionFields = getFieldCollectionFields();
             LOG.debug("fieldCollectionFields = {}", Arrays.asList(fieldCollectionFields));
-            populateFieldCollectionEntry(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)), FIELD_COLLECTION_NAME, fieldCollectionFields, ID_FIELD);
+            populateFieldCollectionEntry(session, FIELD_COLLECTION_NAME, fieldCollectionFields, ID_FIELD);
+            sessionManager.saveSession(session);
 
             return "redirect:" + getCurrentPage(request);
         } catch(RuntimeException e) {
@@ -163,9 +166,12 @@ public class BreaksInCareSummaryController extends AbstractFormController {
                            Model model) {
         LOG.trace("Started EmploymentSummaryController.postForm");
         try {
+            final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
             if(StringUtils.isEmpty(idToChange) == false) {
                 try {
-                    return editFieldCollectionRecord(request, idToChange, FIELD_COLLECTION_NAME, ID_FIELD);
+                    final String editPage = editFieldCollectionRecord(session, idToChange, FIELD_COLLECTION_NAME, ID_FIELD);
+                    sessionManager.saveSession(session);
+                    return editPage;
                 } catch(UnknownRecordException e) {
                     getLegacyValidation().addFormError(idToChange, "break from care", "Unable to edit item");
                 }
@@ -173,7 +179,9 @@ public class BreaksInCareSummaryController extends AbstractFormController {
 
             if(StringUtils.isEmpty(idToDelete) == false) {
                 try {
-                    return deleteFieldCollectionRecord(idToDelete, request, FIELD_COLLECTION_NAME, ID_FIELD);
+                    final String deletePage =  deleteFieldCollectionRecord(session, idToDelete, request, FIELD_COLLECTION_NAME, ID_FIELD);
+                    sessionManager.saveSession(session);
+                    return deletePage;
                 } catch(UnknownRecordException e) {
                     getLegacyValidation().addFormError(idToDelete, "break from care", "Unable to delete item");
                 }
@@ -189,20 +197,20 @@ public class BreaksInCareSummaryController extends AbstractFormController {
         }
     }
 
-    protected String editFieldCollectionRecord(HttpServletRequest request, String idToChange, String fieldCollectionName, String idField) {
-        Parameters.validateMandatoryArgs(new Object[]{idToChange, request}, new String[]{"idToChange", "request"});
+    protected String editFieldCollectionRecord(Session session, String idToChange, String fieldCollectionName, String idField) {
+        Parameters.validateMandatoryArgs(new Object[]{idToChange, session}, new String[]{"idToChange", "session"});
 
         getValidationSummary().reset();
 
         // copy the record values into the edit fields in the session
-        List<Map<String, String>> records = getFieldCollections(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)), fieldCollectionName, true);
+        List<Map<String, String>> records = getFieldCollections(session, fieldCollectionName, true);
         Map<String, String> record = FieldCollection.getFieldCollection(records, idField, idToChange);
         if(record == null) {
             throw new UnknownRecordException("Unknown record id: " + idToChange);
         } else {
             LOG.debug("found record, for id: {}", idToChange);
 //            String[] fields = record.keySet().toArray(new String[]{});  // TODO instead of BreakInCareDetailController.FIELDS (?)
-            copyMapToSession(record, getFieldCollectionFields(), sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)));
+            copyMapToSession(record, getFieldCollectionFields(), session);
         }
 
         String breakType = record.get(BREAK_IN_CARE_TYPE);

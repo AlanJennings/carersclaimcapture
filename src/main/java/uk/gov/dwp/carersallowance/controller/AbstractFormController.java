@@ -205,10 +205,10 @@ public class AbstractFormController {
             if(fields == null || fields.length == 0) {
                 fields = getFields(getPageName());
             }
-
-            copyFromSessionToModel(request, fields, model);
-            copyFromSessionToModel(request, getSharedFields(), model);
-            copyFromSessionToModel(request, getReadOnlyFields(), model);
+            final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
+            copyFromSessionToModel(session, fields, model);
+            copyFromSessionToModel(session, getSharedFields(), model);
+            copyFromSessionToModel(session, getReadOnlyFields(), model);
 
             return getCurrentPage(request);        // returns the view name
         } catch(RuntimeException e) {
@@ -251,7 +251,9 @@ public class AbstractFormController {
 
             getValidationSummary().reset();
 
-            Map<String, String[]> existingFieldValues = getAllFieldValues(request);
+            final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
+
+            Map<String, String[]> existingFieldValues = getAllFieldValues(session);
             validate(fields, request.getParameterMap(), existingFieldValues);
 
             if(hasErrors()) {
@@ -266,10 +268,12 @@ public class AbstractFormController {
                 return form;
             }
 
-            copyFromRequestToSession(request, fields);
-            copyFromRequestToSession(request, getSharedFields());
+            copyFromRequestToSession(session, request, fields);
+            copyFromRequestToSession(session, request, getSharedFields());
 
             finalizePostForm(request);
+
+            sessionManager.saveSession(session);
 
             // add the fieldCollection id field to the url (if its populated)
 
@@ -292,17 +296,16 @@ public class AbstractFormController {
         }
     }
 
-    private Map<String, String[]> getAllFieldValues(HttpServletRequest request) {
+    private Map<String, String[]> getAllFieldValues(Session session) {
         LOG.trace("Started AbstractFormController.getAllFieldValues");
         try {
-            if(request == null) {
+            if(session == null) {
                 return null;
             }
 
             StringBuffer buffer = new StringBuffer();
 
             Map<String, String[]> map = new HashMap<>();
-            Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
             List<String> sessionNames = session.getAttributeNames();
             Collections.sort(sessionNames);
             for(String attrName: sessionNames) {
@@ -351,16 +354,15 @@ public class AbstractFormController {
     /**
      * Copy the named values from the session to the model
      */
-    protected void copyFromSessionToModel(final HttpServletRequest request, final String[] fieldNames, final Model model) {
+    protected void copyFromSessionToModel(final Session session, final String[] fieldNames, final Model model) {
         LOG.trace("Started AbstractFormController.copyFromSessionToModel");
         try {
-            Parameters.validateMandatoryArgs(new Object[]{request, model}, new String[]{"request", "model"});
+            Parameters.validateMandatoryArgs(new Object[]{session, model}, new String[]{"session", "model"});
             if (fieldNames == null) {
                 return;
             }
 
             LOG.debug("fieldNames = {}", Arrays.asList(fieldNames));
-            Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
             for (String fieldName: fieldNames) {
                 Object fieldValue = session.getAttribute(fieldName);
                 LOG.debug("fieldName = {}, fieldValue = {}", fieldName, fieldValue);
@@ -399,7 +401,7 @@ public class AbstractFormController {
     /**
      * Copy the named values from the model to the session
      */
-    protected void copyFromRequestToSession(HttpServletRequest request, String[] fieldNames) {
+    protected void copyFromRequestToSession(Session session, HttpServletRequest request, String[] fieldNames) {
         LOG.trace("Started AbstractFormController.copyFromRequestToSession");
         try {
             Parameters.validateMandatoryArgs(request, "request");
@@ -408,7 +410,6 @@ public class AbstractFormController {
             }
 
             LOG.debug("fieldNames = {}", Arrays.asList(fieldNames));
-            Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
             for(String fieldName: fieldNames) {
                 Object fieldValue;
                 String[] requestValues = request.getParameterMap().get(fieldName);
@@ -861,11 +862,10 @@ public class AbstractFormController {
         }
     }
 
-    protected String showFormEditFieldCollection(HttpServletRequest request, Model model, String fieldCollectionName, String idField) {
+    protected String showFormEditFieldCollection(Session session, HttpServletRequest request, Model model, String fieldCollectionName, String idField) {
         LOG.trace("Started EmploymentDetailsController.showForm");
         try {
             String destination = showFormInternal(request, model);
-            Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
 
             // if the ID field is populated then we are editing an existing record
             // and we should load the data, but only if we have not failed validation
@@ -900,11 +900,10 @@ public class AbstractFormController {
         }
     }
 
-    protected String editFieldCollectionRecord(HttpServletRequest request, String idToChange, String fieldCollectionName, String idField, String editingPage) {
-        Parameters.validateMandatoryArgs(new Object[]{idToChange, request}, new String[]{"idToChange", "request"});
+    protected String editFieldCollectionRecord(Session session, String idToChange, String fieldCollectionName, String idField, String editingPage) {
+        Parameters.validateMandatoryArgs(new Object[]{idToChange, session}, new String[]{"idToChange", "session"});
 
         getValidationSummary().reset();
-        Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
 
         // copy the record values into the edit fields in the session
         List<Map<String, String>> records = getFieldCollections(session, fieldCollectionName, true);
@@ -923,13 +922,13 @@ public class AbstractFormController {
      * Note: this does not validate the form
      * @param fieldCollectionName TODO
      */
-    protected String deleteFieldCollectionRecord(String idToDelete, HttpServletRequest request, String fieldCollectionName, String idField) {
+    protected String deleteFieldCollectionRecord(Session session, String idToDelete, HttpServletRequest request, String fieldCollectionName, String idField) {
         LOG.trace("Starting EmploymentHistoryController.deleteEmployment");
         try {
-            Parameters.validateMandatoryArgs(new Object[]{idToDelete, request}, new String[]{"idToDelete", "request"});
+            Parameters.validateMandatoryArgs(new Object[]{idToDelete, request, session}, new String[]{"idToDelete", "request", "session"});
 
             Integer foundIndex = null;
-            List<Map<String, String>> fieldCollectionList = getFieldCollections(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)), fieldCollectionName);
+            List<Map<String, String>> fieldCollectionList = getFieldCollections(session, fieldCollectionName);
             for(int index = 0; index < fieldCollectionList.size(); index++) {
                 Map<String, String> map = fieldCollectionList.get(index);
                 if(idToDelete.equals(map.get(idField))) {

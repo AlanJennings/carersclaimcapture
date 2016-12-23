@@ -50,6 +50,8 @@ public class CircsStartedControllerTest {
 
     @Before
     public void setUp() throws Exception {
+        when(sessionManager.getSessionIdFromCookie(request)).thenReturn("12345");
+        when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))).thenReturn(session);
         circsStartedController = new CircsStartedController("GB", defaultChangeOfCircsController);
         attributes = new ArrayList<>();
     }
@@ -61,8 +63,6 @@ public class CircsStartedControllerTest {
 
     @Test
     public void testPostCircsForm() throws Exception {
-        when(sessionManager.getSessionIdFromCookie(request)).thenReturn("12345");
-        when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))).thenReturn(session);
         when(session.getAttributeNames()).thenReturn(attributes);
         when(request.getServletPath()).thenReturn("/circumstances/report-changes/selection");
         assertThat(circsStartedController.postCircsForm(request, model), is("redirect:/circumstances/report-changes/change-selection#"));

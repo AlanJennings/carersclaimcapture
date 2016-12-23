@@ -23,6 +23,7 @@ import uk.gov.dwp.carersallowance.session.FieldCollection;
 import uk.gov.dwp.carersallowance.session.FieldCollection.FieldCollectionComparator;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.session.UnknownRecordException;
+import uk.gov.dwp.carersallowance.sessiondata.Session;
 
 @Controller
 public class EmploymentSummaryController extends AbstractFormController {
@@ -67,22 +68,24 @@ public class EmploymentSummaryController extends AbstractFormController {
         try {
             Boolean moreEmployment = getYesNoBooleanFieldValue(request, "moreEmployment");
             LOG.debug("moreEmployment = {}", moreEmployment);
+            final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
             if(Boolean.TRUE.equals(moreEmployment)) {
                 // reset the moreEmployment question
-                sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)).removeAttribute("moreEmployment");
+                session.removeAttribute("moreEmployment");
+                sessionManager.saveSession(session);
                 LOG.debug("redirecting to employment detail page: {}.", EMPLOYMENT_DETAIL);
                 return EMPLOYMENT_DETAIL;
             }
 
             // sort the employment here, so they are sorted when we revisit this page, but
             // not while we are working on it, as that might be confusing
-            List<Map<String, String>> employments = getFieldCollections(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)), FIELD_COLLECTION_NAME);
+            List<Map<String, String>> employments = getFieldCollections(session, FIELD_COLLECTION_NAME);
             if(employments != null) {
                 FieldCollectionComparator comparator = new FieldCollectionComparator(SORTING_FIELDS);
                 Collections.sort(employments, comparator);
             }
 
-            return super.getNextPage(request, YourIncomeController.getIncomePageList(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))));
+            return super.getNextPage(request, YourIncomeController.getIncomePageList(session));
         } finally {
             LOG.trace("Ending EmploymentSummaryController.getNextPage");
         }
@@ -158,18 +161,23 @@ public class EmploymentSummaryController extends AbstractFormController {
                            Model model) {
         LOG.trace("Started EmploymentSummaryController.postForm");
         try {
-            if(StringUtils.isEmpty(idToChange) == false) {
+            final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
+            if (StringUtils.isEmpty(idToChange) == false) {
                 try {
-                    return editFieldCollectionRecord(request, idToChange, FIELD_COLLECTION_NAME, ID_FIELD, EDITING_PAGE);
-                } catch(UnknownRecordException e) {
+                    final String editPage = editFieldCollectionRecord(session, idToChange, FIELD_COLLECTION_NAME, ID_FIELD, EDITING_PAGE);
+                    sessionManager.saveSession(session);
+                    return editPage;
+                } catch (UnknownRecordException e) {
                     getLegacyValidation().addFormError(idToChange, "break from care", "Unable to edit item");
                 }
             }
 
-            if(StringUtils.isEmpty(idToDelete) == false) {
+            if (StringUtils.isEmpty(idToDelete) == false) {
                 try {
-                    return deleteFieldCollectionRecord(idToDelete, request, FIELD_COLLECTION_NAME, ID_FIELD);
-                } catch(UnknownRecordException e) {
+                    final String deletePage = deleteFieldCollectionRecord(session, idToDelete, request, FIELD_COLLECTION_NAME, ID_FIELD);
+                    sessionManager.saveSession(session);
+                    return deletePage;
+                } catch (UnknownRecordException e) {
                     getLegacyValidation().addFormError(idToDelete, "break from care", "Unable to delete item");
                 }
             }
