@@ -26,7 +26,7 @@ import java.net.URISyntaxException;
 @TestPropertySource(properties = { "origin.tag=GB-NIR"})
 public class OriginPageTestNI {
 
-    private static final String ORIGIN_PAGE = "/circumstances/report-changes/origin";
+    private static final String ORIGIN_PAGE = "/circumstances/report-changes/selection";
 
     @Autowired
     private WebApplicationContext wac;

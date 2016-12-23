@@ -3,7 +3,6 @@ package uk.gov.dwp.carersallowance.controller.breaks;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
+
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 /**
@@ -34,7 +34,7 @@ public class BreakSomewhereElseController extends AbstractFormController {
     public static final String[] SHARED_FIELDS = {"break_id", "breakInCareType"};
 
     @Autowired
-    public BreakSomewhereElseController(SessionManager sessionManager, MessageSource messageSource) {
+    public BreakSomewhereElseController(final SessionManager sessionManager, final MessageSource messageSource) {
         super(sessionManager, messageSource);
     }
 
@@ -69,10 +69,10 @@ public class BreakSomewhereElseController extends AbstractFormController {
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
-    public String postForm(HttpServletRequest request, HttpSession session, Model model) {
+    public String postForm(HttpServletRequest request, Model model) {
         LOG.trace("Starting BreakInCareDetailController.postForm");
         try {
-            return super.postForm(request, session, model);
+            return super.postForm(request, model);
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;

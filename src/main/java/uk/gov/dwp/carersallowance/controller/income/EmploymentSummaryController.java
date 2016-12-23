@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
+
 import uk.gov.dwp.carersallowance.session.FieldCollection;
 import uk.gov.dwp.carersallowance.session.FieldCollection.FieldCollectionComparator;
 import uk.gov.dwp.carersallowance.session.SessionManager;
@@ -47,7 +47,7 @@ public class EmploymentSummaryController extends AbstractFormController {
     public static final String   ID_FIELD              = "employment_id";
 
     @Autowired
-    public EmploymentSummaryController(SessionManager sessionManager, MessageSource messageSource) {
+    public EmploymentSummaryController(final SessionManager sessionManager, final MessageSource messageSource) {
         super(sessionManager, messageSource);
     }
 
@@ -69,20 +69,20 @@ public class EmploymentSummaryController extends AbstractFormController {
             LOG.debug("moreEmployment = {}", moreEmployment);
             if(Boolean.TRUE.equals(moreEmployment)) {
                 // reset the moreEmployment question
-                request.getSession().removeAttribute("moreEmployment");
+                sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)).removeAttribute("moreEmployment");
                 LOG.debug("redirecting to employment detail page: {}.", EMPLOYMENT_DETAIL);
                 return EMPLOYMENT_DETAIL;
             }
 
             // sort the employment here, so they are sorted when we revisit this page, but
             // not while we are working on it, as that might be confusing
-            List<Map<String, String>> employments = getFieldCollections(request.getSession(), FIELD_COLLECTION_NAME);
+            List<Map<String, String>> employments = getFieldCollections(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)), FIELD_COLLECTION_NAME);
             if(employments != null) {
                 FieldCollectionComparator comparator = new FieldCollectionComparator(SORTING_FIELDS);
                 Collections.sort(employments, comparator);
             }
 
-            return super.getNextPage(request, YourIncomeController.getIncomePageList(request.getSession()));
+            return super.getNextPage(request, YourIncomeController.getIncomePageList(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))));
         } finally {
             LOG.trace("Ending EmploymentSummaryController.getNextPage");
         }
@@ -106,7 +106,7 @@ public class EmploymentSummaryController extends AbstractFormController {
     public String showForm(HttpServletRequest request, Model model) {
         LOG.trace("Started EmploymentSummaryController.showForm");
         try {
-            List<Map<String, String>> employments = getFieldCollections(request.getSession(), FIELD_COLLECTION_NAME);
+            List<Map<String, String>> employments = getFieldCollections(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)), FIELD_COLLECTION_NAME);
             if(employments == null || employments.isEmpty()) {
                 return "redirect:" + EMPLOYMENT_DETAIL;
             }
@@ -137,7 +137,7 @@ public class EmploymentSummaryController extends AbstractFormController {
                                                                                  getFields(LAST_WAGE_PAGE_NAME),
                                                                                  getFields(PENSION_EXPENSES_PAGE_NAME));
 
-            populateFieldCollectionEntry(request.getSession(), FIELD_COLLECTION_NAME, fieldCollectionFields, ID_FIELD);
+            populateFieldCollectionEntry(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)), FIELD_COLLECTION_NAME, fieldCollectionFields, ID_FIELD);
 
             return "redirect:" + getCurrentPage(request);
         } catch(RuntimeException e) {
@@ -155,7 +155,6 @@ public class EmploymentSummaryController extends AbstractFormController {
     public String postForm(HttpServletRequest request,
                            @ModelAttribute("changeEmployment") String idToChange,
                            @ModelAttribute("deleteEmployment") String idToDelete,
-                           HttpSession session,
                            Model model) {
         LOG.trace("Started EmploymentSummaryController.postForm");
         try {
@@ -176,7 +175,7 @@ public class EmploymentSummaryController extends AbstractFormController {
             }
 
             // handling of the "moreEmployment" question is handled in getNextPage()
-            return super.postForm(request, session, model);
+            return super.postForm(request, model);
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;

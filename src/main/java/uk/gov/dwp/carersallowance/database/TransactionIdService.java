@@ -19,4 +19,8 @@ public class TransactionIdService {
     public String getTransactionId() {
         return databaseService.getTransactionId(originTag);
     }
+
+    public String getTransactionStatusById(final String transactionId) {
+        return databaseService.getTransactionStatusById(transactionId);
+    }
 }

@@ -113,7 +113,7 @@ public class LegacyValidation {
      * Validate that all date fields are populated (field is mandatory)
      * @param allfieldValues
      * @param id
-     * @param fieldTitle
+     * @param args
      */
     public void validateMandatoryDateField(Map<String, String[]> allfieldValues, String id, Object... args) {
         LOG.trace("Started AbstractFormController.validateMandatoryDateField");
@@ -196,7 +196,7 @@ public class LegacyValidation {
     }
 
     /**
-     * @param allMandatory if true all must be populated, if false at least one must be populated
+     * @param allfieldValues if true all must be populated, if false at least one must be populated
      */
     public void validateMandatoryFieldGroupAnyField(Map<String, String[]> allfieldValues, String id, String fieldTitle, String...fieldNames) {
         LOG.trace("Started AbstractFormController.validateMandatoryField");

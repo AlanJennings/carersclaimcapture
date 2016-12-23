@@ -1,7 +1,6 @@
 package uk.gov.dwp.carersallowance.controller.breaks;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +31,7 @@ public class BreakInHospitalController extends AbstractFormController {
     public static final String[] SHARED_FIELDS = {"break_id", "breakInCareType"};
 
     @Autowired
-    public BreakInHospitalController(SessionManager sessionManager, MessageSource messageSource) {
+    public BreakInHospitalController(final SessionManager sessionManager, MessageSource messageSource) {
         super(sessionManager, messageSource);
     }
 
@@ -67,10 +66,10 @@ public class BreakInHospitalController extends AbstractFormController {
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
-    public String postForm(HttpServletRequest request, HttpSession session, Model model) {
+    public String postForm(HttpServletRequest request, Model model) {
         LOG.trace("Starting BreakInCareDetailController.postForm");
         try {
-            return super.postForm(request, session, model);
+            return super.postForm(request, model);
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;

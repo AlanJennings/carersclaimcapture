@@ -17,15 +17,16 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import uk.gov.dwp.carersallowance.controller.XmlBuilder;
 import uk.gov.dwp.carersallowance.database.TransactionIdService;
+
+import uk.gov.dwp.carersallowance.session.CookieManager;
 import uk.gov.dwp.carersallowance.session.SessionManager;
-import uk.gov.dwp.carersallowance.session.SessionManager.Session;
+import uk.gov.dwp.carersallowance.sessiondata.Session;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList.MappingException;
@@ -47,14 +48,12 @@ public class SubmitClaimController {
     private static final String SUCCESS_PAGE       = "/async-submitting";
 //    private static final String FAILED_PAGE        = "/oh-no-its-all-gone-horribly-wrong";
 
-    private SessionManager       sessionManager;
-    private MessageSource        messageSource;
+    private SessionManager sessionManager;
     private TransactionIdService transactionIdService;
 
     @Autowired
-    public SubmitClaimController(SessionManager sessionManager, MessageSource messageSource, TransactionIdService transactionIdService) {
+    public SubmitClaimController(final SessionManager sessionManager, final TransactionIdService transactionIdService) {
         this.sessionManager = sessionManager;
-        this.messageSource = messageSource;
         this.transactionIdService = transactionIdService;
     }
 
@@ -62,17 +61,17 @@ public class SubmitClaimController {
      * This allows an easy to submit route, but is only temporary.
      */
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
-    public String showForm(HttpServletRequest request) {
+    public String showForm(final HttpServletRequest request) {
         return postForm(request);
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
-    public String postForm(HttpServletRequest request) {
+    public String postForm(final HttpServletRequest request) {
 
         LOG.trace("Starting SubmitClaimController.postForm");
         try {
             LOG.debug("request.getParameterMap() = {}", request.getParameterMap()); // log these jsut in case
-            Session session = sessionManager.createFromHttpSession(request.getSession());
+            Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
 
             String xml = buildClaimXml(session);
             //return xml;
@@ -98,12 +97,11 @@ public class SubmitClaimController {
      * @throws ParserConfigurationException
      * @throws MappingException
      */
-    private String buildClaimXml(Session session) throws IOException, InstantiationException, ParserConfigurationException, MappingException {
+    private String buildClaimXml(final Session session) throws IOException, InstantiationException, ParserConfigurationException, MappingException {
         Parameters.validateMandatoryArgs(session, "session");
 
         Map<String, XPathMappingList> mappings = new HashMap<>();
-        loadXPathMappings(mappings, null, XML_MAPPING__CLAIM);
-        loadXPathMappings(mappings, "CareBreak", XML_MAPPING__CLAIM_CAREBREAK);
+        loadXPathMappings(mappings);
 
         Map<String, Object> sessionMap = new HashMap<>(session.getData());
 
@@ -128,9 +126,7 @@ public class SubmitClaimController {
         return xml;
     }
 
-    private void loadXPathMappings(Map<String, XPathMappingList> mappings, String name, String resourceName)
-            throws IOException, MappingException {
-
+    private void loadXPathMappings(final Map<String, XPathMappingList> mappings) throws IOException, MappingException {
         URL claimTemplateUrl = this.getClass().getClassLoader().getResource(XML_MAPPING__CLAIM);
         List<String> xmlMappings = readLines(claimTemplateUrl);
         XPathMappingList valueMappings = new XPathMappingList();
@@ -138,14 +134,14 @@ public class SubmitClaimController {
         mappings.put(null, valueMappings);
     }
 
-    public static String currentDateTime(String format) {
+    public static String currentDateTime(final String format) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(format);
         String now = dateFormat.format(new Date());
         return now;
     }
 
-    public static List<String> readLines(URL url) throws IOException {
-        if(url == null) {
+    public static List<String> readLines(final URL url) throws IOException {
+        if (url == null) {
             return null;
         }
 
@@ -157,7 +153,5 @@ public class SubmitClaimController {
         } finally {
             IOUtils.closeQuietly(inputStream);
         }
-
     }
-
 }

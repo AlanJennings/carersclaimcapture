@@ -3,18 +3,20 @@ package uk.gov.dwp.carersallowance.controller.started;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
-import uk.gov.dwp.carersallowance.session.CookieManager;
+import uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultFormController;
+
 import uk.gov.dwp.carersallowance.session.SessionManager;
+import uk.gov.dwp.carersallowance.sessiondata.Session;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import java.util.Enumeration;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
@@ -28,32 +30,29 @@ public class ClaimStartedControllerTest {
     private ClaimStartedController claimStartedController;
 
     @Mock
-    private CookieManager cookieManager;
-
-    @Mock
     private HttpServletRequest request;
 
     @Mock
     private HttpServletResponse response;
 
     @Mock
-    private HttpSession session;
+    private Session session;
 
     @Mock
     private Model model;
 
+    @InjectMocks
+    private DefaultFormController defaultFormController;
+
     @Mock
     private SessionManager sessionManager;
 
-    @Mock
-    private MessageSource messageSource;
-
-    @Mock
-    private Enumeration<String> attributes;
+    private List<String> attributes;
 
     @Before
     public void setUp() throws Exception {
-        claimStartedController = new ClaimStartedController(sessionManager, messageSource, cookieManager);
+        claimStartedController = new ClaimStartedController(defaultFormController);
+        attributes = new ArrayList<>();
     }
 
     @Test
@@ -63,9 +62,10 @@ public class ClaimStartedControllerTest {
 
     @Test
     public void testPostForm() throws Exception {
-        when(request.getSession()).thenReturn(session);
+        when(sessionManager.getSessionIdFromCookie(request)).thenReturn("12345");
+        when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))).thenReturn(session);
         when(session.getAttributeNames()).thenReturn(attributes);
         when(request.getServletPath()).thenReturn("/allowance/benefits");
-        assertThat(claimStartedController.postForm(request, session, model), is("redirect:/allowance/eligibility#"));
+        assertThat(claimStartedController.postForm(request, model), is("redirect:/allowance/eligibility#"));
     }
 }

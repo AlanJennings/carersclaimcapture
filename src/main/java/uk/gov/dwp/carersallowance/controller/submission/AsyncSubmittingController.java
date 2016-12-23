@@ -33,6 +33,25 @@ public class AsyncSubmittingController {
     public String postForm(HttpServletRequest request) {
         LOG.trace("Starting AsyncSubmittingController.postForm");
         try {
+//            String transactionStatus = transactionIdService.getTransactionStatusById(claim.transactionId.getOrElse(""));
+//
+//            Logger.info("Checking transaction status: {} for {} {}", transactionStatus, claim.key, claim.uuid);
+//            switch(transactionStatus) {
+//                case SUCCESS || ACKNOWLEDGED :
+//                    Redirect(redirectThankYou);
+//                    break;
+//                case GENERATED || SUBMITTED :
+//                    Redirect(redirectSubmitting);
+//                    break;
+//                case SERVICE_UNAVAILABLE :
+//                    Redirect(redirectErrorRetry);
+//                    break;
+//                case "" :
+//                    Redirect(redirectTimeout);
+//                    break;
+//                default :
+//                    Redirect(redirectError);
+//            }
             return "redirect:" + SUCCESS_PAGE;
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);

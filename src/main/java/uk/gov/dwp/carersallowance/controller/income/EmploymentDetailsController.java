@@ -10,6 +10,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
+
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 @Controller
@@ -22,13 +23,13 @@ public class EmploymentDetailsController extends AbstractFormController {
     private static final String  FIELD_COLLECTION_NAME = EmploymentSummaryController.FIELD_COLLECTION_NAME;
 
     @Autowired
-    public EmploymentDetailsController(SessionManager sessionManager, MessageSource messageSource) {
+    public EmploymentDetailsController(final SessionManager sessionManager, final MessageSource messageSource) {
         super(sessionManager, messageSource);
     }
 
     @Override
     public String getPreviousPage(HttpServletRequest request) {
-        List<Map<String, String>> employments = getFieldCollections(request.getSession(), FIELD_COLLECTION_NAME, true);
+        List<Map<String, String>> employments = getFieldCollections(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)), FIELD_COLLECTION_NAME, true);
         if(employments == null || employments.isEmpty()) {
             return YOUR_INCOME_PAGE;
         }

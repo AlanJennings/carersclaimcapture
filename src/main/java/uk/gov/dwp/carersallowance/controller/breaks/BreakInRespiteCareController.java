@@ -3,7 +3,6 @@ package uk.gov.dwp.carersallowance.controller.breaks;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
+
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 /**
@@ -35,7 +35,7 @@ public class BreakInRespiteCareController extends AbstractFormController {
 
 // FIELDS = respiteBreakWhoInRespite, respiteBreakCarerRespiteStartDate_day, respiteBreakCarerRespiteStartDate_month, respiteBreakCarerRespiteStartDate_year, respiteBreakCarerRespiteStayEnded, respiteBreakCarerRespiteEndDate_day, respiteBreakCarerRespiteEndDate_month, respiteBreakCarerRespiteEndDate_year, respiteBreakCarerRespiteStayMedicalCare, respiteBreakCareeRespiteStartDate_day, respiteBreakCareeRespiteStartDate_month, respiteBreakCareeRespiteStartDate_year, respiteBreakCareeRespiteStayEnded, respiteBreakCareeRespiteEndDate_day, respiteBreakCareeRespiteEndDate_month, respiteBreakCareeRespiteEndDate_year, respiteBreakCareeRespiteStayMedicalCare, respiteBreakCareeRespiteCarerStillCaring
     @Autowired
-    public BreakInRespiteCareController(SessionManager sessionManager, MessageSource messageSource) {
+    public BreakInRespiteCareController(final SessionManager sessionManager, final MessageSource messageSource) {
         super(sessionManager, messageSource);
     }
 
@@ -70,10 +70,10 @@ public class BreakInRespiteCareController extends AbstractFormController {
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
-    public String postForm(HttpServletRequest request, HttpSession session, Model model) {
+    public String postForm(HttpServletRequest request, Model model) {
         LOG.trace("Starting BreakInCareDetailController.postForm");
         try {
-            return super.postForm(request, session, model);
+            return super.postForm(request, model);
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;

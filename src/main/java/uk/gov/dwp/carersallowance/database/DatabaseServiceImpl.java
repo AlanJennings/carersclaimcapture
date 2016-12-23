@@ -45,4 +45,9 @@ public class DatabaseServiceImpl implements DatabaseService {
         String transactionId = list.get(0).get("result");
         return transactionId;
     }
+
+    @Override
+    public String getTransactionStatusById(String transactionId) {
+        return null;
+    }
 }

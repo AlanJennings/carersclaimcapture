@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
+
 import uk.gov.dwp.carersallowance.session.FieldCollection;
 import uk.gov.dwp.carersallowance.session.FieldCollection.FieldCollectionComparator;
 import uk.gov.dwp.carersallowance.session.SessionManager;
@@ -52,7 +52,7 @@ public class BreaksInCareSummaryController extends AbstractFormController {
     private static final String   ID_FIELD              = "break_id";
 
     @Autowired
-    public BreaksInCareSummaryController(SessionManager sessionManager, MessageSource messageSource) {
+    public BreaksInCareSummaryController(final SessionManager sessionManager, final MessageSource messageSource) {
         super(sessionManager, messageSource);
     }
 
@@ -69,7 +69,7 @@ public class BreaksInCareSummaryController extends AbstractFormController {
             LOG.debug("moreBreaksInCare = {}", moreBreaksInCare);
             if(Boolean.TRUE.equals(moreBreaksInCare)) {
                 // reset the moreBreaksInCare question
-                request.getSession().removeAttribute("moreBreaksInCare");
+                sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)).removeAttribute("moreBreaksInCare");
                 String breakType = getRequestValue("moreBreaksInCareResidence", request);
                 LOG.debug("breakType = {}", breakType);
 
@@ -90,7 +90,7 @@ public class BreaksInCareSummaryController extends AbstractFormController {
 
             // sort the breaks here, so they are sorted when we revisit this page, but
             // not while we are working on it, as that might be confusing
-            List<Map<String, String>> breaks = getFieldCollections(request.getSession(), FIELD_COLLECTION_NAME);
+            List<Map<String, String>> breaks = getFieldCollections(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)), FIELD_COLLECTION_NAME);
             if(breaks != null) {
                 FieldCollectionComparator comparator = new FieldCollectionComparator(SORTING_FIELDS);
                 Collections.sort(breaks, comparator);
@@ -131,13 +131,13 @@ public class BreaksInCareSummaryController extends AbstractFormController {
      * over the individual page handlers (the request will need populating)
      */
     @RequestMapping(value=SAVE_EDITED_PAGE, method = RequestMethod.GET)
-    public String saveFieldCollection(HttpServletRequest request, HttpSession session, Model model) {
+    public String saveFieldCollection(HttpServletRequest request, Model model) {
         LOG.trace("Started BreaksInCareController.saveFieldCollection");
         try {
             // put the type in the session (so we can get it back)
             String[] fieldCollectionFields = getFieldCollectionFields();
             LOG.debug("fieldCollectionFields = {}", Arrays.asList(fieldCollectionFields));
-            populateFieldCollectionEntry(session, FIELD_COLLECTION_NAME, fieldCollectionFields, ID_FIELD);
+            populateFieldCollectionEntry(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)), FIELD_COLLECTION_NAME, fieldCollectionFields, ID_FIELD);
 
             return "redirect:" + getCurrentPage(request);
         } catch(RuntimeException e) {
@@ -160,7 +160,6 @@ public class BreaksInCareSummaryController extends AbstractFormController {
     public String postForm(HttpServletRequest request,
                            @ModelAttribute("changeBreak") String idToChange,
                            @ModelAttribute("deleteBreak") String idToDelete,
-                           HttpSession session,
                            Model model) {
         LOG.trace("Started EmploymentSummaryController.postForm");
         try {
@@ -181,7 +180,7 @@ public class BreaksInCareSummaryController extends AbstractFormController {
             }
 
             // handling of the "moreEmployment" question is handled in getNextPage()
-            return super.postForm(request, session, model);
+            return super.postForm(request, model);
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
@@ -196,14 +195,14 @@ public class BreaksInCareSummaryController extends AbstractFormController {
         getValidationSummary().reset();
 
         // copy the record values into the edit fields in the session
-        List<Map<String, String>> records = getFieldCollections(request.getSession(), fieldCollectionName, true);
+        List<Map<String, String>> records = getFieldCollections(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)), fieldCollectionName, true);
         Map<String, String> record = FieldCollection.getFieldCollection(records, idField, idToChange);
         if(record == null) {
             throw new UnknownRecordException("Unknown record id: " + idToChange);
         } else {
             LOG.debug("found record, for id: {}", idToChange);
 //            String[] fields = record.keySet().toArray(new String[]{});  // TODO instead of BreakInCareDetailController.FIELDS (?)
-            copyMapToSession(record, getFieldCollectionFields(), request.getSession());
+            copyMapToSession(record, getFieldCollectionFields(), sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)));
         }
 
         String breakType = record.get(BREAK_IN_CARE_TYPE);

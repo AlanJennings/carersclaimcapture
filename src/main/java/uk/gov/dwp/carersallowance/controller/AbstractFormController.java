@@ -15,7 +15,6 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -24,12 +23,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
 
 import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
-import uk.gov.dwp.carersallowance.session.FieldCollection;
-import uk.gov.dwp.carersallowance.session.IllegalFieldValueException;
-import uk.gov.dwp.carersallowance.session.InconsistentFieldValuesException;
-import uk.gov.dwp.carersallowance.session.SessionManager;
-import uk.gov.dwp.carersallowance.session.SessionManager.Session;
-import uk.gov.dwp.carersallowance.session.UnknownRecordException;
+import uk.gov.dwp.carersallowance.session.*;
+import uk.gov.dwp.carersallowance.sessiondata.Session;
 import uk.gov.dwp.carersallowance.transformations.Transformation;
 import uk.gov.dwp.carersallowance.transformations.TransformationType;
 import uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper;
@@ -50,9 +45,11 @@ public class AbstractFormController {
     public static final String   EMAIL_REGEX = "[ 0123456789]{0,20}";       // probably convert to an enum
 
     private MessageSource     messageSource;
-    protected SessionManager    sessionManager;
+    protected SessionManager sessionManager;
     private ValidationSummary validationSummary;
     protected List<String>      pageList;
+
+    //protected CookieManager cookieManager;
 
     protected static final String[] PAGES = {
             "/allowance/benefits",
@@ -91,7 +88,7 @@ public class AbstractFormController {
 
     private LegacyValidation  legacyValidation; //  TODO remove this
 
-    public AbstractFormController(SessionManager sessionManager, MessageSource messageSource) {
+    public AbstractFormController(final SessionManager sessionManager, final MessageSource messageSource) {
         this.sessionManager = sessionManager;
         this.messageSource = messageSource;
 
@@ -182,7 +179,7 @@ public class AbstractFormController {
         return nextPage;
     }
 
-    protected String showForm(HttpServletRequest request, Model model) {
+    public String showForm(HttpServletRequest request, Model model) {
         return showFormInternal(request, model);
     }
 
@@ -243,11 +240,10 @@ public class AbstractFormController {
      * Including RedirectAttributes is needed if we wish redirects to work at all
      * even if we never use it!!
      */
-    protected String postForm(HttpServletRequest request, HttpSession session, Model model) {
+    public String postForm(HttpServletRequest request, Model model) {
 
         LOG.trace("Starting AbstractFormController.postForm");
         try {
-            LOG.debug("session = {}", session);
             LOG.debug("request.getParameterMap() = {}", request.getParameterMap());
 
             String pageName = request.getParameter("pageName");
@@ -306,8 +302,8 @@ public class AbstractFormController {
             StringBuffer buffer = new StringBuffer();
 
             Map<String, String[]> map = new HashMap<>();
-            HttpSession session = request.getSession();
-            List<String> sessionNames = Collections.list(session.getAttributeNames());
+            Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
+            List<String> sessionNames = session.getAttributeNames();
             Collections.sort(sessionNames);
             for(String attrName: sessionNames) {
                 Object attrValue = session.getAttribute(attrName);
@@ -334,7 +330,7 @@ public class AbstractFormController {
         // do nothing
     }
 
-    protected void copyMapToSession(Map<String, String> map, String[] fieldNames, HttpSession session) {
+    protected void copyMapToSession(Map<String, String> map, String[] fieldNames, Session session) {
         LOG.trace("Started AbstractFormController.copyMapToSession");
         try {
             Parameters.validateMandatoryArgs(new Object[]{map, session}, new String[]{"map", "session"});
@@ -355,17 +351,17 @@ public class AbstractFormController {
     /**
      * Copy the named values from the session to the model
      */
-    protected void copyFromSessionToModel(HttpServletRequest request, String[] fieldNames, Model model) {
+    protected void copyFromSessionToModel(final HttpServletRequest request, final String[] fieldNames, final Model model) {
         LOG.trace("Started AbstractFormController.copyFromSessionToModel");
         try {
             Parameters.validateMandatoryArgs(new Object[]{request, model}, new String[]{"request", "model"});
-            if(fieldNames == null) {
+            if (fieldNames == null) {
                 return;
             }
 
             LOG.debug("fieldNames = {}", Arrays.asList(fieldNames));
-            HttpSession session = request.getSession();
-            for(String fieldName: fieldNames) {
+            Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
+            for (String fieldName: fieldNames) {
                 Object fieldValue = session.getAttribute(fieldName);
                 LOG.debug("fieldName = {}, fieldValue = {}", fieldName, fieldValue);
                 model.addAttribute(fieldName, fieldValue);
@@ -412,7 +408,7 @@ public class AbstractFormController {
             }
 
             LOG.debug("fieldNames = {}", Arrays.asList(fieldNames));
-            HttpSession session = request.getSession();
+            Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
             for(String fieldName: fieldNames) {
                 Object fieldValue;
                 String[] requestValues = request.getParameterMap().get(fieldName);
@@ -494,7 +490,7 @@ public class AbstractFormController {
         return value;
     }
 
-    protected void removeFromSession(HttpSession session, String[] fieldNames) {
+    protected void removeFromSession(Session session, String[] fieldNames) {
         LOG.trace("Started AbstractFormController.removeFromSession");
         try {
             Parameters.validateMandatoryArgs(session, "session");
@@ -574,29 +570,7 @@ public class AbstractFormController {
         }
     }
 
-    protected void logSession(HttpSession session) {
-        LOG.info("session = {}", session);
-        if(session == null) {
-            return;
-        }
-
-        session.getAttributeNames();
-
-        LOG.debug("\tsession ID = '{}', creation time = {}, last accessed time = {}", session.getId(), session.getCreationTime(), session.getLastAccessedTime());
-
-        List<String> attrNames = Collections.list(session.getAttributeNames());
-        LOG.debug("\tattribute names = {}", attrNames);
-        for(String attrName: attrNames) {
-            String attrValueStr = null;
-            Object attrValue = session.getAttribute(attrName);
-            if(attrValue != null) {
-                attrValueStr = attrValue.getClass().getName() + "@" + System.identityHashCode(attrValue);
-            }
-            LOG.debug("\tattribute: '{}' = {}:'{}'", attrName, attrValueStr, attrValue);
-        }
-    }
-
-    protected List<Map<String, String>> getFieldCollections(HttpSession session, String collectionName) {
+    protected List<Map<String, String>> getFieldCollections(Session session, String collectionName) {
         return getFieldCollections(session, collectionName, false);
     }
 
@@ -605,7 +579,7 @@ public class AbstractFormController {
      * make the list the field collection list? (yuk)
      */
     @SuppressWarnings({ "unchecked" })
-    protected List<Map<String, String>> getFieldCollections(HttpSession session, String collectionName, boolean create) {
+    protected List<Map<String, String>> getFieldCollections(Session session, String collectionName, boolean create) {
         LOG.trace("Started AbstractFormController.getFieldCollections");
         try {
             Parameters.validateMandatoryArgs(session, "session");
@@ -642,7 +616,7 @@ public class AbstractFormController {
         }
     }
 
-    protected void setFieldCollections(HttpSession session, String collectionName, List<Map<String, String>> values) {
+    protected void setFieldCollections(Session session, String collectionName, List<Map<String, String>> values) {
         Parameters.validateMandatoryArgs(new Object[]{session, collectionName}, new String[]{"session", "collectionName"});
         session.setAttribute(collectionName,  values);
     }
@@ -651,11 +625,11 @@ public class AbstractFormController {
         return getBooleanFieldValue(fieldName, "yes", "no", request.getParameterValues(fieldName));
     }
 
-    public static Boolean getYesNoBooleanFieldValue(HttpSession session, String fieldName) {
+    public static Boolean getYesNoBooleanFieldValue(Session session, String fieldName) {
         return getBooleanFieldValue(fieldName, "yes", "no", getSessionStringAttribute(session, fieldName));
     }
 
-    public static String[] getSessionStringAttribute(HttpSession session, String fieldName) {
+    public static String[] getSessionStringAttribute(Session session, String fieldName) {
         Object object = session.getAttribute(fieldName);
         if(object == null) {
             return null;
@@ -752,7 +726,7 @@ public class AbstractFormController {
         return result;
     }
 
-    protected void saveFormattedDate(HttpSession session, String dateFieldName, String format, String yearFieldName, String monthFieldName, String dayFieldName) {
+    protected void saveFormattedDate(Session session, String dateFieldName, String format, String yearFieldName, String monthFieldName, String dayFieldName) {
 
         Parameters.validateMandatoryArgs(new Object[]{session, dateFieldName, format, yearFieldName, monthFieldName, dayFieldName},
                                          new String[]{"session", "dateFieldName", "format", "yearFieldName", "monthFieldName", "dayFieldName"});
@@ -778,7 +752,7 @@ public class AbstractFormController {
         session.setAttribute(dateFieldName, dateString);
     }
 
-    protected Integer getSessionInt(HttpSession session, String field, String fieldName) {
+    protected Integer getSessionInt(Session session, String field, String fieldName) {
         Parameters.validateMandatoryArgs(new Object[]{session, field, fieldName}, new String[]{"session", "field", "fieldName"});
         Object object = session.getAttribute(field);
         if(object == null) {
@@ -821,7 +795,7 @@ public class AbstractFormController {
      *
      * @throws IllegalArgumentException if the record being edited cannot be found.
      */
-    protected void populateFieldCollectionEntry(HttpSession session, String fieldCollectionName, String[] fields, String idField) {
+    protected void populateFieldCollectionEntry(Session session, String fieldCollectionName, String[] fields, String idField) {
         LOG.trace("Starting AbstractFormController.populateFieldCollectionEntry");
         try {
             Parameters.validateMandatoryArgs(session,  "session");
@@ -891,6 +865,7 @@ public class AbstractFormController {
         LOG.trace("Started EmploymentDetailsController.showForm");
         try {
             String destination = showFormInternal(request, model);
+            Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
 
             // if the ID field is populated then we are editing an existing record
             // and we should load the data, but only if we have not failed validation
@@ -899,7 +874,7 @@ public class AbstractFormController {
             LOG.debug("editIdValue = {}", editIdValue);
             if(StringUtils.isEmpty(editIdValue) == false && getValidationSummary().hasFormErrors() == false) {
                 LOG.debug("populating edit data");
-                List<Map<String, String>> records = getFieldCollections(request.getSession(), fieldCollectionName, true);
+                List<Map<String, String>> records = getFieldCollections(session, fieldCollectionName, true);
                 Map<String, String> record = FieldCollection.getFieldCollection(records, idField, editIdValue);
                 LOG.debug("record = {}", record);
                 model.addAllAttributes(record);
@@ -929,15 +904,16 @@ public class AbstractFormController {
         Parameters.validateMandatoryArgs(new Object[]{idToChange, request}, new String[]{"idToChange", "request"});
 
         getValidationSummary().reset();
+        Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
 
         // copy the record values into the edit fields in the session
-        List<Map<String, String>> records = getFieldCollections(request.getSession(), fieldCollectionName, true);
+        List<Map<String, String>> records = getFieldCollections(session, fieldCollectionName, true);
         Map<String, String> record = FieldCollection.getFieldCollection(records, idField, idToChange);
         if(record == null) {
             throw new UnknownRecordException("Unknown record id: " + idToChange);
         } else {
             String[] fields = record.keySet().toArray(new String[]{});  // TODO instead of BreakInCareDetailController.FIELDS (?)
-            copyMapToSession(record, fields, request.getSession());
+            copyMapToSession(record, fields, session);
         }
 
         return "redirect:" + editingPage;
@@ -953,7 +929,7 @@ public class AbstractFormController {
             Parameters.validateMandatoryArgs(new Object[]{idToDelete, request}, new String[]{"idToDelete", "request"});
 
             Integer foundIndex = null;
-            List<Map<String, String>> fieldCollectionList = getFieldCollections(request.getSession(), fieldCollectionName);
+            List<Map<String, String>> fieldCollectionList = getFieldCollections(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)), fieldCollectionName);
             for(int index = 0; index < fieldCollectionList.size(); index++) {
                 Map<String, String> map = fieldCollectionList.get(index);
                 if(idToDelete.equals(map.get(idField))) {
@@ -989,14 +965,14 @@ public class AbstractFormController {
      * return those that have String or String[] values along with their keys in a map.
      * @return return a map of values or null if session is null
      */
-    public static Map<String, String[]> getSessionStringAttributes(HttpSession session) {
-        if(session == null) {
+    public static Map<String, String[]> getSessionStringAttributes(Session session) {
+        if (session == null) {
             return null;
         }
 
         Map<String, String[]> map = new HashMap<>();
 
-        List<String> attrNames = Collections.list(session.getAttributeNames());
+        List<String> attrNames = session.getAttributeNames();
         for(String attrName: attrNames) {
             Object object = session.getAttribute(attrName);
             if(object == null || object instanceof String[]) {
@@ -1067,7 +1043,7 @@ public class AbstractFormController {
             return true;
 
         } finally {
-            LOG.info("Ending DefaultFormController.supportsRequest");
+            LOG.info("Ending AbstractFormController.supportsRequest");
         }
     }
 
@@ -1076,7 +1052,7 @@ public class AbstractFormController {
      * @throws NoSuchRequestHandlingMethodException
      */
     public String handleRequest(HttpServletRequest request, HttpServletResponse response, Model model) throws NoSuchRequestHandlingMethodException {
-        LOG.info("Started DefaultFormController.handleRequest");
+        LOG.info("Started AbstractFormController.handleRequest");
         Parameters.validateMandatoryArgs(request, "request");
         try {
             String path = request.getServletPath();
@@ -1087,7 +1063,7 @@ public class AbstractFormController {
             if (HTTP_GET.equalsIgnoreCase(method)) {
                 return showForm(request, model);
             } else if (HTTP_POST.equalsIgnoreCase(method)) {
-                return postForm(request, request.getSession(), model);
+                return postForm(request, model);
             } else {
                 LOG.error("Request method {} is not supported in request: {}", method, path);
                 throw new NoSuchRequestHandlingMethodException(request);
@@ -1099,7 +1075,21 @@ public class AbstractFormController {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
         } finally {
-            LOG.info("Ending DefaultFormController.handleRequest");
+            LOG.info("Ending AbstractFormController.handleRequest");
+        }
+    }
+
+    public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response) {
+        LOG.debug("Starting AbstractFormController.createSessionVariables");
+        try {
+            if (request.getQueryString() == null || !request.getQueryString().contains("changing=true")) {
+                sessionManager.createSessionVariables(request, response);
+            }
+        } catch (RuntimeException e) {
+            LOG.error("Unexpected RuntimeException", e);
+            throw e;
+        } finally {
+            LOG.debug("Ending AbstractFormController.createSessionVariables");
         }
     }
 }

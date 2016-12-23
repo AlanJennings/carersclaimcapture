@@ -7,6 +7,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
+
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 /**
@@ -22,10 +23,7 @@ public class DefaultFormController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultFormController.class);
 
     @Autowired
-    private DefaultFormController defaultFormController;
-
-    @Autowired
-    public DefaultFormController(SessionManager sessionManager, MessageSource messageSource) {
+    public DefaultFormController(final SessionManager sessionManager, final MessageSource messageSource) {
         super(sessionManager, messageSource);
     }
 }

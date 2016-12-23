@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(properties = { "origin.tag=GB"})
 public class OriginPageTestGB {
 
-    private static final String ORIGIN_PAGE             = "/circumstances/report-changes/origin";
+    private static final String ORIGIN_PAGE             = "/circumstances/report-changes/selection";
     private static final String CHANGE_SELECTION_PAGE   = "redirect:/circumstances/report-changes/change-selection";
 
     @Autowired

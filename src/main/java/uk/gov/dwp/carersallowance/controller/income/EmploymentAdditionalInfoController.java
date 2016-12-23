@@ -1,7 +1,6 @@
 package uk.gov.dwp.carersallowance.controller.income;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
+
 import uk.gov.dwp.carersallowance.session.SessionManager;
 
 @Controller
@@ -21,13 +21,13 @@ public class EmploymentAdditionalInfoController extends AbstractFormController {
     private static final String[] READONLY_FIELDS = {"employerName"};
 
     @Autowired
-    public EmploymentAdditionalInfoController(SessionManager sessionManager, MessageSource messageSource) {
+    public EmploymentAdditionalInfoController(final SessionManager sessionManager, final MessageSource messageSource) {
         super(sessionManager, messageSource);
     }
 
     @Override
     public String getPreviousPage(HttpServletRequest request) {
-        return super.getPreviousPage(request, YourIncomeController.getIncomePageList(request.getSession()));
+        return super.getPreviousPage(request, YourIncomeController.getIncomePageList(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))));
     }
 
     @Override
@@ -51,8 +51,8 @@ public class EmploymentAdditionalInfoController extends AbstractFormController {
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
-    public String postForm(HttpServletRequest request, HttpSession session, Model model) {
-        return super.postForm(request, session, model);
+    public String postForm(HttpServletRequest request, Model model) {
+        return super.postForm(request, model);
     }
 
 //    /**
