@@ -50,4 +50,9 @@ public class DatabaseServiceImpl implements DatabaseService {
     public String getTransactionStatusById(String transactionId) {
         return null;
     }
+
+    @Override
+    public Boolean health() {
+        return jdbcTemplate.query("SELECT 1", resultSet -> resultSet.next() ? true : false);
+    }
 }

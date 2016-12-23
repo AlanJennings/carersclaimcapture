@@ -6,4 +6,5 @@ package uk.gov.dwp.carersallowance.database;
 public interface DatabaseService {
     String getTransactionId(final String originTag);
     String getTransactionStatusById(final String transactionId);
+    Boolean health();
 }
