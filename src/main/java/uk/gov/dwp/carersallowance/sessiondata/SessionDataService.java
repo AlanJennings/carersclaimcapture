@@ -1,7 +1,5 @@
 package uk.gov.dwp.carersallowance.sessiondata;
 
-import java.util.Map;
-
 /**
  * Created by peterwhitehead on 22/12/2016.
  */
