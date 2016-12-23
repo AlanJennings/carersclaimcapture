@@ -7,14 +7,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ui.Model;
-import uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultFormController;
+import uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultChangeOfCircsController;
 
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +22,11 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by peterwhitehead on 22/12/2016.
+ * Created by peterwhitehead on 23/12/2016.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class ClaimStartedControllerTest {
-    private ClaimStartedController claimStartedController;
+public class CircsStartedControllerTest {
+    private CircsStartedController circsStartedController;
 
     @Mock
     private HttpServletRequest request;
@@ -42,7 +41,7 @@ public class ClaimStartedControllerTest {
     private Model model;
 
     @InjectMocks
-    private DefaultFormController defaultFormController;
+    private DefaultChangeOfCircsController defaultChangeOfCircsController;
 
     @Mock
     private SessionManager sessionManager;
@@ -53,19 +52,25 @@ public class ClaimStartedControllerTest {
     public void setUp() throws Exception {
         when(sessionManager.getSessionIdFromCookie(request)).thenReturn("12345");
         when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))).thenReturn(session);
-        claimStartedController = new ClaimStartedController(defaultFormController);
+        circsStartedController = new CircsStartedController("GB", defaultChangeOfCircsController);
         attributes = new ArrayList<>();
     }
 
     @Test
-    public void testShowForm() throws Exception {
-        assertThat(claimStartedController.showForm(request, response, model), is("/allowance/benefits"));
+    public void testShowCircsForm() throws Exception {
+        assertThat(circsStartedController.showCircsForm(request, response, model), is("redirect:/circumstances/report-changes/change-selection"));
     }
 
     @Test
-    public void testPostForm() throws Exception {
+    public void testPostCircsForm() throws Exception {
         when(session.getAttributeNames()).thenReturn(attributes);
-        when(request.getServletPath()).thenReturn("/allowance/benefits");
-        assertThat(claimStartedController.postForm(request, model), is("redirect:/allowance/eligibility#"));
+        when(request.getServletPath()).thenReturn("/circumstances/report-changes/selection");
+        assertThat(circsStartedController.postCircsForm(request, model), is("redirect:/circumstances/report-changes/change-selection#"));
+    }
+
+    @Test
+    public void testShowCircsGBNIRForm() throws Exception {
+        circsStartedController = new CircsStartedController("GB-NIR", defaultChangeOfCircsController);
+        assertThat(circsStartedController.showCircsForm(request, response, model), is("/circumstances/report-changes/selection"));
     }
 }

@@ -52,4 +52,8 @@ public class SessionManager {
     public String getSessionIdFromCookie(final HttpServletRequest request) {
         return cookieManager.getSessionIdFromCookie(request);
     }
+
+    public void saveSession(final Session session) {
+        sessionDataService.saveSessionData(session);
+    }
 }
