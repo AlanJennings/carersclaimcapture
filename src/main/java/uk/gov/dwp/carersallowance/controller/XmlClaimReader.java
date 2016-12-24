@@ -230,7 +230,7 @@ public class XmlClaimReader {
         LOG.error("Error Logging on");
 
         URL claimTemplateUrl = XmlClaimReader.class.getClassLoader().getResource("xml.mapping.claim");
-        List<String> xmlMappings = SubmitClaimController.readLines(claimTemplateUrl);
+        List<String> xmlMappings = XmlBuilder.readLines(claimTemplateUrl);
         XPathMappingList valueMappings = new XPathMappingList();
         valueMappings.add(xmlMappings);
 //        System.out.println("Value Mappings: ValueMap");

@@ -19,7 +19,7 @@ public class ClaimXmlTest {
 
     @Mock
     SessionManager sessionManager;
-
+/*
     @Test
     public void testXml() {
         System.out.println("Testing XML...");
@@ -78,5 +78,5 @@ public class ClaimXmlTest {
             System.out.println("Exception from test:" + e.toString());
         }
     }
-
+*/
 }

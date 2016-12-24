@@ -1,8 +1,9 @@
-xmlVersion                                      = DWPBody/Version
-appVersion                                      = DWPBody/ClaimVersion
+xmlVersion                                      = DWPBody/ClaimVersion
+appVersion                                      = DWPBody/Version
 origin                                          = DWPBody/Origin
 
 transactionId                                   = DWPBody/DWPCATransaction/TransactionId
+transactionIdAttr                               = DWPBody/DWPCATransaction/[@id]
 dateTimeGenerated                               = DWPBody/DWPCATransaction/DateTimeGenerated
 language                                        = DWPBody/DWPCATransaction/LanguageUsed
 

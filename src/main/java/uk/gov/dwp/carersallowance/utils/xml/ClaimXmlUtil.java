@@ -7,6 +7,8 @@ import org.w3c.dom.Document;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathFactory;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ClaimXmlUtil {
     private static final Logger LOG = LoggerFactory.getLogger(ClaimXmlUtil.class);
@@ -20,6 +22,12 @@ public class ClaimXmlUtil {
             LOG.error("Exception compiling xpath:{}", e.toString(), e);
         }
         return nodevalue;
+    }
+
+    public static String currentDateTime(final String format) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+        String now = dateFormat.format(new Date());
+        return now;
     }
 
 //    private static final Logger  LOG                  = LoggerFactory.getLogger(ClaimXmlUtil.class);

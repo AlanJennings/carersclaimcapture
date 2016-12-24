@@ -5,7 +5,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+import uk.gov.dwp.carersallowance.controller.XmlBuilder;
 import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
+import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
 import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
 
 import javax.xml.xpath.XPath;
@@ -16,7 +18,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.greaterThan;
@@ -30,16 +34,25 @@ public class ClaimHeaderItemsTest {
     private Document document;
     private XPath xpath;
     private String appVersion = "3.14";
-    private String schemaVersion = "0.27";
+    private String xmlVersion = "0.27";
     private String transactionId = "16011234";
     private String origin = "GB";
     private String language = "English";
 
     @Before
     public void setUp() throws Exception {
-        // initialise claim header information only, claim is blank in these tests no matter.
-        ClaimXml claimXml = new ClaimXml();
-        document = claimXml.buildXml(null, transactionId, appVersion, schemaVersion, origin, language);
+        Map<String, Object> sessionMap = new HashMap<>();
+        sessionMap.put("transactionId", transactionId);
+        sessionMap.put("transactionIdAttr", transactionId);
+        sessionMap.put("dateTimeGenerated", ClaimXmlUtil.currentDateTime("dd-MM-yyyy HH:mm"));
+        sessionMap.put("xmlVersion", xmlVersion);
+        sessionMap.put("appVersion", appVersion);
+        sessionMap.put("origin", origin);
+        sessionMap.put("language", language);
+
+        XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
+        String xml = xmlBuilder.render(true, false);
+        document = xmlBuilder.getDocument();
         xpath = XPathFactory.newInstance().newXPath();
     }
 
@@ -59,7 +72,7 @@ public class ClaimHeaderItemsTest {
 
     @Test
     public void checkClaimXmlContainsSchemaVersion() {
-        assertThat(getNodeValue(document, "/DWPBody/ClaimVersion"), is(schemaVersion));
+        assertThat(getNodeValue(document, "/DWPBody/ClaimVersion"), is(xmlVersion));
     }
 
     @Test
