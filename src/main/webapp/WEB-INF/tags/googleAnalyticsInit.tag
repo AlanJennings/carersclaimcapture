@@ -4,7 +4,6 @@
 <%@ attribute name="trackingId" required="true" %>
 
 <c:set var="gaUrl" value="//www.google-analytics.com/analytics.js"/>
-<c:set var="gaUrl" value="//localhost:9021/javascript/analytics.js"/>
 <script type="text/javascript" src="/javascript/googleAnalytics.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {

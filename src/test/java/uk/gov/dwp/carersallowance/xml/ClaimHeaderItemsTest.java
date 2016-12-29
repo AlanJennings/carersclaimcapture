@@ -26,12 +26,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assert.assertThat;
-import static uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil.getNodeValue;
 
 public class ClaimHeaderItemsTest {
     private static final Logger LOG = LoggerFactory.getLogger(ClaimHeaderItemsTest.class);
 
-    private Document document;
+    private XmlBuilder xmlBuilder;
     private XPath xpath;
     private String appVersion = "3.14";
     private String xmlVersion = "0.27";
@@ -50,16 +49,15 @@ public class ClaimHeaderItemsTest {
         sessionMap.put("origin", origin);
         sessionMap.put("language", language);
 
-        XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
+        xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
         String xml = xmlBuilder.render(true, false);
-        document = xmlBuilder.getDocument();
         xpath = XPathFactory.newInstance().newXPath();
     }
 
     @Test
     public void justDumpXml() {
         try {
-            System.out.println(XmlPrettyPrinter.prettyPrintXml(document.getFirstChild()));
+            System.out.println(XmlPrettyPrinter.prettyPrintXml(xmlBuilder.getDocument().getFirstChild()));
         } catch (InstantiationException e) {
             e.printStackTrace();
         }
@@ -67,32 +65,32 @@ public class ClaimHeaderItemsTest {
 
     @Test
     public void checkClaimXmlContainsC3AppVersion() {
-        assertThat(getNodeValue(document, "/DWPBody/Version"), is(appVersion));
+        assertThat(xmlBuilder.getNodeValue("/DWPBody/Version"), is(appVersion));
     }
 
     @Test
     public void checkClaimXmlContainsSchemaVersion() {
-        assertThat(getNodeValue(document, "/DWPBody/ClaimVersion"), is(xmlVersion));
+        assertThat(xmlBuilder.getNodeValue("/DWPBody/ClaimVersion"), is(xmlVersion));
     }
 
     @Test
     public void checkClaimXmlContainsOrigin() {
-        assertThat(getNodeValue(document, "/DWPBody/Origin"), is(origin));
+        assertThat(xmlBuilder.getNodeValue("/DWPBody/Origin"), is(origin));
     }
 
     @Test
     public void checkClaimXmlContainsDWPCATransactionIdAttribute() {
-        assertThat(getNodeValue(document, "/DWPBody/DWPCATransaction/@id"), is(transactionId));
+        assertThat(xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/@id"), is(transactionId));
     }
 
     @Test
     public void checkClaimXmlContainsTransactionId() {
-        assertThat(getNodeValue(document, "/DWPBody/DWPCATransaction/TransactionId"), is(transactionId));
+        assertThat(xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/TransactionId"), is(transactionId));
     }
 
     @Test
     public void checkClaimXmlContainsDateTimeGeneratedWithCorrectFormat() {
-        String dateTimeGenerated = getNodeValue(document, "/DWPBody/DWPCATransaction/DateTimeGenerated");
+        String dateTimeGenerated = xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DateTimeGenerated");
         long dtgSecs = 0;
         try {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm", Locale.getDefault());
@@ -107,6 +105,6 @@ public class ClaimHeaderItemsTest {
 
     @Test
     public void checkClaimXmlContainsLanguage() {
-        assertThat(getNodeValue(document, "/DWPBody/DWPCATransaction/LanguageUsed"), is(language));
+        assertThat(xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/LanguageUsed"), is(language));
     }
 }

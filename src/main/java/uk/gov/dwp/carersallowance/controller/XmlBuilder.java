@@ -12,9 +12,14 @@ import java.util.Objects;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathException;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -27,8 +32,11 @@ import uk.gov.dwp.carersallowance.utils.Parameters;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMapping;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
 import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
+import uk.gov.dwp.carersallowance.xml.AssistedDecision;
 
 public class XmlBuilder {
+    private static final Logger LOG = LoggerFactory.getLogger(XmlBuilder.class);
+
     private static final String XML_MAPPING__CLAIM = "xml.mapping.claim";
     private static final String PATH_SEPARATOR = "/";
 
@@ -41,6 +49,7 @@ public class XmlBuilder {
         document = createDocument(rootNodeName, namespaces);
         this.valueMappings = loadXPathMappings();
 
+        addAssistedDecisionToClaim(values);
         addNodes(values, null, document);
     }
 
@@ -121,8 +130,8 @@ public class XmlBuilder {
             String xpath = mapping.getXpath();
             if (StringUtils.isNotBlank(xpath) && isValueEmpty(value) == false) {
                 if (value instanceof String) {
-                    if (mapping.getProcessingInstruction() != null && mapping.getProcessingInstruction().length() > 0) {
-                        System.out.println("Got mapping instruction:" + mapping.getProcessingInstruction());
+                    // we may have add attribute without = which is a filter instruction i.e. DWPBody/DWPCATransaction/[@id]
+                    if (mapping.getProcessingInstruction() != null && mapping.getProcessingInstruction().length() > 0 && !mapping.getProcessingInstruction().contains("=")) {
                         addAttr(mapping.getXpath(), mapping.getProcessingInstruction(), (String) value, localRootNode);
                     } else {
                         addNode(mapping.getXpath(), (String) value, true, localRootNode);   // create leaf node
@@ -362,6 +371,23 @@ public class XmlBuilder {
     public String render(boolean includeXmlDeclaration, boolean prettyPrint) throws InstantiationException {
         String xml = XmlPrettyPrinter.xmlToString(document, prettyPrint, includeXmlDeclaration);
         return xml;
+    }
+
+    private void addAssistedDecisionToClaim(Map<String, Object> values) {
+        AssistedDecision assistedDecision = new AssistedDecision(65, values);
+        values.put("assistedDecisionReason", assistedDecision.getReason());
+        values.put("assistedDecisionDecision", assistedDecision.getDecision());
+    }
+
+    public String getNodeValue(String nodepath) {
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        String nodevalue = null;
+        try {
+            nodevalue = xpath.compile(nodepath).evaluate(document);
+        } catch (XPathException e) {
+            LOG.error("Exception compiling xpath:{}", e.toString(), e);
+        }
+        return nodevalue;
     }
 
     public Document getDocument() {

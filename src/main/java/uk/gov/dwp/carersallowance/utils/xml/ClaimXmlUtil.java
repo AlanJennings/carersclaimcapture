@@ -13,16 +13,7 @@ import java.util.Date;
 public class ClaimXmlUtil {
     private static final Logger LOG = LoggerFactory.getLogger(ClaimXmlUtil.class);
 
-    static public String getNodeValue(Document document, String nodepath) {
-        XPath xpath = XPathFactory.newInstance().newXPath();
-        String nodevalue = null;
-        try {
-            nodevalue = xpath.compile(nodepath).evaluate(document);
-        } catch (XPathException e) {
-            LOG.error("Exception compiling xpath:{}", e.toString(), e);
-        }
-        return nodevalue;
-    }
+
 
     public static String currentDateTime(final String format) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(format);
