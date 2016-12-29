@@ -14,12 +14,14 @@ import java.util.Arrays;
 public class DefaultChangeOfCircsController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultChangeOfCircsController.class);
 
-    private static final String ORIGIN_PAGE           = "/circumstances/report-changes/selection";
-    private static final String CHANGE_SELECTION_PAGE = "/circumstances/report-changes/change-selection";
+    private static final String ORIGIN_PAGE             = "/circumstances/report-changes/selection";
+    private static final String CHANGE_SELECTION_PAGE   = "/circumstances/report-changes/change-selection";
+    private static final String ABOUT_YOU_PAGE          = "/circumstances/identification/about-you";
 
     private static final String[] PAGES = {
             ORIGIN_PAGE,
-            CHANGE_SELECTION_PAGE
+            CHANGE_SELECTION_PAGE,
+            ABOUT_YOU_PAGE
     };
 
     public DefaultChangeOfCircsController(final SessionManager sessionManager, final MessageSource messageSource) {
