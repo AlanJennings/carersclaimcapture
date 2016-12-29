@@ -1,12 +1,9 @@
 package uk.gov.dwp.carersallowance.controller;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -25,8 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 import uk.gov.dwp.carersallowance.session.*;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
-import uk.gov.dwp.carersallowance.transformations.Transformation;
-import uk.gov.dwp.carersallowance.transformations.TransformationType;
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 import uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 import uk.gov.dwp.carersallowance.validations.FormValidations;
@@ -49,7 +45,7 @@ public class AbstractFormController {
     private ValidationSummary validationSummary;
     protected List<String>      pageList;
 
-    //protected CookieManager cookieManager;
+    private TransformationManager transformationManager;
 
     protected static final String[] PAGES = {
             "/allowance/benefits",
@@ -88,9 +84,10 @@ public class AbstractFormController {
 
     private LegacyValidation  legacyValidation; //  TODO remove this
 
-    public AbstractFormController(final SessionManager sessionManager, final MessageSource messageSource) {
+    public AbstractFormController(final SessionManager sessionManager, final MessageSource messageSource, final TransformationManager transformationManager) {
         this.sessionManager = sessionManager;
         this.messageSource = messageSource;
+        this.transformationManager = transformationManager;
 
         validationSummary = new ValidationSummary();
         legacyValidation = new LegacyValidation(messageSource, validationSummary);
@@ -142,7 +139,7 @@ public class AbstractFormController {
     }
 
     public String[] getReadOnlyFields() {
-        return null;
+        return new String[]{"dateOfClaim_day", "dateOfClaim_month", "dateOfClaim_year"};
     }
 
     public String getPreviousPage(HttpServletRequest request) {
@@ -419,76 +416,11 @@ public class AbstractFormController {
                     fieldValue = requestValues[0];
                 }
                 LOG.debug("fieldName = {}, fieldValue = {}", fieldName, fieldValue);
-                String transformationsKey = String.format(SESSION_TRANSFORMATIONS_KEY, fieldName);
-                List<Transformation> transformations = getTransformations(transformationsKey);
-                fieldValue = applySessionTransformations(fieldName, fieldValue, transformations);
-                session.setAttribute(fieldName,  fieldValue);
+                session.setAttribute(fieldName, transformationManager.getTransformedValue(fieldName, fieldValue, SESSION_TRANSFORMATIONS_KEY, messageSource));
             }
         } finally {
             LOG.trace("Ending AbstractFormController.copyFromRequestToSession");
         }
-    }
-
-    private List<Transformation> getTransformations(String transformationsKey) {
-        LOG.trace("Started AbstractFormController.getTransformations");
-        try {
-            LOG.debug("transformationsKey = {}", transformationsKey);
-            if(StringUtils.isBlank(transformationsKey)) {
-                return null;
-            }
-
-            List<Transformation> list = new ArrayList<>();
-            String transformationList = messageSource.getMessage(transformationsKey, null, null, Locale.getDefault());
-            if(transformationList != null) {
-                String[] transformationNames = transformationList.split(",");
-                for(String transformationName : transformationNames ) {
-                    transformationName = transformationName.trim();
-                    LOG.debug("transformationName = '{}'", transformationName);
-                    TransformationType type = TransformationType.valueOfName(transformationName);
-                    list.add(type.getTransformation());
-                }
-            }
-
-            LOG.debug("list = {}", list);
-            return list;
-        } catch(RuntimeException e) {
-            LOG.error("Problems getting transformations for " + transformationsKey, e);
-            throw e;
-        } finally {
-            LOG.trace("Ending AbstractFormController.getTransformations");
-        }
-    }
-
-    private Object applySessionTransformations(String fieldName, Object fieldValue, List<Transformation> transformations) {
-        Parameters.validateMandatoryArgs(fieldName,  "fieldName");
-        if(fieldValue == null) {
-            return null;
-        }
-
-        if(fieldValue instanceof String[]) {
-            String[] fieldValues = (String[])fieldValue;
-            String[] transformedValues = new String[fieldValues.length];
-            for(int index = 0; index < fieldValues.length; index++) {
-                Object value = applySessionTransformations(fieldName, fieldValues[index], transformations);
-                if(value == null || value instanceof String) {
-                    transformedValues[index] = (String)value;
-                } else {
-                    throw new IllegalArgumentException("Expected value of type String when transforming " + fieldName + ", but received " + value.getClass().getName());
-                }
-            }
-            return transformedValues;
-        }
-
-        if((fieldValue instanceof String) == false) {
-            throw new IllegalArgumentException("Expected fieldValue of type String when transforming " + fieldName + ", but received " + fieldValue.getClass().getName());
-        }
-
-        String value = (String)fieldValue;
-        for(Transformation transformation: transformations) {
-            value = transformation.transform(value);
-        }
-
-        return value;
     }
 
     protected void removeFromSession(Session session, String[] fieldNames) {
@@ -727,54 +659,6 @@ public class AbstractFormController {
         return result;
     }
 
-    protected void saveFormattedDate(Session session, String dateFieldName, String format, String yearFieldName, String monthFieldName, String dayFieldName) {
-
-        Parameters.validateMandatoryArgs(new Object[]{session, dateFieldName, format, yearFieldName, monthFieldName, dayFieldName},
-                                         new String[]{"session", "dateFieldName", "format", "yearFieldName", "monthFieldName", "dayFieldName"});
-
-        Integer day = getSessionInt(session, dayFieldName, "dayFieldName");
-        Integer month = getSessionInt(session, monthFieldName, "monthFieldName");
-        Integer year = getSessionInt(session, yearFieldName, "yearFieldName");
-        if(day == null && month == null && year == null) {
-            session.removeAttribute(dateFieldName);
-        }
-        if(day == null || month == null || year == null) {
-            throw new IllegalArgumentException("All date fields(day:'" + day + "', month:'" + month + "', year:'" + year + "') are not populated");
-        }
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DATE, day);
-        calendar.set(Calendar.MONTH, month + 1);
-        calendar.set(Calendar.YEAR, year);
-        Date date = calendar.getTime();
-
-        SimpleDateFormat formatter = new SimpleDateFormat(format, Locale.getDefault());
-        String dateString = formatter.format(date);
-        session.setAttribute(dateFieldName, dateString);
-    }
-
-    protected Integer getSessionInt(Session session, String field, String fieldName) {
-        Parameters.validateMandatoryArgs(new Object[]{session, field, fieldName}, new String[]{"session", "field", "fieldName"});
-        Object object = session.getAttribute(field);
-        if(object == null) {
-            return null;
-        }
-
-        if((object instanceof String) == false) {
-            throw new IllegalArgumentException("Expecting a 'String' session value:" + fieldName + " but found a " + object.getClass().getName());
-        }
-        String value = (String)object;
-        if(value.trim().equals("")) {
-            return null;
-        }
-
-        try {
-            return Integer.valueOf(value.trim());
-        } catch(NumberFormatException e) {
-            throw new IllegalArgumentException("Expecting a 'numerical' session value:" + fieldName + " but found: '" + value + "'", e);
-        }
-    }
-
 //    protected String getFieldCollectionName() {
 //        return null;
 //    }
@@ -1008,7 +892,7 @@ public class AbstractFormController {
             }
 
             LOG.debug("validation summary before = {}", getValidationSummary());
-            validations.validate(getValidationSummary(), getMessageSource(), fieldValues, existingFieldValues);
+            validations.validate(getValidationSummary(), getMessageSource(), transformationManager, fieldValues, existingFieldValues);
             LOG.debug("validation summary after = {}", getValidationSummary());
         } catch (ParseException e) {
             throw new IllegalStateException("Unable to read validation configuration.", e);

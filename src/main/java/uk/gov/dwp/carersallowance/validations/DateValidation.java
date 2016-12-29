@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 import uk.gov.dwp.carersallowance.utils.DateHolder;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
@@ -43,12 +44,10 @@ public class DateValidation extends AbstractValidation {
     /**
      * Validate that all date fields are populated and they form a valid date
      * We handle mandatory validation here as it is multiple fields, so can't use the mandatory validation
-     * @param allfieldValues
-     * @param id
-     * @param fieldTitle
      */
     public boolean validate(ValidationSummary validationSummary,
                             MessageSource messageSource,
+                            TransformationManager transformationManager,
                             String id,
                             Map<String, String[]> requestFieldValues,
                             Map<String, String[]> existingFieldValues) {
@@ -132,7 +131,7 @@ public class DateValidation extends AbstractValidation {
 
             Calendar calendar = Calendar.getInstance();
             calendar.setLenient(false);
-            calendar.set(yearInt, monthInt, dayInt, 0, 0, 0);
+            calendar.set(yearInt, monthInt - 1, dayInt, 0, 0, 0);
             try {
                 // lenient has no effect until we call getTime()
                 Date date = calendar.getTime();

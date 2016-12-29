@@ -76,6 +76,7 @@ public class XPathMappingList {
         //     xpath                 = DWPBody/.../Answer/Line
         //     processingInstruction = @order=1
         // if processingInstruction starts with @ then append to xpath e.g. DWPBody/.../Answer/Line[@order="1"]
+        // Or may refer to attribute e.g. "/DWPBody/DWPCATransaction/@id"
         String qualifiedXPath = item.getXpath();
         if(qualifiedXPath != null && item.getProcessingInstruction() != null) {
             if(item.getProcessingInstruction().startsWith("messages(") == false) {
@@ -144,13 +145,5 @@ public class XPathMappingList {
         public MappingException(Throwable cause) {
             super(cause);
         }
-    }
-
-    public static void main(String[] args) throws IOException, MappingException {
-        URL claimTemplateUrl = XPathMappingList.class.getClassLoader().getResource("xml.mapping.claim");
-        List<String> xmlMappings = SubmitClaimController.readLines(claimTemplateUrl);
-        XPathMappingList valueMappings = new XPathMappingList();
-        valueMappings.add(xmlMappings);
-        System.out.println(valueMappings.getList());
     }
 }

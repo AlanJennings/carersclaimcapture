@@ -8,6 +8,8 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
+import uk.gov.dwp.carersallowance.sessiondata.SessionDataFactory;
+import uk.gov.dwp.carersallowance.sessiondata.SessionDataMapServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,10 +28,13 @@ import static org.mockito.Mockito.when;
 public class SessionManagerTest {
     private SessionManager sessionManager;
 
-    private MockSessionDataServiceImpl sessionDataService;
+    private SessionDataMapServiceImpl sessionDataService;
 
     @Mock
     private CookieManager cookieManager;
+
+    @Mock
+    private SessionDataFactory sessionDataFactory;
 
     private Session session;
 
@@ -44,8 +49,9 @@ public class SessionManagerTest {
     @Before
     public void setUp() throws Exception {
         session = new Session("1234");
-        sessionDataService = new MockSessionDataServiceImpl();
-        sessionManager = new SessionManager(cookieManager, sessionDataService);
+        sessionDataService = new SessionDataMapServiceImpl();
+        when(sessionDataFactory.getSessionDataService()).thenReturn(sessionDataService);
+        sessionManager = new SessionManager(cookieManager, sessionDataFactory);
         objectCaptor = ArgumentCaptor.forClass(Object.class);
     }
 
@@ -61,10 +67,11 @@ public class SessionManagerTest {
         org.assertj.core.api.Assertions.assertThat(sessionManager.createSession("1234")).isEqualToComparingFieldByField(session);
     }
 
-    @Test
+    @Test(expected = NoSessionException.class)
     public void testRemoveSession() throws Exception {
         sessionDataService.createSessionData("1234");
-        org.assertj.core.api.Assertions.assertThat(sessionManager.removeSession("1234")).isEqualToComparingFieldByField(session);
+        sessionManager.removeSession("1234");
+        sessionDataService.getSessionData("1234");
     }
 
     @Test

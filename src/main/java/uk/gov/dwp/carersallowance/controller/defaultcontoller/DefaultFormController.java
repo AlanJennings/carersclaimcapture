@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
 import uk.gov.dwp.carersallowance.session.SessionManager;
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 
 /**
  * General request handler for basic request.
@@ -23,8 +24,8 @@ public class DefaultFormController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultFormController.class);
 
     @Autowired
-    public DefaultFormController(final SessionManager sessionManager, final MessageSource messageSource) {
-        super(sessionManager, messageSource);
+    public DefaultFormController(final SessionManager sessionManager, final MessageSource messageSource, final TransformationManager transformationManager) {
+        super(sessionManager, messageSource, transformationManager);
     }
 }
 

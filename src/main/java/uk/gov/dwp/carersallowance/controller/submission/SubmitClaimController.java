@@ -28,6 +28,7 @@ import uk.gov.dwp.carersallowance.session.CookieManager;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
 import uk.gov.dwp.carersallowance.utils.Parameters;
+import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList.MappingException;
 
@@ -41,7 +42,6 @@ import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList.MappingException;
 public class SubmitClaimController {
     private static final Logger LOG = LoggerFactory.getLogger(SubmitClaimController.class);
 
-    private static final String XML_MAPPING__CLAIM           = "xml.mapping.claim";
     private static final String XML_MAPPING__CLAIM_CAREBREAK = "xml.mapping.claim.careBreak";
 
     private static final String CURRENT_PAGE       = "/submit-claim";
@@ -100,8 +100,7 @@ public class SubmitClaimController {
     private String buildClaimXml(final Session session) throws IOException, InstantiationException, ParserConfigurationException, MappingException {
         Parameters.validateMandatoryArgs(session, "session");
 
-        Map<String, XPathMappingList> mappings = new HashMap<>();
-        loadXPathMappings(mappings);
+
 
         Map<String, Object> sessionMap = new HashMap<>(session.getData());
 
@@ -112,46 +111,12 @@ public class SubmitClaimController {
 //        sessionMap.put("language", language);
 
         sessionMap.put("transactionId", transactionIdService.getTransactionId());
-        sessionMap.put("dateTimeGenerated", currentDateTime("dd-MM-yyyy HH:mm"));
+        sessionMap.put("dateTimeGenerated", ClaimXmlUtil.currentDateTime("dd-MM-yyyy HH:mm"));
 
-        Map<String, String> namespaces = new HashMap<>();
-        namespaces.put("xmlns", "http://www.govtalk.gov.uk/dwp/carers-allowance");
-        namespaces.put("xmlns:ds", "http://www.w3.org/2000/09/xmldsig#");
-        namespaces.put("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        namespaces.put("xsi:schemaLocation", "http://www.govtalk.gov.uk/dwp/carers-allowance file:/future/schema/ca/CarersAllowance_Schema.xsd");
 
-        XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", namespaces, sessionMap, mappings);
+        XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
         String xml = xmlBuilder.render(true, false);
         LOG.debug("xml:{}", xml);
         return xml;
-    }
-
-    private void loadXPathMappings(final Map<String, XPathMappingList> mappings) throws IOException, MappingException {
-        URL claimTemplateUrl = this.getClass().getClassLoader().getResource(XML_MAPPING__CLAIM);
-        List<String> xmlMappings = readLines(claimTemplateUrl);
-        XPathMappingList valueMappings = new XPathMappingList();
-        valueMappings.add(xmlMappings);
-        mappings.put(null, valueMappings);
-    }
-
-    public static String currentDateTime(final String format) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-        String now = dateFormat.format(new Date());
-        return now;
-    }
-
-    public static List<String> readLines(final URL url) throws IOException {
-        if (url == null) {
-            return null;
-        }
-
-        InputStream inputStream = null;
-        try {
-            inputStream = url.openStream();
-            List<String> list = IOUtils.readLines(inputStream, Charset.defaultCharset());
-            return list;
-        } finally {
-            IOUtils.closeQuietly(inputStream);
-        }
     }
 }

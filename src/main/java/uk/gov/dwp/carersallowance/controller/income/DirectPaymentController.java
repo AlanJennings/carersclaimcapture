@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
 import uk.gov.dwp.carersallowance.session.SessionManager;
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 
 @Controller
 public class DirectPaymentController extends AbstractFormController {
@@ -19,8 +20,8 @@ public class DirectPaymentController extends AbstractFormController {
 
 
     @Autowired
-    public DirectPaymentController(final SessionManager sessionManager, final MessageSource messageSource) {
-        super(sessionManager, messageSource);
+    public DirectPaymentController(final SessionManager sessionManager, final MessageSource messageSource, final TransformationManager transformationManager) {
+        super(sessionManager, messageSource, transformationManager);
     }
 
     @Override

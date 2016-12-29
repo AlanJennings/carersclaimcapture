@@ -189,7 +189,7 @@ public class AssistedDecision {
     }
 
     private String getFromClaim(String key) {
-        if (claimvalues.containsKey(key) && claimvalues.get(key).getClass().equals(String.class)) {
+        if (key != null && claimvalues != null && claimvalues.containsKey(key) && claimvalues.get(key).getClass().equals(String.class)) {
             return (String) claimvalues.get(key);
         }
         return "";

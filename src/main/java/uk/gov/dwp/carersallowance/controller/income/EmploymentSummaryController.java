@@ -24,6 +24,7 @@ import uk.gov.dwp.carersallowance.session.FieldCollection.FieldCollectionCompara
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.session.UnknownRecordException;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 
 @Controller
 public class EmploymentSummaryController extends AbstractFormController {
@@ -48,8 +49,8 @@ public class EmploymentSummaryController extends AbstractFormController {
     public static final String   ID_FIELD              = "employment_id";
 
     @Autowired
-    public EmploymentSummaryController(final SessionManager sessionManager, final MessageSource messageSource) {
-        super(sessionManager, messageSource);
+    public EmploymentSummaryController(final SessionManager sessionManager, final MessageSource messageSource, final TransformationManager transformationManager) {
+        super(sessionManager, messageSource, transformationManager);
     }
 
     @Override
