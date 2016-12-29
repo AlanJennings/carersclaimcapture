@@ -340,7 +340,7 @@ public class AbstractFormController {
 
             for(String fieldName: fieldNames) {
                 String fieldValue = map.get(fieldName);
-                LOG.debug("fieldName = {}, fieldValue = {}", fieldName, fieldValue);
+                LOG.info("Adding session fieldName = {}, fieldValue = {}", fieldName, fieldValue);
                 session.setAttribute(fieldName, fieldValue);
             }
         } finally {
@@ -388,7 +388,7 @@ public class AbstractFormController {
                     fieldValue = requestValues[0];
                 }
                 LOG.debug("fieldName = {}, fieldValue = {}", fieldName, fieldValue);
-                model.addAttribute(fieldName,  fieldValue);
+                model.addAttribute(fieldName, fieldValue);
             }
         } finally {
             LOG.trace("Ending AbstractFormController.syncRequestToModel");
@@ -962,11 +962,11 @@ public class AbstractFormController {
         }
     }
 
-    public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response) {
+    public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile) {
         LOG.debug("Starting AbstractFormController.createSessionVariables");
         try {
             if (request.getQueryString() == null || !request.getQueryString().contains("changing=true")) {
-                sessionManager.createSessionVariables(request, response);
+                sessionManager.createSessionVariables(request, response, xmlFile);
             }
         } catch (RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);

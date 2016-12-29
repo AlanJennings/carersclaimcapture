@@ -41,7 +41,9 @@ public class CircsStartedController {
 
     @RequestMapping(value = CURRENT_CIRCS_PAGE, method = RequestMethod.GET)
     public String showCircsForm(final HttpServletRequest request, final HttpServletResponse response, final Model model) {
-        defaultChangeOfCircsController.createSessionVariables(request, response);
+        // Load replicate data in by setting circs replica xml filename here ...
+        String replicaData = null;
+        defaultChangeOfCircsController.createSessionVariables(request, response, replicaData);
         if (originTag.equals(ORIGIN_NI)) {
             defaultChangeOfCircsController.showForm(request, model);
             return CURRENT_CIRCS_PAGE;
