@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -39,8 +40,8 @@ public class AboutYouController extends AbstractFormController {
     private static final String CHANGE_PAYMENT_DETAILS = "changePaymentDetails";
     private static final String SOMETHING_ELSE = "somethingElse";
 
-    public AboutYouController(SessionManager sessionManager, MessageSource messageSource) {
-        super(sessionManager, messageSource);
+    public AboutYouController(SessionManager sessionManager, MessageSource messageSource, final TransformationManager transformationManager) {
+        super(sessionManager, messageSource, transformationManager);
     }
 
     @Override
