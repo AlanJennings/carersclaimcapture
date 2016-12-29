@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
 public class ConfirmValidation extends AbstractValidation {
@@ -23,7 +24,7 @@ public class ConfirmValidation extends AbstractValidation {
     /**
      * validate that every non-null value of the confirmation field matches every non-null value of the comparison field
      */
-    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> existingFieldValues) {
+    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, TransformationManager transformationManager, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> existingFieldValues) {
         Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName, requestFieldValues}, new String[]{"validationSummary", "messageSource", "fieldName", "allFieldValues"});
         LOG.trace("Starting ConfirmValidation.validate");
         try {

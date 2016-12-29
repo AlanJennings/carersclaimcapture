@@ -15,6 +15,7 @@ import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
 @Controller
@@ -32,8 +33,8 @@ public class YourIncomeController extends AbstractFormController {
     private static final String YOUR_INCOME_ANYOTHER                         = "yourIncome_anyother";
 
     @Autowired
-    public YourIncomeController(final SessionManager sessionManager, final MessageSource messageSource) {
-        super(sessionManager, messageSource);
+    public YourIncomeController(final SessionManager sessionManager, final MessageSource messageSource, final TransformationManager transformationManager) {
+        super(sessionManager, messageSource, transformationManager);
     }
 
     public static List<String> getIncomePageList(Session session) {

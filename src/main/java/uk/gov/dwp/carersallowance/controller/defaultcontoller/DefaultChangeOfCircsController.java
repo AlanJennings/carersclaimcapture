@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
 import uk.gov.dwp.carersallowance.session.SessionManager;
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 
 import java.util.Arrays;
 
@@ -22,8 +23,8 @@ public class DefaultChangeOfCircsController extends AbstractFormController {
             CHANGE_SELECTION_PAGE
     };
 
-    public DefaultChangeOfCircsController(final SessionManager sessionManager, final MessageSource messageSource) {
-        super(sessionManager, messageSource);
+    public DefaultChangeOfCircsController(final SessionManager sessionManager, final MessageSource messageSource, final TransformationManager transformationManager) {
+        super(sessionManager, messageSource, transformationManager);
         pageList = Arrays.asList(DefaultChangeOfCircsController.PAGES);
     }
 }

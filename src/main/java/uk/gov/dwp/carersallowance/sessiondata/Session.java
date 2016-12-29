@@ -1,5 +1,6 @@
 package uk.gov.dwp.carersallowance.sessiondata;
 
+import org.apache.commons.lang3.StringUtils;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
 import java.util.HashMap;
@@ -35,6 +36,9 @@ public class Session {
     }
 
     public void setAttribute(final String name, final Object value) {
+        if (StringUtils.isEmpty(name)) {
+            return;
+        }
         data.put(name, value);
     }
 

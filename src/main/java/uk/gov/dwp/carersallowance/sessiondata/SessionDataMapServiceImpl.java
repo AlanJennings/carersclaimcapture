@@ -1,9 +1,7 @@
-package uk.gov.dwp.carersallowance.session;
+package uk.gov.dwp.carersallowance.sessiondata;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-import uk.gov.dwp.carersallowance.sessiondata.Session;
-import uk.gov.dwp.carersallowance.sessiondata.SessionDataService;
+import uk.gov.dwp.carersallowance.session.NoSessionException;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,12 +9,11 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by peterwhitehead on 22/12/2016.
  */
-@Profile("test")
 @Service
-public class MockSessionDataServiceImpl implements SessionDataService {
+public class SessionDataMapServiceImpl implements SessionDataService {
     private Map<String, Session> sessions;
 
-    public MockSessionDataServiceImpl() {
+    public SessionDataMapServiceImpl() {
         sessions = new ConcurrentHashMap<>();
     }
 
@@ -43,7 +40,7 @@ public class MockSessionDataServiceImpl implements SessionDataService {
     }
 
     @Override
-    public Session removeSessionData(final String sessionId) {
-        return sessions.remove(sessionId);
+    public void removeSessionData(final String sessionId) {
+        sessions.remove(sessionId);
     }
 }

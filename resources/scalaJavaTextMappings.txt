@@ -457,6 +457,7 @@ welshCommunication=welshCommunication.label
 
 s11.longName=/consent-and-declaration/declaration.pageTitle
 obtainInfoAgreement=tellUsWhyInformation.label
+disclaimer.form.next=page.declaration.nextButtonText
 obtainInfoWhy=tellUsWhyPerson.label
 declaration.openingParagraph=declarationText.line1
 declaration.correct=declarationText.line2

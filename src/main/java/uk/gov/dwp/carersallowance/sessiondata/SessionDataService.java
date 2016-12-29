@@ -6,6 +6,6 @@ package uk.gov.dwp.carersallowance.sessiondata;
 public interface SessionDataService {
     Session getSessionData(final String sessionId);
     Session saveSessionData(final Session session);
-    Session removeSessionData(final String sessionId);
+    void removeSessionData(final String sessionId);
     Session createSessionData(final String sessionId);
 }

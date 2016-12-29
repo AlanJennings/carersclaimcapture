@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
 import uk.gov.dwp.carersallowance.session.SessionManager;
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 
 /**
  * A new empty care break has an index of -1;
@@ -34,8 +35,8 @@ public class BreakSomewhereElseController extends AbstractFormController {
     public static final String[] SHARED_FIELDS = {"break_id", "breakInCareType"};
 
     @Autowired
-    public BreakSomewhereElseController(final SessionManager sessionManager, final MessageSource messageSource) {
-        super(sessionManager, messageSource);
+    public BreakSomewhereElseController(final SessionManager sessionManager, final MessageSource messageSource, final TransformationManager transformationManager) {
+        super(sessionManager, messageSource, transformationManager);
     }
 
     @Override

@@ -12,14 +12,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
 import uk.gov.dwp.carersallowance.session.SessionManager;
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 
 @Controller
 public class FosteringAllowanceController extends AbstractFormController {
     private static final String CURRENT_PAGE  = "/your-income/fostering-allowance";
 
     @Autowired
-    public FosteringAllowanceController(final SessionManager sessionManager, final MessageSource messageSource) {
-        super(sessionManager, messageSource);
+    public FosteringAllowanceController(final SessionManager sessionManager, final MessageSource messageSource, final TransformationManager transformationManager) {
+        super(sessionManager, messageSource, transformationManager);
     }
 
     @Override

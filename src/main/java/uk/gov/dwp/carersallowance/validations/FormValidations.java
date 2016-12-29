@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
 public class FormValidations {
@@ -219,6 +220,7 @@ public class FormValidations {
 
     public ValidationSummary validate(ValidationSummary validationSummary,
                                       MessageSource messageSource,
+                                      TransformationManager transformationManager,
                                       Map<String, String[]> requestFieldValues,
                                       Map<String, String[]> existingFieldValues) {
         LOG.trace("Started FormValidations.validate");
@@ -232,8 +234,8 @@ public class FormValidations {
                 LOG.debug("validating {}", field);
 
                 // global validations
-                if(globalRegexValidation.validate(validationSummary, messageSource, field, requestFieldValues, existingFieldValues) == false) {
-                    LOG.debug("Failed global regex valdiation for {}", field);
+                if(globalRegexValidation.validate(validationSummary, messageSource, transformationManager, field, requestFieldValues, existingFieldValues) == false) {
+                    LOG.debug("Failed global regex validation for {}", field);
                     continue;
                 }
 
@@ -250,7 +252,7 @@ public class FormValidations {
                 List<Validation> fieldValidations = validations.get(field);
                 LOG.info("fieldValidations: {}", fieldValidations);
                 for(Validation validation: fieldValidations) {
-                    validation.validate(validationSummary, messageSource, field, requestFieldValues, existingFieldValues);
+                    validation.validate(validationSummary, messageSource, transformationManager, field, requestFieldValues, existingFieldValues);
                 }
             }
 

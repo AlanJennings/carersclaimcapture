@@ -6,7 +6,7 @@
 
 <t:mainPage>
  
-    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}" nextButtonTextKey="page.declaration.nextButtonText">
 
         <t:yesnofield name="tellUsWhyInformation" />
 

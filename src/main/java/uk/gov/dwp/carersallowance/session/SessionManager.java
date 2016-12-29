@@ -8,32 +8,37 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Service;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
-import uk.gov.dwp.carersallowance.sessiondata.SessionDataService;
+import uk.gov.dwp.carersallowance.sessiondata.SessionDataFactory;
 
 @Service
 public class SessionManager {
-    private final SessionDataService sessionDataService;
+    private final SessionDataFactory sessionDataFactory;
     private final CookieManager cookieManager;
 
     @Inject
-    public SessionManager(final CookieManager cookieManager, final SessionDataService sessionDataService) {
+    public SessionManager(final CookieManager cookieManager, final SessionDataFactory sessionDataFactory) {
         this.cookieManager = cookieManager;
-        this.sessionDataService = sessionDataService;
-    }
-    public Session getSession(final String sessionId) {
-        return sessionDataService.getSessionData(sessionId);
+        this.sessionDataFactory = sessionDataFactory;
     }
 
     public String createSessionId() {
         return UUID.randomUUID().toString();
     }
 
-    public Session createSession(final String sessionId) {
-        return sessionDataService.createSessionData(sessionId);
+    public Session getSession(final String sessionId) {
+        return sessionDataFactory.getSessionDataService().getSessionData(sessionId);
     }
 
-    public Session removeSession(final String sessionId) {
-        return sessionDataService.removeSessionData(sessionId);
+    public Session createSession(final String sessionId) {
+        return sessionDataFactory.getSessionDataService().createSessionData(sessionId);
+    }
+
+    public void removeSession(final String sessionId) {
+        sessionDataFactory.getSessionDataService().removeSessionData(sessionId);
+    }
+
+    public void saveSession(final Session session) {
+        sessionDataFactory.getSessionDataService().saveSessionData(session);
     }
 
     public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response) {
@@ -51,9 +56,5 @@ public class SessionManager {
 
     public String getSessionIdFromCookie(final HttpServletRequest request) {
         return cookieManager.getSessionIdFromCookie(request);
-    }
-
-    public void saveSession(final Session session) {
-        sessionDataService.saveSessionData(session);
     }
 }

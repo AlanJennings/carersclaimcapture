@@ -25,6 +25,7 @@ import uk.gov.dwp.carersallowance.session.FieldCollection.FieldCollectionCompara
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.session.UnknownRecordException;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
 @Controller
@@ -53,8 +54,8 @@ public class BreaksInCareSummaryController extends AbstractFormController {
     private static final String   ID_FIELD              = "break_id";
 
     @Autowired
-    public BreaksInCareSummaryController(final SessionManager sessionManager, final MessageSource messageSource) {
-        super(sessionManager, messageSource);
+    public BreaksInCareSummaryController(final SessionManager sessionManager, final MessageSource messageSource, final TransformationManager transformationManager) {
+        super(sessionManager, messageSource, transformationManager);
     }
 
     @Override

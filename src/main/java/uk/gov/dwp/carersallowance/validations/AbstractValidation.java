@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
 import uk.gov.dwp.carersallowance.session.InconsistentFieldValuesException;
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 import uk.gov.dwp.carersallowance.utils.KeyValue;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
@@ -21,9 +22,10 @@ public abstract class AbstractValidation implements Validation {
     private static final String PARAM_SEPERATOR = "=";
     private static final String ARG_SEPARATOR = "\\|";
     private static final String ERROR_TEXT_KEY_FORMAT = "%s.error_text";
+    protected static final String VALIDATION_TRANSFORMATION_KEY_FORMAT = "%s.validation.transformations";
 
     @Override
-    public abstract boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> existingFieldValues);
+    public abstract boolean validate(ValidationSummary validationSummary, MessageSource messageSource, TransformationManager transformationManager, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> existingFieldValues);
 
     /**
      * @return the message or null if it does not exist
