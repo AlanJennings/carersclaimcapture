@@ -7,6 +7,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.context.MessageSource;
+import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
+import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionServiceImpl;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
 import uk.gov.dwp.carersallowance.sessiondata.SessionDataFactory;
 import uk.gov.dwp.carersallowance.sessiondata.SessionDataMapServiceImpl;
@@ -36,6 +39,11 @@ public class SessionManagerTest {
     @Mock
     private SessionDataFactory sessionDataFactory;
 
+    @Mock
+    private MessageSource messageSource;
+
+    private ClaimEncryptionService claimEncryptionService;
+
     private Session session;
 
     @Mock
@@ -50,14 +58,15 @@ public class SessionManagerTest {
     public void setUp() throws Exception {
         session = new Session("1234");
         sessionDataService = new SessionDataMapServiceImpl();
+        claimEncryptionService = new ClaimEncryptionServiceImpl(false, messageSource);
         when(sessionDataFactory.getSessionDataService()).thenReturn(sessionDataService);
-        sessionManager = new SessionManager(cookieManager, sessionDataFactory);
+        sessionManager = new SessionManager(cookieManager, sessionDataFactory, claimEncryptionService);
         objectCaptor = ArgumentCaptor.forClass(Object.class);
     }
 
     @Test
     public void testGetSession() throws Exception {
-        sessionDataService.createSessionData("1234");
+        session = sessionDataService.createSessionData("1234");
         final Session session1 = sessionManager.getSession("1234");
         org.assertj.core.api.Assertions.assertThat(session1).isEqualToComparingFieldByField(session);
     }
@@ -106,7 +115,7 @@ public class SessionManagerTest {
         sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml");
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
-        Session session=sessionManager.getSession(sessionId);
+        session = sessionManager.getSession(sessionId);
         assertThat(session.getAttribute("over35HoursAWeek"), is("yes"));
         assertThat(session.getAttribute("over16YearsOld"), is("yes"));
         assertThat(session.getAttribute("originCountry"), is("GB"));
@@ -117,7 +126,7 @@ public class SessionManagerTest {
         sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml");
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
-        Session session=sessionManager.getSession(sessionId);
+        session = sessionManager.getSession(sessionId);
         assertThat(session.getAttribute("dateOfClaim_day"), is("20"));
         assertThat(session.getAttribute("dateOfClaim_month"), is("04"));
         assertThat(session.getAttribute("dateOfClaim_year"), is("2016"));
@@ -128,7 +137,7 @@ public class SessionManagerTest {
         sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml");
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
-        Session session=sessionManager.getSession(sessionId);
+        session = sessionManager.getSession(sessionId);
         assertThat(session.getAttribute("appVersion"), is("0.27"));
         assertThat(session.getAttribute("origin"), is("GB"));
         assertThat(session.getAttribute("language"), is("English"));

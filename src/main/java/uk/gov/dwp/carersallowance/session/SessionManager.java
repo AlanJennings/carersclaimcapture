@@ -15,6 +15,8 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
 import uk.gov.dwp.carersallowance.xml.XmlBuilder;
 import uk.gov.dwp.carersallowance.xml.XmlClaimReader;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
@@ -26,11 +28,13 @@ public class SessionManager {
     private static final Logger LOG = LoggerFactory.getLogger(SessionManager.class);
     private final SessionDataFactory sessionDataFactory;
     private final CookieManager cookieManager;
+    private final ClaimEncryptionService claimEncryptionService;
 
     @Inject
-    public SessionManager(final CookieManager cookieManager, final SessionDataFactory sessionDataFactory) {
+    public SessionManager(final CookieManager cookieManager, final SessionDataFactory sessionDataFactory, final ClaimEncryptionService claimEncryptionService) {
         this.cookieManager = cookieManager;
         this.sessionDataFactory = sessionDataFactory;
+        this.claimEncryptionService = claimEncryptionService;
     }
 
     public String createSessionId() {
@@ -38,7 +42,7 @@ public class SessionManager {
     }
 
     public Session getSession(final String sessionId) {
-        return sessionDataFactory.getSessionDataService().getSessionData(sessionId);
+        return claimEncryptionService.decryptClaim(sessionDataFactory.getSessionDataService().getSessionData(sessionId));
     }
 
     public Session createSession(final String sessionId) {
@@ -50,7 +54,7 @@ public class SessionManager {
     }
 
     public void saveSession(final Session session) {
-        sessionDataFactory.getSessionDataService().saveSessionData(session);
+        sessionDataFactory.getSessionDataService().saveSessionData(claimEncryptionService.encryptClaim(session));
     }
 
     public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile) {

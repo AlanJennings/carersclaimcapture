@@ -73,13 +73,21 @@ public class SessionDataDatabaseServiceImpl implements SessionDataService {
 
     private Session getSessionFromSessionData(final String sessionId) {
         final SessionData sessionData = processRequest(sessionId, "/session/load/" + XorEncryption.encryptUuid(sessionId, sdKey), HttpMethod.POST);
-        if (sessionData.getMinutesSinceLastActive() != null && Integer.valueOf(sessionData.getMinutesSinceLastActive()) > claimExpiryTime) {
+
+        if (isEmpty(sessionData)) {
+            throw new NoSessionException("No Session for Session ID: " + sessionId);
+        }
+        if ((sessionData.getMinutesSinceLastActive() != null && Integer.valueOf(sessionData.getMinutesSinceLastActive()) > claimExpiryTime)) {
             throw new SessionTimeoutException("Session timed out, last active:" + sessionData.getMinutesSinceLastActive() + " timeout period:" + claimExpiryTime);
         }
         final String xml = new String(DatatypeConverter.parseBase64Binary(sessionData.getPayload()));
         XStream xStream = createXStream();
         Map<String, Object> data = (Map<String, Object>)xStream.fromXML(xml);
         return new Session(sessionId, data);
+    }
+
+    private Boolean isEmpty(SessionData sessionData) {
+        return sessionData == null || (sessionData.getMinutesSinceLastActive() == null && sessionData.getPayload() == null && sessionData.getSessionId() == null);
     }
 
     private void saveSessionToSessionData(final Session session) {
@@ -114,7 +122,7 @@ public class SessionDataDatabaseServiceImpl implements SessionDataService {
         } catch (SessionDataServiceException mde) {
             throw mde;
         } catch (Exception e) {
-            LOG.error("Session data failed to save claim. sessionId:{}.", sessionId, e);
+            LOG.error("Session data process claim. sessionId:{}.", sessionId, e);
             throw new SessionDataServiceException("Session data service is unavailable! " + e.getMessage() + ".", e);
         }
     }
