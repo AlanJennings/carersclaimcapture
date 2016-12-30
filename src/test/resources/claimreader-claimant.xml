@@ -13,7 +13,7 @@
         <DWPCAClaim>
             <DateOfClaim>
                 <QuestionLabel>Claim date</QuestionLabel>
-                <Answer type="date">08-04-2016</Answer>
+                <Answer>20-04-2016</Answer>
             </DateOfClaim>
             <QualifyingBenefit>
                 <QuestionLabel>What benefit does the person you care for get?</QuestionLabel>
@@ -34,7 +34,7 @@
                 </Title>
                 <DateOfBirth>
                     <QuestionLabel>Date of birth</QuestionLabel>
-                    <Answer type="date">10-10-1990</Answer>
+                    <Answer>20-10-1990</Answer>
                 </DateOfBirth>
                 <NationalInsuranceNumber>
                     <QuestionLabel>National Insurance number</QuestionLabel>
@@ -54,7 +54,7 @@
                 </Cared35HoursBefore>
                 <DateStartCaring>
                     <QuestionLabel>When did you begin caring?</QuestionLabel>
-                    <Answer type="date">08-01-2016</Answer>
+                    <Answer>08-01-2016</Answer>
                 </DateStartCaring>
                 <MaritalStatus>
                     <QuestionLabel>Your status</QuestionLabel>

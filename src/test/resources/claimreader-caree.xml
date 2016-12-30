@@ -13,7 +13,7 @@
         <DWPCAClaim>
             <DateOfClaim>
                 <QuestionLabel>Claim date</QuestionLabel>
-                <Answer type="date">08-04-2016</Answer>
+                <Answer>08-04-2016</Answer>
             </DateOfClaim>
             <QualifyingBenefit>
                 <QuestionLabel>What benefit does the person you care for get?</QuestionLabel>
@@ -34,7 +34,7 @@
                 </Title>
                 <DateOfBirth>
                     <QuestionLabel>Date of birth</QuestionLabel>
-                    <Answer type="date">08-04-2001</Answer>
+                    <Answer>08-04-2001</Answer>
                 </DateOfBirth>
                 <NationalInsuranceNumber>
                     <QuestionLabel>National Insurance number</QuestionLabel>
@@ -77,7 +77,7 @@
                     </WhoWasAway>
                     <StartDate>
                         <QuestionLabel>When was Jane Bloggs admitted?</QuestionLabel>
-                        <Answer type="date">09-07-2016</Answer>
+                        <Answer>09-07-2016</Answer>
                     </StartDate>
                     <BreakEnded>
                         <QuestionLabel>Has the hospital stay ended?</QuestionLabel>
@@ -85,7 +85,7 @@
                     </BreakEnded>
                     <EndDate>
                         <QuestionLabel>When was Jane Bloggs discharged?</QuestionLabel>
-                        <Answer type="date">09-07-2016</Answer>
+                        <Answer>09-07-2016</Answer>
                     </EndDate>
                     <BreaksInCareRespiteStillCaring>
                         <QuestionLabel>During this time in hospital, were you still providing care for Jane Bloggs for 35 hours a week?</QuestionLabel>
@@ -103,7 +103,7 @@
                     </WhoWasAway>
                     <StartDate>
                         <QuestionLabel>When was Jane Bloggs admitted?</QuestionLabel>
-                        <Answer type="date">09-07-2016</Answer>
+                        <Answer>09-07-2016</Answer>
                     </StartDate>
                     <BreakEnded>
                         <QuestionLabel>Has the respite or care home stay ended?</QuestionLabel>
@@ -111,7 +111,7 @@
                     </BreakEnded>
                     <EndDate>
                         <QuestionLabel>When was Jane Bloggs discharged?</QuestionLabel>
-                        <Answer type="date">09-07-2016</Answer>
+                        <Answer>09-07-2016</Answer>
                     </EndDate>
                     <DpMedicalCare>
                         <QuestionLabel>Did Jane Bloggs receive care from a medical professional during this time?</QuestionLabel>
@@ -133,11 +133,11 @@
                     </BreakStarted>
                     <StartDate>
                         <QuestionLabel>What date did you start to provide care again?</QuestionLabel>
-                        <Answer type="date">09-07-2016</Answer>
+                        <Answer>09-07-2016</Answer>
                     </StartDate>
                     <EndDate>
                         <QuestionLabel>What date did you start to provide care again?</QuestionLabel>
-                        <Answer type="date">09-07-2016</Answer>
+                        <Answer>09-07-2016</Answer>
                     </EndDate>
                     <ReasonClaimant>
                         <QuestionLabel>Where were you during this time?</QuestionLabel>

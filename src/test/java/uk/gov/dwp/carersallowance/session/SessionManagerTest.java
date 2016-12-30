@@ -76,7 +76,7 @@ public class SessionManagerTest {
 
     @Test
     public void testCreateSessionVariables() throws Exception {
-        sessionManager.createSessionVariables(request, response);
+        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml");
         verify(cookieManager, times(1)).addGaCookie(request, response);
         verify(cookieManager, times(1)).addSessionCookie(Matchers.any(HttpServletResponse.class), anyString());
         verify(cookieManager, times(1)).addVersionCookie(response);
@@ -99,5 +99,46 @@ public class SessionManagerTest {
         session1.setAttribute("test", "test2");
         sessionManager.saveSession(session1);
         org.assertj.core.api.Assertions.assertThat(session1).isEqualToComparingFieldByField(sessionManager.getSession(sessionId));
+    }
+
+    @Test
+    public void testLoadDefaultData() throws Exception {
+        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml");
+        verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
+        final String sessionId = objectCaptor.getValue().toString();
+        Session session=sessionManager.getSession(sessionId);
+        assertThat(session.getAttribute("over35HoursAWeek"), is("yes"));
+        assertThat(session.getAttribute("over16YearsOld"), is("yes"));
+        assertThat(session.getAttribute("originCountry"), is("GB"));
+    }
+
+    @Test
+    public void testLoadClaimDate() throws Exception {
+        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml");
+        verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
+        final String sessionId = objectCaptor.getValue().toString();
+        Session session=sessionManager.getSession(sessionId);
+        assertThat(session.getAttribute("dateOfClaim_day"), is("20"));
+        assertThat(session.getAttribute("dateOfClaim_month"), is("04"));
+        assertThat(session.getAttribute("dateOfClaim_year"), is("2016"));
+    }
+
+    @Test
+    public void testLoadReplicaData() throws Exception {
+        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml");
+        verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
+        final String sessionId = objectCaptor.getValue().toString();
+        Session session=sessionManager.getSession(sessionId);
+        assertThat(session.getAttribute("appVersion"), is("0.27"));
+        assertThat(session.getAttribute("origin"), is("GB"));
+        assertThat(session.getAttribute("language"), is("English"));
+        assertThat(session.getAttribute("dateOfClaim_day"), is("20"));
+        assertThat(session.getAttribute("dateOfClaim_month"), is("04"));
+        assertThat(session.getAttribute("dateOfClaim_year"), is("2016"));
+        assertThat(session.getAttribute("carerSurname"), is("Bloggs"));
+        assertThat(session.getAttribute("carerFirstName"), is("Joe"));
+        assertThat(session.getAttribute("carerDateOfBirth_day"), is("20"));
+        assertThat(session.getAttribute("carerDateOfBirth_month"), is("10"));
+        assertThat(session.getAttribute("carerDateOfBirth_year"), is("1990"));
     }
 }

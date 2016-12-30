@@ -415,7 +415,7 @@ public class AbstractFormController {
                 } else {
                     fieldValue = requestValues[0];
                 }
-                LOG.debug("fieldName = {}, fieldValue = {}", fieldName, fieldValue);
+                LOG.info("Adding session fieldName = {}, fieldValue = {}", fieldName, fieldValue);
                 session.setAttribute(fieldName, transformationManager.getTransformedValue(fieldName, fieldValue, SESSION_TRANSFORMATIONS_KEY, messageSource));
             }
         } finally {

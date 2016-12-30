@@ -13,7 +13,7 @@
         <DWPCAClaim>
             <DateOfClaim>
                 <QuestionLabel>Claim date</QuestionLabel>
-                <Answer type="date">08-04-2016</Answer>
+                <Answer>08-04-2016</Answer>
             </DateOfClaim>
             <QualifyingBenefit>
                 <QuestionLabel>What benefit does the person you care for get?</QuestionLabel>
@@ -34,7 +34,7 @@
                 </Title>
                 <DateOfBirth>
                     <QuestionLabel>Date of birth</QuestionLabel>
-                    <Answer type="date">10-10-1990</Answer>
+                    <Answer>10-10-1990</Answer>
                 </DateOfBirth>
                 <NationalInsuranceNumber>
                     <QuestionLabel>National Insurance number</QuestionLabel>
@@ -54,7 +54,7 @@
                 </Cared35HoursBefore>
                 <DateStartCaring>
                     <QuestionLabel>When did you begin caring?</QuestionLabel>
-                    <Answer type="date">08-01-2016</Answer>
+                    <Answer>08-01-2016</Answer>
                 </DateStartCaring>
                 <MaritalStatus>
                     <QuestionLabel>Your status</QuestionLabel>
@@ -72,6 +72,10 @@
                     <QuestionLabel>Email address</QuestionLabel>
                     <Answer>cads.dwp@gmail.com</Answer>
                 </Email>
+                <EmailConfirmation>
+                    <QuestionLabel>Email address</QuestionLabel>
+                    <Answer>cads.dwp@gmail.com</Answer>
+                </EmailConfirmation>
             </Claimant>
             <Caree>
                 <Surname>
@@ -88,7 +92,7 @@
                 </Title>
                 <DateOfBirth>
                     <QuestionLabel>Date of birth</QuestionLabel>
-                    <Answer type="date">08-04-2001</Answer>
+                    <Answer>08-04-2001</Answer>
                 </DateOfBirth>
                 <NationalInsuranceNumber>
                     <QuestionLabel>National Insurance number</QuestionLabel>
@@ -108,7 +112,7 @@
                 </RelationToClaimant>
                 <Cared35Hours>
                     <QuestionLabel>Do you spend 35 hours or more each week providing care for Jane Bloggs?</QuestionLabel>
-                    <Answer>Yes</Answer>
+                    <Answer>yes</Answer>
                 </Cared35Hours>
                 <CareBreak>
                     <BreaksSinceClaim>
@@ -131,7 +135,7 @@
                     </WhoWasAway>
                     <StartDate>
                         <QuestionLabel>When was Jane Bloggs admitted?</QuestionLabel>
-                        <Answer type="date">09-07-2016</Answer>
+                        <Answer>09-07-2016</Answer>
                     </StartDate>
                     <BreakEnded>
                         <QuestionLabel>Has the hospital stay ended?</QuestionLabel>
@@ -139,7 +143,7 @@
                     </BreakEnded>
                     <EndDate>
                         <QuestionLabel>When was Jane Bloggs discharged?</QuestionLabel>
-                        <Answer type="date">09-07-2016</Answer>
+                        <Answer>09-07-2016</Answer>
                     </EndDate>
                     <BreaksInCareRespiteStillCaring>
                         <QuestionLabel>During this time in hospital, were you still providing care for Jane Bloggs for 35 hours a week?</QuestionLabel>
@@ -157,7 +161,7 @@
                     </WhoWasAway>
                     <StartDate>
                         <QuestionLabel>When was Jane Bloggs admitted?</QuestionLabel>
-                        <Answer type="date">09-07-2016</Answer>
+                        <Answer>09-07-2016</Answer>
                     </StartDate>
                     <BreakEnded>
                         <QuestionLabel>Has the respite or care home stay ended?</QuestionLabel>
@@ -165,7 +169,7 @@
                     </BreakEnded>
                     <EndDate>
                         <QuestionLabel>When was Jane Bloggs discharged?</QuestionLabel>
-                        <Answer type="date">09-07-2016</Answer>
+                        <Answer>09-07-2016</Answer>
                     </EndDate>
                     <DpMedicalCare>
                         <QuestionLabel>Did Jane Bloggs receive care from a medical professional during this time?</QuestionLabel>
@@ -187,11 +191,11 @@
                     </BreakStarted>
                     <StartDate>
                         <QuestionLabel>What date did you start to provide care again?</QuestionLabel>
-                        <Answer type="date">09-07-2016</Answer>
+                        <Answer>09-07-2016</Answer>
                     </StartDate>
                     <EndDate>
                         <QuestionLabel>What date did you start to provide care again?</QuestionLabel>
-                        <Answer type="date">09-07-2016</Answer>
+                        <Answer>09-07-2016</Answer>
                     </EndDate>
                     <ReasonClaimant>
                         <QuestionLabel>Where were you during this time?</QuestionLabel>
@@ -245,11 +249,11 @@
                     </Title>
                     <DateStarted>
                         <QuestionLabel>When did you start the course?</QuestionLabel>
-                        <Answer type="date">08-03-2016</Answer>
+                        <Answer>08-03-2016</Answer>
                     </DateStarted>
                     <ExpectedEndDate>
                         <QuestionLabel>When did the course end or when will you finish?</QuestionLabel>
-                        <Answer type="date">08-04-2018</Answer>
+                        <Answer>08-04-2018</Answer>
                     </ExpectedEndDate>
                 </CourseDetails>
                 <LocationDetails>
@@ -326,7 +330,7 @@
                         <Pay>
                             <DateLastPaid>
                                 <QuestionLabel>When were you last paid?</QuestionLabel>
-                                <Answer type="date">01-04-2016</Answer>
+                                <Answer>01-04-2016</Answer>
                             </DateLastPaid>
                             <GrossPayment>
                                 <QuestionLabel>What were you paid in your last wage?</QuestionLabel>
@@ -381,11 +385,11 @@
                     </MoreThanYearAgo>
                     <DateStarted>
                         <QuestionLabel>When did you start this work?</QuestionLabel>
-                        <Answer type="date">08-10-2015</Answer>
+                        <Answer>08-10-2015</Answer>
                     </DateStarted>
                     <DateEnded>
                         <QuestionLabel>When did you finish this work?</QuestionLabel>
-                        <Answer type="date">08-02-2016</Answer>
+                        <Answer>08-02-2016</Answer>
                     </DateEnded>
                     <PaidMoneyYet>
                         <QuestionLabel>Has your self-employed business been paid any money yet?</QuestionLabel>
@@ -393,7 +397,7 @@
                     </PaidMoneyYet>
                     <PaidMoneyDate>
                         <QuestionLabel>Date money first received by the business</QuestionLabel>
-                        <Answer type="date">08-11-2015</Answer>
+                        <Answer>08-11-2015</Answer>
                     </PaidMoneyDate>
                     <PaidForPension>
                         <QuestionLabel>Did you pay into a pension?</QuestionLabel>
@@ -415,7 +419,7 @@
                     </StillBeingPaidThisPay>
                     <WhenDidYouLastGetPaid>
                         <QuestionLabel>When were you last paid?</QuestionLabel>
-                        <Answer type="date">08-01-2016</Answer>
+                        <Answer>08-01-2016</Answer>
                     </WhenDidYouLastGetPaid>
                     <WhoPaidYouThisPay>
                         <QuestionLabel>Who paid you Statutory Sick Pay?</QuestionLabel>
@@ -441,7 +445,7 @@
                     </StillBeingPaidThisPay>
                     <WhenDidYouLastGetPaid>
                         <QuestionLabel>When were you last paid?</QuestionLabel>
-                        <Answer type="date">08-01-2016</Answer>
+                        <Answer>08-01-2016</Answer>
                     </WhenDidYouLastGetPaid>
                     <WhoPaidYouThisPay>
                         <QuestionLabel>Who paid you this?</QuestionLabel>
@@ -485,7 +489,7 @@
                     </StillBeingPaidThisPay>
                     <WhenDidYouLastGetPaid>
                         <QuestionLabel>When were you last paid?</QuestionLabel>
-                        <Answer type="date">08-01-2016</Answer>
+                        <Answer>08-01-2016</Answer>
                     </WhenDidYouLastGetPaid>
                     <WhoPaidYouThisPay>
                         <QuestionLabel>Who paid you this?</QuestionLabel>
@@ -528,7 +532,7 @@
                 </Title>
                 <DateOfBirth>
                     <QuestionLabel>Date of birth</QuestionLabel>
-                    <Answer type="date">08-04-2006</Answer>
+                    <Answer>08-04-2006</Answer>
                 </DateOfBirth>
                 <NationalInsuranceNumber>
                     <QuestionLabel>National Insurance number</QuestionLabel>

@@ -76,7 +76,6 @@ public class SessionManager {
             List<String> xmlMappings = XmlBuilder.readLines(claimTemplateUrl);
             XPathMappingList valueMappings = new XPathMappingList();
             valueMappings.add(xmlMappings);
-
             URL xmlfile = XmlClaimReader.class.getClassLoader().getResource(xmlFile);
             String xml = FileUtils.readFileToString(new File(xmlfile.toURI()), Charset.defaultCharset());
 
@@ -86,6 +85,11 @@ public class SessionManager {
                 LOG.info("Replica setting data for name:" + name + " to:" + values.get(name));
                 session.setAttribute(name, values.get(name));
             }
+
+            // TODO load the replica data from xml ... but its not there ! Hows it done in scala ??
+            session.setAttribute("over35HoursAWeek", "yes");
+            session.setAttribute("over16YearsOld", "yes");
+            session.setAttribute("originCountry", "GB");
         } catch (Exception e) {
             LOG.error("Exception loading replica data {}", e.toString(), e);
         }
