@@ -114,7 +114,7 @@ public class EmploymentSummaryController extends AbstractFormController {
             if(employments == null || employments.isEmpty()) {
                 return "redirect:" + EMPLOYMENT_DETAIL;
             }
-            return super.showForm(request, model);
+            return super.getForm(request, model);
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;

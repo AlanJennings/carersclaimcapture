@@ -45,7 +45,7 @@ public class CircsStartedController {
         String replicaData = null;
         defaultChangeOfCircsController.createSessionVariables(request, response, replicaData);
         if (originTag.equals(ORIGIN_NI)) {
-            defaultChangeOfCircsController.showForm(request, model);
+            defaultChangeOfCircsController.getForm(request, model);
             return CURRENT_CIRCS_PAGE;
         }
         return "redirect:" + CHANGE_SELECTION_PAGE;

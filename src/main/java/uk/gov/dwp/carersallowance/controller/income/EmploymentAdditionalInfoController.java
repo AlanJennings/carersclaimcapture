@@ -48,7 +48,7 @@ public class EmploymentAdditionalInfoController extends AbstractFormController {
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
     public String showForm(HttpServletRequest request, Model model) {
-        return super.showForm(request, model);
+        return super.getForm(request, model);
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)

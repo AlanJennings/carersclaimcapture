@@ -176,11 +176,11 @@ public class AbstractFormController {
         return nextPage;
     }
 
-    public String showForm(HttpServletRequest request, Model model) {
-        return showFormInternal(request, model);
+    public String getForm(HttpServletRequest request, Model model) {
+        return getFormInternal(request, model);
     }
 
-    private String showFormInternal(HttpServletRequest request, Model model) {
+    private String getFormInternal(HttpServletRequest request, Model model) {
         LOG.trace("Starting AbstractFormController.showFormInternal");
         try {
             LOG.debug("model = {}", model);
@@ -255,7 +255,7 @@ public class AbstractFormController {
 
             if(hasErrors()) {
                 LOG.info("there are validation errors, re-showing form");
-                String form = showForm(request, model);
+                String form = getForm(request, model);
 
                 // add the values of the current form to the model as well as the session values
                 copyFromRequestToModel(request, fields, model);
@@ -749,7 +749,7 @@ public class AbstractFormController {
     protected String showFormEditFieldCollection(Session session, HttpServletRequest request, Model model, String fieldCollectionName, String idField) {
         LOG.trace("Started EmploymentDetailsController.showForm");
         try {
-            String destination = showFormInternal(request, model);
+            String destination = getFormInternal(request, model);
 
             // if the ID field is populated then we are editing an existing record
             // and we should load the data, but only if we have not failed validation
@@ -944,7 +944,7 @@ public class AbstractFormController {
             String page = null;
             LOG.info("method = {}, path = {}", method, path);
             if (HTTP_GET.equalsIgnoreCase(method)) {
-                return showForm(request, model);
+                return getForm(request, model);
             } else if (HTTP_POST.equalsIgnoreCase(method)) {
                 return postForm(request, model);
             } else {

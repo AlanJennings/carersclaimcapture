@@ -113,7 +113,7 @@ public class BreaksInCareSummaryController extends AbstractFormController {
     public String showForm(HttpServletRequest request, Model model) {
         LOG.trace("Started BreaksInCareController.showForm");
         try {
-            return super.showForm(request, model);
+            return super.getForm(request, model);
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;

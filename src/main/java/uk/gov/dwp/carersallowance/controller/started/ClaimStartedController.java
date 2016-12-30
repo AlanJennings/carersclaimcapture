@@ -31,7 +31,7 @@ public class ClaimStartedController {
     @RequestMapping(value = CURRENT_PAGE, method = RequestMethod.GET)
     public String showForm(final HttpServletRequest request, final HttpServletResponse response, final Model model) {
         defaultFormController.createSessionVariables(request, response, "defaultClaim.xml");
-        defaultFormController.showForm(request, model);
+        defaultFormController.getForm(request, model);
         return CURRENT_PAGE;
     }
 
