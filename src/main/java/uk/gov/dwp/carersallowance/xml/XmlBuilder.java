@@ -1,4 +1,4 @@
-package uk.gov.dwp.carersallowance.controller;
+package uk.gov.dwp.carersallowance.xml;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,7 +32,6 @@ import uk.gov.dwp.carersallowance.utils.Parameters;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMapping;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
 import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
-import uk.gov.dwp.carersallowance.xml.AssistedDecision;
 
 public class XmlBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(XmlBuilder.class);

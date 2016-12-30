@@ -4,14 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import uk.gov.dwp.carersallowance.controller.XmlBuilder;
 import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
-import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
 import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
 
 import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathFactory;
 
 import java.time.LocalDateTime;

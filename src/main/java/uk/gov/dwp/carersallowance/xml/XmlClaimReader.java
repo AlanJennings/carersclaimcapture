@@ -1,9 +1,5 @@
-package uk.gov.dwp.carersallowance.controller;
+package uk.gov.dwp.carersallowance.xml;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.CharacterData;
@@ -24,10 +18,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import uk.gov.dwp.carersallowance.controller.submission.SubmitClaimController;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMapping;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
-import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList.MappingException;
 import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
 
 /**

@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
+import uk.gov.dwp.carersallowance.xml.XmlBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;

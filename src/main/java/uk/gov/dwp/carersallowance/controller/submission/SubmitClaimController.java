@@ -1,19 +1,12 @@
 package uk.gov.dwp.carersallowance.controller.submission;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +14,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import uk.gov.dwp.carersallowance.controller.XmlBuilder;
+import uk.gov.dwp.carersallowance.xml.XmlBuilder;
 import uk.gov.dwp.carersallowance.database.TransactionIdService;
 
-import uk.gov.dwp.carersallowance.session.CookieManager;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
-import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList.MappingException;
 
 /**

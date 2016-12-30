@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
+import uk.gov.dwp.carersallowance.xml.XmlBuilder;
+import uk.gov.dwp.carersallowance.xml.XmlClaimReader;
 
 import java.io.File;
 import java.net.URL;
