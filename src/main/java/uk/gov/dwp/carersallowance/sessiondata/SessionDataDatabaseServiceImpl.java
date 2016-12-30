@@ -99,6 +99,7 @@ public class SessionDataDatabaseServiceImpl implements SessionDataService {
 
     private String processRequest(final String message, final String sessionId, final String url, final HttpMethod method) {
         try {
+            LOG.debug("Sending request {}{} to session data database.", sdUrl, url);
             final ResponseEntity<String> response = restTemplate.exchange(sdUrl + url, method, createRequest(message), String.class);
             return processResponse(response, sessionId);
         } catch (RestClientException rce) {
@@ -109,11 +110,14 @@ public class SessionDataDatabaseServiceImpl implements SessionDataService {
         } catch (Exception e) {
             LOG.error("Session data failed to save claim. sessionId:{}.", sessionId, e);
             throw new SessionDataServiceException("Session data service is unavailable! " + e.getMessage() + ".", e);
+        } finally {
+            LOG.debug("Finished request {}{} to session data database.", sdUrl, url);
         }
     }
 
     private SessionData processRequest(final String sessionId, final String url, final HttpMethod method) {
         try {
+            LOG.debug("Sending request {}{} to session data database.", sdUrl, url);
             final ResponseEntity<SessionData> response = restTemplate.exchange(sdUrl + url, method, createRequest(""), SessionData.class);
             return processResponse(response, sessionId, true);
         } catch (RestClientException rce) {
@@ -124,6 +128,8 @@ public class SessionDataDatabaseServiceImpl implements SessionDataService {
         } catch (Exception e) {
             LOG.error("Session data process claim. sessionId:{}.", sessionId, e);
             throw new SessionDataServiceException("Session data service is unavailable! " + e.getMessage() + ".", e);
+        } finally {
+            LOG.debug("Finished request {}{} to session data database.", sdUrl, url);
         }
     }
 
