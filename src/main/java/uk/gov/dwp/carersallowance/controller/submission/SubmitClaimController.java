@@ -52,7 +52,7 @@ public class SubmitClaimController {
      * This allows an easy to submit route, but is only temporary.
      */
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
-    public String showForm(final HttpServletRequest request) {
+    public String getForm(final HttpServletRequest request) {
         return postForm(request);
     }
 

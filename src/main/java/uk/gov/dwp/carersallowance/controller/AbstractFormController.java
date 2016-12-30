@@ -181,7 +181,7 @@ public class AbstractFormController {
     }
 
     private String getFormInternal(HttpServletRequest request, Model model) {
-        LOG.trace("Starting AbstractFormController.showFormInternal");
+        LOG.trace("Starting AbstractFormController.getFormInternal");
         try {
             LOG.debug("model = {}", model);
 
@@ -212,7 +212,7 @@ public class AbstractFormController {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
         } finally {
-            LOG.trace("Ending AbstractFormController.showFormInternal");
+            LOG.trace("Ending AbstractFormController.getFormInternal");
         }
     }
 
@@ -746,8 +746,8 @@ public class AbstractFormController {
         }
     }
 
-    protected String showFormEditFieldCollection(Session session, HttpServletRequest request, Model model, String fieldCollectionName, String idField) {
-        LOG.trace("Started EmploymentDetailsController.showForm");
+    protected String getFormEditFieldCollection(Session session, HttpServletRequest request, Model model, String fieldCollectionName, String idField) {
+        LOG.trace("Started EmploymentDetailsController.getForm");
         try {
             String destination = getFormInternal(request, model);
 
@@ -768,7 +768,7 @@ public class AbstractFormController {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
         } finally {
-            LOG.trace("Ending EmploymentDetailsController.showForm\n");
+            LOG.trace("Ending EmploymentDetailsController.getForm\n");
         }
     }
 

@@ -110,15 +110,15 @@ public class BreaksInCareSummaryController extends AbstractFormController {
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
-    public String showForm(HttpServletRequest request, Model model) {
-        LOG.trace("Started BreaksInCareController.showForm");
+    public String getForm(HttpServletRequest request, Model model) {
+        LOG.trace("Started BreaksInCareController.getForm");
         try {
             return super.getForm(request, model);
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
         } finally {
-            LOG.trace("Ending BreaksInCareController.showForm\n");
+            LOG.trace("Ending BreaksInCareController.getForm\n");
         }
     }
 
@@ -127,7 +127,7 @@ public class BreaksInCareSummaryController extends AbstractFormController {
      * either a new one (if break_id is not populated), or an existing one (if it is)
      * and then cleanup the session by removing the individual fields values.
      *
-     * Then redirect to the showForm page (i.e. post, redirect, get)
+     * Then redirect to the getForm page (i.e. post, redirect, get)
      *
      * Note: validation has already occurred, but can be repeated if required by iterating
      * over the individual page handlers (the request will need populating)

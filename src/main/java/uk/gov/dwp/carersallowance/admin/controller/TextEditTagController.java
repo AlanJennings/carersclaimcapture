@@ -33,10 +33,10 @@ public class TextEditTagController {
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
-    public String showForm(HttpServletRequest request,
+    public String getForm(HttpServletRequest request,
                            Model model,
                            @RequestParam(value = "name", required = false) String name) {
-        LOG.trace("Starting AbstractFormController.showFormInternal");
+        LOG.trace("Starting AbstractFormController.getFormInternal");
         try {
             LOG.debug("model = {}", model);
 
@@ -60,7 +60,7 @@ public class TextEditTagController {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
         } finally {
-            LOG.trace("Ending AbstractFormController.showFormInternal");
+            LOG.trace("Ending AbstractFormController.getFormInternal");
         }
     }
 

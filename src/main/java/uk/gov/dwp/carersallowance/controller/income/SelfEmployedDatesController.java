@@ -35,14 +35,4 @@ public class SelfEmployedDatesController extends AbstractFormController {
     public String getNextPage(HttpServletRequest request) {
         return super.getNextPage(request, YourIncomeController.getIncomePageList(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))));
     }
-
-//    @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
-//    public String showForm(HttpServletRequest request, Model model) {
-//        return super.showForm(request, model);
-//    }
-//
-//    @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
-//    public String postForm(HttpServletRequest request, HttpSession session, Model model) {
-//        return super.postForm(request, model);
-//    }
 }

@@ -40,7 +40,7 @@ public class DirectPaymentController extends AbstractFormController {
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
-    public String showForm(HttpServletRequest request, Model model) {
+    public String getForm(HttpServletRequest request, Model model) {
         return super.getForm(request, model);
     }
 

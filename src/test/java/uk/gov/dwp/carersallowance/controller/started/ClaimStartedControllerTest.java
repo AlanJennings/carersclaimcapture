@@ -53,13 +53,13 @@ public class ClaimStartedControllerTest {
     public void setUp() throws Exception {
         when(sessionManager.getSessionIdFromCookie(request)).thenReturn("12345");
         when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))).thenReturn(session);
-        claimStartedController = new ClaimStartedController(defaultFormController);
+        claimStartedController = new ClaimStartedController(false,"",defaultFormController);
         attributes = new ArrayList<>();
     }
 
     @Test
-    public void testShowForm() throws Exception {
-        assertThat(claimStartedController.showForm(request, response, model), is("/allowance/benefits"));
+    public void testGetForm() throws Exception {
+        assertThat(claimStartedController.getForm(request, response, model), is("/allowance/benefits"));
     }
 
     @Test

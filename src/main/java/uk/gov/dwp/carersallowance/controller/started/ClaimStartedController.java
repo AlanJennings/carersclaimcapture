@@ -2,6 +2,7 @@ package uk.gov.dwp.carersallowance.controller.started;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,18 +20,28 @@ import javax.servlet.http.HttpServletResponse;
 public class ClaimStartedController {
     private static final Logger LOG = LoggerFactory.getLogger(ClaimStartedController.class);
 
+    private final Boolean replicaEnabledProperty;
+    private final String replicaDataFileProperty;
     private final DefaultFormController defaultFormController;
 
     private static final String CURRENT_PAGE = "/allowance/benefits";
 
     @Inject
-    public ClaimStartedController(final DefaultFormController defaultFormController) {
+    public ClaimStartedController(final @Value("${replica.enabled}") Boolean replicaEnabledProperty,
+                                  final @Value("${replica.datafile}") String replicaDataFileProperty,
+                                  final DefaultFormController defaultFormController) {
+        this.replicaEnabledProperty = replicaEnabledProperty;
+        this.replicaDataFileProperty = replicaDataFileProperty;
         this.defaultFormController = defaultFormController;
     }
 
     @RequestMapping(value = CURRENT_PAGE, method = RequestMethod.GET)
-    public String showForm(final HttpServletRequest request, final HttpServletResponse response, final Model model) {
-        defaultFormController.createSessionVariables(request, response, "defaultClaim.xml");
+    public String getForm(final HttpServletRequest request, final HttpServletResponse response, final Model model) {
+        String replicaDataFile = null;
+        if (replicaEnabledProperty && replicaDataFileProperty != null && replicaDataFileProperty.length() > 0) {
+            replicaDataFile = replicaDataFileProperty;
+        }
+        defaultFormController.createSessionVariables(request, response, replicaDataFile);
         defaultFormController.getForm(request, model);
         return CURRENT_PAGE;
     }

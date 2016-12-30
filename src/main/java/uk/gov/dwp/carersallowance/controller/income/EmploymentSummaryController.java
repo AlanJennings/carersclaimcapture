@@ -107,8 +107,8 @@ public class EmploymentSummaryController extends AbstractFormController {
      * otherwise show the summary form as normal.
      */
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
-    public String showForm(HttpServletRequest request, Model model) {
-        LOG.trace("Started EmploymentSummaryController.showForm");
+    public String getForm(HttpServletRequest request, Model model) {
+        LOG.trace("Started EmploymentSummaryController.getForm");
         try {
             List<Map<String, String>> employments = getFieldCollections(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)), FIELD_COLLECTION_NAME);
             if(employments == null || employments.isEmpty()) {
@@ -119,7 +119,7 @@ public class EmploymentSummaryController extends AbstractFormController {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
         } finally {
-            LOG.trace("Ending EmploymentSummaryController.showForm\n");
+            LOG.trace("Ending EmploymentSummaryController.getForm\n");
         }
     }
 
@@ -128,7 +128,7 @@ public class EmploymentSummaryController extends AbstractFormController {
      * either a new one (if employment_id is not populated), or an existing one (if it is)
      * and then cleanup the session by removing the individual fields values.
      *
-     * Then redirect to the showForm page (i.e. post, redirect, get)
+     * Then redirect to the getForm page (i.e. post, redirect, get)
      *
      * Note: validation has already occurred, but can be repeated if required by iterating
      * over the individual page handlers (the request will need populating)

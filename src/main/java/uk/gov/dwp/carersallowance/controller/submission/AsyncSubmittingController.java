@@ -25,7 +25,7 @@ public class AsyncSubmittingController {
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
-    public String showForm(HttpServletRequest request) {
+    public String getForm(HttpServletRequest request) {
         return CURRENT_PAGE;
     }
 
