@@ -29,6 +29,6 @@ public class ApplicationTransactionIdTest {
 
     @Test
     public void testGetTransactionId() throws Exception {
-        assertThat(transactionIdService.getTransactionId(), is("16120000001"));
+        assertThat(transactionIdService.getTransactionId(), is("17010000001"));
     }
 }
