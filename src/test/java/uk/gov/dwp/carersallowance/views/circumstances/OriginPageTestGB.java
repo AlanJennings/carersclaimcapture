@@ -26,10 +26,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration
 @WebAppConfiguration
 
-@TestPropertySource(properties = { "origin.tag=GB"})
+@TestPropertySource(properties = { "origin.tag=GB", "session.data.to.db=false"})
 public class OriginPageTestGB {
 
-    private static final String ORIGIN_PAGE             = "/circumstances/report-changes/origin";
+    private static final String ORIGIN_PAGE             = "/circumstances/report-changes/selection";
     private static final String CHANGE_SELECTION_PAGE   = "redirect:/circumstances/report-changes/change-selection";
 
     @Autowired

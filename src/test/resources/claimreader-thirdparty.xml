@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DWPBody xmlns="http://www.govtalk.gov.uk/dwp/carers-allowance"
+         xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.govtalk.gov.uk/dwp/carers-allowance file:/future/schema/ca/CarersAllowance_Schema.xsd">
+    <Version>0.27</Version>
+    <ClaimVersion>3.15</ClaimVersion>
+    <Origin>GB</Origin>
+    <DWPCATransaction transactionId="16080000398">
+        <DWPCAClaim>
+            <Declaration>
+                <DeclarationQuestion>
+                    <QuestionLabel>Are you the carer?</QuestionLabel>
+                    <Answer>No</Answer>
+                </DeclarationQuestion>
+                <DeclarationNameOrg>
+                    <QuestionLabel>Your name and organisation</QuestionLabel>
+                    <Answer>Jenny Bloggs Preston carers</Answer>
+                </DeclarationNameOrg>
+            </Declaration>
+         </DWPCAClaim>
+    </DWPCATransaction>
+</DWPBody>

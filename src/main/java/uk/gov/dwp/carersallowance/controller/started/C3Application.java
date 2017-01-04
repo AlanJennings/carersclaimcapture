@@ -14,8 +14,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 
 import gov.dwp.carers.monitor.MonitorRegistration;
+import uk.gov.dwp.carersallowance.monitoring.ClaimReceivedConnectionCheck;
+import uk.gov.dwp.carersallowance.monitoring.DBHealthCheck;
+import uk.gov.dwp.carersallowance.monitoring.SessionDataConnectionCheck;
 
-//import gov.dwp.carers.monitor.MonitorRegistration; TODO artifactory
+import java.util.Arrays;
 
 /**
  * Created by peterwhitehead on 10/11/2016.
@@ -61,13 +64,15 @@ public class C3Application {
         //carersScheduler.stop();
     }
 
-//    @Inject
-//    private void registerHealthChecks(final DBHealthCheck dbHealthCheck) {
-//        if (LOGGER.isInfoEnabled()) {
-//            LOGGER.info(appName + " - registering health checks.");
-//        }
-//        monitorRegistration.registerHealthChecks(Arrays.asList(dbHealthCheck));
-//    }
+    @Inject
+    private void registerHealthChecks(final DBHealthCheck dbHealthCheck,
+                                      final ClaimReceivedConnectionCheck claimReceivedConnectionCheck,
+                                      final SessionDataConnectionCheck sessionDataConnectionCheck) {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info(appName + " - registering health checks.");
+        }
+        monitorRegistration.registerHealthChecks(Arrays.asList(dbHealthCheck, claimReceivedConnectionCheck, sessionDataConnectionCheck));
+    }
 //
 //    @Inject
 //    private void startPurgeDatabaseSchedule(final DatabasePurgeServiceImpl databasePurgeServiceImpl,

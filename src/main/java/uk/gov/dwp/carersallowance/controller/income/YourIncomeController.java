@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +12,10 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
+
 import uk.gov.dwp.carersallowance.session.SessionManager;
+import uk.gov.dwp.carersallowance.sessiondata.Session;
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
 @Controller
@@ -31,11 +33,11 @@ public class YourIncomeController extends AbstractFormController {
     private static final String YOUR_INCOME_ANYOTHER                         = "yourIncome_anyother";
 
     @Autowired
-    public YourIncomeController(SessionManager sessionManager, MessageSource messageSource) {
-        super(sessionManager, messageSource);
+    public YourIncomeController(final SessionManager sessionManager, final MessageSource messageSource, final TransformationManager transformationManager) {
+        super(sessionManager, messageSource, transformationManager);
     }
 
-    public static List<String> getIncomePageList(HttpSession session) {
+    public static List<String> getIncomePageList(Session session) {
         Parameters.validateMandatoryArgs(session, "session");
         List<String> pages = new ArrayList<>();
         pages.add(CURRENT_PAGE);
@@ -77,6 +79,6 @@ public class YourIncomeController extends AbstractFormController {
 
     @Override
     public String getNextPage(HttpServletRequest request) {
-        return super.getNextPage(request, YourIncomeController.getIncomePageList(request.getSession()));
+        return super.getNextPage(request, YourIncomeController.getIncomePageList(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))));
     }
 }

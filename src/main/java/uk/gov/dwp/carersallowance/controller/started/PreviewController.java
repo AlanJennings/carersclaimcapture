@@ -3,7 +3,6 @@ package uk.gov.dwp.carersallowance.controller.started;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
+
 import uk.gov.dwp.carersallowance.session.SessionManager;
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 
 @Controller
 public class PreviewController extends AbstractFormController {
@@ -27,8 +28,8 @@ public class PreviewController extends AbstractFormController {
 //    private static final String[] FIELDS = {};
 
     @Autowired
-    public PreviewController(SessionManager sessionManager, MessageSource messageSource) {
-        super(sessionManager, messageSource);
+    public PreviewController(final SessionManager sessionManager, final MessageSource messageSource, final TransformationManager transformationManager) {
+        super(sessionManager, messageSource, transformationManager);
     }
 
     @Override
@@ -47,14 +48,13 @@ public class PreviewController extends AbstractFormController {
 //    }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
-    public String showForm(HttpServletRequest request, Model model) {
-        // return super.showForm(request, model);
+    public String getForm(HttpServletRequest request, Model model) {
         return "redirect:" + getNextPage(request);
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
-    public String postForm(HttpServletRequest request, HttpSession session, Model model) {
-        return super.postForm(request, session, model);
+    public String postForm(HttpServletRequest request, Model model) {
+        return super.postForm(request, model);
     }
 
     /**

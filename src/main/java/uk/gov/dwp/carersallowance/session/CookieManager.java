@@ -2,6 +2,7 @@ package uk.gov.dwp.carersallowance.session;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import uk.gov.dwp.carersallowance.sessiondata.Session;
 
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
@@ -45,6 +46,27 @@ public class CookieManager {
         addCookie(response, applicationVersionCookieName, appVersionNumber(), c3VersionSecondsToLive);
     }
 
+    public String getVersionCookieValue(final HttpServletRequest request) {
+        Cookie cookie = getCookie(request, applicationVersionCookieName);
+        if (cookie == null) {
+            return "";
+        } else {
+            return cookie.getValue();
+        }
+    }
+
+    public String getSessionIdFromCookie(final HttpServletRequest request) {
+        String sessionId = (String)request.getAttribute(Session.SESSION_ID);
+        if (sessionId != null) {
+            return sessionId;
+        }
+        Cookie cookie = getCookie(request, sessionCookieName);
+        if (cookie == null) {
+            return "";
+        }
+        return cookie.getValue();
+    }
+
     public void addGaCookie(final HttpServletRequest request, final HttpServletResponse response) {
         addCookie(response, gACookieName, newGoogleAnalyticsClientId(request, gACookieName), gACookieSecondsToLive);
     }
@@ -56,17 +78,27 @@ public class CookieManager {
     private void addCookie(final HttpServletResponse response, final String name, final String value, final Integer maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setMaxAge(maxAge);
+        cookie.setPath("/");
         response.addCookie(cookie);
     }
 
     private String newGoogleAnalyticsClientId(final HttpServletRequest request, final String cookieName) {
+        Cookie cookie = getCookie(request, cookieName);
+        if (cookie == null) {
+            return gACidPrefix + "." + Math.round(2147483647 * Math.random()) + "." + Math.round(2147483647 * Math.random());
+        } else {
+            return cookie.getValue();
+        }
+    }
+
+    private Cookie getCookie(final HttpServletRequest request, final String cookieName) {
         Cookie[] cookies = request.getCookies();
         for (int n = 0; n < (cookies == null ? 0 : cookies.length); n++) {
             if (cookies[n].getName().equals(cookieName)) {
-                return cookies[n].getValue();
+                return cookies[n];
             }
         }
-        return gACidPrefix + "." + Math.round(2147483647 * Math.random()) + "." + Math.round(2147483647 * Math.random());
+        return null;
     }
 
     private String appVersionNumber() {

@@ -1,6 +1,26 @@
 package uk.gov.dwp.carersallowance.utils.xml;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathException;
+import javax.xml.xpath.XPathFactory;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class ClaimXmlUtil {
+    private static final Logger LOG = LoggerFactory.getLogger(ClaimXmlUtil.class);
+
+
+
+    public static String currentDateTime(final String format) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+        String now = dateFormat.format(new Date());
+        return now;
+    }
+
 //    private static final Logger  LOG                  = LoggerFactory.getLogger(ClaimXmlUtil.class);
 //
 //    private static final String KEYSTORE_SYSTEM_KEY = "carers.keystore";

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
+
 import uk.gov.dwp.carersallowance.session.FieldCollection;
 import uk.gov.dwp.carersallowance.session.FieldCollection.FieldCollectionComparator;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.session.UnknownRecordException;
+import uk.gov.dwp.carersallowance.sessiondata.Session;
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 
 @Controller
 public class EmploymentSummaryController extends AbstractFormController {
@@ -47,8 +49,8 @@ public class EmploymentSummaryController extends AbstractFormController {
     public static final String   ID_FIELD              = "employment_id";
 
     @Autowired
-    public EmploymentSummaryController(SessionManager sessionManager, MessageSource messageSource) {
-        super(sessionManager, messageSource);
+    public EmploymentSummaryController(final SessionManager sessionManager, final MessageSource messageSource, final TransformationManager transformationManager) {
+        super(sessionManager, messageSource, transformationManager);
     }
 
     @Override
@@ -67,22 +69,24 @@ public class EmploymentSummaryController extends AbstractFormController {
         try {
             Boolean moreEmployment = getYesNoBooleanFieldValue(request, "moreEmployment");
             LOG.debug("moreEmployment = {}", moreEmployment);
+            final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
             if(Boolean.TRUE.equals(moreEmployment)) {
                 // reset the moreEmployment question
-                request.getSession().removeAttribute("moreEmployment");
+                session.removeAttribute("moreEmployment");
+                sessionManager.saveSession(session);
                 LOG.debug("redirecting to employment detail page: {}.", EMPLOYMENT_DETAIL);
                 return EMPLOYMENT_DETAIL;
             }
 
             // sort the employment here, so they are sorted when we revisit this page, but
             // not while we are working on it, as that might be confusing
-            List<Map<String, String>> employments = getFieldCollections(request.getSession(), FIELD_COLLECTION_NAME);
+            List<Map<String, String>> employments = getFieldCollections(session, FIELD_COLLECTION_NAME);
             if(employments != null) {
                 FieldCollectionComparator comparator = new FieldCollectionComparator(SORTING_FIELDS);
                 Collections.sort(employments, comparator);
             }
 
-            return super.getNextPage(request, YourIncomeController.getIncomePageList(request.getSession()));
+            return super.getNextPage(request, YourIncomeController.getIncomePageList(session));
         } finally {
             LOG.trace("Ending EmploymentSummaryController.getNextPage");
         }
@@ -103,19 +107,19 @@ public class EmploymentSummaryController extends AbstractFormController {
      * otherwise show the summary form as normal.
      */
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
-    public String showForm(HttpServletRequest request, Model model) {
-        LOG.trace("Started EmploymentSummaryController.showForm");
+    public String getForm(HttpServletRequest request, Model model) {
+        LOG.trace("Started EmploymentSummaryController.getForm");
         try {
-            List<Map<String, String>> employments = getFieldCollections(request.getSession(), FIELD_COLLECTION_NAME);
+            List<Map<String, String>> employments = getFieldCollections(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)), FIELD_COLLECTION_NAME);
             if(employments == null || employments.isEmpty()) {
                 return "redirect:" + EMPLOYMENT_DETAIL;
             }
-            return super.showForm(request, model);
+            return super.getForm(request, model);
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
         } finally {
-            LOG.trace("Ending EmploymentSummaryController.showForm\n");
+            LOG.trace("Ending EmploymentSummaryController.getForm\n");
         }
     }
 
@@ -124,7 +128,7 @@ public class EmploymentSummaryController extends AbstractFormController {
      * either a new one (if employment_id is not populated), or an existing one (if it is)
      * and then cleanup the session by removing the individual fields values.
      *
-     * Then redirect to the showForm page (i.e. post, redirect, get)
+     * Then redirect to the getForm page (i.e. post, redirect, get)
      *
      * Note: validation has already occurred, but can be repeated if required by iterating
      * over the individual page handlers (the request will need populating)
@@ -137,7 +141,7 @@ public class EmploymentSummaryController extends AbstractFormController {
                                                                                  getFields(LAST_WAGE_PAGE_NAME),
                                                                                  getFields(PENSION_EXPENSES_PAGE_NAME));
 
-            populateFieldCollectionEntry(request.getSession(), FIELD_COLLECTION_NAME, fieldCollectionFields, ID_FIELD);
+            populateFieldCollectionEntry(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)), FIELD_COLLECTION_NAME, fieldCollectionFields, ID_FIELD);
 
             return "redirect:" + getCurrentPage(request);
         } catch(RuntimeException e) {
@@ -155,28 +159,32 @@ public class EmploymentSummaryController extends AbstractFormController {
     public String postForm(HttpServletRequest request,
                            @ModelAttribute("changeEmployment") String idToChange,
                            @ModelAttribute("deleteEmployment") String idToDelete,
-                           HttpSession session,
                            Model model) {
         LOG.trace("Started EmploymentSummaryController.postForm");
         try {
-            if(StringUtils.isEmpty(idToChange) == false) {
+            final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
+            if (StringUtils.isEmpty(idToChange) == false) {
                 try {
-                    return editFieldCollectionRecord(request, idToChange, FIELD_COLLECTION_NAME, ID_FIELD, EDITING_PAGE);
-                } catch(UnknownRecordException e) {
+                    final String editPage = editFieldCollectionRecord(session, idToChange, FIELD_COLLECTION_NAME, ID_FIELD, EDITING_PAGE);
+                    sessionManager.saveSession(session);
+                    return editPage;
+                } catch (UnknownRecordException e) {
                     getLegacyValidation().addFormError(idToChange, "break from care", "Unable to edit item");
                 }
             }
 
-            if(StringUtils.isEmpty(idToDelete) == false) {
+            if (StringUtils.isEmpty(idToDelete) == false) {
                 try {
-                    return deleteFieldCollectionRecord(idToDelete, request, FIELD_COLLECTION_NAME, ID_FIELD);
-                } catch(UnknownRecordException e) {
+                    final String deletePage = deleteFieldCollectionRecord(session, idToDelete, request, FIELD_COLLECTION_NAME, ID_FIELD);
+                    sessionManager.saveSession(session);
+                    return deletePage;
+                } catch (UnknownRecordException e) {
                     getLegacyValidation().addFormError(idToDelete, "break from care", "Unable to delete item");
                 }
             }
 
             // handling of the "moreEmployment" question is handled in getNextPage()
-            return super.postForm(request, session, model);
+            return super.postForm(request, model);
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;

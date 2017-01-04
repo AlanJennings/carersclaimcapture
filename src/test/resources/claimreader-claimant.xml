@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DWPBody xmlns="http://www.govtalk.gov.uk/dwp/carers-allowance" 
+         xmlns:ds="http://www.w3.org/2000/09/xmldsig#" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://www.govtalk.gov.uk/dwp/carers-allowance file:/future/schema/ca/CarersAllowance_Schema.xsd">
+    <Version>0.27</Version>
+    <ClaimVersion>3.15</ClaimVersion>
+    <Origin>GB</Origin>
+    <DWPCATransaction transactionId="16080000398">
+        <TransactionId>16080000398</TransactionId>
+        <DateTimeGenerated>12-08-2016 15:35</DateTimeGenerated>
+        <LanguageUsed>English</LanguageUsed>
+        <DWPCAClaim>
+            <DateOfClaim>
+                <QuestionLabel>Claim date</QuestionLabel>
+                <Answer>20-04-2016</Answer>
+            </DateOfClaim>
+            <QualifyingBenefit>
+                <QuestionLabel>What benefit does the person you care for get?</QuestionLabel>
+                <Answer>AA</Answer>
+            </QualifyingBenefit>
+            <Claimant>
+                <Surname>
+                    <QuestionLabel>Last name</QuestionLabel>
+                    <Answer>Bloggs</Answer>
+                </Surname>
+                <OtherNames>
+                    <QuestionLabel>First name</QuestionLabel>
+                    <Answer>Joe</Answer>
+                </OtherNames>
+                <Title>
+                    <QuestionLabel>Title</QuestionLabel>
+                    <Answer>Mr</Answer>
+                </Title>
+                <DateOfBirth>
+                    <QuestionLabel>Date of birth</QuestionLabel>
+                    <Answer>20-10-1990</Answer>
+                </DateOfBirth>
+                <NationalInsuranceNumber>
+                    <QuestionLabel>National Insurance number</QuestionLabel>
+                    <Answer>AB123456D</Answer>
+                </NationalInsuranceNumber>
+                <Address>
+                    <QuestionLabel>Address</QuestionLabel>
+                    <Answer>
+                        <Line order="1">123</Line>
+                        <Line order="2">Street</Line>
+                        <PostCode>C4T 0AD</PostCode>
+                    </Answer>
+                </Address>
+                <Cared35HoursBefore>
+                    <QuestionLabel>Were you caring for the person for more than 35 hours a week before this date?</QuestionLabel>
+                    <Answer>Yes</Answer>
+                </Cared35HoursBefore>
+                <DateStartCaring>
+                    <QuestionLabel>When did you begin caring?</QuestionLabel>
+                    <Answer>08-01-2016</Answer>
+                </DateStartCaring>
+                <MaritalStatus>
+                    <QuestionLabel>Your status</QuestionLabel>
+                    <Answer>Single</Answer>
+                </MaritalStatus>
+                <TextPhoneContact>
+                    <QuestionLabel>This is a textphone for people with hearing difficulties.</QuestionLabel>
+                    <Answer>Yes</Answer>
+                </TextPhoneContact>
+                <WantsContactEmail>
+                    <QuestionLabel>Have you got an email address?</QuestionLabel>
+                    <Answer>Yes</Answer>
+                </WantsContactEmail>
+                <Email>
+                    <QuestionLabel>Email address</QuestionLabel>
+                    <Answer>cads.dwp@gmail.com</Answer>
+                </Email>
+            </Claimant>
+         </DWPCAClaim>
+    </DWPCATransaction>
+</DWPBody>

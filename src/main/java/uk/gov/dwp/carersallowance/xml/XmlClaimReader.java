@@ -1,9 +1,5 @@
-package uk.gov.dwp.carersallowance.controller;
+package uk.gov.dwp.carersallowance.xml;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.CharacterData;
@@ -24,10 +18,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import uk.gov.dwp.carersallowance.controller.submission.SubmitClaimController;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMapping;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
-import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList.MappingException;
 import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
 
 /**
@@ -42,20 +34,20 @@ import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
 public class XmlClaimReader {
     private static final Logger LOG = LoggerFactory.getLogger(XmlClaimReader.class);
 
-    private Set<String>              NOT_SUPPORTED  = new HashSet<>(Arrays.asList(new String[]{"DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak"}));
-    private static final Set<String> ACTIVE_ATTRS   = new HashSet<>(Arrays.asList(new String[]{"type", "order"}));
-    private static final String      PATH_SEPARATOR = "/";
+    private Set<String> NOT_SUPPORTED = new HashSet<>(Arrays.asList(new String[]{"DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak"}));
+    private static final Set<String> ACTIVE_ATTRS = new HashSet<>(Arrays.asList(new String[]{"type", "order"}));
+    private static final String PATH_SEPARATOR = "/";
     private static final Set<String> IGNORE_MAPPING = new HashSet<>(Arrays.asList(new String[]{
             "DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/Evidence/Title"       // TODO
     }));
 
-    private XPathMappingList    valueMappings;
+    private XPathMappingList valueMappings;
     private Map<String, Object> values;
-    private List<String>        errors;
-    private boolean             sessionVariablesOnly;
+    private List<String> errors;
+    private boolean sessionVariablesOnly;
 
     public XmlClaimReader(String xml, XPathMappingList valueMappings, boolean sessionVariablesOnly) throws InstantiationException {
-        this((Document)XmlPrettyPrinter.stringToNode(xml), valueMappings, sessionVariablesOnly);
+        this((Document) XmlPrettyPrinter.stringToNode(xml), valueMappings, sessionVariablesOnly);
     }
 
     public XmlClaimReader(Document xml, XPathMappingList valueMappings, boolean sessionVariablesOnly) {
@@ -76,17 +68,17 @@ public class XmlClaimReader {
     }
 
     private void parseXml(Map<String, Object> values, Node node, String parentPath, Integer parentOrder, Set<String> activeAttrsLowerCase) {
-        if(node == null) {
+        if (node == null) {
             return;
         }
 
-        if(NOT_SUPPORTED.contains(parentPath)) {
+        if (NOT_SUPPORTED.contains(parentPath)) {
             return;
         }
 
         // found text node, create entry
         LOG.debug("parentPath = {}", parentPath);
-        if(node instanceof CharacterData) {
+        if (node instanceof CharacterData) {
             createMapping(values, node, parentPath);
         }
 
@@ -98,57 +90,89 @@ public class XmlClaimReader {
         Map<String, Integer> siblingTotals = getSiblingCount(children);
         Map<String, Integer> currentSiblingCount = new HashMap<>();
 
-        for(int index = 0; index < children.getLength(); index++) {
+        for (int index = 0; index < children.getLength(); index++) {
             Node child = children.item(index);
             String childName = child.getNodeName();
 
             Integer childOrder;
-            if(siblingTotals.get(childName) == null || siblingTotals.get(childName) == Integer.valueOf(1)) {
+            if (siblingTotals.get(childName) == null || siblingTotals.get(childName) == Integer.valueOf(1)) {
                 // when there is just a single instance we don't bother with an order attribute,
                 // which is most of the time
                 childOrder = null;
             } else {
                 // we use order attribute, to maintain a one to one mapping (and maintain the order)
                 childOrder = currentSiblingCount.get(childName);
-                if(childOrder == null) {
+                if (childOrder == null) {
                     childOrder = Integer.valueOf(1);
                 } else {
                     childOrder = Integer.valueOf(childOrder.intValue() + 1);
                 }
-                currentSiblingCount.put(childName,  childOrder);
+                currentSiblingCount.put(childName, childOrder);
             }
             parseXml(values, child, nodePath, childOrder, activeAttrsLowerCase);
         }
     }
 
     private void createMapping(Map<String, Object> values, Node xml, String parentPath) {
-        String data = ((CharacterData)xml).getData();
+        String data = ((CharacterData) xml).getData();
         LOG.debug("Found Text: {}", data);
+
         XPathMapping mapping = valueMappings.getXPathMap().get(parentPath);
-        if(IGNORE_MAPPING.contains(parentPath)) {
+
+        // TODO ... fix this so dont need to loop around looking for DateOfClaim ... which exists but was not returned by get
+        // BIZARRE ??? Test works OK but running in app doesnot find mapping for DWPBody/DWPCATransaction/DWPCAClaim/DateOfClaim/Answer
+        if(mapping == null){
+            List<XPathMapping> mappings=valueMappings.getList();
+            for( XPathMapping m : mappings){
+                if(m!=null && m.getXpath()!=null && m.getXpath().equals(parentPath)){
+                    LOG.error("BIZARRE found mapping for "+parentPath+" by looping but not by map lookup. Needs further investigation");
+                    System.out.println("Loop found matching xpath for parent:"+parentPath);
+                    mapping=m;
+                }
+            }
+        }
+
+        if (IGNORE_MAPPING.contains(parentPath)) {
             return; // do nothing
-        } else if(mapping == null) {
+        } else if (mapping == null) {
             LOG.error("Unknown mapping for {}", parentPath);
             errors.add("Unknown mapping for " + parentPath);
             throw new IllegalStateException("Unknown mapping for " + parentPath);
         } else {
             String key = mapping.getValue();
-            if(sessionVariablesOnly && key != null && (key.startsWith("/") || key.contains("."))) {
+            String processingInstruction = mapping.getProcessingInstruction();
+            if (sessionVariablesOnly && key != null && (key.startsWith("/") || key.contains("."))) {
                 // do not store non-session variables
+            } else if (processingInstruction != null && processingInstruction.equals("@type=\"date\"")) {
+                LOG.info("XmlClaim adding date:" + key + "->" + data);
+                createDateMapping(key, data);
             } else {
-                values.put(key, data);
+                LOG.info("XmlClaim adding string:" + key + "->" + data);
+                // TODO Fixup case on yes / no to be consistent between claim and webapp
+                values.put(key, data.replace("No", "no").replace("Yes", "yes"));
             }
+        }
+    }
+
+    private void createDateMapping(String keystub, String datestring) {
+        try {
+            values.put(keystub, null);
+            values.put(keystub + "_day", datestring.substring(0, 2));
+            values.put(keystub + "_month", datestring.substring(3, 5));
+            values.put(keystub + "_year", datestring.substring(6, 10));
+        } catch (Exception e) {
+            LOG.error("Failed to parse xml key:" + keystub + " from datestring:" + datestring);
         }
     }
 
     private String buildNodePath(Node xml, String parentPath, Integer parentOrder, Set<String> activeAttrsLowerCase) {
         String nodeName = xml.getNodeName();
-        if(xml instanceof Element) {
-            nodeName = nodeName + getAttrsAsString((Element)xml, activeAttrsLowerCase);
+        if (xml instanceof Element) {
+            nodeName = nodeName + getAttrsAsString((Element) xml, activeAttrsLowerCase);
         }
 
         String nodePath;
-        if(parentPath == null) {
+        if (parentPath == null) {
             nodePath = nodeName;
         } else {
             nodePath = parentPath + PATH_SEPARATOR + nodeName;
@@ -159,20 +183,20 @@ public class XmlClaimReader {
     }
 
     private Map<String, Integer> getSiblingCount(NodeList nodes) {
-        if(nodes == null) {
+        if (nodes == null) {
             return null;
         }
 
         Map<String, Integer> siblingCount = new HashMap<>();
-        for(int index = 0; index < nodes.getLength(); index++) {
+        for (int index = 0; index < nodes.getLength(); index++) {
             Node node = nodes.item(index);
-            if(node instanceof CharacterData) {
+            if (node instanceof CharacterData) {
                 continue;
             }
 
             String nodeName = node.getNodeName();
             Integer count = siblingCount.get(nodeName);
-            if(count == null) {
+            if (count == null) {
                 siblingCount.put(nodeName, Integer.valueOf(1));
             } else {
                 siblingCount.put(nodeName, Integer.valueOf(count.intValue() + 1));
@@ -185,13 +209,13 @@ public class XmlClaimReader {
     private String getAttrsAsString(Element element, Set<String> activeAttrsLowerCase) {
         NamedNodeMap attrMap = element.getAttributes();
         StringBuffer buffer = new StringBuffer();
-        for(int index = 0; index < attrMap.getLength(); index++) {
+        for (int index = 0; index < attrMap.getLength(); index++) {
             Node attr = attrMap.item(index);
             String attrName = attr.getNodeName();
-            if(activeAttrsLowerCase.contains(attrName.toLowerCase())) {
+            if (activeAttrsLowerCase.contains(attrName.toLowerCase())) {
                 String attrValue = attr.getNodeValue();
 
-                if(buffer.length() > 0) {
+                if (buffer.length() > 0) {
                     buffer.append(",");
                 }
                 buffer.append("[@").append(attrName).append("=\"").append(attrValue).append("\"]");
@@ -201,10 +225,10 @@ public class XmlClaimReader {
     }
 
     public static String join(Map<String, ? extends Object> map, String separator) {
-        if(map == null) {
+        if (map == null) {
             return null;
         }
-        if(separator == null) {
+        if (separator == null) {
             separator = "";
         }
 
@@ -214,43 +238,12 @@ public class XmlClaimReader {
 
         Collections.sort(keys);
         StringBuffer buffer = new StringBuffer();
-        for(String key : keys) {
-            if(buffer.length() > 0) {
+        for (String key : keys) {
+            if (buffer.length() > 0) {
                 buffer.append(separator);
             }
             buffer.append(key).append(" = ").append(map.get(key));
         }
         return buffer.toString();
-    }
-
-    public static void main(String[] args) throws IOException, MappingException, InstantiationException {
-        LOG.trace("Trace Logging on");
-        LOG.debug("Debug Logging on");
-        LOG.warn("Warn Logging on");
-        LOG.error("Error Logging on");
-
-        URL claimTemplateUrl = XmlClaimReader.class.getClassLoader().getResource("xml.mapping.claim");
-        List<String> xmlMappings = SubmitClaimController.readLines(claimTemplateUrl);
-        XPathMappingList valueMappings = new XPathMappingList();
-        valueMappings.add(xmlMappings);
-//        System.out.println("Value Mappings: ValueMap");
-//        System.out.println("==============");
-//        System.out.println(join(valueMappings.getValueMap(), "\n"));
-//
-//        System.out.println("\nValue Mappings: XPathMap");
-//        System.out.println("========================");
-//        System.out.println(join(valueMappings.getXPathMap(), "\n"));
-
-        String filename = "/Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/data/decrypted.xml";
-        String xml = FileUtils.readFileToString(new File(filename), Charset.defaultCharset());
-
-        XmlClaimReader claimReader = new XmlClaimReader(xml, valueMappings, true);
-        System.out.println("\nERRORS");
-        System.out.println("======");
-        System.out.println(StringUtils.join(claimReader.getErrors(), '\n'));
-
-        System.out.println("\nVALUES");
-        System.out.println("======");
-        System.out.println(join(claimReader.getValues(), "\n"));
     }
 }

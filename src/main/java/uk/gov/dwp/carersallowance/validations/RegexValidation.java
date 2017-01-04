@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
 /**
@@ -33,7 +34,7 @@ public class RegexValidation extends AbstractValidation {
     /**
      * validate that at least one value corresponding to fieldName is populated
      */
-    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> existingFieldValues) {
+    public boolean validate(ValidationSummary validationSummary, MessageSource messageSource, TransformationManager transformationManager, String fieldName, Map<String, String[]> requestFieldValues, Map<String, String[]> existingFieldValues) {
         Parameters.validateMandatoryArgs(new Object[]{validationSummary, messageSource, fieldName, requestFieldValues}, new String[]{"validationSummary", "messageSource", "fieldName", "allFieldValues"});
         LOG.trace("Starting RegexValidation.validate");
         try {
@@ -47,6 +48,7 @@ public class RegexValidation extends AbstractValidation {
                         continue;
                     }
 
+                    fieldValue = (String)transformationManager.getTransformedValue(fieldName, fieldValue, VALIDATION_TRANSFORMATION_KEY_FORMAT, messageSource);
                     Matcher matcher = pattern.matcher(fieldValue);
                     if(matcher.matches() == false) {
                         LOG.debug("field value({}) does not match regular expression: {}", fieldValue, regex);

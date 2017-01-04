@@ -1,114 +1,113 @@
 package uk.gov.dwp.carersallowance.session;
 
-import java.util.Collections;
-import java.util.HashMap;
+import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.http.HttpSession;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.stream.Stream;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import uk.gov.dwp.carersallowance.utils.Parameters;
+import org.springframework.ui.Model;
+import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
+import uk.gov.dwp.carersallowance.xml.XmlBuilder;
+import uk.gov.dwp.carersallowance.xml.XmlClaimReader;
+import uk.gov.dwp.carersallowance.sessiondata.Session;
+import uk.gov.dwp.carersallowance.sessiondata.SessionDataFactory;
+import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
 
 @Service
 public class SessionManager {
-    private Map<String, Session> sessions;
+    private static final Logger LOG = LoggerFactory.getLogger(SessionManager.class);
+    private final SessionDataFactory sessionDataFactory;
+    private final CookieManager cookieManager;
+    private final ClaimEncryptionService claimEncryptionService;
 
-    public SessionManager() {
-        sessions = new HashMap<String, Session>();
-    }
-
-    public Session getSession(String sessionId) { return getSession(sessionId, false); }
-
-    public Session createSession() {
-        Session session = new Session();
-        sessions.put(session.getSessionId(),  session);
-
-        return session;
+    @Inject
+    public SessionManager(final CookieManager cookieManager, final SessionDataFactory sessionDataFactory, final ClaimEncryptionService claimEncryptionService) {
+        this.cookieManager = cookieManager;
+        this.sessionDataFactory = sessionDataFactory;
+        this.claimEncryptionService = claimEncryptionService;
     }
 
     public String createSessionId() {
         return UUID.randomUUID().toString();
     }
 
-    /**
-     * We don't need to synchronize this as new sessions are created using statistically
-     * unique IDs that don't overlap
-     */
-    public Session getSession(String sessionId, boolean create) {
-        Session session = sessions.get(sessionId);
-        if(session == null) {
-            if(create) {
-                session = new Session();
-                sessions.put(session.getSessionId(),  session);
-            } else {
-                throw new NoSessionException("No Session for Session ID: " + sessionId);
+    public Session getSession(final String sessionId) {
+        return claimEncryptionService.decryptClaim(sessionDataFactory.getSessionDataService().getSessionData(sessionId));
+    }
+
+    public Session createSession(final String sessionId) {
+        return sessionDataFactory.getSessionDataService().createSessionData(sessionId);
+    }
+
+    public void removeSession(final String sessionId) {
+        sessionDataFactory.getSessionDataService().removeSessionData(sessionId);
+    }
+
+    public void saveSession(final Session session) {
+        sessionDataFactory.getSessionDataService().saveSessionData(claimEncryptionService.encryptClaim(session));
+    }
+
+    public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile) {
+        cookieManager.addVersionCookie(response);
+        cookieManager.addGaCookie(request, response);
+        createSessionData(request, response, xmlFile);
+    }
+
+    private void createSessionData(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile) {
+        final String sessionId = createSessionId();
+        Session session = createSession(sessionId);
+        request.setAttribute(Session.SESSION_ID, sessionId);
+        cookieManager.addSessionCookie(response, sessionId);
+        if (xmlFile != null && xmlFile.length() > 0) {
+            loadReplicaData(session, xmlFile);
+        }
+    }
+
+    private void loadReplicaData(Session session, final String xmlFile) {
+        try {
+            LOG.info("Using XMLFile " + xmlFile);
+            URL claimTemplateUrl = XmlClaimReader.class.getClassLoader().getResource("xml.mapping.claim");
+            List<String> xmlMappings = XmlBuilder.readLines(claimTemplateUrl);
+            XPathMappingList valueMappings = new XPathMappingList();
+            valueMappings.add(xmlMappings);
+            URL xmlfile = XmlClaimReader.class.getClassLoader().getResource(xmlFile);
+
+            String xml = IOUtils.toString(XmlClaimReader.class.getClassLoader().getResourceAsStream(xmlFile),Charset.defaultCharset());
+            XmlClaimReader claimReader = new XmlClaimReader(xml, valueMappings, true);
+
+            Map<String, Object> values = claimReader.getValues();
+            for (String name : values.keySet()) {
+                LOG.info("Replica setting data for name:" + name + " to:" + values.get(name));
+                session.setAttribute(name, values.get(name));
             }
-        }
 
-        return session;
+
+            LOG.info("5 " );
+            // TODO load the replica data from xml ... but its not there ! Hows it done in scala ??
+            session.setAttribute("over35HoursAWeek", "yes");
+            session.setAttribute("over16YearsOld", "yes");
+            session.setAttribute("originCountry", "GB");
+        } catch (Exception e) {
+            LOG.error("Exception loading replica data {}", e.toString(), e);
+        }
+        saveSession(session);
     }
 
-    public Session createFromHttpSession(HttpSession httpSession) {
-        Session session = createSession();
-        if(httpSession != null) {
-            Map<String, Object> sessionData = session.getData();
-
-            List<String> attrNames = Collections.list(httpSession.getAttributeNames());
-            for(String attrName: attrNames) {
-                sessionData.put(attrName,  httpSession.getAttribute(attrName));
-            }
-        }
-        return session;
-    }
-
-    public Session removeSession(String sessionId) {
-        return sessions.get(sessionId);
-    }
-
-    /**
-     * Session is nested so it's constructors can stay private, but still be used by SessionManager
-     */
-    public static class Session {
-        private String              sessionId;
-        private Map<String, Object> data;
-
-        protected Session(String sessionId, Map<String, Object> data) {
-            Parameters.validateMandatoryArgs(new Object[]{sessionId, data}, new String[]{"sessionId", "data"});
-
-            this.sessionId = sessionId;
-            this.data = data;
-        }
-
-        protected Session() {
-            this(UUID.randomUUID().toString(), new HashMap<>());
-        }
-
-        public String getSessionId() {
-            return  sessionId;
-        }
-
-        /**
-         * At some point this will be expanded to that all access to the internal data is wrapped
-         * See also {@link FieldValue}
-         * @return
-         */
-        public Map<String, Object> getData() {
-            return data;
-        }
-
-        public String toString() {
-            StringBuffer buffer = new StringBuffer();
-
-            buffer.append(this.getClass().getName()).append("@").append(System.identityHashCode(this));
-            buffer.append("=[");
-            buffer.append("sessionId = ").append(sessionId);
-            buffer.append(", data = ").append(data);
-            buffer.append("]");
-
-            return buffer.toString();
-        }
+    public String getSessionIdFromCookie(final HttpServletRequest request) {
+        return cookieManager.getSessionIdFromCookie(request);
     }
 }

@@ -94,8 +94,7 @@ dependencies {
     compile("commons-io:commons-io:2.5")
     compile("commons-lang:commons-lang:2.6")
     compile("gov.dwp.carers:carerscommon:8.08-SNAPSHOT")
-    compile("gov.dwp.carers:xmlcommons:8.28-SNAPSHOT")
-    compile "io.dropwizard.metrics:metrics-core:3.1.2"
+    compile("gov.dwp.carers:xmlcommons:8.29-SNAPSHOT")
     compile("javax.inject:javax.inject:1")
     compile("javax.servlet:jstl")
     compile("org.apache.commons:commons-lang3:3.5")
@@ -111,6 +110,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-websocket")
     runtime("me.moocar:logback-gelf:0.3")
+    compile("com.thoughtworks.xstream:xstream:1.4.9")
     testCompile (
             'org.springframework.boot:spring-boot-starter-test',
             'org.assertj:assertj-core:3.5.2',

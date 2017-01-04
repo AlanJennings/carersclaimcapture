@@ -12,6 +12,9 @@ import uk.gov.dwp.carersallowance.database.TransactionIdService;
 
 import javax.inject.Inject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -29,6 +32,8 @@ public class ApplicationTransactionIdTest {
 
     @Test
     public void testGetTransactionId() throws Exception {
-        assertThat(transactionIdService.getTransactionId(), is("16120000001"));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        final String date = simpleDateFormat.format(new Date());
+        assertThat(transactionIdService.getTransactionId(), is(date.substring(2,4) + "010000001"));
     }
 }

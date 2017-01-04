@@ -2,45 +2,58 @@ package uk.gov.dwp.carersallowance.xml;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.w3c.dom.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
 import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
 
 import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathFactory;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assert.assertThat;
 
-
 public class ClaimHeaderItemsTest {
-    private Document document;
+    private static final Logger LOG = LoggerFactory.getLogger(ClaimHeaderItemsTest.class);
+
+    private XmlBuilder xmlBuilder;
     private XPath xpath;
     private String appVersion = "3.14";
-    private String schemaVersion = "0.27";
+    private String xmlVersion = "0.27";
     private String transactionId = "16011234";
     private String origin = "GB";
     private String language = "English";
 
     @Before
     public void setUp() throws Exception {
-        // initialise claim header information only, claim is blank in these tests no matter.
-        ClaimXml claimXml = new ClaimXml();
-        document = claimXml.buildXml(null, transactionId, appVersion, schemaVersion, origin, language);
+        Map<String, Object> sessionMap = new HashMap<>();
+        sessionMap.put("transactionId", transactionId);
+        sessionMap.put("transactionIdAttr", transactionId);
+        sessionMap.put("dateTimeGenerated", ClaimXmlUtil.currentDateTime("dd-MM-yyyy HH:mm"));
+        sessionMap.put("xmlVersion", xmlVersion);
+        sessionMap.put("appVersion", appVersion);
+        sessionMap.put("origin", origin);
+        sessionMap.put("language", language);
+
+        xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
+        String xml = xmlBuilder.render(true, false);
         xpath = XPathFactory.newInstance().newXPath();
     }
 
     @Test
     public void justDumpXml() {
         try {
-            System.out.println(XmlPrettyPrinter.prettyPrintXml(document.getFirstChild()));
+            System.out.println(XmlPrettyPrinter.prettyPrintXml(xmlBuilder.getDocument().getFirstChild()));
         } catch (InstantiationException e) {
             e.printStackTrace();
         }
@@ -48,57 +61,46 @@ public class ClaimHeaderItemsTest {
 
     @Test
     public void checkClaimXmlContainsC3AppVersion() {
-        assertThat(getNodeValue("/DWPBody/Version"), is(appVersion));
+        assertThat(xmlBuilder.getNodeValue("/DWPBody/Version"), is(appVersion));
     }
 
     @Test
     public void checkClaimXmlContainsSchemaVersion() {
-        assertThat(getNodeValue("/DWPBody/ClaimVersion"), is(schemaVersion));
+        assertThat(xmlBuilder.getNodeValue("/DWPBody/ClaimVersion"), is(xmlVersion));
     }
 
     @Test
     public void checkClaimXmlContainsOrigin() {
-        assertThat(getNodeValue("/DWPBody/Origin"), is(origin));
+        assertThat(xmlBuilder.getNodeValue("/DWPBody/Origin"), is(origin));
     }
 
     @Test
     public void checkClaimXmlContainsDWPCATransactionIdAttribute() {
-        assertThat(getNodeValue("/DWPBody/DWPCATransaction/@id"), is(transactionId));
+        assertThat(xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/@id"), is(transactionId));
     }
 
     @Test
     public void checkClaimXmlContainsTransactionId() {
-        assertThat(getNodeValue("/DWPBody/DWPCATransaction/TransactionId"), is(transactionId));
+        assertThat(xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/TransactionId"), is(transactionId));
     }
 
     @Test
     public void checkClaimXmlContainsDateTimeGeneratedWithCorrectFormat() {
-        String dateTimeGenerated = getNodeValue("/DWPBody/DWPCATransaction/DateTimeGenerated");
-        long dtgMillis = 0;
+        String dateTimeGenerated = xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DateTimeGenerated");
+        long dtgSecs = 0;
         try {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm", Locale.getDefault());
-            LocalDateTime dt = LocalDateTime.parse(dateTimeGenerated, dtf);
-            dtgMillis = dt.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+            dtgSecs = LocalDateTime.parse(dateTimeGenerated, dtf).toEpochSecond(ZoneOffset.UTC);
         } catch (Exception e) {
-            System.out.println("Exception parsing DateTimeGenerated:" + dateTimeGenerated + " " + e.toString());
+            LOG.error("Exception parsing DateTimeGenerated:{}", dateTimeGenerated, e);
         }
-        long nowmillis = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        assertThat("Datetime generated is after 70 secs ago", dtgMillis, greaterThan(nowmillis - 70000));
-        assertThat("Datetime generated before now", dtgMillis, lessThanOrEqualTo(nowmillis));
+        long nowsecs = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
+        assertThat("Datetime generated is after 70 secs ago", dtgSecs, greaterThan(nowsecs - 70));
+        assertThat("Datetime generated before now", dtgSecs, lessThanOrEqualTo(nowsecs));
     }
 
     @Test
     public void checkClaimXmlContainsLanguage() {
-        assertThat(getNodeValue("/DWPBody/DWPCATransaction/LanguageUsed"), is(language));
-    }
-
-    private String getNodeValue(String nodepath) {
-        String nodevalue = null;
-        try {
-            nodevalue = xpath.compile(nodepath).evaluate(document);
-        } catch (XPathException e) {
-            System.out.println("Exception compiling xpath:" + e.toString());
-        }
-        return nodevalue;
+        assertThat(xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/LanguageUsed"), is(language));
     }
 }

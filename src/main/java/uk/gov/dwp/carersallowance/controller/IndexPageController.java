@@ -15,7 +15,7 @@ public class IndexPageController {
      * This allows an easy to submit route, but is only temporary.
      */
     @RequestMapping(value="/index")
-    public String showForm(HttpServletRequest request) {
+    public String getForm(HttpServletRequest request) {
         return "/index";
     }
 }

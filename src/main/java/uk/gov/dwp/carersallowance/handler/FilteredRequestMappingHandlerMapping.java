@@ -51,7 +51,7 @@ public class FilteredRequestMappingHandlerMapping extends RequestMappingHandlerM
     }
 
     public void setExclude(String pattern) {
-        if(StringUtils.isBlank(pattern)) {
+        if (StringUtils.isBlank(pattern)) {
             return;
         }
 
@@ -63,7 +63,7 @@ public class FilteredRequestMappingHandlerMapping extends RequestMappingHandlerM
     private HandlerMethod getDefaultControllerMethod(HttpServletRequest request) {
         LOG.trace("Started FilteredRequestMappingHandlerMapping.getFudgedHandlerMethod");
         try {
-            if(request == null) {
+            if (request == null) {
                 return null;
             }
 
@@ -72,18 +72,16 @@ public class FilteredRequestMappingHandlerMapping extends RequestMappingHandlerM
                 String path = request.getRequestURI();
                 if (path.startsWith("/circumstances")) {
                     controller = getApplicationContext().getBean(DefaultChangeOfCircsController.class);
-                }
-                else {
+                } else {
                     controller = getApplicationContext().getBean(DefaultFormController.class);
                 }
                 AbstractFormController defaultController = null;
-                if(controller instanceof DefaultFormController) {
+                if (controller instanceof DefaultFormController) {
                     defaultController = (DefaultFormController)controller;
-                }
-                else if (controller instanceof DefaultChangeOfCircsController){
+                } else if (controller instanceof DefaultChangeOfCircsController){
                     defaultController = (DefaultChangeOfCircsController) controller;
                 }
-                if(defaultController == null || defaultController.supportsRequest(request) == false) {
+                if (defaultController == null || defaultController.supportsRequest(request) == false) {
                     return null;
                 }
                 HandlerMethod handlerMethod = new HandlerMethod(controller, "handleRequest", HttpServletRequest.class, HttpServletResponse.class, Model.class);
@@ -115,20 +113,20 @@ public class FilteredRequestMappingHandlerMapping extends RequestMappingHandlerM
      */
     @Override
     protected HandlerMethod getHandlerInternal(HttpServletRequest request) throws Exception {
-        if(request == null) {
+        if (request == null) {
             return null;
         }
 
         String path = request.getServletPath(); // from the end of the application path until the args
-        for(String pattern: excludePatterns) {
-            if(pathMatcher.match(pattern, path)) {
+        for (String pattern: excludePatterns) {
+            if (pathMatcher.match(pattern, path)) {
                 LOG.debug("Excluding Path({}) as it matches {}", path, pattern);
                 return null;
             }
         }
 
         HandlerMethod method = super.getHandlerInternal(request);
-        if(method == null) {
+        if (method == null) {
             method = getDefaultControllerMethod(request);
         }
 
