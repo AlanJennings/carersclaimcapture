@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
 import uk.gov.dwp.carersallowance.xml.XmlBuilder;
 import uk.gov.dwp.carersallowance.database.TransactionIdService;
 
@@ -39,13 +40,15 @@ public class SubmitClaimController {
     private static final String SUCCESS_PAGE       = "/async-submitting";
 //    private static final String FAILED_PAGE        = "/oh-no-its-all-gone-horribly-wrong";
 
-    private SessionManager sessionManager;
-    private TransactionIdService transactionIdService;
+    private final SessionManager sessionManager;
+    private final TransactionIdService transactionIdService;
+    private final ClaimEncryptionService claimEncryptionService;
 
     @Autowired
-    public SubmitClaimController(final SessionManager sessionManager, final TransactionIdService transactionIdService) {
+    public SubmitClaimController(final SessionManager sessionManager, final TransactionIdService transactionIdService, final ClaimEncryptionService claimEncryptionService) {
         this.sessionManager = sessionManager;
         this.transactionIdService = transactionIdService;
+        this.claimEncryptionService = claimEncryptionService;
     }
 
     /**
@@ -91,7 +94,7 @@ public class SubmitClaimController {
     private String buildClaimXml(final Session session) throws IOException, InstantiationException, ParserConfigurationException, MappingException {
         Parameters.validateMandatoryArgs(session, "session");
 
-
+        claimEncryptionService.encryptClaim(session);
 
         Map<String, Object> sessionMap = new HashMap<>(session.getData());
 
