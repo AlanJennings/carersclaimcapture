@@ -22,16 +22,27 @@ public class CircsStartedController {
 
     private final DefaultChangeOfCircsController defaultChangeOfCircsController;
 
+    @Value("${circs.replica.enabled}")
+    private Boolean circsReplicaEnabledProperty;
+
+    @Value("${circs.replica.datafile}")
+    private String circsReplicaDataFileProperty;
+
+    @Value("${origin.tag}")
+    private String originTag;
+
     private static final String CURRENT_CIRCS_PAGE = "/circumstances/report-changes/selection";
     private static final String CHANGE_SELECTION_PAGE = "/circumstances/report-changes/change-selection";
     private static final String ORIGIN_NI = "GB-NIR";
-    private final String originTag;
 
     @Inject
-    public CircsStartedController(final @Value("${origin.tag}") String originTag,
-                                  final DefaultChangeOfCircsController defaultChangeOfCircsController) {
+    public CircsStartedController(final DefaultChangeOfCircsController defaultChangeOfCircsController) {
+
+        if (circsReplicaEnabledProperty == null){
+            circsReplicaEnabledProperty = false;
+        }
+
         this.defaultChangeOfCircsController = defaultChangeOfCircsController;
-        this.originTag = originTag;
     }
 
     @RequestMapping(value = CURRENT_CIRCS_PAGE, method = RequestMethod.POST)
@@ -41,10 +52,19 @@ public class CircsStartedController {
 
     @RequestMapping(value = CURRENT_CIRCS_PAGE, method = RequestMethod.GET)
     public String showCircsForm(final HttpServletRequest request, final HttpServletResponse response, final Model model) {
-        // Load replicate data in by setting circs replica xml filename here ...
-        String replicaData = null;
-        defaultChangeOfCircsController.createSessionVariables(request, response, replicaData);
-        if (originTag.equals(ORIGIN_NI)) {
+
+        String replicaDataFile = null;
+        LOG.info("circsReplicaEnabledProperty = " + circsReplicaEnabledProperty );
+        LOG.info("circsReplicaDataFileProperty = " + circsReplicaDataFileProperty );
+
+
+        if (circsReplicaEnabledProperty && circsReplicaDataFileProperty != null && circsReplicaDataFileProperty.length() > 0) {
+            replicaDataFile = circsReplicaDataFileProperty;
+            LOG.info("replicaDataFile = " + replicaDataFile );
+        }
+
+        defaultChangeOfCircsController.createSessionVariables(request, response, replicaDataFile);
+        if (originTag != null && originTag.equals(ORIGIN_NI)) {
             defaultChangeOfCircsController.getForm(request, model);
             return CURRENT_CIRCS_PAGE;
         }

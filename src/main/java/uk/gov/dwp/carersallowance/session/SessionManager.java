@@ -1,6 +1,7 @@
 package uk.gov.dwp.carersallowance.session;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -10,12 +11,15 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import org.springframework.ui.Model;
 import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
 import uk.gov.dwp.carersallowance.xml.XmlBuilder;
 import uk.gov.dwp.carersallowance.xml.XmlClaimReader;
@@ -75,20 +79,24 @@ public class SessionManager {
 
     private void loadReplicaData(Session session, final String xmlFile) {
         try {
+            LOG.info("Using XMLFile " + xmlFile);
             URL claimTemplateUrl = XmlClaimReader.class.getClassLoader().getResource("xml.mapping.claim");
             List<String> xmlMappings = XmlBuilder.readLines(claimTemplateUrl);
             XPathMappingList valueMappings = new XPathMappingList();
             valueMappings.add(xmlMappings);
             URL xmlfile = XmlClaimReader.class.getClassLoader().getResource(xmlFile);
-            String xml = FileUtils.readFileToString(new File(xmlfile.toURI()), Charset.defaultCharset());
 
+            String xml = IOUtils.toString(XmlClaimReader.class.getClassLoader().getResourceAsStream(xmlFile),Charset.defaultCharset());
             XmlClaimReader claimReader = new XmlClaimReader(xml, valueMappings, true);
+
             Map<String, Object> values = claimReader.getValues();
             for (String name : values.keySet()) {
                 LOG.info("Replica setting data for name:" + name + " to:" + values.get(name));
                 session.setAttribute(name, values.get(name));
             }
 
+
+            LOG.info("5 " );
             // TODO load the replica data from xml ... but its not there ! Hows it done in scala ??
             session.setAttribute("over35HoursAWeek", "yes");
             session.setAttribute("over16YearsOld", "yes");
