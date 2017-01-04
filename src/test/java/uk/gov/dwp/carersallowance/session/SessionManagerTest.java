@@ -29,6 +29,8 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class SessionManagerTest {
+    private static final String XML_MAPPING_FILE = "xml.mapping.claim";
+
     private SessionManager sessionManager;
 
     private SessionDataMapServiceImpl sessionDataService;
@@ -54,6 +56,7 @@ public class SessionManagerTest {
 
     private ArgumentCaptor<Object> objectCaptor;
 
+
     @Before
     public void setUp() throws Exception {
         session = new Session("1234");
@@ -61,6 +64,7 @@ public class SessionManagerTest {
         claimEncryptionService = new ClaimEncryptionServiceImpl(false, messageSource);
         when(sessionDataFactory.getSessionDataService()).thenReturn(sessionDataService);
         sessionManager = new SessionManager(cookieManager, sessionDataFactory, claimEncryptionService);
+        sessionManager.setXmlMappingFile(XML_MAPPING_FILE);
         objectCaptor = ArgumentCaptor.forClass(Object.class);
     }
 

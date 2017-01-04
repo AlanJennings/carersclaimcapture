@@ -17,6 +17,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import org.springframework.ui.Model;
@@ -27,17 +28,25 @@ import uk.gov.dwp.carersallowance.sessiondata.Session;
 import uk.gov.dwp.carersallowance.sessiondata.SessionDataFactory;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
 
+
+
 @Service
 public class SessionManager {
+
+    @Value("${xml.mappingFile}")
+    private String xmlMappingFile;
+
     private static final Logger LOG = LoggerFactory.getLogger(SessionManager.class);
     private final SessionDataFactory sessionDataFactory;
     private final CookieManager cookieManager;
     private final ClaimEncryptionService claimEncryptionService;
 
     @Inject
-    public SessionManager(final CookieManager cookieManager, final SessionDataFactory sessionDataFactory, final ClaimEncryptionService claimEncryptionService) {
-        this.cookieManager = cookieManager;
-        this.sessionDataFactory = sessionDataFactory;
+    public SessionManager(final CookieManager cookieManager,
+                          final SessionDataFactory sessionDataFactory,
+                          final ClaimEncryptionService claimEncryptionService){
+        this.cookieManager          = cookieManager;
+        this.sessionDataFactory     = sessionDataFactory;
         this.claimEncryptionService = claimEncryptionService;
     }
 
@@ -80,7 +89,7 @@ public class SessionManager {
     private void loadReplicaData(Session session, final String xmlFile) {
         try {
             LOG.info("Using XMLFile " + xmlFile);
-            URL claimTemplateUrl = XmlClaimReader.class.getClassLoader().getResource("xml.mapping.claim");
+            URL claimTemplateUrl = XmlClaimReader.class.getClassLoader().getResource(xmlMappingFile);
             List<String> xmlMappings = XmlBuilder.readLines(claimTemplateUrl);
             XPathMappingList valueMappings = new XPathMappingList();
             valueMappings.add(xmlMappings);
@@ -109,5 +118,9 @@ public class SessionManager {
 
     public String getSessionIdFromCookie(final HttpServletRequest request) {
         return cookieManager.getSessionIdFromCookie(request);
+    }
+
+    public void setXmlMappingFile(String xmlMappingFile) {
+        this.xmlMappingFile = xmlMappingFile;
     }
 }
