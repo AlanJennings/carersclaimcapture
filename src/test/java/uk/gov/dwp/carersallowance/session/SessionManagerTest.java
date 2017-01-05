@@ -63,8 +63,8 @@ public class SessionManagerTest {
         sessionDataService = new SessionDataMapServiceImpl();
         claimEncryptionService = new ClaimEncryptionServiceImpl(false, messageSource);
         when(sessionDataFactory.getSessionDataService()).thenReturn(sessionDataService);
-        sessionManager = new SessionManager(cookieManager, sessionDataFactory, claimEncryptionService);
-        sessionManager.setXmlMappingFile(XML_MAPPING_FILE);
+        sessionManager = new SessionManager(cookieManager, sessionDataFactory, claimEncryptionService, XML_MAPPING_FILE);
+        //sessionManager.setXmlMappingFile(XML_MAPPING_FILE);
         objectCaptor = ArgumentCaptor.forClass(Object.class);
     }
 
