@@ -14,6 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 
 import gov.dwp.carers.monitor.MonitorRegistration;
+import org.springframework.scheduling.annotation.EnableAsync;
 import uk.gov.dwp.carersallowance.monitoring.ClaimReceivedConnectionCheck;
 import uk.gov.dwp.carersallowance.monitoring.DBHealthCheck;
 import uk.gov.dwp.carersallowance.monitoring.SessionDataConnectionCheck;
@@ -26,6 +27,7 @@ import java.util.Arrays;
 @SpringBootApplication
 @ComponentScan(basePackages = {"uk.gov.dwp.carersallowance", "gov.dwp.carers"})
 @PropertySource("classpath:/config/application-info.properties")
+@EnableAsync
 public class C3Application {
     private static final Logger LOGGER = LoggerFactory.getLogger(C3Application.class);
 

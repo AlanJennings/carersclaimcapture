@@ -69,10 +69,6 @@
                     <QuestionLabel>Email address</QuestionLabel>
                     <Answer>cads.dwp@gmail.com</Answer>
                 </Email>
-                <EmailConfirmation>
-                    <QuestionLabel>Confirm email address</QuestionLabel>
-                    <Answer>cads.dwp@gmail.com</Answer>
-                </EmailConfirmation>
             </Claimant>
             <Caree>
                 <Surname>

@@ -23,4 +23,17 @@ public class TransactionIdService {
     public String getTransactionStatusById(final String transactionId) {
         return databaseService.getTransactionStatusById(transactionId);
     }
+
+    public Boolean setTransactionStatusById(final String transactionId, final String status) {
+        return databaseService.setTransactionStatusById(transactionId, status);
+    }
+
+    public Boolean insertTransactionId(final String transactionId) {
+        return databaseService.insertTransactionId(transactionId);
+    }
+
+    public Boolean insertTransactionStatus(final String transactionId, final String status, final Integer type, final Integer thirdParty,
+                                    final Integer circsType, final String lang, final Integer jsEnabled, final Integer email, final Integer saveForLaterEmail) {
+        return databaseService.insertTransactionStatus(transactionId, status, type, thirdParty, circsType, lang, jsEnabled, email, saveForLaterEmail, originTag);
+    }
 }

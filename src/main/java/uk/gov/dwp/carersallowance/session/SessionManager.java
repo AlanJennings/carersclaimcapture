@@ -1,7 +1,5 @@
 package uk.gov.dwp.carersallowance.session;
 
-import java.io.File;
-import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -11,17 +9,13 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.stream.Stream;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import org.springframework.ui.Model;
-import uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultFormController;
 import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
 import uk.gov.dwp.carersallowance.xml.XmlBuilder;
 import uk.gov.dwp.carersallowance.xml.XmlClaimReader;
@@ -30,18 +24,14 @@ import uk.gov.dwp.carersallowance.sessiondata.SessionDataFactory;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
 
 
-
 @Service
 public class SessionManager {
+    private static final Logger LOG = LoggerFactory.getLogger(SessionManager.class);
 
     private String xmlMappingFile;
-
-    private static final Logger LOG = LoggerFactory.getLogger(SessionManager.class);
     private final SessionDataFactory sessionDataFactory;
     private final CookieManager cookieManager;
     private final ClaimEncryptionService claimEncryptionService;
-
-
 
     @Inject
     public SessionManager(final CookieManager cookieManager,
@@ -97,8 +87,6 @@ public class SessionManager {
             List<String> xmlMappings = XmlBuilder.readLines(claimTemplateUrl);
             XPathMappingList valueMappings = new XPathMappingList();
             valueMappings.add(xmlMappings);
-            URL xmlfile = XmlClaimReader.class.getClassLoader().getResource(xmlFile);
-
             String xml = IOUtils.toString(XmlClaimReader.class.getClassLoader().getResourceAsStream(xmlFile),Charset.defaultCharset());
             XmlClaimReader claimReader = new XmlClaimReader(xml, valueMappings, true);
 
@@ -107,7 +95,7 @@ public class SessionManager {
                 LOG.info("Replica setting data for name:" + name + " to:" + values.get(name));
                 session.setAttribute(name, values.get(name));
             }
-
+            session.removeAttribute("transactionId");
 
             LOG.info("5 " );
             // TODO load the replica data from xml ... but its not there ! Hows it done in scala ??
@@ -122,9 +110,5 @@ public class SessionManager {
 
     public String getSessionIdFromCookie(final HttpServletRequest request) {
         return cookieManager.getSessionIdFromCookie(request);
-    }
-
-    public void setXmlMappingFile(String xmlMappingFile) {
-        this.xmlMappingFile = xmlMappingFile;
     }
 }

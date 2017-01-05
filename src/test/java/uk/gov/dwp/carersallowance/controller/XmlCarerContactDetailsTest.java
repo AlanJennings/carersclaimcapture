@@ -45,6 +45,5 @@ public class XmlCarerContactDetailsTest {
         }
         assertThat(sessionValues.get("carerWantsEmailContact"), is("yes"));
         assertThat(sessionValues.get("carerMail"), is("cads.dwp@gmail.com"));
-        assertThat(sessionValues.get("carerMailConfirmation"), is("cads.dwp@gmail.com"));
     }
 }

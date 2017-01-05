@@ -9,6 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import gov.dwp.carers.xml.helpers.XMLMessageHelper;
 import gov.dwp.carers.xml.signing.SigningException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,7 @@ public class SubmitClaimController {
 
     private static final String CURRENT_PAGE       = "/submit-claim";
     private static final String SUCCESS_PAGE       = "/async-submitting";
+    private static final String TRANSACTION_ID     = "transactionId";
 //    private static final String FAILED_PAGE        = "/oh-no-its-all-gone-horribly-wrong";
 
     private SessionManager sessionManager;
@@ -74,10 +76,17 @@ public class SubmitClaimController {
         LOG.trace("Starting SubmitClaimController.postForm");
         try {
             LOG.debug("request.getParameterMap() = {}", request.getParameterMap()); // log these jsut in case
-            Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
+            final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
 
-            String xml = buildClaimXml(session);
-            submitClaimService.sendClaim(xml);
+            String transactionId = getTransactionId(session);
+            saveTransactionId(transactionId, session);
+
+            String xml = buildClaimXml(session, transactionId);
+            //transactionIdService.insertTransactionStatus((String)session.getAttribute(TRANSACTION_ID), "0100", type, thirdParty, circsType, lang, jsEnabled, email, saveForLaterEmail, originTag);
+            transactionIdService.insertTransactionStatus(transactionId, "0100", null, null, null, null, null, null, null);
+
+            submitClaimService.sendClaim(xml, transactionId);
+            LOG.info("Sent claim for transactionId :{}", session.getAttribute(TRANSACTION_ID));
             return "redirect:" + SUCCESS_PAGE;
         } catch(IOException | InstantiationException | ParserConfigurationException | MappingException e) {
             LOG.error("Unexpected RuntimeException", e);
@@ -100,7 +109,7 @@ public class SubmitClaimController {
      * @throws ParserConfigurationException
      * @throws MappingException
      */
-    private String buildClaimXml(final Session session) throws IOException, InstantiationException, ParserConfigurationException, MappingException {
+    private String buildClaimXml(final Session session, final String transactionId) throws IOException, InstantiationException, ParserConfigurationException, MappingException {
         Parameters.validateMandatoryArgs(session, "session");
 
         claimEncryptionService.encryptClaim(session);
@@ -112,7 +121,7 @@ public class SubmitClaimController {
 //        sessionMap.put("appVersion", appVersion);
 //        sessionMap.put("origin", origin);
 //        sessionMap.put("language", language);
-        final String transactionId = transactionIdService.getTransactionId();
+
         sessionMap.put("transactionId", transactionId);
         sessionMap.put("dateTimeGenerated", ClaimXmlUtil.currentDateTime("dd-MM-yyyy HH:mm"));
 
@@ -122,6 +131,21 @@ public class SubmitClaimController {
         final String signedXml = signClaim(xml, transactionId);
         LOG.debug("signedXml:{}", signedXml);
         return signedXml;
+    }
+
+    private void saveTransactionId(final String transactionId, final Session session) {
+        if (session.getAttribute(TRANSACTION_ID) == null) {
+            session.setAttribute(TRANSACTION_ID, transactionId);
+            sessionManager.saveSession(session);
+        }
+    }
+
+    private String getTransactionId(final Session session) {
+        String transactionId = (String)session.getAttribute(TRANSACTION_ID);
+        if (StringUtils.isEmpty(transactionId)) {
+            transactionId = transactionIdService.getTransactionId();
+        }
+        return transactionId;
     }
 
     private String signClaim(final String xmlClaim, final String transactionId) {
