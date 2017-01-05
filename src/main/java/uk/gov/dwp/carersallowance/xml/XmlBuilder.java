@@ -176,6 +176,8 @@ public class XmlBuilder {
         if (value != null) {
             LOG.debug("GOT REGULAR KEY!!");
             return value;
+        } else if (key != null && key.contains(".attribute")) {
+            return values.get(key.replace(".attribute", ""));
         } else if (values.containsKey(key + "_day") && values.containsKey(key + "_month") && values.containsKey(key + "_year")) {
             LOG.debug("GOT DATE KEYS!!");
             String dateDay = (String) values.get(key + "_day");

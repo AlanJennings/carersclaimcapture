@@ -3,7 +3,7 @@ xmlVersion                                      = DWPBody/ClaimVersion
 origin                                          = DWPBody/Origin
 
 transactionId                                   = DWPBody/DWPCATransaction/TransactionId
-transactionIdAttr                               = DWPBody/DWPCATransaction/[@id]
+transactionId.attribute                         = DWPBody/DWPCATransaction/[@id]
 dateTimeGenerated                               = DWPBody/DWPCATransaction/DateTimeGenerated
 language                                        = DWPBody/DWPCATransaction/LanguageUsed
 

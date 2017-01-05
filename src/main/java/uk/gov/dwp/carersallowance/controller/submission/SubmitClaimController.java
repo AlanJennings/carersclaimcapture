@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.ParserConfigurationException;
 
+import gov.dwp.carers.xml.helpers.XMLMessageHelper;
+import gov.dwp.carers.xml.signing.SigningException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import org.w3c.dom.Document;
 import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
 import uk.gov.dwp.carersallowance.submission.SubmitClaimService;
 import uk.gov.dwp.carersallowance.xml.XmlBuilder;
@@ -54,7 +57,7 @@ public class SubmitClaimController {
         this.sessionManager = sessionManager;
         this.transactionIdService = transactionIdService;
         this.claimEncryptionService = claimEncryptionService;
-        this.submitClaimService=submitClaimService;
+        this.submitClaimService = submitClaimService;
     }
 
     /**
@@ -74,7 +77,6 @@ public class SubmitClaimController {
             Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
 
             String xml = buildClaimXml(session);
-            // TODO add signature ... messageReceived properties currently set to check.signature=false
             submitClaimService.sendClaim(xml);
             return "redirect:" + SUCCESS_PAGE;
         } catch(IOException | InstantiationException | ParserConfigurationException | MappingException e) {
@@ -110,14 +112,29 @@ public class SubmitClaimController {
 //        sessionMap.put("appVersion", appVersion);
 //        sessionMap.put("origin", origin);
 //        sessionMap.put("language", language);
-
-        sessionMap.put("transactionId", transactionIdService.getTransactionId());
+        final String transactionId = transactionIdService.getTransactionId();
+        sessionMap.put("transactionId", transactionId);
         sessionMap.put("dateTimeGenerated", ClaimXmlUtil.currentDateTime("dd-MM-yyyy HH:mm"));
 
-
-        XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
-        String xml = xmlBuilder.render(true, false);
+        final XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
+        final String xml = xmlBuilder.render(true, false);
         LOG.debug("xml:{}", xml);
-        return xml;
+        final String signedXml = signClaim(xml, transactionId);
+        LOG.debug("signedXml:{}", signedXml);
+        return signedXml;
+    }
+
+    private String signClaim(final String xmlClaim, final String transactionId) {
+        final String xmlString = xmlClaim.replaceAll("<!--[\\s\\S]*?-->", "");
+        final XMLMessageHelper xMLMessageHelper = new XMLMessageHelper();
+        try {
+            final Document document = xMLMessageHelper.createDocument(xmlString);
+            xMLMessageHelper.normaliseDocument(document);
+            final String xmlStringTransformed = xMLMessageHelper.transformXml(xMLMessageHelper.createDefaultTransformer(), document);
+            return xMLMessageHelper.signXml(xmlStringTransformed, transactionId);
+        } catch (Exception e) {
+            LOG.error("Unable to sign xml:{}", e.getMessage(), e);
+            throw new SigningException("Unable to sign xml", e);
+        }
     }
 }

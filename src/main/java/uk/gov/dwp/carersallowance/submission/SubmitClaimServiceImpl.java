@@ -10,7 +10,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.inject.Inject;
 import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
 
 @Component
 public class SubmitClaimServiceImpl implements SubmitClaimService {
@@ -33,7 +32,7 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
             final MediaType mediaTypeXml = new MediaType("application", "xml", StandardCharsets.UTF_8);
             headers.setContentType(mediaTypeXml);
             final HttpEntity<String> request = new HttpEntity<>(xml, headers);
-            LOG.info("Posting claim to :"+crUrl);
+            LOG.info("Posting claim to :{}", crUrl);
             final ResponseEntity<String> response = restTemplate.exchange(crUrl + "/submission", HttpMethod.POST, request, String.class);
             LOG.debug("RESPONSE:{}", response.getStatusCode());
             //TODO Handle response from submit to claim received
