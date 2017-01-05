@@ -21,6 +21,7 @@ public class AboutYouController extends AbstractFormController {
     public static final Logger LOG = LoggerFactory.getLogger(AboutYouController.class);
 
     private static final String CURRENT_PAGE            = "/circumstances/identification/about-you";
+    private static final String PREVIOUS_PAGE           = "/circumstances/report-changes/change-selection";
 
     private static final String STOPPED_CARING_PAGE     = "/circumstances/report-changes/stopped-caring";
     private static final String EMPLOYMENT_CHANGE_PAGE  = "/circumstances/report-changes/employment-change";
@@ -79,6 +80,11 @@ public class AboutYouController extends AbstractFormController {
                 returnValue = null;
         }
         return returnValue;
+    }
+
+    @Override
+    public String getPreviousPage(HttpServletRequest request) {
+        return PREVIOUS_PAGE;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)

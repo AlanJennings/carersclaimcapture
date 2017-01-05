@@ -1,5 +1,7 @@
 package uk.gov.dwp.carersallowance.session;
 
+import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -9,13 +11,17 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.stream.Stream;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import org.springframework.ui.Model;
+import uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultFormController;
 import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
 import uk.gov.dwp.carersallowance.xml.XmlBuilder;
 import uk.gov.dwp.carersallowance.xml.XmlClaimReader;
@@ -28,7 +34,6 @@ import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
 @Service
 public class SessionManager {
 
-    @Value("${xml.mappingFile}")
     private String xmlMappingFile;
 
     private static final Logger LOG = LoggerFactory.getLogger(SessionManager.class);
@@ -36,13 +41,17 @@ public class SessionManager {
     private final CookieManager cookieManager;
     private final ClaimEncryptionService claimEncryptionService;
 
+
+
     @Inject
     public SessionManager(final CookieManager cookieManager,
                           final SessionDataFactory sessionDataFactory,
-                          final ClaimEncryptionService claimEncryptionService){
+                          final ClaimEncryptionService claimEncryptionService,
+                          final @Value("${xml.mappingFile}") String xmlMappingFile){
         this.cookieManager          = cookieManager;
         this.sessionDataFactory     = sessionDataFactory;
         this.claimEncryptionService = claimEncryptionService;
+        this.xmlMappingFile         = xmlMappingFile;
     }
 
     public String createSessionId() {
