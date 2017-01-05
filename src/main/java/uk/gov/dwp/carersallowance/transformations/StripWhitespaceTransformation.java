@@ -1,23 +1,27 @@
 package uk.gov.dwp.carersallowance.transformations;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class StripWhitespaceTransformation implements Transformation {
+    private static final Logger LOG = LoggerFactory.getLogger(StripWhitespaceTransformation.class);
 
     @Override
     public String transform(String value) {
-        if(value == null) {
+        if (value == null) {
             return null;
         }
         char[] dest = new char[value.length()];
         int destIndex = 0;
-        for(int srcIndex = 0; srcIndex < value.length(); srcIndex++) {
+        for (int srcIndex = 0; srcIndex < value.length(); srcIndex++) {
             char ch = value.charAt(srcIndex);
-            if(Character.isWhitespace(ch) == false) {
+            if (Character.isWhitespace(ch) == false) {
                 dest[destIndex] = ch;
                 destIndex++;
             }
         }
 
-        if(destIndex == 0) {
+        if (destIndex == 0) {
             return "";
         }
 
@@ -29,9 +33,8 @@ public class StripWhitespaceTransformation implements Transformation {
         StripWhitespaceTransformation stripWhitespace = new StripWhitespaceTransformation();
 
         String[] values = {null, "", "X", " X ", "X ", " X", " X O X ", " X O X", "X O X ", " ", "      "};
-        for(String value : values) {
-            System.out.print("'" + value + "' = '");
-            System.out.println(stripWhitespace.transform(value) + "'");
+        for (String value : values) {
+            LOG.debug("'{}'='{}'", value, stripWhitespace.transform(value));
         }
     }
 }

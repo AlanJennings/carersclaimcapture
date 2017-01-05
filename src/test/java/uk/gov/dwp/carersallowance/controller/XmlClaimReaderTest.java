@@ -32,7 +32,7 @@ public class XmlClaimReaderTest {
 
     @Test
     public void simpleXmlLoadTest() throws Exception {
-        System.out.println("Doing simple xml test");
+        LOG.debug("Doing simple xml test");
         String simplexml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<DWPBody>\n" +
                 "    <Version>0.27</Version>\n" +
@@ -74,7 +74,7 @@ public class XmlClaimReaderTest {
         Map<String, Object> sessionValues = claimReader.getValues();
         Map<String, Object> values = claimReader.getValues();
         for (String name : values.keySet()) {
-            System.out.println("VALUE:" + name + "=>" + values.get(name) + "\n");
+            LOG.debug("VALUE:{}=>{}\n", name, values.get(name));
         }
         assertThat(sessionValues.get("thirdParty"), is("no"));
         assertThat(sessionValues.get("nameAndOrganisation"), is("Jenny Bloggs Preston carers"));

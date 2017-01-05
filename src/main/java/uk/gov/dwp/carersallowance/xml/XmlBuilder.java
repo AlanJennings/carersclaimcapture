@@ -123,27 +123,74 @@ public class XmlBuilder {
         }
 
         List<XPathMapping> list = mappingList.getList();
+
+        // Store all string values by xpath to allow easy lookup when checking if questions need to be added to xml
+        Map<String, String> valuesByValueKey = new HashMap<>();
         for (XPathMapping mapping : list) {
             String valueKey = mapping.getValue();
-            Object value = values.get(valueKey);
+            Object value = getClaimValue(valueKey, values);
+            LOG.debug("Build map ... checking valueKey:{} for xpath:{}->{}", valueKey, mapping.getXpath(), value);
+            if (StringUtils.isNotBlank(mapping.getXpath()) && isValueEmpty(value) == false && value instanceof String) {
+                LOG.debug("Build map ... ADDING valueKey:{}->{}", valueKey, value);
+                valuesByValueKey.put(valueKey, (String) value);
+            }
+        }
+
+        for (XPathMapping mapping : list) {
+            String valueKey = mapping.getValue();
+            Object value = getClaimValue(valueKey, values);
             String xpath = mapping.getXpath();
+            String processingInstruction = mapping.getProcessingInstruction();
+            LOG.debug("Checking xpath:{}", xpath);
             if (StringUtils.isNotBlank(xpath) && isValueEmpty(value) == false) {
                 if (value instanceof String) {
                     // we may have add attribute without = which is a filter instruction i.e. DWPBody/DWPCATransaction/[@id]
-                    if (mapping.getProcessingInstruction() != null && mapping.getProcessingInstruction().length() > 0 && !mapping.getProcessingInstruction().contains("=")) {
-                        addAttr(mapping.getXpath(), mapping.getProcessingInstruction(), (String) value, localRootNode);
+                    if (processingInstruction != null && processingInstruction.length() > 0 && !processingInstruction.contains("=")) {
+                        addAttr(xpath, processingInstruction, (String) value, localRootNode);
                     } else {
-                        addNode(mapping.getXpath(), (String) value, true, localRootNode);   // create leaf node
+                        addNode(xpath, (String) value, true, localRootNode);   // create leaf node
                     }
                 } else if (value instanceof List) {
                     // field collection, we can't reliably assert the parameterized types, so will go with <?>
                     List<Map<String, String>> fieldCollectionList = castFieldCollectionList(value);
-                    add(fieldCollectionList, mapping.getXpath());
+                    add(fieldCollectionList, xpath);
                 } else {
                     throw new IllegalFieldValueException("Unsupported value class: " + value.getClass().getName(), (String) null, (String[]) null);
                 }
+            } else if (valueKey != null && valueKey.endsWith(".label")) {
+                // TODO use parameters when building the questions
+                LOG.debug("Checking QuestionLabel:{}", valueKey);
+                String question = getQuestion(valueKey, null);
+                String relatedAnswerKey = valueKey.replace(".label", "");
+                // If we have a corresponding Answer and value set for this QuestionLabel then we add to xml
+                if (valuesByValueKey.containsKey(relatedAnswerKey)) {
+                    LOG.debug("Adding QuestionLabel:{}", xpath);
+                    addNode(xpath, question, true, localRootNode);
+                }
             }
         }
+    }
+
+    private Object getClaimValue(String key, Map<String, Object> values) {
+        Object value = values.get(key);
+        if (value != null) {
+            LOG.debug("GOT REGULAR KEY!!");
+            return value;
+        } else if (values.containsKey(key + "_day") && values.containsKey(key + "_month") && values.containsKey(key + "_year")) {
+            LOG.debug("GOT DATE KEYS!!");
+            String dateDay = (String) values.get(key + "_day");
+            String dateMonth = (String) values.get(key + "_month");
+            String dateYear = (String) values.get(key + "_year");
+            String date = dateDay + "-" + dateMonth + "-" + dateYear;
+            LOG.debug("RETURNING DATE:{}", date);
+            return date;
+        } else {
+            return null;
+        }
+    }
+
+    private String getQuestion(String questionKey, Object... parameters) {
+        return ("Question for " + questionKey);
     }
 
     /**
@@ -168,7 +215,7 @@ public class XmlBuilder {
 
         Node node = getNamedNode(xPath, null, false, localRootNode);
         if (isValueEmpty(value) == false) {
-            Node textNode = document.createTextNode(value);
+            Node textNode = document.createTextNode(value.replace("yes","Yes").replace("no","No"));
             node.appendChild(textNode);
         }
 

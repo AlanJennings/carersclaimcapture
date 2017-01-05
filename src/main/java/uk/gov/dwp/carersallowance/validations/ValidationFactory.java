@@ -28,7 +28,7 @@ public class ValidationFactory {
      */
     public Validation getValidation(ValidationType type, String key, String condition, Map<String, String> additionalParameters) {
         LOG.debug("type = {}, condition = {}", type, condition);
-        if(type == null || condition == null) {
+        if (type == null || condition == null) {
             return null;
         }
 
@@ -80,7 +80,7 @@ public class ValidationFactory {
      * Note: condition is null safe trimmed before comparison
      */
     private boolean isValidationEnabled(String condition) {
-        if(condition != null) {
+        if (condition != null) {
             condition = condition.trim();
         }
         return Boolean.parseBoolean(condition);
@@ -91,7 +91,7 @@ public class ValidationFactory {
      */
     private String cleanupConditionValue(String code) {
         String referencedMessageValue = messageSource.getMessage(trimQuotes(code), null, null, Locale.getDefault());
-        if(referencedMessageValue == null) {
+        if (referencedMessageValue == null) {
             return code;
         }
 
@@ -100,12 +100,12 @@ public class ValidationFactory {
     }
 
     private String trimQuotes(String string) {
-        if(string == null) {
+        if (string == null) {
             return null;
         }
 
         string = string.trim();
-        if(string.length() >= 2 && string.charAt(0) == '"' && string.charAt(string.length() -1) == '"') {
+        if (string.length() >= 2 && string.charAt(0) == '"' && string.charAt(string.length() -1) == '"') {
             LOG.debug("Trimming external quotes");
             return string.substring(1, string.length() -1);
         }
@@ -117,9 +117,8 @@ public class ValidationFactory {
         String[] values = {null, "", "\"\"", "\"hello", "hello\"", "hello \" world \"."};
 
         ValidationFactory factory = new ValidationFactory(null);
-        for(String value: values) {
-            System.out.print("'" + value + "'");
-            System.out.println(" = '" + factory.trimQuotes(value) + "'");
+        for (String value: values) {
+            LOG.debug("'{}' = '{}'", value, factory.trimQuotes(value));
         }
     }
 }

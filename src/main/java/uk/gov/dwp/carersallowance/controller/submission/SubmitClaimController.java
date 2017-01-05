@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
+import uk.gov.dwp.carersallowance.submission.SubmitClaimService;
 import uk.gov.dwp.carersallowance.xml.XmlBuilder;
 import uk.gov.dwp.carersallowance.database.TransactionIdService;
 
@@ -40,15 +41,20 @@ public class SubmitClaimController {
     private static final String SUCCESS_PAGE       = "/async-submitting";
 //    private static final String FAILED_PAGE        = "/oh-no-its-all-gone-horribly-wrong";
 
-    private final SessionManager sessionManager;
-    private final TransactionIdService transactionIdService;
+    private SessionManager sessionManager;
+    private TransactionIdService transactionIdService;
+    private SubmitClaimService submitClaimService;
     private final ClaimEncryptionService claimEncryptionService;
 
     @Autowired
-    public SubmitClaimController(final SessionManager sessionManager, final TransactionIdService transactionIdService, final ClaimEncryptionService claimEncryptionService) {
+    public SubmitClaimController(final SessionManager sessionManager,
+                                 final TransactionIdService transactionIdService,
+                                 final ClaimEncryptionService claimEncryptionService,
+                                 final SubmitClaimService submitClaimService) {
         this.sessionManager = sessionManager;
         this.transactionIdService = transactionIdService;
         this.claimEncryptionService = claimEncryptionService;
+        this.submitClaimService=submitClaimService;
     }
 
     /**
@@ -68,7 +74,8 @@ public class SubmitClaimController {
             Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
 
             String xml = buildClaimXml(session);
-            //return xml;
+            // TODO add signature ... messageReceived properties currently set to check.signature=false
+            submitClaimService.sendClaim(xml);
             return "redirect:" + SUCCESS_PAGE;
         } catch(IOException | InstantiationException | ParserConfigurationException | MappingException e) {
             LOG.error("Unexpected RuntimeException", e);

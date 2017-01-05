@@ -123,10 +123,10 @@ public class XmlClaimReader {
         // BIZARRE ??? Test works OK but running in app doesnot find mapping for DWPBody/DWPCATransaction/DWPCAClaim/DateOfClaim/Answer
         if(mapping == null){
             List<XPathMapping> mappings=valueMappings.getList();
-            for( XPathMapping m : mappings){
-                if(m!=null && m.getXpath()!=null && m.getXpath().equals(parentPath)){
+            for (XPathMapping m : mappings){
+                if (m!=null && m.getXpath()!=null && m.getXpath().equals(parentPath)){
                     LOG.error("BIZARRE found mapping for "+parentPath+" by looping but not by map lookup. Needs further investigation");
-                    System.out.println("Loop found matching xpath for parent:"+parentPath);
+                    LOG.debug("Loop found matching xpath for parent:{}", parentPath);
                     mapping=m;
                 }
             }

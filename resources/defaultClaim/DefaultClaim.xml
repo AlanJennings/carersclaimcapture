@@ -229,7 +229,7 @@
                 </Employed>
                 <SelfEmployed>
                     <QuestionLabel>Have you been self-employed at any time since 1 April 2016?</QuestionLabel>
-                    <Answer>Yes</Answer>
+                    <Answer>No</Answer>
                 </SelfEmployed>
                 <OtherPaymentQuestion>
                     <QuestionLabel>What other income have you had since 08/04/2016?</QuestionLabel>
@@ -329,40 +329,6 @@
                         </OtherEmployment>
                     </JobDetails>
                 </Employment>
-                <SelfEmployment>
-                    <SelfEmployedNow>
-                        <QuestionLabel>Are you still doing this work?</QuestionLabel>
-                        <Answer>No</Answer>
-                    </SelfEmployedNow>
-                    <MoreThanYearAgo>
-                        <QuestionLabel>Did you start this work more than a year ago?</QuestionLabel>
-                        <Answer>No</Answer>
-                    </MoreThanYearAgo>
-                    <DateStarted>
-                        <QuestionLabel>When did you start this work?</QuestionLabel>
-                        <Answer>08-10-2015</Answer>
-                    </DateStarted>
-                    <DateEnded>
-                        <QuestionLabel>When did you finish this work?</QuestionLabel>
-                        <Answer>08-02-2016</Answer>
-                    </DateEnded>
-                    <PaidMoneyYet>
-                        <QuestionLabel>Has your self-employed business been paid any money yet?</QuestionLabel>
-                        <Answer>Yes</Answer>
-                    </PaidMoneyYet>
-                    <PaidMoneyDate>
-                        <QuestionLabel>Date money first received by the business</QuestionLabel>
-                        <Answer>08-11-2015</Answer>
-                    </PaidMoneyDate>
-                    <PaidForPension>
-                        <QuestionLabel>Did you pay into a pension?</QuestionLabel>
-                        <Answer>No</Answer>
-                    </PaidForPension>
-                    <PaidForJobExpenses>
-                        <QuestionLabel>Did you have any care costs because of this work?</QuestionLabel>
-                        <Answer>No</Answer>
-                    </PaidForJobExpenses>
-                </SelfEmployment>
                 <EmploymentAdditionalInfo>
                     <QuestionLabel>Do you want to add anything about your work?</QuestionLabel>
                     <Answer>No</Answer>

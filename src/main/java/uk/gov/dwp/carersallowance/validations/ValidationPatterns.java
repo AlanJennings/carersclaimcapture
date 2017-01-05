@@ -1,11 +1,15 @@
 package uk.gov.dwp.carersallowance.validations;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ValidationPatterns {
+    private static final Logger LOG = LoggerFactory.getLogger(ValidationPatterns.class);
 
     public static final int    ACCOUNT_HOLDER_NAME_MAX_LENGTH = 60;
     public static final int    ACCOUNT_NUMBER_MAX_LENGTH      = 10;
@@ -38,17 +42,16 @@ public class ValidationPatterns {
 
     public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException {
         Field[] fields = ValidationPatterns.class.getFields();
-        System.out.println("Fields = " + Arrays.asList(fields));
-        for(Field field: fields) {
+        LOG.debug("Fields = {}", Arrays.asList(fields));
+        for (Field field: fields) {
             String fieldName = field.getName();
-            if(field.getType() != String.class) {
-                System.out.println("field: " + field + " is not a string");
+            if (field.getType() != String.class) {
+                LOG.debug("field: {} is not a string", field);
             } else {
-                System.out.print("pattern: " + fieldName);
                 String value = (String)field.get(null);
                 Pattern pattern = Pattern.compile(value);
                 Matcher matcher = pattern.matcher("");
-                System.out.println(" = " + matcher.matches());
+                LOG.debug("pattern: {} = {}", field, matcher.matches());
             }
         }
     }

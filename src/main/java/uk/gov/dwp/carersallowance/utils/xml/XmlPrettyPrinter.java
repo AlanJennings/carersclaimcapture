@@ -38,7 +38,7 @@ public final class XmlPrettyPrinter {
 
         Parameters.validateMandatoryArgs(new Object[]{xml}, new String[]{"xml"});
         try {
-            if(!prettyPrint) {
+            if (!prettyPrint) {
                 xml.normalize();
             }
 
@@ -119,15 +119,15 @@ public final class XmlPrettyPrinter {
 
         @Override
         public short acceptNode(Node nodeArg) {
-            if(nodeArg == null) {
+            if (nodeArg == null) {
                 return FILTER_REJECT;
             }
 
-            if(nodeArg instanceof Text) {
+            if (nodeArg instanceof Text) {
                 Text textNode = (Text)nodeArg;
                 String wholeText = textNode.getWholeText();
                 // Bizarrely textNode.isElementContentWhitespace() does not always return true when the text is all whitespace!!
-                if(StringUtils.isWhitespace(wholeText)) {
+                if (StringUtils.isWhitespace(wholeText)) {
                     return FILTER_REJECT;
                 }
             }
@@ -156,7 +156,7 @@ public final class XmlPrettyPrinter {
     }
 
 //    public static void main(String[] args) {
-//        System.out.println("Started");
+//        LOG.debug("Started");
 //
 //        String filename = "/Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/resources/data/claim.16010000027.v3_4.xml";
 //
@@ -168,25 +168,25 @@ public final class XmlPrettyPrinter {
 //                String flatXml = formatXml(rawXml, false, false);
 //                String flattenedXml = formatXml(prettyXml, false, false);
 //
-//                System.out.println("   RAW XML");
-//                System.out.println("=============");
-//                System.out.println(rawXml);
-//                System.out.println();
+//                LOG.debug("   RAW XML");
+//                LOG.debug("=============");
+//                LOG.debug(rawXml);
+//                LOG.debug();
 //
-//                System.out.println("  PRETTY XML");
-//                System.out.println("=============");
-//                System.out.println(prettyXml);
-//                System.out.println();
+//                LOG.debug("  PRETTY XML");
+//                LOG.debug("=============");
+//                LOG.debug(prettyXml);
+//                LOG.debug();
 //
-//                System.out.println("  FLAT XML");
-//                System.out.println("=============");
-//                System.out.println(flatXml);
-//                System.out.println();
+//                LOG.debug("  FLAT XML");
+//                LOG.debug("=============");
+//                LOG.debug(flatXml);
+//                LOG.debug();
 //
-//                System.out.println("  FLATENED XML");
-//                System.out.println("================");
-//                System.out.println(flattenedXml);
-//                System.out.println();
+//                LOG.debug("  FLATENED XML");
+//                LOG.debug("================");
+//                LOG.debug(flattenedXml);
+//                LOG.debug();
 //
 //            } catch(IOException e) {
 //                System.err.println("Problems with file: " + filename);
@@ -196,6 +196,6 @@ public final class XmlPrettyPrinter {
 //                e.printStackTrace();
 //            }
 ////        }
-//            System.out.println("Complete");
+//            LOG.debug("Complete");
 //    }
 }

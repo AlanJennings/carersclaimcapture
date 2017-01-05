@@ -178,15 +178,15 @@ public class DateValidation extends AbstractValidation {
     public static void main(String[] args) {
         Calendar calendar = Calendar.getInstance();
 
-        System.out.println("calendar = " + calendar.getTime());
+        LOG.debug("calendar = {}", calendar.getTime());
 
-        System.out.println("first go");
+        LOG.debug("first go");
         calendar.set(Calendar.MONTH, 20);
-        System.out.println("calendar = " + calendar.getTime());
+        LOG.debug("calendar = {}", calendar.getTime());
 
         calendar.setLenient(false);
-        System.out.println("second go");
+        LOG.debug("second go");
         calendar.set(Calendar.MONTH, 20);
-        System.out.println("calendar = " + calendar.getTime());
+        LOG.debug("calendar = {}", calendar.getTime());
     }
 }

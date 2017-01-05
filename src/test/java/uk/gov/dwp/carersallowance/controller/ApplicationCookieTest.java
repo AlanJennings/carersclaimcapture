@@ -48,7 +48,6 @@ public class ApplicationCookieTest {
     @Before
     public void setUp() throws Exception {
         cookieCaptor = ArgumentCaptor.forClass(Cookie.class);
-        System.out.println("BEFORE setUp appversion:"+applicationVersion);
     }
 
     @Test
@@ -59,7 +58,6 @@ public class ApplicationCookieTest {
         } catch (Exception e) {
 
         }
-        System.out.println("Response status:" + response.getStatus());
         verify(response, times(3)).addCookie(cookieCaptor.capture());
         assertEquals("C3Version", cookieCaptor.getAllValues().get(0).getName());
         assertEquals("4.02", cookieCaptor.getAllValues().get(0).getValue());

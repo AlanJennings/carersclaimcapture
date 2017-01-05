@@ -267,6 +267,6 @@ public class ResolveArgs extends BodyTagSupport {
     public static void main(String[] args) {
         ResolveArgs resolveArgs = new ResolveArgs();
         String result = resolveArgs.stripEnclosingQuotes("");
-        System.out.println("'\"\"' = '" + result + "'");
+        LOG.debug("'\"\"' = '{}'", result);
     }
 }

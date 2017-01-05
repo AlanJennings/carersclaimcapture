@@ -8,15 +8,13 @@ public class KeyValue {
 
     /**
      * Split key/value around the
-     * @param string
-     * @param startSeperator
      */
     public KeyValue(String string, String seperator) {
         this(string, seperator, null);
     }
 
     public KeyValue(String string, String startSeperator, String endSeparator) {
-        if(StringUtils.isBlank(string)) {
+        if (StringUtils.isBlank(string)) {
             return;
         }
 
@@ -26,26 +24,26 @@ public class KeyValue {
         }
 
         int pos = string.indexOf(startSeperator);
-        if(pos < 0) {
+        if (pos < 0) {
             key = string.trim();
             return;
         }
 
         key = string.substring(0, pos);
         key = key.trim();
-        if(key.equals("")) {
+        if (key.equals("")) {
             key = null;
         }
 
         if(pos < string.length()) {
             value = string.substring(pos + 1);
             value = value.trim();
-            if(StringUtils.isEmpty(endSeparator) == false && value.endsWith(endSeparator)) {
+            if (StringUtils.isEmpty(endSeparator) == false && value.endsWith(endSeparator)) {
                 value = value.substring(0, value.length() - endSeparator.length());
                 value = value.trim();
             }
 
-            if(value.equals("")) {
+            if (value.equals("")) {
                 value = null;
             }
         }
@@ -74,7 +72,7 @@ public class KeyValue {
 //        }
 
         String[] processingInstructions = {"DWPBody/DWPCATransaction/DWPCAClaim/DateOfClaim/Answer[@type=date]"};
-        for(String string: processingInstructions) {
+        for (String string: processingInstructions) {
             KeyValue keyValue = new KeyValue(string, "[", "]");
             System.out.println("string = '" + string + "', key = '" + keyValue.getKey() + "', value = '" + keyValue.getValue() + "'");
         }

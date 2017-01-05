@@ -41,7 +41,7 @@ public class XmlCarerContactDetailsTest {
         Map<String, Object> sessionValues = claimReader.getValues();
         Map<String, Object> values = claimReader.getValues();
         for (String name : values.keySet()) {
-            System.out.println("VALUE:" + name + "=>" + values.get(name) + "\n");
+            LOG.debug("VALUE:{}=>{}\n", name, values.get(name));
         }
         assertThat(sessionValues.get("carerWantsEmailContact"), is("yes"));
         assertThat(sessionValues.get("carerMail"), is("cads.dwp@gmail.com"));

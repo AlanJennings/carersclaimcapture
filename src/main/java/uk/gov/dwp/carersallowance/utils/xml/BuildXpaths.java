@@ -36,13 +36,13 @@ public class BuildXpaths {
     private void parse(List<XPathMapping> list, String parentPath, Node parent) {
         LOG.trace("Started BuildXpaths.parse(List<Item> list, String parentPath, Node parent)");
         LOG.debug("parentPath = {}", parentPath);
-        if(parent == null) {
+        if (parent == null) {
             return;
         }
 
         LOG.debug("getting children");
         NodeList children = parent.getChildNodes();
-        for(int index = 0; index < children.getLength(); index++) {
+        for (int index = 0; index < children.getLength(); index++) {
             Node child = children.item(index);
             String nodeName = child.getNodeName();
             String xpath = parentPath + nodeName;
@@ -50,13 +50,13 @@ public class BuildXpaths {
             LOG.debug("nodeType = {}, nodeName = {}", nodeType, nodeName);
 
             // we can't use instanceof as everything is a Node
-            if(nodeType == Node.ELEMENT_NODE) {
+            if (nodeType == Node.ELEMENT_NODE) {
                 String value = getNodeValue(child);
                 LOG.debug("value = {}", value);
-                if(isFormVariable(value)) {
+                if (isFormVariable(value)) {
                     LOG.debug("found form variable");
                     String data = extractFormVariable(value);
-                    if(data.endsWith(".label") == false) {
+                    if (data.endsWith(".label") == false) {
                         XPathMapping item = new XPathMapping(data, xpath, null);
                         list.add(item);
                     }
@@ -71,7 +71,7 @@ public class BuildXpaths {
     }
 
     private boolean isFormVariable(String value) {
-        if(value == null || value.equals("") || value.charAt(0) != '{' || value.charAt(value.length() - 1) != '}') {
+        if (value == null || value.equals("") || value.charAt(0) != '{' || value.charAt(value.length() - 1) != '}') {
             return false;
         }
 
@@ -89,15 +89,15 @@ public class BuildXpaths {
      * @return
      */
     private String getNodeValue(Node node) {
-        if(node == null) {
+        if (node == null) {
             return null;
         }
 
         StringBuffer buffer = new StringBuffer();
         NodeList children = node.getChildNodes();
-        for(int index = 0; index < children.getLength(); index++) {
+        for (int index = 0; index < children.getLength(); index++) {
             Node child = children.item(index);
-            if(child instanceof Text) {
+            if (child instanceof Text) {
                 Text textNode = (Text)child;
                 buffer.append(textNode.getData());
             }
@@ -111,7 +111,7 @@ public class BuildXpaths {
     }
 
     public static void main(String[] args) throws IOException, InstantiationException {
-        System.out.println("Started ...");
+        LOG.debug("Started ...");
 
         String directory = "/Users/drh/development-java/CarersClaimCapture/CarersClaimCapture/src/main/resources";
         String filename = "claim.template.xml";
@@ -125,11 +125,11 @@ public class BuildXpaths {
         BuildXpaths buildXpaths = new BuildXpaths(document);
         List<XPathMapping> items = buildXpaths.getItems();
 
-        System.out.println(items);
+        LOG.debug("{}", items);
 
-        for(XPathMapping item: items) {
-            System.out.println(item.getValue() + "\t = " + item.getXpath());
+        for (XPathMapping item: items) {
+            LOG.debug(item.getValue() + "\t = " + item.getXpath());
         }
-        System.out.println("Complete");
+        LOG.debug("Complete");
     }
 }

@@ -177,8 +177,8 @@ public class ClaimXmlUtil {
 //        ClaimXmlUtil claimXml = new ClaimXmlUtil(filename);
 //
 //        String decrypted = claimXml.decryptFields(claimXml.getXml());
-////        System.out.println("text      = " + text);
-//        System.out.println("decrypted = " + decrypted);
+////        LOG.debug("text      = " + text);
+//        LOG.debug("decrypted = " + decrypted);
 //
 //    }
 }

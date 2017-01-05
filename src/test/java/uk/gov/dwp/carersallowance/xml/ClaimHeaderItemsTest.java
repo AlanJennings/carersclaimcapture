@@ -53,7 +53,7 @@ public class ClaimHeaderItemsTest {
     @Test
     public void justDumpXml() {
         try {
-            System.out.println(XmlPrettyPrinter.prettyPrintXml(xmlBuilder.getDocument().getFirstChild()));
+            LOG.debug(XmlPrettyPrinter.prettyPrintXml(xmlBuilder.getDocument().getFirstChild()));
         } catch (InstantiationException e) {
             e.printStackTrace();
         }
