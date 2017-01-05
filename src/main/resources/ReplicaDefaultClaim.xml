@@ -6,7 +6,7 @@
     <Version>0.27</Version>
     <ClaimVersion>3.15</ClaimVersion>
     <Origin>GB</Origin>
-    <DWPCATransaction transactionId="16080000398">
+    <DWPCATransaction id="16080000398">
         <TransactionId>16080000398</TransactionId>
         <DateTimeGenerated>12-08-2016 15:35</DateTimeGenerated>
         <LanguageUsed>English</LanguageUsed>
@@ -72,10 +72,6 @@
                     <QuestionLabel>Email address</QuestionLabel>
                     <Answer>cads.dwp@gmail.com</Answer>
                 </Email>
-                <EmailConfirmation>
-                    <QuestionLabel>Email address</QuestionLabel>
-                    <Answer>cads.dwp@gmail.com</Answer>
-                </EmailConfirmation>
             </Claimant>
             <Caree>
                 <Surname>
