@@ -25,7 +25,9 @@ node ('master') {
     }
     stage ('Build') {
         try {
-            artifactoryGradle.run switches: '-Dgradle.user.home=$JENKINS_HOME/.gradle', buildFile: 'build.gradle', tasks: 'clean test build sourcesJar zipDatabase artifactoryPublish', buildInfo: buildInfo, server: server
+            withEnv(['_JAVA_OPTIONS=-Dcarers.keystore=/opt/carers-keystore/carerskeystore']) {
+                artifactoryGradle.run switches: '-Dgradle.user.home=$JENKINS_HOME/.gradle', buildFile: 'build.gradle', tasks: 'clean test build sourcesJar artifactoryPublish', buildInfo: buildInfo, server: server
+            }
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'build/reports/tests/test/', reportFiles: 'index.html', reportName: 'Test Report'])
             junit keepLongStdio: true, testResults: 'build/test-results/test/*.xml'
         } catch (Exception e) {
@@ -49,6 +51,8 @@ node ('master') {
     if (env.BRANCH_NAME == 'int-release') {
         stage ('Build RPM') {
             artifactoryGradle.run switches: '-Dgradle.user.home=$JENKINS_HOME/.gradle', buildFile: 'build.gradle', tasks: 'rpm', server: server
+            sh 'cp build/linux-package/*.rpm /opt/repo/cads/preview/'
+            build job: 'Update repository metadata', parameters: [string(name: 'REPO_NAME', value: 'preview')], wait: false
         }
     }
 
