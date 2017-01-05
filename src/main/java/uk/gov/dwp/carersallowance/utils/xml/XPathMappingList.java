@@ -146,4 +146,18 @@ public class XPathMappingList {
             super(cause);
         }
     }
+
+    public String toString(){
+        StringBuffer buffer = new StringBuffer();
+
+        for(XPathMapping mapping : list) {
+            buffer.append(mapping.toString());
+            buffer.append("\n");
+        }
+        buffer.append("XPathMappingList contains " + list.size() + " items \n");
+        buffer.append("valueMap contains " + valueMap.size() + " items \n");
+        buffer.append("xpathMap contains " + xpathMap.size() + " items \n");
+        buffer.append("get xpathMap returns " + this.getXPathMap().size() + " items \n");
+        return buffer.toString();
+    }
 }

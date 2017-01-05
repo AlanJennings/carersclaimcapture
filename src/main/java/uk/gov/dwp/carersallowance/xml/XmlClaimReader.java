@@ -122,10 +122,19 @@ public class XmlClaimReader {
         // TODO ... fix this so dont need to loop around looking for DateOfClaim ... which exists but was not returned by get
         // BIZARRE ??? Test works OK but running in app doesnot find mapping for DWPBody/DWPCATransaction/DWPCAClaim/DateOfClaim/Answer
         if(mapping == null){
+
+            for (Map.Entry<String,XPathMapping> entry : valueMappings.getXPathMap().entrySet()) {
+                String key = entry.getKey();
+                XPathMapping value = entry.getValue();
+                LOG.info("key :" + key + "  value :"+  value.toString());
+            }
+
+
             List<XPathMapping> mappings=valueMappings.getList();
             for (XPathMapping m : mappings){
                 if (m!=null && m.getXpath()!=null && m.getXpath().equals(parentPath)){
                     LOG.error("BIZARRE found mapping for "+parentPath+" by looping but not by map lookup. Needs further investigation");
+                    LOG.info("valueMappings :" + valueMappings.toString());
                     LOG.debug("Loop found matching xpath for parent:{}", parentPath);
                     mapping=m;
                 }
