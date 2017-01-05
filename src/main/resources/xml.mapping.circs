@@ -1,0 +1,30 @@
+appVersion                                      = DWPBody/Version
+xmlVersion                                      = DWPBody/ClaimVersion
+origin                                          = DWPBody/Origin
+
+transactionId                                   = DWPBody/DWPCATransaction/TransactionId
+transactionIdAttr                               = DWPBody/DWPCATransaction/[@id]
+dateTimeGenerated                               = DWPBody/DWPCATransaction/DateTimeGenerated
+language                                        = DWPBody/DWPCATransaction/LanguageUsed
+
+dateOfClaim.label                               = DWPBody/DWPCATransaction/DWPCAClaim/DateOfClaim/QuestionLabel[messages("dateOfClaim.label")]                         = DWPBody/DWPCATransaction/DWPCAClaim/DateOfClaim/QuestionLabel[messages("dateOfClaim.label")]
+dateOfClaim                                     = DWPBody/DWPCATransaction/DWPCAClaim/DateOfClaim/Answer[@type="date"]
+benefitsAnswer.label                            = DWPBody/DWPCATransaction/DWPCAClaim/QualifyingBenefit/QuestionLabel[messages("benefitsAnswer.label")]
+
+changeTypeAnswer.label                          = DWPBody/DWPCATransaction/DWPCAClaim/changeTypeAnswer/QuestionLabel
+changeTypeAnswer                                = DWPBody/DWPCATransaction/DWPCAClaim/changeTypeAnswer/Answer
+
+firstName.label                                 = DWPBody/DWPCATransaction/DWPCAClaim/firstName/QuestionLabel
+firstName                                       = DWPBody/DWPCATransaction/DWPCAClaim/firstName/Answer
+
+lastName.label                                 = DWPBody/DWPCATransaction/DWPCAClaim/lastName/QuestionLabel
+lastName                                       = DWPBody/DWPCATransaction/DWPCAClaim/lastName/Answer
+
+nationalInsuranceNumber.label                  = DWPBody/DWPCATransaction/DWPCAClaim/nationalInsuranceNumber/QuestionLabel
+nationalInsuranceNumber                        = DWPBody/DWPCATransaction/DWPCAClaim/nationalInsuranceNumber/Answer
+
+dateOfBirth.label                              = DWPBody/DWPCATransaction/DWPCAClaim/DateOfBirth/QuestionLabel[messages("dateOfBirth.label")]
+dateOfBirth                                    = DWPBody/DWPCATransaction/DWPCAClaim/DateOfBirth/Answer[@type="date"]
+
+carerDateOfBirth.label                         = DWPBody/DWPCATransaction/DWPCAClaim/carerDateOfBirth/QuestionLabel[messages("carerDateOfBirth.label")]
+carerDateOfBirth                               = DWPBody/DWPCATransaction/DWPCAClaim/carerDateOfBirth/Answer[@type="date"]
