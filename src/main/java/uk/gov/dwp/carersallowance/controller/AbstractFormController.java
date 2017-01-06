@@ -963,11 +963,11 @@ public class AbstractFormController {
         }
     }
 
-    public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile) {
+    public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile, final String claimType) {
         LOG.debug("Starting AbstractFormController.createSessionVariables");
         try {
             if (request.getQueryString() == null || !request.getQueryString().contains("changing=true")) {
-                sessionManager.createSessionVariables(request, response, xmlFile, mappingFile);
+                sessionManager.createSessionVariables(request, response, xmlFile, mappingFile, claimType);
             }
         } catch (RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);

@@ -61,7 +61,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
-    public Boolean setTransactionStatusById(final String transactionId, final String status) {
+    public Boolean updateTransactionStatus(final String transactionId, final String status) {
         final String updateSQL = "UPDATE transactionstatus SET status = ? WHERE transaction_id = ?";
         final Object[] args = new Object[]{ status, transactionId };
         final int stored = jdbcTemplate.update(updateSQL, args);
@@ -91,4 +91,21 @@ public class DatabaseServiceImpl implements DatabaseService {
         }
         return rtn;
     }
+
+    @Override
+    public Boolean updateEmailStatus(String transactionId, Integer emailStatus) {
+        return null;
+    }
+
+    @Override
+    public Boolean updateSaveForLaterEmailStatus(String transactionId, Integer emailSaveForLaterStatus) {
+        return null;
+    }
+
+    @Override
+    public Boolean recordMi(String transactionId, Boolean thirdParty, Integer circsChange, String lang) {
+        return null;
+    }
+
+
 }

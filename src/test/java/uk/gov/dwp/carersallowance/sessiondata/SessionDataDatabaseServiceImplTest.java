@@ -59,7 +59,7 @@ public class SessionDataDatabaseServiceImplTest {
     public void testCreateSessionData() throws Exception {
         final ResponseEntity<String> response = new ResponseEntity("", HttpStatus.OK);
         when(restTemplate.exchange(anyString(), Mockito.<HttpMethod> any(), Mockito.<HttpEntity<String>> any(), Mockito.<Class<String>> any())).thenReturn(response);
-        Session session = sessionDataDatabaseServiceImpl.createSessionData("8a20d772-b998-486d-ba05-fd3ef75d4fd2");
+        Session session = sessionDataDatabaseServiceImpl.createSessionData("8a20d772-b998-486d-ba05-fd3ef75d4fd2", "claim");
         assertThat(session.getSessionId(), is("8a20d772-b998-486d-ba05-fd3ef75d4fd2"));
     }
 

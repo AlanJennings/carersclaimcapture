@@ -55,8 +55,9 @@ public class SessionDataDatabaseServiceImpl implements SessionDataService {
     }
 
     @Override
-    public Session createSessionData(final String sessionId) {
+    public Session createSessionData(final String sessionId, final String claimType) {
         final Session session = new Session(sessionId);
+        session.setAttribute("key", claimType);
         return saveSessionData(session);
     }
 

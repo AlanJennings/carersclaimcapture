@@ -25,7 +25,7 @@ public class ClaimStartedController {
     private final Boolean replicaEnabledProperty;
     private final String replicaDataFileProperty;
     private final DefaultFormController defaultFormController;
-    private URL xmlMappingFile;
+    private final URL xmlMappingFile;
 
     private static final String CURRENT_PAGE = "/allowance/benefits";
 
@@ -42,11 +42,7 @@ public class ClaimStartedController {
 
     @RequestMapping(value = CURRENT_PAGE, method = RequestMethod.GET)
     public String getForm(final HttpServletRequest request, final HttpServletResponse response, final Model model) {
-        String replicaDataFile = null;
-        if (replicaEnabledProperty && replicaDataFileProperty != null && replicaDataFileProperty.length() > 0) {
-            replicaDataFile = replicaDataFileProperty;
-        }
-        defaultFormController.createSessionVariables(request, response, replicaDataFile, xmlMappingFile);
+        defaultFormController.createSessionVariables(request, response, getReplicateDataFile(), xmlMappingFile, "claim");
         defaultFormController.getForm(request, model);
         return CURRENT_PAGE;
     }
@@ -54,5 +50,12 @@ public class ClaimStartedController {
     @RequestMapping(value = CURRENT_PAGE, method = RequestMethod.POST)
     public String postForm(final HttpServletRequest request, final Model model) {
         return defaultFormController.postForm(request, model);
+    }
+
+    private String getReplicateDataFile() {
+        if (replicaEnabledProperty) {
+            return replicaDataFileProperty;
+        }
+        return null;
     }
 }
