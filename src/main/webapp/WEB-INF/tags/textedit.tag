@@ -2,6 +2,7 @@
 <%@ tag description="Text Edit box Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %>
 
 <%@ attribute name="name" required="true"%>
     
@@ -85,9 +86,9 @@
              outerStyle="${pageScope.outerStyle}" 
              errors="${pageScope.errors}">
 
-    <label class="form-label-bold" for="${pageScope.id}"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </label>
+    <label class="form-label-bold" for="${cads:encrypt(pageScope.id)}"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </label>
     <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
-    <input type="text" class="form-control ${pageScope.additionalClasses}" id="${pageScope.id}" name="${pageScope.name}" value="${pageScope.value}" maxLength="${pageScope.maxLength}" autocomplete="off">
+    <input type="text" class="form-control ${pageScope.additionalClasses}" id="${cads:encrypt(pageScope.id)}" name="${pageScope.name}" value="${pageScope.value}" maxLength="${pageScope.maxLength}" autocomplete="off">
     <t:hint hintTextKey="${pageScope.hintAfterKey}" parentName="${pageScope.name}" element="hintAfter" />
 
 </t:component>

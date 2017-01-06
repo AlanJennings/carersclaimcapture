@@ -1,6 +1,7 @@
 <%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %>
 
 <%@ attribute name="name" required="true" type="java.lang.String"%>
     
@@ -28,6 +29,8 @@
 <c:if test="${pageScope.useRawValue!='true'}" >
     <c:set var="value" value="${requestScope[pageScope.name]}" />
 </c:if>
+<c:set var='yesId' value='${pageScope.id}_yes' />
+<c:set var='noId' value='${pageScope.id}_no' />
 
 <t:component tagType="textedit"
              name="${pageScope.name}" 
@@ -39,7 +42,7 @@
         <legend class="form-label-bold "><t:message code="${pageScope.labelKey}" args="${pageScope.labelKeyArgs}" /></legend>        
 
         <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
-        <ul class="inline " id="${pageScope.id}">  
+        <ul class="inline " id="${cads:encrypt(pageScope.id)}">
             <li>
                 <%-- 
                     clicking on a label is the same as clicking on an input (to gain focus probably), so by spanning the control with a label
@@ -47,8 +50,8 @@
                 --%>
                 <label class="block-label">
                     <input type="radio" 
-                           id="${pageScope.id}_yes" 
-                           name="${pageScope.name}" 
+                           id="${cads:encrypt(yesId)}"
+                           name="${cads:encrypt(pageScope.name)}"
                            value="yes"  
                            <c:if test="${pageScope.value=='yes'}">checked</c:if>  
                     />
@@ -63,8 +66,8 @@
                 --%>            
                 <label class="block-label">
                     <input type="radio" 
-                           id="${pageScope.id}_no" 
-                           name="${pageScope.name}" 
+                           id="${cads:encrypt(noId)}"
+                           name="${cads:encrypt(pageScope.name)}"
                            value="no"  
                            <c:if test="${pageScope.value=='no'}">checked</c:if>  
                     />

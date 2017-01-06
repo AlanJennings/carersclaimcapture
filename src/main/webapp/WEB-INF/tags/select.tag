@@ -1,6 +1,7 @@
 <%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %>
 
 <%@ attribute name="name" required="true" %>
 <%@ attribute name="optionValues" required="true" %> <!-- Note optionValues are white-space sensitive -->
@@ -36,10 +37,10 @@
              outerStyle="${pageScope.outerStyle}" 
              errors="${pageScope.errors}">
     
-    <label class="form-label-bold" for="${pageScope.id}"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </label>
+    <label class="form-label-bold" for="${cads:encrypt(pageScope.id)}"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </label>
     <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
     
-    <select id="${pageScope.id}" name="${pageScope.name}" class="form-control ${pageScope.additionalClasses}">
+    <select id="${cads:encrypt(pageScope.id)}" name="${cads:encrypt(pageScope.name)}" class="form-control ${pageScope.additionalClasses}">
         <c:if test="${pageScope.includeBlank='true'}" >
             <option value="">Select</option>
         </c:if>

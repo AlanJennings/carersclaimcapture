@@ -63,7 +63,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public Boolean setTransactionStatusById(final String transactionId, final String status) {
         final String updateSQL = "UPDATE transactionstatus SET status = ? WHERE transaction_id = ?";
-        final Object[] args = new Object[]{ transactionId, status };
+        final Object[] args = new Object[]{ status, transactionId };
         final int stored = jdbcTemplate.update(updateSQL, args);
         Boolean rtn = Boolean.TRUE;
         if (stored <= 0) {

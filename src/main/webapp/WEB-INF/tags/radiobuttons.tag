@@ -1,6 +1,7 @@
 <%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %>
 
 <%@ attribute name="name" required="true"%>
 <%@ attribute name="optionValues" required="true"%> <!-- Note optionValues are white-space sensitive -->
@@ -37,17 +38,18 @@
         <legend class="form-label-bold "><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /></legend>        
 
         <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
-        <ul class="form-group form-group-compound" id="${pageScope.id}">
+        <ul class="form-group form-group-compound" id="${cads:encrypt(pageScope.id)}">
             <c:forTokens items="${pageScope.optionValues}" delims="|" var="optionValue" varStatus="optionValueIndex">
-               <li>                
+                <c:set var='optionId' value='${pageScope.id}_${pageScope.optionValue}' />
+                <li>
                     <%-- 
                         clicking on a label is the same as clicking on an input (to gain focus probably), so by spanning the control 
                         with a label instead of a div makes the whole control click-able, not just the tiny radio button in the middle 
                     --%>
-                    <label class="block-label" for="${pageScope.id}_${pageScope.optionValue}">
+                    <label class="block-label" for="${cads:encrypt(optionId)}">
                         <input type="radio" 
-                               id="${pageScope.id}_${pageScope.optionValue}" 
-                               name="${pageScope.name}" 
+                               id="${cads:encrypt(optionId)}"
+                               name="${cads:encrypt(pageScope.name)}"
                                onmousedown=""  
                                value="${pageScope.optionValue}" 
                                class="${pageScope.additionalClasses}"

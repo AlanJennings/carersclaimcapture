@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %>
 
 <%@ attribute name="name" required="true" %>
     
@@ -40,9 +41,9 @@
              outerStyle="${pageScope.outerStyle}" 
              errors="${pageScope.errors}">
 
-        <label class="form-label-bold" for="${pageScope.id}"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </label>
+        <label class="form-label-bold" for="${cads:encrypt(pageScope.id)}"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </label>
         <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/> 
-        <textarea class="form-control ${pageScope.additionalClasses}" id="${pageScope.id}" name="${pageScope.name}" maxLength="${pageScope.maxLength}" >${pageScope.value}</textarea>
+        <textarea class="form-control ${pageScope.additionalClasses}" id="${cads:encrypt(pageScope.id)}" name="${cads:encrypt(pageScope.name)}" maxLength="${pageScope.maxLength}" >${pageScope.value}</textarea>
         <c:if test="${pageScope.showRemainingChars=='true'}" >
             <c:set var="remainingChars" value="${pageScope.maxLength - fn:length(pageScope.value)}" />
             <p class="form-hint countdown">${pageScope.remainingChars} characters left</p>

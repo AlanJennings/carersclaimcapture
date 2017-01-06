@@ -1,6 +1,7 @@
 <%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %>
 
 <%@ attribute name="id" required="true"%>
     
@@ -16,13 +17,13 @@
     The default for a hidden panel should be block, so that it shows for JavaScript disabled browsers
     the JavaScript then initially hides the panel before any trigger events occur 
 --%>
-<div data-tag-type="hiddenWarning" id="${pageScope.id}" class="${pageScope.outerClass}" style="display: none; margin-top: -20px;">
+<div data-tag-type="hiddenWarning" id="${cads:encrypt(pageScope.id)}" class="${pageScope.outerClass}" style="display: none; margin-top: -20px;">
     <jsp:doBody/>
 </div>
 
 <c:if test="${(not empty pageScope.triggerId) && (not empty pageScope.triggerValue)}" >
     <script type="text/javascript">
-        window.initPanelState("${pageScope.id}", "${pageScope.triggerId}", "${pageScope.triggerValue}");
-        window.initPanelEvents("${pageScope.id}", "${pageScope.triggerId}", "${pageScope.triggerValue}");
+        window.initPanelState("${cads:encrypt(pageScope.id)}", "${pageScope.triggerId}", "${pageScope.triggerValue}");
+        window.initPanelEvents("${cads:encrypt(pageScope.id)}", "${pageScope.triggerId}", "${pageScope.triggerValue}");
     </script>
 </c:if>
