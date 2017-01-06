@@ -1,5 +1,6 @@
 package uk.gov.dwp.carersallowance.controller;
 
+import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -962,11 +963,11 @@ public class AbstractFormController {
         }
     }
 
-    public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile) {
+    public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile) {
         LOG.debug("Starting AbstractFormController.createSessionVariables");
         try {
             if (request.getQueryString() == null || !request.getQueryString().contains("changing=true")) {
-                sessionManager.createSessionVariables(request, response, xmlFile);
+                sessionManager.createSessionVariables(request, response, xmlFile, mappingFile);
             }
         } catch (RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
