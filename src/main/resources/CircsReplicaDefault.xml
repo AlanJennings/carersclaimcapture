@@ -14,26 +14,50 @@
                 <QuestionLabel>Claim date</QuestionLabel>
                 <Answer>08-04-2016</Answer>
             </DateOfClaim>
-            <changeTypeAnswer>
+            <ChangeTypeAnswer>
                 <QuestionLabel>Report a change in your circumstances</QuestionLabel>
-                <Answer>Your job or income has changed</Answer>
-            </changeTypeAnswer>
-            <firstName>
-                <QuestionLabel>First name</QuestionLabel>
-                <Answer>Francies</Answer>
-            </firstName>
-            <lastName>
-                <QuestionLabel>Last name</QuestionLabel>
-                <Answer>Underwood</Answer>
-            </lastName>
-            <nationalInsuranceNumber>
-                <QuestionLabel>National Insurance Number</QuestionLabel>
-                <Answer>NW092827D</Answer>
-            </nationalInsuranceNumber>
-            <DateOfBirth>
-                <QuestionLabel>Date of birth</QuestionLabel>
-                <Answer>05-11-1959</Answer>
-            </DateOfBirth>
+                <Answer>stoppedProvidingCare</Answer>
+            </ChangeTypeAnswer>
+            <Claimant>
+                <OtherNames>
+                    <QuestionLabel>First name</QuestionLabel>
+                    <Answer>Francis</Answer>
+                </OtherNames>
+                <Surname>
+                    <QuestionLabel>Last name</QuestionLabel>
+                    <Answer>Underwood</Answer>
+                </Surname>
+                <NationalInsuranceNumber>
+                    <QuestionLabel>National Insurance Number</QuestionLabel>
+                    <Answer>NW092827D</Answer>
+                </NationalInsuranceNumber>
+                <DateOfBirth>
+                    <QuestionLabel>Date of birth</QuestionLabel>
+                    <Answer>05-11-1959</Answer>
+                </DateOfBirth>
+                <TextPhoneContact>
+                    <QuestionLabel>Contact number</QuestionLabel>
+                    <Answer>07753 276014</Answer>
+                </TextPhoneContact>
+                <WantsContactEmail>
+                    <QuestionLabel>Do you want an email to confirm your change has been received?</QuestionLabel>
+                    <Answer>No</Answer>
+                </WantsContactEmail>
+            </Claimant>
+            <Caree>
+                <OtherNames>
+                    <QuestionLabel>First name</QuestionLabel>
+                    <Answer>Zoe</Answer>
+                </OtherNames>
+                <Surname>
+                    <QuestionLabel>Their last name</QuestionLabel>
+                    <Answer>Barnes</Answer>
+                </Surname>
+                <RelationToClaimant>
+                    <QuestionLabel>What's their relationship to you?</QuestionLabel>
+                    <Answer>I couldn't possibly comment</Answer>
+                </RelationToClaimant>
+            </Caree>
         </DWPCAClaim>
     </DWPCATransaction>
 </DWPBody>

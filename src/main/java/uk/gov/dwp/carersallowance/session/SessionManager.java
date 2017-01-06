@@ -28,7 +28,6 @@ import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
 public class SessionManager {
     private static final Logger LOG = LoggerFactory.getLogger(SessionManager.class);
 
-    private String xmlMappingFile;
     private final SessionDataFactory sessionDataFactory;
     private final CookieManager cookieManager;
     private final ClaimEncryptionService claimEncryptionService;
@@ -36,12 +35,10 @@ public class SessionManager {
     @Inject
     public SessionManager(final CookieManager cookieManager,
                           final SessionDataFactory sessionDataFactory,
-                          final ClaimEncryptionService claimEncryptionService,
-                          final @Value("${xml.mappingFile}") String xmlMappingFile){
+                          final ClaimEncryptionService claimEncryptionService){
         this.cookieManager          = cookieManager;
         this.sessionDataFactory     = sessionDataFactory;
         this.claimEncryptionService = claimEncryptionService;
-        this.xmlMappingFile         = xmlMappingFile;
     }
 
     public String createSessionId() {
@@ -64,27 +61,27 @@ public class SessionManager {
         sessionDataFactory.getSessionDataService().saveSessionData(claimEncryptionService.encryptClaim(session));
     }
 
-    public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile) {
+    public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile) {
         cookieManager.addVersionCookie(response);
         cookieManager.addGaCookie(request, response);
-        createSessionData(request, response, xmlFile);
+        createSessionData(request, response, xmlFile, mappingFile);
     }
 
-    private void createSessionData(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile) {
+    private void createSessionData(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile) {
         final String sessionId = createSessionId();
         Session session = createSession(sessionId);
         request.setAttribute(Session.SESSION_ID, sessionId);
         cookieManager.addSessionCookie(response, sessionId);
         if (xmlFile != null && xmlFile.length() > 0) {
-            loadReplicaData(session, xmlFile);
+            loadReplicaData(session, xmlFile, mappingFile);
         }
     }
 
-    private void loadReplicaData(Session session, final String xmlFile) {
+    private void loadReplicaData(Session session, final String xmlFile, final URL mappingFile) {
         try {
             LOG.info("Using XMLFile " + xmlFile);
-            URL claimTemplateUrl = XmlClaimReader.class.getClassLoader().getResource(xmlMappingFile);
-            List<String> xmlMappings = XmlBuilder.readLines(claimTemplateUrl);
+            LOG.info("Using mapping file " + mappingFile);
+            List<String> xmlMappings = XmlBuilder.readLines(mappingFile);
             XPathMappingList valueMappings = new XPathMappingList();
             valueMappings.add(xmlMappings);
             String xml = IOUtils.toString(XmlClaimReader.class.getClassLoader().getResourceAsStream(xmlFile),Charset.defaultCharset());

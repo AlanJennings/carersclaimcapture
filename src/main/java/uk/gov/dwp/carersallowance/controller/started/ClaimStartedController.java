@@ -8,10 +8,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultFormController;
+import uk.gov.dwp.carersallowance.xml.XmlClaimReader;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URL;
 
 /**
  * Created by peterwhitehead on 22/12/2016.
@@ -23,16 +25,19 @@ public class ClaimStartedController {
     private final Boolean replicaEnabledProperty;
     private final String replicaDataFileProperty;
     private final DefaultFormController defaultFormController;
+    private URL xmlMappingFile;
 
     private static final String CURRENT_PAGE = "/allowance/benefits";
 
     @Inject
     public ClaimStartedController(final @Value("${replica.enabled}") Boolean replicaEnabledProperty,
                                   final @Value("${replica.datafile}") String replicaDataFileProperty,
-                                  final DefaultFormController defaultFormController) {
+                                  final DefaultFormController defaultFormController,
+                                  final @Value("${xml.mappingFile}") String mappingFile) {
         this.replicaEnabledProperty = replicaEnabledProperty;
         this.replicaDataFileProperty = replicaDataFileProperty;
         this.defaultFormController = defaultFormController;
+        this.xmlMappingFile = XmlClaimReader.class.getClassLoader().getResource(mappingFile);
     }
 
     @RequestMapping(value = CURRENT_PAGE, method = RequestMethod.GET)
@@ -41,7 +46,7 @@ public class ClaimStartedController {
         if (replicaEnabledProperty && replicaDataFileProperty != null && replicaDataFileProperty.length() > 0) {
             replicaDataFile = replicaDataFileProperty;
         }
-        defaultFormController.createSessionVariables(request, response, replicaDataFile);
+        defaultFormController.createSessionVariables(request, response, replicaDataFile, xmlMappingFile);
         defaultFormController.getForm(request, model);
         return CURRENT_PAGE;
     }

@@ -8,10 +8,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultChangeOfCircsController;
+import uk.gov.dwp.carersallowance.xml.XmlClaimReader;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URL;
 
 /**
  * Created by peterwhitehead on 22/12/2016.
@@ -34,14 +36,16 @@ public class CircsStartedController {
     private static final String CURRENT_CIRCS_PAGE = "/circumstances/report-changes/selection";
     private static final String CHANGE_SELECTION_PAGE = "/circumstances/report-changes/change-selection";
     private static final String ORIGIN_NI = "GB-NIR";
+    private URL xmlMappingFile;
 
     @Inject
-    public CircsStartedController(final DefaultChangeOfCircsController defaultChangeOfCircsController) {
+    public CircsStartedController(final DefaultChangeOfCircsController defaultChangeOfCircsController,
+                                  @Value("${xml.circsMappingFile}") String mappingFile) {
 
         if (circsReplicaEnabledProperty == null){
             circsReplicaEnabledProperty = false;
         }
-
+        this.xmlMappingFile = XmlClaimReader.class.getClassLoader().getResource(mappingFile);
         this.defaultChangeOfCircsController = defaultChangeOfCircsController;
     }
 
@@ -63,7 +67,7 @@ public class CircsStartedController {
             LOG.info("replicaDataFile = " + replicaDataFile );
         }
 
-        defaultChangeOfCircsController.createSessionVariables(request, response, replicaDataFile);
+        defaultChangeOfCircsController.createSessionVariables(request, response, replicaDataFile, xmlMappingFile);
         if (originTag != null && originTag.equals(ORIGIN_NI)) {
             defaultChangeOfCircsController.getForm(request, model);
             return CURRENT_CIRCS_PAGE;
