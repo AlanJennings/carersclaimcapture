@@ -1,5 +1,8 @@
 package uk.gov.dwp.carersallowance.submission;
 
+import gov.dwp.carers.xml.helpers.XMLMessageHelper;
+import gov.dwp.carers.xml.signing.SigningException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,31 +11,66 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.w3c.dom.Document;
 import uk.gov.dwp.carersallowance.database.Status;
 import uk.gov.dwp.carersallowance.database.TransactionIdService;
+import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
+import uk.gov.dwp.carersallowance.session.SessionManager;
+import uk.gov.dwp.carersallowance.sessiondata.Session;
+import uk.gov.dwp.carersallowance.utils.Parameters;
+import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
+import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
+import uk.gov.dwp.carersallowance.xml.XmlBuilder;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class SubmitClaimServiceImpl implements SubmitClaimService {
     private static final Logger LOG = LoggerFactory.getLogger(SubmitClaimServiceImpl.class);
 
+    private static final String TRANSACTION_ID = "transactionId";
     private final RestTemplate restTemplate;
     private final String crUrl;
+    private final SessionManager sessionManager;
     private final TransactionIdService transactionIdService;
+    private final ClaimEncryptionService claimEncryptionService;
 
     @Inject
     public SubmitClaimServiceImpl(final RestTemplate restTemplate,
                                   @Value("${cr.url}") final String crUrl,
-                                  final TransactionIdService transactionIdService) {
+                                  final SessionManager sessionManager,
+                                  final TransactionIdService transactionIdService,
+                                  final ClaimEncryptionService claimEncryptionService) {
         this.restTemplate = restTemplate;
         this.crUrl = crUrl;
+        this.sessionManager = sessionManager;
         this.transactionIdService = transactionIdService;
+        this.claimEncryptionService = claimEncryptionService;
     }
 
     @Override
     @Async
+    public void sendClaim(final HttpServletRequest request) throws IOException, InstantiationException, ParserConfigurationException, XPathMappingList.MappingException {
+        final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
+
+        String transactionId = getTransactionId(session);
+        saveTransactionId(transactionId, session);
+
+        String xml = buildClaimXml(session, transactionId);
+
+        //transactionIdService.insertTransactionStatus(transactionId, "0100", type, thirdParty, circsType, lang, jsEnabled, email, saveForLaterEmail);
+        transactionIdService.insertTransactionStatus(transactionId, Status.GENERATED.getStatus(), null, null, null, null, null, null, null);
+
+        sendClaim(xml, transactionId);
+        LOG.info("Sent claim for transactionId :{}", session.getAttribute(TRANSACTION_ID));
+    }
+
     public void sendClaim(final String xml, final String transactionId) {
         try {
             final HttpHeaders headers = new HttpHeaders();
@@ -57,6 +95,69 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
             transactionIdService.setTransactionStatusById(transactionId, Status.SUCCESS.getStatus());
         } else {
             transactionIdService.setTransactionStatusById(transactionId, Status.SERVICE_UNAVAILABLE.getStatus());
+        }
+    }
+
+    /**
+     * Build the Claim XML and add the digital signature
+     * flatten the XML and send it
+     * @param session
+     * @return
+     * @throws IOException
+     * @throws InstantiationException
+     * @throws ParserConfigurationException
+     * @throws XPathMappingList.MappingException
+     */
+    private String buildClaimXml(final Session session, final String transactionId) throws IOException, InstantiationException, ParserConfigurationException, XPathMappingList.MappingException {
+        Parameters.validateMandatoryArgs(session, "session");
+
+        claimEncryptionService.encryptClaim(session);
+
+        Map<String, Object> sessionMap = new HashMap<>(session.getData());
+
+// TODO these need setting up in the session at the start of the claim.
+//        sessionMap.put("xmlVersion", xmlVersion);
+//        sessionMap.put("appVersion", appVersion);
+//        sessionMap.put("origin", origin);
+//        sessionMap.put("language", language);
+
+        sessionMap.put("transactionId", transactionId);
+        sessionMap.put("dateTimeGenerated", ClaimXmlUtil.currentDateTime("dd-MM-yyyy HH:mm"));
+
+        final XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
+        final String xml = xmlBuilder.render(true, false);
+        LOG.debug("xml:{}", xml);
+        final String signedXml = signClaim(xml, transactionId);
+        LOG.debug("signedXml:{}", signedXml);
+        return signedXml;
+    }
+
+    private void saveTransactionId(final String transactionId, final Session session) {
+        if (session.getAttribute(TRANSACTION_ID) == null) {
+            session.setAttribute(TRANSACTION_ID, transactionId);
+            sessionManager.saveSession(session);
+        }
+    }
+
+    private String getTransactionId(final Session session) {
+        String transactionId = (String)session.getAttribute(TRANSACTION_ID);
+        if (StringUtils.isEmpty(transactionId)) {
+            transactionId = transactionIdService.getTransactionId();
+        }
+        return transactionId;
+    }
+
+    private String signClaim(final String xmlClaim, final String transactionId) {
+        final String xmlString = xmlClaim.replaceAll("<!--[\\s\\S]*?-->", "");
+        final XMLMessageHelper xMLMessageHelper = new XMLMessageHelper();
+        try {
+            final Document document = xMLMessageHelper.createDocument(xmlString);
+            xMLMessageHelper.normaliseDocument(document);
+            final String xmlStringTransformed = xMLMessageHelper.transformXml(xMLMessageHelper.createDefaultTransformer(), document);
+            return xMLMessageHelper.signXml(xmlStringTransformed, transactionId);
+        } catch (Exception e) {
+            LOG.error("Unable to sign xml:{}", e.getMessage(), e);
+            throw new SigningException("Unable to sign xml", e);
         }
     }
 }

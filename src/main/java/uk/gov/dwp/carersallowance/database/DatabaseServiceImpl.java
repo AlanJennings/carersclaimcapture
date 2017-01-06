@@ -91,19 +91,4 @@ public class DatabaseServiceImpl implements DatabaseService {
         }
         return rtn;
     }
-
-    @Override
-    public Boolean insertTransactionId(final String transactionId) {
-        final String insertSQL = "INSERT INTO transactionids(transaction_id) VALUES(?)";
-        final Object[] args = new Object[]{ transactionId };
-        final int stored = jdbcTemplate.update(insertSQL, args);
-        Boolean rtn = Boolean.TRUE;
-        if (stored <= 0) {
-            LOG.error("Could not insert into transactionids for transactionId:{}.", transactionId);
-            rtn = Boolean.FALSE;
-        } else {
-            LOG.debug("Successfully inserted into transactionids for transactionId:{}.", transactionId);
-        }
-        return rtn;
-    }
 }

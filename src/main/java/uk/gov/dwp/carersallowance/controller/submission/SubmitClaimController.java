@@ -1,15 +1,10 @@
 package uk.gov.dwp.carersallowance.controller.submission;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.ParserConfigurationException;
 
-import gov.dwp.carers.xml.helpers.XMLMessageHelper;
-import gov.dwp.carers.xml.signing.SigningException;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import org.w3c.dom.Document;
-import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
 import uk.gov.dwp.carersallowance.submission.SubmitClaimService;
-import uk.gov.dwp.carersallowance.xml.XmlBuilder;
-import uk.gov.dwp.carersallowance.database.TransactionIdService;
 
-import uk.gov.dwp.carersallowance.session.SessionManager;
-import uk.gov.dwp.carersallowance.sessiondata.Session;
-import uk.gov.dwp.carersallowance.utils.Parameters;
-import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList.MappingException;
 
 /**
@@ -44,21 +31,11 @@ public class SubmitClaimController {
     private static final String CURRENT_PAGE       = "/submit-claim";
     private static final String SUCCESS_PAGE       = "/async-submitting";
     private static final String TRANSACTION_ID     = "transactionId";
-//    private static final String FAILED_PAGE        = "/oh-no-its-all-gone-horribly-wrong";
 
-    private SessionManager sessionManager;
-    private TransactionIdService transactionIdService;
     private SubmitClaimService submitClaimService;
-    private final ClaimEncryptionService claimEncryptionService;
 
     @Autowired
-    public SubmitClaimController(final SessionManager sessionManager,
-                                 final TransactionIdService transactionIdService,
-                                 final ClaimEncryptionService claimEncryptionService,
-                                 final SubmitClaimService submitClaimService) {
-        this.sessionManager = sessionManager;
-        this.transactionIdService = transactionIdService;
-        this.claimEncryptionService = claimEncryptionService;
+    public SubmitClaimController(final SubmitClaimService submitClaimService) {
         this.submitClaimService = submitClaimService;
     }
 
@@ -76,17 +53,9 @@ public class SubmitClaimController {
         LOG.trace("Starting SubmitClaimController.postForm");
         try {
             LOG.debug("request.getParameterMap() = {}", request.getParameterMap()); // log these jsut in case
-            final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
+            submitClaimService.sendClaim(request);
+            LOG.info("Sent claim");
 
-            String transactionId = getTransactionId(session);
-            saveTransactionId(transactionId, session);
-
-            String xml = buildClaimXml(session, transactionId);
-            //transactionIdService.insertTransactionStatus((String)session.getAttribute(TRANSACTION_ID), "0100", type, thirdParty, circsType, lang, jsEnabled, email, saveForLaterEmail, originTag);
-            transactionIdService.insertTransactionStatus(transactionId, "0100", null, null, null, null, null, null, null);
-
-            submitClaimService.sendClaim(xml, transactionId);
-            LOG.info("Sent claim for transactionId :{}", session.getAttribute(TRANSACTION_ID));
             return "redirect:" + SUCCESS_PAGE;
         } catch(IOException | InstantiationException | ParserConfigurationException | MappingException e) {
             LOG.error("Unexpected RuntimeException", e);
@@ -99,66 +68,4 @@ public class SubmitClaimController {
         }
     }
 
-    /**
-     * Build the Claim XML and add the digital signature
-     * flatten the XML and send it
-     * @param session
-     * @return
-     * @throws IOException
-     * @throws InstantiationException
-     * @throws ParserConfigurationException
-     * @throws MappingException
-     */
-    private String buildClaimXml(final Session session, final String transactionId) throws IOException, InstantiationException, ParserConfigurationException, MappingException {
-        Parameters.validateMandatoryArgs(session, "session");
-
-        claimEncryptionService.encryptClaim(session);
-
-        Map<String, Object> sessionMap = new HashMap<>(session.getData());
-
-// TODO these need setting up in the session at the start of the claim.
-//        sessionMap.put("xmlVersion", xmlVersion);
-//        sessionMap.put("appVersion", appVersion);
-//        sessionMap.put("origin", origin);
-//        sessionMap.put("language", language);
-
-        sessionMap.put("transactionId", transactionId);
-        sessionMap.put("dateTimeGenerated", ClaimXmlUtil.currentDateTime("dd-MM-yyyy HH:mm"));
-
-        final XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
-        final String xml = xmlBuilder.render(true, false);
-        LOG.debug("xml:{}", xml);
-        final String signedXml = signClaim(xml, transactionId);
-        LOG.debug("signedXml:{}", signedXml);
-        return signedXml;
-    }
-
-    private void saveTransactionId(final String transactionId, final Session session) {
-        if (session.getAttribute(TRANSACTION_ID) == null) {
-            session.setAttribute(TRANSACTION_ID, transactionId);
-            sessionManager.saveSession(session);
-        }
-    }
-
-    private String getTransactionId(final Session session) {
-        String transactionId = (String)session.getAttribute(TRANSACTION_ID);
-        if (StringUtils.isEmpty(transactionId)) {
-            transactionId = transactionIdService.getTransactionId();
-        }
-        return transactionId;
-    }
-
-    private String signClaim(final String xmlClaim, final String transactionId) {
-        final String xmlString = xmlClaim.replaceAll("<!--[\\s\\S]*?-->", "");
-        final XMLMessageHelper xMLMessageHelper = new XMLMessageHelper();
-        try {
-            final Document document = xMLMessageHelper.createDocument(xmlString);
-            xMLMessageHelper.normaliseDocument(document);
-            final String xmlStringTransformed = xMLMessageHelper.transformXml(xMLMessageHelper.createDefaultTransformer(), document);
-            return xMLMessageHelper.signXml(xmlStringTransformed, transactionId);
-        } catch (Exception e) {
-            LOG.error("Unable to sign xml:{}", e.getMessage(), e);
-            throw new SigningException("Unable to sign xml", e);
-        }
-    }
 }

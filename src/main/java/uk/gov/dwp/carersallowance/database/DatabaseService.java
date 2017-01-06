@@ -8,7 +8,6 @@ public interface DatabaseService {
     String getTransactionStatusById(final String transactionId);
     Boolean health();
     Boolean setTransactionStatusById(final String transactionId, final String status);
-    Boolean insertTransactionId(final String transactionId);
     Boolean insertTransactionStatus(final String transactionId, final String status, final Integer type, final Integer thirdParty,
                                     final Integer circsType, final String lang, final Integer jsEnabled, final Integer email,
                                     final Integer saveForLaterEmail, final String originTag);
