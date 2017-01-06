@@ -23,6 +23,8 @@ import uk.gov.dwp.carersallowance.sessiondata.Session;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -64,8 +66,8 @@ public class SelectionPageTest {
         MockitoAnnotations.initMocks(this);
 
         // Set up mock responses - mocks session ID
-        when(sessionManager.getSessionIdFromCookie(request)).thenReturn("AB123456");
-        when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(null))).thenReturn(session);
+        when(sessionManager.getSessionIdFromCookie(anyObject())).thenReturn("AB123456");
+        when(sessionManager.getSession(anyString())).thenReturn(session);
     }
 
     @Test
