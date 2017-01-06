@@ -16,13 +16,6 @@ public class RequestDecryptionWrapper extends HttpServletRequestWrapper {
     private Map<String, String[]> allParameters = null;
     private final FieldEncryptionService fieldEncryptionService;
 
-    /**
-     * Create a new request wrapper that will merge additional parameters into
-     * the request object without prematurely reading parameters from the
-     * original request.
-     *
-     * @param request
-     */
     public RequestDecryptionWrapper(final HttpServletRequest request, final FieldEncryptionService fieldEncryptionService) {
         super(request);
         this.fieldEncryptionService = fieldEncryptionService;
