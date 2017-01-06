@@ -28,6 +28,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ClaimStartedControllerTest {
     private ClaimStartedController claimStartedController;
+    private final static String MAPPING_FILE = "xml.mapping.claim";
 
     @Mock
     private HttpServletRequest request;
@@ -53,7 +54,7 @@ public class ClaimStartedControllerTest {
     public void setUp() throws Exception {
         when(sessionManager.getSessionIdFromCookie(request)).thenReturn("12345");
         when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))).thenReturn(session);
-        claimStartedController = new ClaimStartedController(false,"",defaultFormController);
+        claimStartedController = new ClaimStartedController(false,"",defaultFormController, MAPPING_FILE);
         attributes = new ArrayList<>();
     }
 

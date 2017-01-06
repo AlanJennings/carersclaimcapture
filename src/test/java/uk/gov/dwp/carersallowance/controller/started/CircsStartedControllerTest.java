@@ -37,6 +37,7 @@ import static org.mockito.Mockito.when;
 //@TestPropertySource(properties = { "circs.replica.enabled=false", "circs.replica.datafile = CircsReplicaDefault.xml"})
 public class CircsStartedControllerTest {
     private CircsStartedController circsStartedController;
+    private final static String MAPPING_FILE = "xml.mapping.circs";
 
     @Mock
     private HttpServletRequest request;
@@ -65,7 +66,7 @@ public class CircsStartedControllerTest {
     public void setUp() throws Exception {
         when(sessionManager.getSessionIdFromCookie(request)).thenReturn("12345");
         when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))).thenReturn(session);
-        circsStartedController = new CircsStartedController( defaultChangeOfCircsController);
+        circsStartedController = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE);
         attributes = new ArrayList<>();
     }
 
@@ -83,7 +84,7 @@ public class CircsStartedControllerTest {
 
     @Test
     public void testShowCircsGBNIRForm() throws Exception {
-        circsStartedController = new CircsStartedController( defaultChangeOfCircsController);
+        circsStartedController = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE);
         assertThat(circsStartedController.showCircsForm(request, response, model), is("redirect:/circumstances/report-changes/change-selection"));
     }
 }

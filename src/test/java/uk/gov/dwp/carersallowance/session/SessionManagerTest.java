@@ -17,6 +17,8 @@ import uk.gov.dwp.carersallowance.sessiondata.SessionDataMapServiceImpl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.net.URL;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyString;
@@ -30,6 +32,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class SessionManagerTest {
     private static final String XML_MAPPING_FILE = "xml.mapping.claim";
+    private URL mappingFileURL;
 
     private SessionManager sessionManager;
 
@@ -59,11 +62,12 @@ public class SessionManagerTest {
 
     @Before
     public void setUp() throws Exception {
+        mappingFileURL = SessionManager.class.getClassLoader().getResource(XML_MAPPING_FILE);
         session = new Session("1234");
         sessionDataService = new SessionDataMapServiceImpl();
         claimEncryptionService = new ClaimEncryptionServiceImpl(false, messageSource);
         when(sessionDataFactory.getSessionDataService()).thenReturn(sessionDataService);
-        sessionManager = new SessionManager(cookieManager, sessionDataFactory, claimEncryptionService, XML_MAPPING_FILE);
+        sessionManager = new SessionManager(cookieManager, sessionDataFactory, claimEncryptionService);
         //sessionManager.setXmlMappingFile(XML_MAPPING_FILE);
         objectCaptor = ArgumentCaptor.forClass(Object.class);
     }
@@ -89,7 +93,7 @@ public class SessionManagerTest {
 
     @Test
     public void testCreateSessionVariables() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml");
+        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL);
         verify(cookieManager, times(1)).addGaCookie(request, response);
         verify(cookieManager, times(1)).addSessionCookie(Matchers.any(HttpServletResponse.class), anyString());
         verify(cookieManager, times(1)).addVersionCookie(response);
@@ -116,7 +120,7 @@ public class SessionManagerTest {
 
     @Test
     public void testLoadDefaultData() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml");
+        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml", mappingFileURL);
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
         session = sessionManager.getSession(sessionId);
@@ -127,7 +131,7 @@ public class SessionManagerTest {
 
     @Test
     public void testLoadClaimDate() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml");
+        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml", mappingFileURL);
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
         session = sessionManager.getSession(sessionId);
@@ -138,7 +142,7 @@ public class SessionManagerTest {
 
     @Test
     public void testLoadReplicaData() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml");
+        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL);
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
         session = sessionManager.getSession(sessionId);
