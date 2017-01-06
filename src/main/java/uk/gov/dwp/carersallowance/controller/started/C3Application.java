@@ -43,48 +43,30 @@ public class C3Application {
     @Inject
     private MonitorRegistration monitorRegistration;
 
-    //private CarersScheduler carersScheduler;
-
     @PostConstruct
     public void onStart() throws Exception {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("Starting application with - serverPort:" + serverPort + " envName:" + envName + " appName:" + appName);
-            LOGGER.info(appName + " is now starting.");
-        }
+        LOGGER.info("Starting application with - serverPort:{} envName:{} appName:{}", serverPort, envName, appName);
+        LOGGER.info("{} is now starting.", appName);
 
         monitorRegistration.registerReporters();
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info(appName + " started.");
-        }
+        LOGGER.info("{} started.", appName);
     }
 
     @PreDestroy
     public void onStop() {
         monitorRegistration.unRegisterReporters();
         monitorRegistration.unRegisterHealthChecks();
-        //carersScheduler.stop();
     }
 
     @Inject
     private void registerHealthChecks(final DBHealthCheck dbHealthCheck,
                                       final ClaimReceivedConnectionCheck claimReceivedConnectionCheck,
                                       final SessionDataConnectionCheck sessionDataConnectionCheck) {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info(appName + " - registering health checks.");
-        }
+        LOGGER.info("{} - registering health checks.", appName);
+
         monitorRegistration.registerHealthChecks(Arrays.asList(dbHealthCheck, claimReceivedConnectionCheck, sessionDataConnectionCheck));
     }
-//
-//    @Inject
-//    private void startPurgeDatabaseSchedule(final DatabasePurgeServiceImpl databasePurgeServiceImpl,
-//                                            @Value("${database.purge.scheduler.hours}") final Long databasePurgeSchedulerHours) {
-//        if (LOGGER.isInfoEnabled()) {
-//            LOGGER.info(appName + " - starting purge database scheduler.");
-//        }
-//        this.carersScheduler = new CarersScheduler(appName, "purge-database", databasePurgeServiceImpl);
-//        this.carersScheduler.start(databasePurgeSchedulerHours, TimeUnit.HOURS);
-//    }
 
     public static void main(final String... args) throws Exception {
         final SpringApplication springApplication = new SpringApplication(C3Application.class);

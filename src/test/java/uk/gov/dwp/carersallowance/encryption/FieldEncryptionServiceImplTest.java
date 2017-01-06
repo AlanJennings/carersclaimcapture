@@ -18,7 +18,7 @@ public class FieldEncryptionServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
-        fieldEncryptionService = new FieldEncryptionServiceImpl("8a20d772-b998-486d-ba05-fd3ef75d4fd2");
+        fieldEncryptionService = new FieldEncryptionServiceImpl("8a20d772-b998-486d-ba05-fd3ef75d4fd2", true);
     }
 
     @Test
