@@ -45,7 +45,7 @@ public class XmlBuilderTest {
     public void testDocument() {
         try {
             XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
-            assertThat(xmlBuilder.getNodeValue("/DWPBody/Version"), is(appVersion));
+            assertThat(xmlBuilder.getNodeValue("/DWPBody/Version"), is(xmlVersion));
         } catch (Exception e) {
             LOG.error("Exception calling XmlBuilder :", e);
         }

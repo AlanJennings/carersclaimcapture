@@ -60,13 +60,13 @@ public class ClaimHeaderItemsTest {
     }
 
     @Test
-    public void checkClaimXmlContainsC3AppVersion() {
-        assertThat(xmlBuilder.getNodeValue("/DWPBody/Version"), is(appVersion));
+    public void checkClaimXmlContainsSchemaVersion() {
+        assertThat(xmlBuilder.getNodeValue("/DWPBody/Version"), is(xmlVersion));
     }
 
     @Test
-    public void checkClaimXmlContainsSchemaVersion() {
-        assertThat(xmlBuilder.getNodeValue("/DWPBody/ClaimVersion"), is(xmlVersion));
+    public void checkClaimXmlContainsC3AppVersion() {
+        assertThat(xmlBuilder.getNodeValue("/DWPBody/ClaimVersion"), is(appVersion));
     }
 
     @Test

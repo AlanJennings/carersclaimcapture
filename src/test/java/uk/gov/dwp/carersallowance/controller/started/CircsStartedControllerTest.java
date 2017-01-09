@@ -54,7 +54,7 @@ public class CircsStartedControllerTest {
     public void setUp() throws Exception {
         when(sessionManager.getSessionIdFromCookie(request)).thenReturn("12345");
         when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))).thenReturn(session);
-        circsStartedController = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE, false, null, "GB");
+        circsStartedController = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE, false, null, "0.27", "GB");
         attributes = new ArrayList<>();
     }
 
@@ -72,7 +72,7 @@ public class CircsStartedControllerTest {
 
     @Test
     public void testShowCircsGBNIRForm() throws Exception {
-        circsStartedController = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE, false, null, "GB-NIR");
+        circsStartedController = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE, false, null, "0.27", "GB-NIR");
         assertThat(circsStartedController.showCircsForm(request, response, model), is("/circumstances/report-changes/selection"));
     }
 }

@@ -93,7 +93,7 @@ public class SessionManagerTest {
 
     @Test
     public void testCreateSessionVariables() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, "claim");
+        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, "0.27", "claim");
         verify(cookieManager, times(1)).addGaCookie(request, response);
         verify(cookieManager, times(1)).addSessionCookie(Matchers.any(HttpServletResponse.class), anyString());
         verify(cookieManager, times(1)).addVersionCookie(response);
@@ -120,7 +120,7 @@ public class SessionManagerTest {
 
     @Test
     public void testLoadDefaultData() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml", mappingFileURL, "claim");
+        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml", mappingFileURL, "0.27", "claim");
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
         session = sessionManager.getSession(sessionId);
@@ -131,7 +131,7 @@ public class SessionManagerTest {
 
     @Test
     public void testLoadClaimDate() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml", mappingFileURL, "claim");
+        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml", mappingFileURL, "0.27", "claim");
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
         session = sessionManager.getSession(sessionId);
@@ -142,11 +142,11 @@ public class SessionManagerTest {
 
     @Test
     public void testLoadReplicaData() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, "claim");
+        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, "0.27", "claim");
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
         session = sessionManager.getSession(sessionId);
-        assertThat(session.getAttribute("appVersion"), is("0.27"));
+        assertThat(session.getAttribute("appVersion"), is("3.15"));
         assertThat(session.getAttribute("origin"), is("GB"));
         assertThat(session.getAttribute("language"), is("English"));
         assertThat(session.getAttribute("dateOfClaim_day"), is("20"));
@@ -157,5 +157,14 @@ public class SessionManagerTest {
         assertThat(session.getAttribute("carerDateOfBirth_day"), is("20"));
         assertThat(session.getAttribute("carerDateOfBirth_month"), is("10"));
         assertThat(session.getAttribute("carerDateOfBirth_year"), is("1990"));
+    }
+
+    @Test
+    public void testXmlVersionOverwritesReplicaData() throws Exception {
+        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, "XXX", "claim");
+        verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
+        final String sessionId = objectCaptor.getValue().toString();
+        session = sessionManager.getSession(sessionId);
+        assertThat(session.getAttribute("xmlVersion"), is("XXX"));
     }
 }

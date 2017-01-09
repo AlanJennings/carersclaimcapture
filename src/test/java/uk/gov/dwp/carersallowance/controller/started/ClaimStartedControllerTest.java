@@ -54,7 +54,7 @@ public class ClaimStartedControllerTest {
     public void setUp() throws Exception {
         when(sessionManager.getSessionIdFromCookie(request)).thenReturn("12345");
         when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))).thenReturn(session);
-        claimStartedController = new ClaimStartedController(false,"",defaultFormController, MAPPING_FILE);
+        claimStartedController = new ClaimStartedController("0.27", false, "", defaultFormController, MAPPING_FILE);
         attributes = new ArrayList<>();
     }
 
