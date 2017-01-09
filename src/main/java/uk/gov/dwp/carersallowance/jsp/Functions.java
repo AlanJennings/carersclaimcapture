@@ -13,6 +13,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import uk.gov.dwp.carersallowance.encryption.FieldEncryptionServiceImpl;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
 import javax.inject.Inject;
@@ -22,10 +23,12 @@ public class Functions {
     private static final Logger LOG = LoggerFactory.getLogger(Functions.class);
     private static final String READ_DATE_FORMAT = "dd-MM-yyyy";
     private static transient MessageSource messageSource;
+    private static transient FieldEncryptionServiceImpl fieldEncryptionService;
 
     @Inject
-    private Functions(MessageSource messageSource) {
+    private Functions(final MessageSource messageSource, final FieldEncryptionServiceImpl fieldEncryptionService) {
         this.messageSource = messageSource;
+        this.fieldEncryptionService = fieldEncryptionService;
     }
 
     public static String dateOffset(String dayField, String monthField, String yearField, String format, String offset) {
@@ -226,5 +229,13 @@ public class Functions {
         } finally {
             LOG.trace("Ending Functions.prop");
         }
+    }
+
+    public static String encrypt(final String value) {
+        return fieldEncryptionService.encryptAES(value);
+    }
+
+    public static String decrypt(final String value) {
+        return fieldEncryptionService.encryptAES(value);
     }
 }

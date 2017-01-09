@@ -1,6 +1,7 @@
 <%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %>
 
 <%@ attribute name="name" required="true" %>
 
@@ -47,9 +48,9 @@
         <c:set var="checked" value="checked" />
     </c:if>
     
-    <label for="${pageScope.id}" class="${pageScope.labelClass}"> 
+    <label for="${cads:encrypt(pageScope.id)}" class="${pageScope.labelClass}">
         <span class="form-label-bold"><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" /></span>
-        <input type="checkbox" id="${pageScope.id}" name="${pageScope.name}" class="${pageScope.additionalClasses}" value="${pageScope.checkedValue}" ${pageScope.checked} style="top: 24px;">
+        <input type="checkbox" id="${cads:encrypt(pageScope.id)}" name="${cads:encrypt(pageScope.name)}" class="${pageScope.additionalClasses}" value="${pageScope.checkedValue}" ${pageScope.checked} style="top: 24px;">
         <span><t:message code="${pageScope.textKey}" /></span>
     </label>
     

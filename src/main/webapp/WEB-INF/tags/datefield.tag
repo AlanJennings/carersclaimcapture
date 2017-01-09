@@ -1,6 +1,7 @@
 <%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %>
 
 <%@ attribute name="name" required="true" %>
     
@@ -35,6 +36,9 @@
 </c:if>
 
 <c:set var="numbersWarning"><t:message code='warning.numbers.only' /></c:set>
+<c:set var='yearId' value='${pageScope.id}_year' />
+<c:set var='monthId' value='${pageScope.id}_month' />
+<c:set var='dayId' value='${pageScope.id}_day' />
 
 <t:component tagType="datefield"
              name="${pageScope.name}" 
@@ -46,13 +50,13 @@
     <fieldset class="question-group">
         <legend class="form-label-bold"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </legend>
         <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore" />
-        <ul class="form-date" id="${pageScope.id}">
+        <ul class="form-date" id="${cads:encrypt(pageScope.id)}">
             <li class="form-group">
-                <label for="${pageScope.id}_day"><t:message code="day" /></label>
+                <label for="${cads:encrypt(dayId)}"><t:message code="day" /></label>
                 <input type="tel" 
                        class="form-control"
-                       id="${pageScope.id}_day"
-                       name="${pageScope.nameDay}"
+                       id="${cads:encrypt(dayId)}"
+                       name="${cads:encrypt(pageScope.nameDay)}"
                        title="${pageScope.numbersWarning}" 
                        value="${pageScope.valueDay}" 
                        maxLength="2" 
@@ -60,23 +64,23 @@
             </li>
             
             <li class="form-group month">
-                <label for="${pageScope.id}_month"><t:message code="month" /></label>
+                <label for="${cads:encrypt(monthId)}"><t:message code="month" /></label>
                 <input type="tel"
                        class="form-control"
-                       id="${pageScope.id}_month"
-                       name="${pageScope.nameMonth}"
+                       id="${cads:encrypt(monthId)}"
+                       name="${cads:encrypt(pageScope.nameMonth)}"
                        title="${pageScope.numbersWarning}"
                        value="${pageScope.valueMonth}" 
                        maxLength="2"
                        autocomplete="off">
             </li>
-            
+
             <li class="form-group form-group-year">
-                <label for="${pageScope.id}_year"><t:message code="year" /></label>
+                <label for="${cads:encrypt(yearId)}"><t:message code="year" /></label>
                 <input type="tel"
                        class="form-control"
-                       id="${pageScope.id}_year"
-                       name="${pageScope.nameYear}"
+                       id="${cads:encrypt(yearId)}"
+                       name="${cads:encrypt(pageScope.nameYear)}"
                        title="${pageScope.numbersWarning}"
                        value="${pageScope.valueYear}" 
                        maxLength="4"

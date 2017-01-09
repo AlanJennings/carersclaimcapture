@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %>
 
 <!DOCTYPE html>
 
@@ -38,12 +39,12 @@
     <script type="text/javascript">
         $(function() {
             window.initDateWarning("claimDateWarning",
-                                   "dateOfClaim_day",
-                                   "dateOfClaim_month",
-                                   "dateOfClaim_year",
-                                   "You can't claim Carer's Allowance more than 3 months in advance.",
-                                   false);
-        });
+                    "${cads:encrypt("dateOfClaim_day")}",
+                    "${cads:encrypt("dateOfClaim_month")}",
+                    "${cads:encrypt("dateOfClaim_year")}",
+                    "You can't claim Carer's Allowance more than 3 months in advance.",
+                    false);
+});
 
     </script>
 

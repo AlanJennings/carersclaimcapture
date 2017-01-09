@@ -21,7 +21,7 @@ public class SessionDataMapServiceImplTest {
 
     @Test
     public void testCreateAndGetSessionData() throws Exception {
-        sessionDataMapServiceImpl.createSessionData("1234");
+        sessionDataMapServiceImpl.createSessionData("1234", "claim");
         Session session = sessionDataMapServiceImpl.getSessionData("1234");
         assertThat(session, is(notNullValue()));
         assertThat(session.getSessionId(), is("1234"));
@@ -36,7 +36,7 @@ public class SessionDataMapServiceImplTest {
 
     @Test(expected = NoSessionException.class)
     public void testRemoveSessionData() throws Exception {
-        Session session = sessionDataMapServiceImpl.createSessionData("1234");
+        Session session = sessionDataMapServiceImpl.createSessionData("1234", "claim");
         org.assertj.core.api.Assertions.assertThat(sessionDataMapServiceImpl.getSessionData("1234")).isEqualToComparingFieldByField(session);
         sessionDataMapServiceImpl.removeSessionData("1234");
         sessionDataMapServiceImpl.getSessionData("1234");

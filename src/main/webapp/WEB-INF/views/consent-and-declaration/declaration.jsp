@@ -7,6 +7,7 @@
 <t:mainPage>
  
     <t:pageContent errors="${validationErrors}" backLink="${previousPage}" nextButtonTextKey="page.declaration.nextButtonText">
+        <input type="hidden" id="jsEnabled" name="jsEnabled" value="false">
 
         <t:yesnofield name="tellUsWhyInformation" />
 
@@ -42,6 +43,7 @@
     </t:pageContent>
 
 </t:mainPage>
+<script type="text/javascript">$($("#jsEnabled").val("true"));</script>
 
 
 

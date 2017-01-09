@@ -7,5 +7,5 @@ public interface SessionDataService {
     Session getSessionData(final String sessionId);
     Session saveSessionData(final Session session);
     void removeSessionData(final String sessionId);
-    Session createSessionData(final String sessionId);
+    Session createSessionData(final String sessionId, final String claimType);
 }

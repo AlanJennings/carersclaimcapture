@@ -1,6 +1,7 @@
 <%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %>
     
 <%@ attribute name="name" required="true" %>
     
@@ -35,6 +36,10 @@
 </c:if>
 
 <c:set var="numbersWarning"><t:message code='warning.numbers.only' /></c:set>
+<c:set var='id1' value='${pageScope.id}_1' />
+<c:set var='id2' value='${pageScope.id}_2' />
+<c:set var='id3' value='${pageScope.id}_3' />
+
 
 <t:component tagType="sortcode"
              name="${pageScope.name}" 
@@ -46,12 +51,12 @@
         <legend class="form-label-bold"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </legend>
         <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
         <%-- sort-code is just a marker class there are no styles for it --%>
-        <ul class="form-date sort-code" id="${pageScope.id}">
+        <ul class="form-date sort-code" id="${cads:encrypt(pageScope.id)}">
             <li class="form-group">
                 <input type="tel" 
                        class="form-control"
-                       id="${pageScope.id}_1"
-                       name="${pageScope.nameBlock1}"
+                       id="${cads:encrypt(id1)}"
+                       name="${cads:encrypt(pageScope.nameBlock1)}"
                        title="${pageScope.numbersWarning}" 
                        value="${pageScope.valueBlock1}" 
                        maxLength="2" 
@@ -61,8 +66,8 @@
             <li class="form-group">
                 <input type="tel"
                        class="form-control"
-                       id="${pageScope.id}_2"
-                       name="${pageScope.nameBlock2}"
+                       id="${cads:encrypt(id2)}"
+                       name="${cads:encrypt(pageScope.nameBlock2)}"
                        title="${pageScope.numbersWarning}"
                        value="${pageScope.valueBlock2}" 
                        maxLength="2"
@@ -72,8 +77,8 @@
             <li class="form-group">
                 <input type="tel"
                        class="form-control"
-                       id="${pageScope.id}_3"
-                       name="${pageScope.nameBlock3}"
+                       id="${cads:encrypt(id3)}"
+                       name="${cads:encrypt(pageScope.nameBlock3)}"
                        title="${pageScope.numbersWarning}"
                        value="${pageScope.valueBlock3}" 
                        maxLength="2"

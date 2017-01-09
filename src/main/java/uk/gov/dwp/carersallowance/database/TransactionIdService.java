@@ -25,7 +25,7 @@ public class TransactionIdService {
     }
 
     public Boolean setTransactionStatusById(final String transactionId, final String status) {
-        return databaseService.setTransactionStatusById(transactionId, status);
+        return databaseService.updateTransactionStatus(transactionId, status);
     }
 
     public Boolean insertTransactionStatus(final String transactionId, final String status, final Integer type, final Integer thirdParty,

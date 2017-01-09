@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
@@ -22,7 +21,6 @@ import uk.gov.dwp.carersallowance.xml.XmlClaimReader;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
 import uk.gov.dwp.carersallowance.sessiondata.SessionDataFactory;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
-
 
 @Service
 public class SessionManager {
@@ -49,8 +47,8 @@ public class SessionManager {
         return claimEncryptionService.decryptClaim(sessionDataFactory.getSessionDataService().getSessionData(sessionId));
     }
 
-    public Session createSession(final String sessionId) {
-        return sessionDataFactory.getSessionDataService().createSessionData(sessionId);
+    public Session createSession(final String sessionId, final String claimType) {
+        return sessionDataFactory.getSessionDataService().createSessionData(sessionId, claimType);
     }
 
     public void removeSession(final String sessionId) {
@@ -61,15 +59,15 @@ public class SessionManager {
         sessionDataFactory.getSessionDataService().saveSessionData(claimEncryptionService.encryptClaim(session));
     }
 
-    public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile) {
+    public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile, final String claimType) {
         cookieManager.addVersionCookie(response);
         cookieManager.addGaCookie(request, response);
-        createSessionData(request, response, xmlFile, mappingFile);
+        createSessionData(request, response, xmlFile, mappingFile, claimType);
     }
 
-    private void createSessionData(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile) {
+    private void createSessionData(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile, final String claimType) {
         final String sessionId = createSessionId();
-        Session session = createSession(sessionId);
+        Session session = createSession(sessionId, claimType);
         request.setAttribute(Session.SESSION_ID, sessionId);
         cookieManager.addSessionCookie(response, sessionId);
         if (xmlFile != null && xmlFile.length() > 0) {

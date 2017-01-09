@@ -23,30 +23,26 @@ public class CircsStartedController {
     private static final Logger LOG = LoggerFactory.getLogger(CircsStartedController.class);
 
     private final DefaultChangeOfCircsController defaultChangeOfCircsController;
-
-    @Value("${circs.replica.enabled}")
-    private Boolean circsReplicaEnabledProperty;
-
-    @Value("${circs.replica.datafile}")
-    private String circsReplicaDataFileProperty;
-
-    @Value("${origin.tag}")
-    private String originTag;
+    private final Boolean circsReplicaEnabledProperty;
+    private final String circsReplicaDataFileProperty;
+    private final String originTag;
+    private final URL xmlMappingFile;
 
     private static final String CURRENT_CIRCS_PAGE = "/circumstances/report-changes/selection";
     private static final String CHANGE_SELECTION_PAGE = "/circumstances/report-changes/change-selection";
     private static final String ORIGIN_NI = "GB-NIR";
-    private URL xmlMappingFile;
 
     @Inject
     public CircsStartedController(final DefaultChangeOfCircsController defaultChangeOfCircsController,
-                                  @Value("${xml.circsMappingFile}") String mappingFile) {
-
-        if (circsReplicaEnabledProperty == null){
-            circsReplicaEnabledProperty = false;
-        }
+                                  @Value("${xml.circsMappingFile}") String mappingFile,
+                                  @Value("${circs.replica.enabled}") final Boolean circsReplicaEnabledProperty,
+                                  @Value("${circs.replica.datafile}") final String circsReplicaDataFileProperty,
+                                  @Value("${origin.tag}") final String originTag) {
         this.xmlMappingFile = XmlClaimReader.class.getClassLoader().getResource(mappingFile);
         this.defaultChangeOfCircsController = defaultChangeOfCircsController;
+        this.circsReplicaEnabledProperty = circsReplicaEnabledProperty;
+        this.circsReplicaDataFileProperty = circsReplicaDataFileProperty;
+        this.originTag = originTag;
     }
 
     @RequestMapping(value = CURRENT_CIRCS_PAGE, method = RequestMethod.POST)
@@ -56,22 +52,21 @@ public class CircsStartedController {
 
     @RequestMapping(value = CURRENT_CIRCS_PAGE, method = RequestMethod.GET)
     public String showCircsForm(final HttpServletRequest request, final HttpServletResponse response, final Model model) {
-
-        String replicaDataFile = null;
         LOG.info("circsReplicaEnabledProperty = " + circsReplicaEnabledProperty );
         LOG.info("circsReplicaDataFileProperty = " + circsReplicaDataFileProperty );
 
-
-        if (circsReplicaEnabledProperty && circsReplicaDataFileProperty != null && circsReplicaDataFileProperty.length() > 0) {
-            replicaDataFile = circsReplicaDataFileProperty;
-            LOG.info("replicaDataFile = " + replicaDataFile );
-        }
-
-        defaultChangeOfCircsController.createSessionVariables(request, response, replicaDataFile, xmlMappingFile);
-        if (originTag != null && originTag.equals(ORIGIN_NI)) {
+        defaultChangeOfCircsController.createSessionVariables(request, response, getReplicateDataFile(), xmlMappingFile, "circs");
+        if (ORIGIN_NI.equals(originTag)) {
             defaultChangeOfCircsController.getForm(request, model);
             return CURRENT_CIRCS_PAGE;
         }
         return "redirect:" + CHANGE_SELECTION_PAGE;
+    }
+
+    private String getReplicateDataFile() {
+        if (circsReplicaEnabledProperty) {
+            return circsReplicaDataFileProperty;
+        }
+        return null;
     }
 }

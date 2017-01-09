@@ -41,6 +41,11 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
     private final TransactionIdService transactionIdService;
     private final ClaimEncryptionService claimEncryptionService;
 
+    private static final Integer JS_ENABLED = 1;
+    private static final Integer JS_DISABLED = 0;
+    private static final Integer FULL_CLAIM = 1;
+    private static final Integer CHANGE_CIRCUMSTANCES = 2;
+
     @Inject
     public SubmitClaimServiceImpl(final RestTemplate restTemplate,
                                   @Value("${cr.url}") final String crUrl,
@@ -65,10 +70,24 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
         String xml = buildClaimXml(session, transactionId);
 
         //transactionIdService.insertTransactionStatus(transactionId, "0100", type, thirdParty, circsType, lang, jsEnabled, email, saveForLaterEmail);
-        transactionIdService.insertTransactionStatus(transactionId, Status.GENERATED.getStatus(), null, null, null, null, null, null, null);
+        transactionIdService.insertTransactionStatus(transactionId, Status.GENERATED.getStatus(), getClaimType(session), null, null, (String)session.getAttribute("language"), getJsEnabled(session), null, null);
 
         sendClaim(xml, transactionId);
         LOG.info("Sent claim for transactionId :{}", session.getAttribute(TRANSACTION_ID));
+    }
+
+    private Integer getJsEnabled(final Session session) {
+        if ("true".equals(session.getAttribute("jsEnabled"))) {
+            return JS_ENABLED;
+        }
+        return JS_DISABLED;
+    }
+
+    private Integer getClaimType(final Session session) {
+        if ("circs".equals(session.getAttribute("key"))) {
+            return CHANGE_CIRCUMSTANCES;
+        }
+        return FULL_CLAIM;
     }
 
     public void sendClaim(final String xml, final String transactionId) {
@@ -93,8 +112,10 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
     private void processResponse(final ResponseEntity<String> response, final String transactionId) {
         if (response.getStatusCode() == HttpStatus.OK) {
             transactionIdService.setTransactionStatusById(transactionId, Status.SUCCESS.getStatus());
+            //Counters.incrementClaimSubmissionCount submission-successful-count
         } else {
             transactionIdService.setTransactionStatusById(transactionId, Status.SERVICE_UNAVAILABLE.getStatus());
+            //Counters.incrementSubmissionErrorStatus - submission-error-status- + status
         }
     }
 

@@ -17,6 +17,8 @@ import uk.gov.dwp.carersallowance.sessiondata.SessionDataMapServiceImpl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.net.URL;
+
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyString;
@@ -30,6 +32,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class SessionManagerTest {
     private static final String XML_MAPPING_FILE = "xml.mapping.claim";
+    private URL mappingFileURL;
 
     private SessionManager sessionManager;
 
@@ -59,37 +62,38 @@ public class SessionManagerTest {
 
     @Before
     public void setUp() throws Exception {
+        mappingFileURL = SessionManager.class.getClassLoader().getResource(XML_MAPPING_FILE);
         session = new Session("1234");
+        session.setAttribute("key", "claim");
         sessionDataService = new SessionDataMapServiceImpl();
         claimEncryptionService = new ClaimEncryptionServiceImpl(false, messageSource);
         when(sessionDataFactory.getSessionDataService()).thenReturn(sessionDataService);
-        sessionManager = new SessionManager(cookieManager, sessionDataFactory, claimEncryptionService, XML_MAPPING_FILE);
-        //sessionManager.setXmlMappingFile(XML_MAPPING_FILE);
+        sessionManager = new SessionManager(cookieManager, sessionDataFactory, claimEncryptionService);
         objectCaptor = ArgumentCaptor.forClass(Object.class);
     }
 
     @Test
     public void testGetSession() throws Exception {
-        session = sessionDataService.createSessionData("1234");
+        session = sessionDataService.createSessionData("1234", "claim");
         final Session session1 = sessionManager.getSession("1234");
         org.assertj.core.api.Assertions.assertThat(session1).isEqualToComparingFieldByField(session);
     }
 
     @Test
     public void testCreateSession() throws Exception {
-        org.assertj.core.api.Assertions.assertThat(sessionManager.createSession("1234")).isEqualToComparingFieldByField(session);
+        org.assertj.core.api.Assertions.assertThat(sessionManager.createSession("1234", "claim")).isEqualToComparingFieldByField(session);
     }
 
     @Test(expected = NoSessionException.class)
     public void testRemoveSession() throws Exception {
-        sessionDataService.createSessionData("1234");
+        sessionDataService.createSessionData("1234", "claim");
         sessionManager.removeSession("1234");
         sessionDataService.getSessionData("1234");
     }
 
     @Test
     public void testCreateSessionVariables() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml");
+        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, "claim");
         verify(cookieManager, times(1)).addGaCookie(request, response);
         verify(cookieManager, times(1)).addSessionCookie(Matchers.any(HttpServletResponse.class), anyString());
         verify(cookieManager, times(1)).addVersionCookie(response);
@@ -108,7 +112,7 @@ public class SessionManagerTest {
     @Test
     public void testSaveSession() throws Exception {
         final String sessionId = "1234";
-        final Session session1 = sessionDataService.createSessionData("1234");
+        final Session session1 = sessionDataService.createSessionData("1234", "claim");
         session1.setAttribute("test", "test2");
         sessionManager.saveSession(session1);
         org.assertj.core.api.Assertions.assertThat(session1).isEqualToComparingFieldByField(sessionManager.getSession(sessionId));
@@ -116,7 +120,7 @@ public class SessionManagerTest {
 
     @Test
     public void testLoadDefaultData() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml");
+        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml", mappingFileURL, "claim");
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
         session = sessionManager.getSession(sessionId);
@@ -127,7 +131,7 @@ public class SessionManagerTest {
 
     @Test
     public void testLoadClaimDate() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml");
+        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml", mappingFileURL, "claim");
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
         session = sessionManager.getSession(sessionId);
@@ -138,7 +142,7 @@ public class SessionManagerTest {
 
     @Test
     public void testLoadReplicaData() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml");
+        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, "claim");
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
         session = sessionManager.getSession(sessionId);

@@ -6,12 +6,6 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.ui.Model;
 import uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultChangeOfCircsController;
 
@@ -28,15 +22,10 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
-
-//@RunWith(SpringRunner.class)
-//@SpringBootTest(classes = C3Application.class)
-//@ContextConfiguration
-//@WebAppConfiguration
 @RunWith(MockitoJUnitRunner.class)
-//@TestPropertySource(properties = { "circs.replica.enabled=false", "circs.replica.datafile = CircsReplicaDefault.xml"})
 public class CircsStartedControllerTest {
     private CircsStartedController circsStartedController;
+    private final static String MAPPING_FILE = "xml.mapping.circs";
 
     @Mock
     private HttpServletRequest request;
@@ -65,7 +54,7 @@ public class CircsStartedControllerTest {
     public void setUp() throws Exception {
         when(sessionManager.getSessionIdFromCookie(request)).thenReturn("12345");
         when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))).thenReturn(session);
-        circsStartedController = new CircsStartedController( defaultChangeOfCircsController);
+        circsStartedController = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE, false, null, "GB");
         attributes = new ArrayList<>();
     }
 
@@ -83,7 +72,7 @@ public class CircsStartedControllerTest {
 
     @Test
     public void testShowCircsGBNIRForm() throws Exception {
-        circsStartedController = new CircsStartedController( defaultChangeOfCircsController);
-        assertThat(circsStartedController.showCircsForm(request, response, model), is("redirect:/circumstances/report-changes/change-selection"));
+        circsStartedController = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE, false, null, "GB-NIR");
+        assertThat(circsStartedController.showCircsForm(request, response, model), is("/circumstances/report-changes/selection"));
     }
 }

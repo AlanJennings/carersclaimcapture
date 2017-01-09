@@ -1,6 +1,7 @@
 <%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %>
 
 <%@ attribute name="id" required="true" %>
 
@@ -34,7 +35,7 @@
 
 <c:if test="${(not empty pageScope.triggerId) && ((not empty pageScope.triggerValue) || (not empty pageScope.triggerFunction))}" >
     <script type="text/javascript">
-        window.initPanelState("${pageScope.id}", "${pageScope.triggerId}", "${pageScope.triggerValue}", "${pageScope.triggerFunction}", "${clearOnHide}");
-        window.initPanelEvents("${pageScope.id}", "${pageScope.triggerId}", "${pageScope.triggerValue}", "${pageScope.triggerFunction}", "${clearOnHide}");
+        window.initPanelState("${pageScope.id}", "${cads:encrypt(pageScope.triggerId)}", "${pageScope.triggerValue}", "${pageScope.triggerFunction}", "${clearOnHide}");
+        window.initPanelEvents("${pageScope.id}", "${cads:encrypt(pageScope.triggerId)}", "${pageScope.triggerValue}", "${pageScope.triggerFunction}", "${clearOnHide}");
     </script>
 </c:if>

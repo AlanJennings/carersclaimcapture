@@ -27,8 +27,9 @@ public class SessionDataMapServiceImpl implements SessionDataService {
     }
 
     @Override
-    public Session createSessionData(final String sessionId) {
+    public Session createSessionData(final String sessionId, final String claimType) {
         final Session session = new Session(sessionId);
+        session.setAttribute("key", claimType);
         sessions.put(sessionId, session);
         return session;
     }
