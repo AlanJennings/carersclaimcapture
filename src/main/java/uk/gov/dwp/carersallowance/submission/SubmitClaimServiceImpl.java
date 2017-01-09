@@ -70,7 +70,7 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
         String xml = buildClaimXml(session, transactionId);
 
         //transactionIdService.insertTransactionStatus(transactionId, "0100", type, thirdParty, circsType, lang, jsEnabled, email, saveForLaterEmail);
-        transactionIdService.insertTransactionStatus(transactionId, Status.GENERATED.getStatus(), getClaimType(session), null, null, (String)session.getAttribute("language"), getJsEnabled(session), null, null);
+        transactionIdService.insertTransactionStatus(transactionId, Status.GENERATED.getStatus(), getClaimType(session), null, null, (String) session.getAttribute("language"), getJsEnabled(session), null, null);
 
         sendClaim(xml, transactionId);
         LOG.info("Sent claim for transactionId :{}", session.getAttribute(TRANSACTION_ID));
@@ -96,9 +96,10 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
             final MediaType mediaTypeXml = new MediaType("application", "xml", StandardCharsets.UTF_8);
             headers.setContentType(mediaTypeXml);
             final HttpEntity<String> request = new HttpEntity<>(xml, headers);
-            LOG.info("Posting claim to :{}", crUrl);
+            final String submitUrl = crUrl + "/submission";
+            LOG.info("Posting claim to :{}", submitUrl);
             transactionIdService.setTransactionStatusById(transactionId, Status.SUBMITTED.getStatus());
-            final ResponseEntity<String> response = restTemplate.exchange(crUrl + "/submission", HttpMethod.POST, request, String.class);
+            final ResponseEntity<String> response = restTemplate.exchange(submitUrl, HttpMethod.POST, request, String.class);
             LOG.debug("RESPONSE:{}", response.getStatusCode());
             //TODO Handle response from submit to claim received
             processResponse(response, transactionId);
@@ -122,6 +123,7 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
     /**
      * Build the Claim XML and add the digital signature
      * flatten the XML and send it
+     *
      * @param session
      * @return
      * @throws IOException
@@ -161,7 +163,7 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
     }
 
     private String getTransactionId(final Session session) {
-        String transactionId = (String)session.getAttribute(TRANSACTION_ID);
+        String transactionId = (String) session.getAttribute(TRANSACTION_ID);
         if (StringUtils.isEmpty(transactionId)) {
             transactionId = transactionIdService.getTransactionId();
         }

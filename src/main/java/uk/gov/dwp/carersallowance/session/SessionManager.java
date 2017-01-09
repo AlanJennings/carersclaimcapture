@@ -59,13 +59,13 @@ public class SessionManager {
         sessionDataFactory.getSessionDataService().saveSessionData(claimEncryptionService.encryptClaim(session));
     }
 
-    public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile, final String claimType) {
+    public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile, final String xmlSchemaVersion, final String claimType) {
         cookieManager.addVersionCookie(response);
         cookieManager.addGaCookie(request, response);
-        createSessionData(request, response, xmlFile, mappingFile, claimType);
+        createSessionData(request, response, xmlFile, mappingFile, xmlSchemaVersion, claimType);
     }
 
-    private void createSessionData(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile, final String claimType) {
+    private void createSessionData(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile, final String xmlSchemaVersion, final String claimType) {
         final String sessionId = createSessionId();
         Session session = createSession(sessionId, claimType);
         request.setAttribute(Session.SESSION_ID, sessionId);
@@ -73,6 +73,7 @@ public class SessionManager {
         if (xmlFile != null && xmlFile.length() > 0) {
             loadReplicaData(session, xmlFile, mappingFile);
         }
+        session.setAttribute("xmlVersion", xmlSchemaVersion);
     }
 
     private void loadReplicaData(Session session, final String xmlFile, final URL mappingFile) {
@@ -91,9 +92,6 @@ public class SessionManager {
                 session.setAttribute(name, values.get(name));
             }
             session.removeAttribute("transactionId");
-
-            LOG.info("5 " );
-            // TODO load the replica data from xml ... but its not there ! Hows it done in scala ??
             session.setAttribute("over35HoursAWeek", "yes");
             session.setAttribute("over16YearsOld", "yes");
             session.setAttribute("originCountry", "GB");

@@ -25,6 +25,7 @@ public class CircsStartedController {
     private final DefaultChangeOfCircsController defaultChangeOfCircsController;
     private final Boolean circsReplicaEnabledProperty;
     private final String circsReplicaDataFileProperty;
+    private final String xmlSchemaVersion;
     private final String originTag;
     private final URL xmlMappingFile;
 
@@ -37,11 +38,13 @@ public class CircsStartedController {
                                   @Value("${xml.circsMappingFile}") String mappingFile,
                                   @Value("${circs.replica.enabled}") final Boolean circsReplicaEnabledProperty,
                                   @Value("${circs.replica.datafile}") final String circsReplicaDataFileProperty,
+                                  final @Value("${xml.schema.version}") String xmlSchemaVersion,
                                   @Value("${origin.tag}") final String originTag) {
         this.xmlMappingFile = XmlClaimReader.class.getClassLoader().getResource(mappingFile);
         this.defaultChangeOfCircsController = defaultChangeOfCircsController;
         this.circsReplicaEnabledProperty = circsReplicaEnabledProperty;
         this.circsReplicaDataFileProperty = circsReplicaDataFileProperty;
+        this.xmlSchemaVersion = xmlSchemaVersion;
         this.originTag = originTag;
     }
 
@@ -52,10 +55,10 @@ public class CircsStartedController {
 
     @RequestMapping(value = CURRENT_CIRCS_PAGE, method = RequestMethod.GET)
     public String showCircsForm(final HttpServletRequest request, final HttpServletResponse response, final Model model) {
-        LOG.info("circsReplicaEnabledProperty = " + circsReplicaEnabledProperty );
-        LOG.info("circsReplicaDataFileProperty = " + circsReplicaDataFileProperty );
+        LOG.info("circsReplicaEnabledProperty = " + circsReplicaEnabledProperty);
+        LOG.info("circsReplicaDataFileProperty = " + circsReplicaDataFileProperty);
 
-        defaultChangeOfCircsController.createSessionVariables(request, response, getReplicateDataFile(), xmlMappingFile, "circs");
+        defaultChangeOfCircsController.createSessionVariables(request, response, getReplicateDataFile(), xmlMappingFile, xmlSchemaVersion, "circs");
         if (ORIGIN_NI.equals(originTag)) {
             defaultChangeOfCircsController.getForm(request, model);
             return CURRENT_CIRCS_PAGE;

@@ -22,6 +22,7 @@ import java.net.URL;
 public class ClaimStartedController {
     private static final Logger LOG = LoggerFactory.getLogger(ClaimStartedController.class);
 
+    private final String xmlSchemaVersion;
     private final Boolean replicaEnabledProperty;
     private final String replicaDataFileProperty;
     private final DefaultFormController defaultFormController;
@@ -30,10 +31,12 @@ public class ClaimStartedController {
     private static final String CURRENT_PAGE = "/allowance/benefits";
 
     @Inject
-    public ClaimStartedController(final @Value("${replica.enabled}") Boolean replicaEnabledProperty,
+    public ClaimStartedController(final @Value("${xml.schema.version}") String xmlSchemaVersion,
+                                  final @Value("${replica.enabled}") Boolean replicaEnabledProperty,
                                   final @Value("${replica.datafile}") String replicaDataFileProperty,
                                   final DefaultFormController defaultFormController,
                                   final @Value("${xml.mappingFile}") String mappingFile) {
+        this.xmlSchemaVersion=xmlSchemaVersion;
         this.replicaEnabledProperty = replicaEnabledProperty;
         this.replicaDataFileProperty = replicaDataFileProperty;
         this.defaultFormController = defaultFormController;
@@ -42,7 +45,7 @@ public class ClaimStartedController {
 
     @RequestMapping(value = CURRENT_PAGE, method = RequestMethod.GET)
     public String getForm(final HttpServletRequest request, final HttpServletResponse response, final Model model) {
-        defaultFormController.createSessionVariables(request, response, getReplicateDataFile(), xmlMappingFile, "claim");
+        defaultFormController.createSessionVariables(request, response, getReplicateDataFile(), xmlMappingFile, xmlSchemaVersion, "claim");
         defaultFormController.getForm(request, model);
         return CURRENT_PAGE;
     }
