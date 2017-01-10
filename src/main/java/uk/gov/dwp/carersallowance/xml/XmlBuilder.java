@@ -159,13 +159,17 @@ public class XmlBuilder {
                     throw new IllegalFieldValueException("Unsupported value class: " + value.getClass().getName(), (String) null, (String[]) null);
                 }
             } else if (valueKey != null && valueKey.endsWith(".label")) {
-                // TODO use parameters when building the questions
                 LOG.debug("Checking QuestionLabel:{}", valueKey);
                 String question = getQuestion(valueKey, null);
                 String relatedAnswerKey = valueKey.replace(".label", "");
                 // If we have a corresponding Answer and value set for this QuestionLabel then we add to xml
                 if (valuesByValueKey.containsKey(relatedAnswerKey)) {
                     LOG.debug("Adding QuestionLabel:{}", xpath);
+                    addNode(xpath, question, true, localRootNode);
+                }
+                // Address carerAddress.label has carerAddressLineOne, carerAddressLineTwo
+                else if(valuesByValueKey.containsKey(relatedAnswerKey+"LineOne")){
+                    LOG.debug("Adding Address QuestionLabel:{}", xpath);
                     addNode(xpath, question, true, localRootNode);
                 }
             }
@@ -198,11 +202,10 @@ public class XmlBuilder {
         try {
             questionMessage = messageSource.getMessage(questionKey, parameters, Locale.getDefault());
         } catch (NoSuchMessageException e) {
-            LOG.error("NoSuchMessageException thrown looking for message for key:" + questionKey, e);
+            LOG.error("NoSuchMessageException thrown looking for message for key:" + questionKey);
             questionMessage = "ERROR " + questionKey + " - message not found";
-        }
-        catch( Exception e){
-            LOG.error("Exception thrown looking for message for key:" + questionKey, e);
+        } catch (Exception e) {
+            LOG.error("Exception thrown looking for message for key:" + questionKey);
             questionMessage = "ERROR " + questionKey + " - exception";
         }
         return (questionMessage);

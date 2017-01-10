@@ -101,6 +101,7 @@ public class ClaimantTest {
         assertThat(xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DWPCAClaim/Claimant/Address/Answer/PostCode"), is("PR12AA"));
     }
 
+    @Test
     public void checkyesIsMappedToYesAndnoIsMappedToNo() throws Exception {
         sessionMap.put("beforeClaimCaring", "yes");
         sessionMap.put("carerWantsEmailContact", "no");
