@@ -26,11 +26,8 @@ import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList.MappingException;
 public class SubmitClaimController {
     private static final Logger LOG = LoggerFactory.getLogger(SubmitClaimController.class);
 
-    private static final String XML_MAPPING__CLAIM_CAREBREAK = "xml.mapping.claim.careBreak";
-
     private static final String CURRENT_PAGE       = "/submit-claim";
     private static final String SUCCESS_PAGE       = "/async-submitting";
-    private static final String TRANSACTION_ID     = "transactionId";
 
     private SubmitClaimService submitClaimService;
 
@@ -53,6 +50,7 @@ public class SubmitClaimController {
         LOG.trace("Starting SubmitClaimController.postForm");
         try {
             LOG.debug("request.getParameterMap() = {}", request.getParameterMap()); // log these jsut in case
+
             submitClaimService.sendClaim(request);
             LOG.info("Sent claim");
 
@@ -67,5 +65,4 @@ public class SubmitClaimController {
             LOG.trace("Ending SubmitClaimController.postForm");
         }
     }
-
 }

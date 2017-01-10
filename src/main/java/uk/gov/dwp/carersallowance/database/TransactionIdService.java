@@ -32,4 +32,8 @@ public class TransactionIdService {
                                     final Integer circsType, final String lang, final Integer jsEnabled, final Integer email, final Integer saveForLaterEmail) {
         return databaseService.insertTransactionStatus(transactionId, status, type, thirdParty, circsType, lang, jsEnabled, email, saveForLaterEmail, originTag);
     }
+
+    public Boolean updateEmailStatus(final String transactionId, final Integer emailStatus) {
+        return databaseService.updateEmailStatus(transactionId, emailStatus);
+    }
 }

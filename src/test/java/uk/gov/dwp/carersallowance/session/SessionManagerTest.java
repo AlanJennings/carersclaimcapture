@@ -62,13 +62,14 @@ public class SessionManagerTest {
 
     @Before
     public void setUp() throws Exception {
+        when(cookieManager.getApplicationVersionNumber()).thenReturn("3.15");
         mappingFileURL = SessionManager.class.getClassLoader().getResource(XML_MAPPING_FILE);
         session = new Session("1234");
         session.setAttribute("key", "claim");
         sessionDataService = new SessionDataMapServiceImpl();
         claimEncryptionService = new ClaimEncryptionServiceImpl(false, messageSource);
         when(sessionDataFactory.getSessionDataService()).thenReturn(sessionDataService);
-        sessionManager = new SessionManager(cookieManager, sessionDataFactory, claimEncryptionService);
+        sessionManager = new SessionManager(cookieManager, sessionDataFactory, claimEncryptionService, "GB");
         objectCaptor = ArgumentCaptor.forClass(Object.class);
     }
 

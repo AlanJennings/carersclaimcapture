@@ -1,5 +1,6 @@
 package uk.gov.dwp.carersallowance.submission;
 
+import gov.dwp.carers.monitor.Counters;
 import gov.dwp.carers.xml.helpers.XMLMessageHelper;
 import gov.dwp.carers.xml.signing.SigningException;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +16,8 @@ import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.Document;
 import uk.gov.dwp.carersallowance.database.Status;
 import uk.gov.dwp.carersallowance.database.TransactionIdService;
+import uk.gov.dwp.carersallowance.email.EmailService;
+import uk.gov.dwp.carersallowance.email.EmailServletResponse;
 import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
@@ -42,6 +45,8 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
     private final TransactionIdService transactionIdService;
     private final ClaimEncryptionService claimEncryptionService;
     private final MessageSource messageSource;
+    private final Counters counters;
+    private final EmailService emailService;
 
     private static final Integer JS_ENABLED = 1;
     private static final Integer JS_DISABLED = 0;
@@ -54,29 +59,32 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
                                   final SessionManager sessionManager,
                                   final TransactionIdService transactionIdService,
                                   final ClaimEncryptionService claimEncryptionService,
-                                  final MessageSource messageSource) {
+                                  final MessageSource messageSource,
+                                  final Counters counters,
+                                  final EmailService emailService) {
         this.restTemplate = restTemplate;
         this.crUrl = crUrl;
         this.sessionManager = sessionManager;
         this.transactionIdService = transactionIdService;
         this.claimEncryptionService = claimEncryptionService;
         this.messageSource = messageSource;
+        this.counters = counters;
+        this.emailService = emailService;
     }
 
     @Override
-    @Async
     public void sendClaim(final HttpServletRequest request) throws IOException, InstantiationException, ParserConfigurationException, XPathMappingList.MappingException {
         final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
 
         String transactionId = getTransactionId(session);
         saveTransactionId(transactionId, session);
 
-        String xml = buildClaimXml(messageSource, session, transactionId);
+        String xml = buildClaimXml(session, transactionId);
 
         //transactionIdService.insertTransactionStatus(transactionId, "0100", type, thirdParty, circsType, lang, jsEnabled, email, saveForLaterEmail);
         transactionIdService.insertTransactionStatus(transactionId, Status.GENERATED.getStatus(), getClaimType(session), null, null, (String) session.getAttribute("language"), getJsEnabled(session), null, null);
 
-        sendClaim(xml, transactionId);
+        sendClaim(xml, transactionId, session, getEmailBody(request, session));
         LOG.info("Sent claim for transactionId :{}", session.getAttribute(TRANSACTION_ID));
     }
 
@@ -94,19 +102,22 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
         return FULL_CLAIM;
     }
 
-    public void sendClaim(final String xml, final String transactionId) {
+    @Async
+    public void sendClaim(final String xml, final String transactionId, final Session session, final String emailBody) {
         try {
+            transactionIdService.setTransactionStatusById(transactionId, Status.SUBMITTED.getStatus());
+
             final HttpHeaders headers = new HttpHeaders();
             final MediaType mediaTypeXml = new MediaType("application", "xml", StandardCharsets.UTF_8);
             headers.setContentType(mediaTypeXml);
-            final HttpEntity<String> request = new HttpEntity<>(xml, headers);
+            final HttpEntity<String> requestRest = new HttpEntity<>(xml, headers);
+
             final String submitUrl = crUrl + "/submission";
             LOG.info("Posting claim to :{}", submitUrl);
-            transactionIdService.setTransactionStatusById(transactionId, Status.SUBMITTED.getStatus());
-            final ResponseEntity<String> response = restTemplate.exchange(submitUrl, HttpMethod.POST, request, String.class);
-            LOG.debug("RESPONSE:{}", response.getStatusCode());
-            //TODO Handle response from submit to claim received
-            processResponse(response, transactionId);
+            final ResponseEntity<String> responseRest = restTemplate.exchange(submitUrl, HttpMethod.POST, requestRest, String.class);
+
+            LOG.debug("RESPONSE:{}", responseRest.getStatusCode());
+            processResponse(responseRest, transactionId, session, emailBody);
         } catch (RestClientException rce) {
             LOG.error("sendClaim error:", rce);
         } catch (Exception e) {
@@ -114,14 +125,28 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
         }
     }
 
-    private void processResponse(final ResponseEntity<String> response, final String transactionId) {
-        if (response.getStatusCode() == HttpStatus.OK) {
-            transactionIdService.setTransactionStatusById(transactionId, Status.SUCCESS.getStatus());
-            //Counters.incrementClaimSubmissionCount submission-successful-count
+    private void processResponse(final ResponseEntity<String> responseRest, final String transactionId, final Session session, final String emailBody) throws Exception {
+        if (responseRest.getStatusCode() == HttpStatus.OK) {
+            processOk(responseRest, transactionId, session, emailBody);
         } else {
-            transactionIdService.setTransactionStatusById(transactionId, Status.SERVICE_UNAVAILABLE.getStatus());
-            //Counters.incrementSubmissionErrorStatus - submission-error-status- + status
+            processErrorResponse(responseRest, transactionId);
         }
+    }
+
+    private void processErrorResponse(final ResponseEntity<String> response, final String transactionId) {
+        transactionIdService.setTransactionStatusById(transactionId, Status.SERVICE_UNAVAILABLE.getStatus());
+        counters.incrementMetric("submission-error-status-" + response.getStatusCode().value());
+    }
+
+    private void processOk(final ResponseEntity<String> responseRest, final String transactionId, final Session session, final String emailBody) throws Exception {
+        LOG.info("Successful submission [{}] - response status {} for transactionId:{}.", Status.SUCCESS.getStatus(), responseRest.getStatusCode(), transactionId);
+        transactionIdService.setTransactionStatusById(transactionId, Status.SUCCESS.getStatus());
+        counters.incrementMetric("submission-successful-count");
+
+        //We send email after we update status and we verify that the submission has been successful
+        emailService.sendEmail(emailBody, session, transactionId);
+
+        sessionManager.removeSession(session.getSessionId());
     }
 
     /**
@@ -135,20 +160,13 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
      * @throws ParserConfigurationException
      * @throws XPathMappingList.MappingException
      */
-    private String buildClaimXml(final MessageSource messageSource, final Session session, final String transactionId) throws IOException, InstantiationException, ParserConfigurationException, XPathMappingList.MappingException {
+    private String buildClaimXml(final Session session, final String transactionId) throws IOException, InstantiationException, ParserConfigurationException, XPathMappingList.MappingException {
         Parameters.validateMandatoryArgs(session, "session");
 
         claimEncryptionService.encryptClaim(session);
 
         Map<String, Object> sessionMap = new HashMap<>(session.getData());
 
-// TODO these need setting up in the session at the start of the claim.
-//        sessionMap.put("xmlVersion", xmlVersion);
-//        sessionMap.put("appVersion", appVersion);
-//        sessionMap.put("origin", origin);
-//        sessionMap.put("language", language);
-
-        sessionMap.put("transactionId", transactionId);
         sessionMap.put("dateTimeGenerated", ClaimXmlUtil.currentDateTime("dd-MM-yyyy HH:mm"));
 
         final XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
@@ -186,5 +204,97 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
             LOG.error("Unable to sign xml:{}", e.getMessage(), e);
             throw new SigningException("Unable to sign xml", e);
         }
+    }
+
+    //need to get email body before request is overwritten
+    private String getEmailBody(final HttpServletRequest request, final Session session) {
+        try {
+            EmailServletResponse response = new EmailServletResponse();
+            response.setContentType("text/html");
+            response.setStatus(200);
+            setRequestParameters(request, session);
+            request.getRequestDispatcher("/WEB-INF/views/" + (isClaim(session) ? "claim" : "circs") + "Email.jsp").forward(request, response);
+            return response.toString();
+        } catch (Exception e) {
+            LOG.error("Unable to send email", e);
+            throw new RuntimeException("Unable to send email", e);
+        }
+    }
+
+    private void setRequestParameters(final HttpServletRequest request, final Session session) {
+        request.setAttribute("isOriginGB", isOriginGB(session));
+        request.setAttribute("isClaim", isClaim(session));
+        request.setAttribute("isEmployedByEmployer", isEmployedByEmployer(session));
+        request.setAttribute("isEmployment", isEmployment(session));
+        request.setAttribute("isSelfEmployed", isSelfEmployed(session));
+        request.setAttribute("isCofcSelfEmployment", isCofcSelfEmployment(session));
+        request.setAttribute("isCofcFinishedEmployment", isCofcFinishedEmployment(session));
+        request.setAttribute("hasStatutorySickPay", hasStatutorySickPay(session));
+        request.setAttribute("hasStatutoryPay", hasStatutoryPay(session));
+        request.setAttribute("pensionStatementsRequired", pensionStatementsRequired(session));
+        request.setAttribute("dateOfClaim_day", session.getAttribute("dateOfClaim_day"));
+        request.setAttribute("dateOfClaim_month", session.getAttribute("dateOfClaim_month"));
+        request.setAttribute("dateOfClaim_year", session.getAttribute("dateOfClaim_year"));
+        request.setAttribute("versionSchemaTransactionInfo", versionSchemaTransactionInfo(session));
+    }
+
+    private Boolean isOriginGB(final Session session) {
+        return "GB".equals(session.getAttribute("originTag"));
+    }
+
+    private String versionSchemaTransactionInfo(final Session session) {
+        return session.getAttribute("appVersion") + " / " + session.getAttribute("xmlVersion") + " / " +  session.getAttribute(TRANSACTION_ID);
+    }
+
+    private Boolean pensionStatementsRequired(final Session session) {
+        return "yes".equals(session.getAttribute("selfEmployedPayPensionScheme")) || "yes".equals(session.getAttribute("payPensionScheme"));
+    }
+
+    private Boolean hasStatutoryPay(final Session session) {
+        return "yes".equals(session.getAttribute("yourIncome_patmatadoppay"));
+    }
+
+    private Boolean hasStatutorySickPay(final Session session) {
+        return "yes".equals(session.getAttribute("yourIncome_sickpay"));
+    }
+
+    private Boolean isCofcFinishedEmployment(final Session session) {
+        return "yes".equals(session.getAttribute("circsEmploymentFinished"));
+    }
+
+    private Boolean isCofcSelfEmployment(final Session session) {
+        return "yes".equals(session.getAttribute("circsSelfEmployment"));
+    }
+
+    private Boolean isEmployment(final Session session) {
+        return isClaimEmployment(session) || isCircsEmployment(session);
+    }
+
+    private Boolean isClaimEmployment(final Session session) {
+        return "yes".equals(getEmployment(session)) || "yes".equals(getSelfEmployment(session));
+    }
+
+    private Boolean isEmployedByEmployer(final Session session) {
+        return "yes".equals(getEmployment(session));
+    }
+
+    private Boolean isSelfEmployed(final Session session) {
+        return "yes".equals(getSelfEmployment(session));
+    }
+
+    private Boolean isCircsEmployment(final Session session) {
+        return "yes".equals(session.getAttribute("circsEmployed"));
+    }
+
+    private String getSelfEmployment(final Session session) {
+        return (String)session.getAttribute("beenSelfEmployedSince1WeekBeforeClaim");
+    }
+
+    private String getEmployment(final Session session) {
+        return (String)session.getAttribute("beenEmployedSince6MonthsBeforeClaim");
+    }
+
+    private Boolean isClaim(final Session session) {
+        return "claim".equals(session.getAttribute("key"));
     }
 }

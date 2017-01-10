@@ -43,7 +43,7 @@ public class CookieManager {
     }
 
     public void addVersionCookie(final HttpServletResponse response) {
-        addCookie(response, applicationVersionCookieName, appVersionNumber(), c3VersionSecondsToLive);
+        addCookie(response, applicationVersionCookieName, getApplicationVersionNumber(), c3VersionSecondsToLive);
     }
 
     public String getVersionCookieValue(final HttpServletRequest request) {
@@ -101,7 +101,7 @@ public class CookieManager {
         return null;
     }
 
-    private String appVersionNumber() {
+    public String getApplicationVersionNumber() {
         return (applicationVersion.replaceAll("-.*", ""));
     }
 }

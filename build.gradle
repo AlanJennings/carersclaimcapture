@@ -109,6 +109,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-websocket")
+    compile("org.springframework.boot:spring-boot-starter-mail")
     runtime("me.moocar:logback-gelf:0.3")
     compile("com.thoughtworks.xstream:xstream:1.4.9")
     testCompile (

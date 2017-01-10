@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
@@ -29,14 +30,17 @@ public class SessionManager {
     private final SessionDataFactory sessionDataFactory;
     private final CookieManager cookieManager;
     private final ClaimEncryptionService claimEncryptionService;
+    private final String originTag;
 
     @Inject
     public SessionManager(final CookieManager cookieManager,
                           final SessionDataFactory sessionDataFactory,
-                          final ClaimEncryptionService claimEncryptionService){
-        this.cookieManager          = cookieManager;
-        this.sessionDataFactory     = sessionDataFactory;
+                          final ClaimEncryptionService claimEncryptionService,
+                          @Value("${origin.tag}") final String originTag){
+        this.cookieManager = cookieManager;
+        this.sessionDataFactory = sessionDataFactory;
         this.claimEncryptionService = claimEncryptionService;
+        this.originTag = originTag;
     }
 
     public String createSessionId() {
@@ -74,6 +78,8 @@ public class SessionManager {
             loadReplicaData(session, xmlFile, mappingFile);
         }
         session.setAttribute("xmlVersion", xmlSchemaVersion);
+        session.setAttribute("originTag", originTag);
+        session.setAttribute("appVersion", cookieManager.getApplicationVersionNumber());
     }
 
     private void loadReplicaData(Session session, final String xmlFile, final URL mappingFile) {
