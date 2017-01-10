@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -40,6 +41,7 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
     private final SessionManager sessionManager;
     private final TransactionIdService transactionIdService;
     private final ClaimEncryptionService claimEncryptionService;
+    private final MessageSource messageSource;
 
     private static final Integer JS_ENABLED = 1;
     private static final Integer JS_DISABLED = 0;
@@ -51,12 +53,14 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
                                   @Value("${cr.url}") final String crUrl,
                                   final SessionManager sessionManager,
                                   final TransactionIdService transactionIdService,
-                                  final ClaimEncryptionService claimEncryptionService) {
+                                  final ClaimEncryptionService claimEncryptionService,
+                                  final MessageSource messageSource) {
         this.restTemplate = restTemplate;
         this.crUrl = crUrl;
         this.sessionManager = sessionManager;
         this.transactionIdService = transactionIdService;
         this.claimEncryptionService = claimEncryptionService;
+        this.messageSource = messageSource;
     }
 
     @Override
@@ -67,7 +71,7 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
         String transactionId = getTransactionId(session);
         saveTransactionId(transactionId, session);
 
-        String xml = buildClaimXml(session, transactionId);
+        String xml = buildClaimXml(messageSource, session, transactionId);
 
         //transactionIdService.insertTransactionStatus(transactionId, "0100", type, thirdParty, circsType, lang, jsEnabled, email, saveForLaterEmail);
         transactionIdService.insertTransactionStatus(transactionId, Status.GENERATED.getStatus(), getClaimType(session), null, null, (String) session.getAttribute("language"), getJsEnabled(session), null, null);
@@ -131,7 +135,7 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
      * @throws ParserConfigurationException
      * @throws XPathMappingList.MappingException
      */
-    private String buildClaimXml(final Session session, final String transactionId) throws IOException, InstantiationException, ParserConfigurationException, XPathMappingList.MappingException {
+    private String buildClaimXml(final MessageSource messageSource, final Session session, final String transactionId) throws IOException, InstantiationException, ParserConfigurationException, XPathMappingList.MappingException {
         Parameters.validateMandatoryArgs(session, "session");
 
         claimEncryptionService.encryptClaim(session);
@@ -147,7 +151,7 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
         sessionMap.put("transactionId", transactionId);
         sessionMap.put("dateTimeGenerated", ClaimXmlUtil.currentDateTime("dd-MM-yyyy HH:mm"));
 
-        final XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
+        final XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
         final String xml = xmlBuilder.render(true, false);
         LOG.debug("xml:{}", xml);
         final String signedXml = signClaim(xml, transactionId);

@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
 import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
 import uk.gov.dwp.carersallowance.xml.XmlBuilder;
 
@@ -29,6 +30,9 @@ public class XmlBuilderTest {
     @Mock
     private HttpServletRequest request;
 
+    @Mock
+    private MessageSource messageSource;
+
     @Before
     public void setUp() throws Exception {
         sessionMap = new HashMap<>();
@@ -44,7 +48,7 @@ public class XmlBuilderTest {
     @Test
     public void testDocument() {
         try {
-            XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
+            XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
             assertThat(xmlBuilder.getNodeValue("/DWPBody/Version"), is(xmlVersion));
         } catch (Exception e) {
             LOG.error("Exception calling XmlBuilder :", e);
@@ -54,7 +58,7 @@ public class XmlBuilderTest {
     @Test
     public void testXml() {
         try {
-            XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
+            XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
             String xml = xmlBuilder.render(true, false);
             assertTrue(xml.startsWith("<?xml"));
             assertTrue(xml.contains("<DWPBody"));

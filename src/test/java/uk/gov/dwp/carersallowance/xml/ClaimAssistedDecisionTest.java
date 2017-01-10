@@ -2,8 +2,10 @@ package uk.gov.dwp.carersallowance.xml;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
 import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
 
 import java.util.HashMap;
@@ -23,6 +25,9 @@ public class ClaimAssistedDecisionTest {
     private String origin = "GB";
     private String language = "English";
 
+    @Mock
+    private MessageSource messageSource;
+
     @Before
     public void setUp() throws Exception {
         sessionMap = new HashMap<>();
@@ -36,8 +41,8 @@ public class ClaimAssistedDecisionTest {
     }
 
     @Test
-    public void checkClaimXmlContainsDefaultAssistedDecisionReason() throws Exception{
-        XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
+    public void checkClaimXmlContainsDefaultAssistedDecisionReason() throws Exception {
+        XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
         String reason = xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DWPCAClaim/AssistedDecisions/AssistedDecision/Reason");
         String decision = xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DWPCAClaim/AssistedDecisions/AssistedDecision/RecommendedDecision");
         assertThat(reason, is("Check CIS for benefits. Send Pro517 if relevant."));
@@ -45,9 +50,9 @@ public class ClaimAssistedDecisionTest {
     }
 
     @Test
-    public void checkClaimXmlContainsAFIPAssistedDecisionReason() throws Exception{
+    public void checkClaimXmlContainsAFIPAssistedDecisionReason() throws Exception {
         sessionMap.put("benefitsAnswer", "AFIP");
-        XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
+        XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
         String reason = xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DWPCAClaim/AssistedDecisions/AssistedDecision/Reason");
         String decision = xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DWPCAClaim/AssistedDecisions/AssistedDecision/RecommendedDecision");
         assertThat(reason, is("Assign to AFIP officer on CAMLite workflow."));

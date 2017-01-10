@@ -2,8 +2,10 @@ package uk.gov.dwp.carersallowance.xml;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
 import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
 import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
 
@@ -27,6 +29,9 @@ public class ClaimantTest {
 
     private Map<String, Object> sessionMap;
 
+    @Mock
+    private MessageSource messageSource;
+
     @Before
     public void setUp() throws Exception {
         sessionMap = new HashMap<>();
@@ -42,7 +47,7 @@ public class ClaimantTest {
         sessionMap.put("dateOfClaim_day", "31");
         sessionMap.put("dateOfClaim_month", "12");
         sessionMap.put("dateOfClaim_year", "2016");
-        xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
+        xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
     }
 
     @Test
@@ -70,7 +75,7 @@ public class ClaimantTest {
     @Test
     public void checkClaimXmlDoesContainMiddleNameQuestionIfAnswered() throws Exception {
         sessionMap.put("carerMiddleName", "Freddy");
-        xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
+        xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
         LOG.debug("Othernames node1:{}", xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DWPCAClaim/Claimant/MiddleNames"));
         assertThat(xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DWPCAClaim/Claimant/MiddleNames/QuestionLabel").length() > 0, is(true));
         assertThat(xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DWPCAClaim/Claimant/MiddleNames/Answer"), is("Freddy"));
@@ -78,7 +83,7 @@ public class ClaimantTest {
 
     @Test
     public void checkClaimXmlDoesntContainMiddleNameQuestionIfNotAnswered() throws Exception {
-        xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
+        xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
         LOG.debug("Othernames node2:{}", xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DWPCAClaim/Claimant/MiddleNames"));
         assertThat(xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DWPCAClaim/Claimant/MiddleNames/QuestionLabel"), is(""));
         assertThat(xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DWPCAClaim/Claimant/MiddleNames/Answer"), is(""));
@@ -89,7 +94,7 @@ public class ClaimantTest {
     public void checkClaimXmlContainsAddress() throws Exception {
         sessionMap.put("carerAddressLineOne", "22 Acacia Ave");
         sessionMap.put("carerPostcode", "PR12AA");
-        xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
+        xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
         LOG.debug("Address node1:", xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DWPCAClaim/Claimant/Address"));
         assertThat(xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DWPCAClaim/Claimant/Address/QuestionLabel").length() > 0, is(true));
         assertThat(xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DWPCAClaim/Claimant/Address/Answer/Line"), is("22 Acacia Ave"));
@@ -99,7 +104,7 @@ public class ClaimantTest {
     public void checkyesIsMappedToYesAndnoIsMappedToNo() throws Exception {
         sessionMap.put("beforeClaimCaring", "yes");
         sessionMap.put("carerWantsEmailContact", "no");
-        xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
+        xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
         assertThat(xmlBuilder.getNodeValue("DWPBody/DWPCATransaction/DWPCAClaim/Claimant/Cared35HoursBefore/Answer"), is("Yes"));
         assertThat(xmlBuilder.getNodeValue("DWPBody/DWPCATransaction/DWPCAClaim/Claimant/WantsContactEmail/Answer"), is("No"));
     }

@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,6 +17,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -41,8 +40,10 @@ public class XmlBuilder {
 
     private Document document;
     private Map<String, XPathMappingList> valueMappings;
+    private final MessageSource messageSource;
 
-    public XmlBuilder(String rootNodeName, Map<String, Object> values) throws ParserConfigurationException, IOException, XPathMappingList.MappingException {
+    public XmlBuilder(final String rootNodeName, final Map<String, Object> values, final MessageSource messageSource) throws ParserConfigurationException, IOException, XPathMappingList.MappingException {
+        this.messageSource = messageSource;
         Parameters.validateMandatoryArgs(new Object[]{rootNodeName}, new String[]{"rootNodeName"});
         Map<String, String> namespaces = getNamespaces();
         document = createDocument(rootNodeName, namespaces);
@@ -192,7 +193,19 @@ public class XmlBuilder {
     }
 
     private String getQuestion(String questionKey, Object... parameters) {
-        return ("Question for " + questionKey);
+        // TODO throw exception and stop processing if gap in messages. But too many Income / Breaks gaps as of 10/01/2016
+        String questionMessage;
+        try {
+            questionMessage = messageSource.getMessage(questionKey, parameters, Locale.getDefault());
+        } catch (NoSuchMessageException e) {
+            LOG.error("NoSuchMessageException thrown looking for message for key:" + questionKey, e);
+            questionMessage = "ERROR " + questionKey + " - message not found";
+        }
+        catch( Exception e){
+            LOG.error("Exception thrown looking for message for key:" + questionKey, e);
+            questionMessage = "ERROR " + questionKey + " - exception";
+        }
+        return (questionMessage);
     }
 
     /**
@@ -217,7 +230,7 @@ public class XmlBuilder {
 
         Node node = getNamedNode(xPath, null, false, localRootNode);
         if (isValueEmpty(value) == false) {
-            Node textNode = document.createTextNode(value.replace("yes","Yes").replace("no","No"));
+            Node textNode = document.createTextNode(value.replace("yes", "Yes").replace("no", "No"));
             node.appendChild(textNode);
         }
 

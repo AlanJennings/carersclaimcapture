@@ -2,8 +2,10 @@ package uk.gov.dwp.carersallowance.xml;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
 import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
 import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
 
@@ -34,6 +36,9 @@ public class ClaimHeaderItemsTest {
     private String origin = "GB";
     private String language = "English";
 
+    @Mock
+    private MessageSource messageSource;
+
     @Before
     public void setUp() throws Exception {
         Map<String, Object> sessionMap = new HashMap<>();
@@ -45,7 +50,7 @@ public class ClaimHeaderItemsTest {
         sessionMap.put("origin", origin);
         sessionMap.put("language", language);
 
-        xmlBuilder = new XmlBuilder("DWPBody", sessionMap);
+        xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
         String xml = xmlBuilder.render(true, false);
         xpath = XPathFactory.newInstance().newXPath();
     }
