@@ -102,7 +102,7 @@
                     </c:if>
 
                     <c:if test="${isEmployment}" >
-                        <p><t:message code="evidenceText.section3.line1" /></p>
+                        <p><t:message code="mail.claim.next.line1.alt" /></p>
                     </c:if>
                     <c:if test="${!isEmployment}" >
                         <p><t:message code="mail.claim.next.line1" /></p>

@@ -74,9 +74,6 @@ public class EmailServiceImpl implements EmailService {
 
     private void send(final String transactionID, final String subject, final String emailAddress, final String body) throws Exception {
         LOG.info("Sending email for transactionId:{}", transactionID);
-        if (javaMailSender == null) {
-            return;
-        }
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         mimeMessage.setText(body, "utf-8", "html");
         mimeMessage.setSubject(subject);
