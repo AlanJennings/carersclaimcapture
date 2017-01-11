@@ -2,6 +2,7 @@ package uk.gov.dwp.carersallowance.sessiondata;
 
 import org.springframework.stereotype.Service;
 import uk.gov.dwp.carersallowance.session.NoSessionException;
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,7 +30,7 @@ public class SessionDataMapServiceImpl implements SessionDataService {
     @Override
     public Session createSessionData(final String sessionId, final String claimType) {
         final Session session = new Session(sessionId);
-        session.setAttribute("key", claimType);
+        session.setAttribute(C3Constants.KEY, claimType);
         sessions.put(sessionId, session);
         return session;
     }

@@ -27,6 +27,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import uk.gov.dwp.carersallowance.session.IllegalFieldValueException;
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMapping;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
@@ -233,7 +234,7 @@ public class XmlBuilder {
 
         Node node = getNamedNode(xPath, null, false, localRootNode);
         if (isValueEmpty(value) == false) {
-            Node textNode = document.createTextNode(value.replace("yes", "Yes").replace("no", "No"));
+            Node textNode = document.createTextNode(value.replace(C3Constants.YES, "Yes").replace(C3Constants.NO, "No"));
             node.appendChild(textNode);
         }
 

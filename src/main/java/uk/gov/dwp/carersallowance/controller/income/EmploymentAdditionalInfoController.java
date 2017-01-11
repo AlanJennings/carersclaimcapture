@@ -66,7 +66,7 @@ public class EmploymentAdditionalInfoController extends AbstractFormController {
 //        LOG.trace("Starting BenefitsController.validate");
 //
 //        validateMandatoryField(fieldValues, "empAdditionalInfo");
-//        if(fieldValue_Equals(fieldValues, "empAdditionalInfo", "yes")) {
+//        if(fieldValue_Equals(fieldValues, "empAdditionalInfo", C3Constants.YES)) {
 //            validateMandatoryField(fieldValues, "empAdditionalInfoText");
 //        }
 //

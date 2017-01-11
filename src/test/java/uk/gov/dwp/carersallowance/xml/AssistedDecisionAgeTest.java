@@ -2,6 +2,7 @@ package uk.gov.dwp.carersallowance.xml;
 
 import org.junit.Before;
 import org.junit.Test;
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -56,7 +57,7 @@ public class AssistedDecisionAgeTest {
     // "Create 'show table' AD if no bank details provided"
     @Test
     public void noBankDetails() {
-        claimvalues.put("likeToPay", "no");
+        claimvalues.put("likeToPay", C3Constants.NO);
 
         AssistedDecision assistedDecision = new AssistedDecision(65, claimvalues);
         assertThat(assistedDecision.getReason(), is(NONESHOWTABLEREASON));

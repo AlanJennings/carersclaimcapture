@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
 import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
 
@@ -35,7 +36,7 @@ public class ClaimantTest {
     @Before
     public void setUp() throws Exception {
         sessionMap = new HashMap<>();
-        sessionMap.put("transactionId", transactionId);
+        sessionMap.put(C3Constants.TRANSACTION_ID, transactionId);
         sessionMap.put("transactionIdAttr", transactionId);
         sessionMap.put("dateTimeGenerated", ClaimXmlUtil.currentDateTime("dd-MM-yyyy HH:mm"));
         sessionMap.put("xmlVersion", xmlVersion);
@@ -103,8 +104,8 @@ public class ClaimantTest {
 
     @Test
     public void checkyesIsMappedToYesAndnoIsMappedToNo() throws Exception {
-        sessionMap.put("beforeClaimCaring", "yes");
-        sessionMap.put("carerWantsEmailContact", "no");
+        sessionMap.put("beforeClaimCaring", C3Constants.YES);
+        sessionMap.put("carerWantsEmailContact", C3Constants.NO);
         xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
         assertThat(xmlBuilder.getNodeValue("DWPBody/DWPCATransaction/DWPCAClaim/Claimant/Cared35HoursBefore/Answer"), is("Yes"));
         assertThat(xmlBuilder.getNodeValue("DWPBody/DWPCATransaction/DWPCAClaim/Claimant/WantsContactEmail/Answer"), is("No"));

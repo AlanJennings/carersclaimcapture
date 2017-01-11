@@ -59,7 +59,7 @@ public class OtherStatutoryPaymentsController extends AbstractFormController {
 //
 //        validateMandatoryField(fieldValues, "otherStatPaymentPaymentTypesForThisPay");
 //        validateMandatoryField(fieldValues, "otherStatPaymentStillBeingPaidThisPay");
-//        if(fieldValue_Equals(fieldValues, "otherStatPaymentBeenInEducationSinceClaimDate", "yes")) {
+//        if(fieldValue_Equals(fieldValues, "otherStatPaymentBeenInEducationSinceClaimDate", C3Constants.YES)) {
 //            validateMandatoryDateField(fieldValues, "otherStatPaymentWhenDidYouLastGetPaid");
 //        }
 //

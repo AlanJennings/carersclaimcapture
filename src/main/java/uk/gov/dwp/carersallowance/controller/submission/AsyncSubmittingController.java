@@ -4,14 +4,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import uk.gov.dwp.carersallowance.database.TransactionIdService;
-import uk.gov.dwp.carersallowance.session.SessionManager;
-import uk.gov.dwp.carersallowance.sessiondata.Session;
+import uk.gov.dwp.carersallowance.session.NoSessionException;
 
 import javax.servlet.http.HttpServletRequest;
 import uk.gov.dwp.carersallowance.database.Status;
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 
 @Controller
 public class AsyncSubmittingController {
@@ -30,29 +31,38 @@ public class AsyncSubmittingController {
     private static final String SERVICE_UNAVAILABLE = Status.SERVICE_UNAVAILABLE.getStatus();
 
     private final TransactionIdService transactionIdService;
-    private final SessionManager sessionManager;
 
     @Autowired
-    public AsyncSubmittingController(final TransactionIdService transactionIdService, final SessionManager sessionManager) {
+    public AsyncSubmittingController(final TransactionIdService transactionIdService) {
         this.transactionIdService = transactionIdService;
-        this.sessionManager = sessionManager;
+    }
+
+    @RequestMapping(value=SUCCESS_PAGE, method = RequestMethod.GET)
+    public String showThankYouPage(HttpServletRequest request) {
+        return SUCCESS_PAGE;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
-    public String getForm(HttpServletRequest request) {
+    public String getForm(HttpServletRequest request, final Model model) {
+        model.addAttribute(C3Constants.TRANSACTION_ID, request.getParameter(C3Constants.TRANSACTION_ID));
+        model.addAttribute(C3Constants.IS_CLAIM, request.getParameter(C3Constants.IS_CLAIM));
         return CURRENT_PAGE;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
-    public String postForm(HttpServletRequest request) {
+    public String postForm(HttpServletRequest request, final Model model) {
         LOG.trace("Starting AsyncSubmittingController.postForm");
         try {
-            final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
-            final String transactionId = (String)session.getAttribute("transactionId");
+            final String transactionId = request.getParameter(C3Constants.TRANSACTION_ID);
             String transactionStatus = transactionIdService.getTransactionStatusById(transactionId);
 
             LOG.info("Checking transaction status:{} for transactionId:{}", transactionStatus, transactionId);
+
+            model.addAttribute(C3Constants.TRANSACTION_ID, transactionId);
+            model.addAttribute(C3Constants.IS_CLAIM, "true".equals(request.getParameter(C3Constants.IS_CLAIM)));
             return processTransactionStatusResponse(transactionStatus);
+        } catch (NoSessionException nse) {
+            return "redirect:" + SUCCESS_PAGE;
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
@@ -66,7 +76,7 @@ public class AsyncSubmittingController {
             return "redirect:" + SUCCESS_PAGE;
         }
         if (SUBMITTED.equals(transactionStatus) || GENERATED.equals(transactionStatus)) {
-            return "redirect:" + CURRENT_PAGE;
+            return CURRENT_PAGE;
         }
         if (SERVICE_UNAVAILABLE.equals(transactionStatus)) {
             return "redirect:" + ERROR_RETRY;

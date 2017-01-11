@@ -21,6 +21,7 @@ import uk.gov.dwp.carersallowance.email.EmailServletResponse;
 import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
@@ -38,7 +39,6 @@ import java.util.Map;
 public class SubmitClaimServiceImpl implements SubmitClaimService {
     private static final Logger LOG = LoggerFactory.getLogger(SubmitClaimServiceImpl.class);
 
-    private static final String TRANSACTION_ID = "transactionId";
     private final RestTemplate restTemplate;
     private final String crUrl;
     private final SessionManager sessionManager;
@@ -73,19 +73,15 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
     }
 
     @Override
-    public void sendClaim(final HttpServletRequest request) throws IOException, InstantiationException, ParserConfigurationException, XPathMappingList.MappingException {
-        final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
-
-        String transactionId = getTransactionId(session);
-        saveTransactionId(transactionId, session);
-
-        String xml = buildClaimXml(session, transactionId);
+    @Async
+    public void sendClaim(final Session session, final String transactionId, final String emailBody) throws IOException, InstantiationException, ParserConfigurationException, XPathMappingList.MappingException {
+        final String xml = buildClaimXml(session, transactionId);
 
         //transactionIdService.insertTransactionStatus(transactionId, "0100", type, thirdParty, circsType, lang, jsEnabled, email, saveForLaterEmail);
         transactionIdService.insertTransactionStatus(transactionId, Status.GENERATED.getStatus(), getClaimType(session), null, null, (String) session.getAttribute("language"), getJsEnabled(session), null, null);
 
-        sendClaim(xml, transactionId, session, getEmailBody(request, session));
-        LOG.info("Sent claim for transactionId :{}", session.getAttribute(TRANSACTION_ID));
+        sendClaim(xml, transactionId, session, emailBody);
+        LOG.info("Sent claim for transactionId :{}", session.getAttribute(C3Constants.TRANSACTION_ID));
     }
 
     private Integer getJsEnabled(final Session session) {
@@ -95,14 +91,23 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
         return JS_DISABLED;
     }
 
+    public Session getSession(final HttpServletRequest request) {
+        return sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
+    }
+
+    public String retrieveTransactionId(final Session session) {
+        final String transactionId = getTransactionId(session);
+        saveTransactionId(transactionId, session);
+        return transactionId;
+    }
+
     private Integer getClaimType(final Session session) {
-        if ("circs".equals(session.getAttribute("key"))) {
+        if (C3Constants.CIRCS.equals(session.getAttribute(C3Constants.KEY))) {
             return CHANGE_CIRCUMSTANCES;
         }
         return FULL_CLAIM;
     }
 
-    @Async
     public void sendClaim(final String xml, final String transactionId, final Session session, final String emailBody) {
         try {
             transactionIdService.setTransactionStatusById(transactionId, Status.SUBMITTED.getStatus());
@@ -178,14 +183,14 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
     }
 
     private void saveTransactionId(final String transactionId, final Session session) {
-        if (session.getAttribute(TRANSACTION_ID) == null) {
-            session.setAttribute(TRANSACTION_ID, transactionId);
+        if (session.getAttribute(C3Constants.TRANSACTION_ID) == null) {
+            session.setAttribute(C3Constants.TRANSACTION_ID, transactionId);
             sessionManager.saveSession(session);
         }
     }
 
     private String getTransactionId(final Session session) {
-        String transactionId = (String) session.getAttribute(TRANSACTION_ID);
+        String transactionId = (String) session.getAttribute(C3Constants.TRANSACTION_ID);
         if (StringUtils.isEmpty(transactionId)) {
             transactionId = transactionIdService.getTransactionId();
         }
@@ -207,13 +212,13 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
     }
 
     //need to get email body before request is overwritten
-    private String getEmailBody(final HttpServletRequest request, final Session session) {
+    public String getEmailBody(final HttpServletRequest request, final Session session) {
         try {
             EmailServletResponse response = new EmailServletResponse();
             response.setContentType("text/html");
             response.setStatus(200);
             setRequestParameters(request, session);
-            request.getRequestDispatcher("/WEB-INF/views/" + (isClaim(session) ? "claim" : "circs") + "Email.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/" + (isClaim(session) ? C3Constants.CLAIM : C3Constants.CIRCS) + "Email.jsp").forward(request, response);
             return response.toString();
         } catch (Exception e) {
             LOG.error("Unable to send email", e);
@@ -223,7 +228,7 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
 
     private void setRequestParameters(final HttpServletRequest request, final Session session) {
         request.setAttribute("isOriginGB", isOriginGB(session));
-        request.setAttribute("isClaim", isClaim(session));
+        request.setAttribute(C3Constants.IS_CLAIM, isClaim(session));
         request.setAttribute("isEmployedByEmployer", isEmployedByEmployer(session));
         request.setAttribute("isEmployment", isEmployment(session));
         request.setAttribute("isSelfEmployed", isSelfEmployed(session));
@@ -243,27 +248,27 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
     }
 
     private String versionSchemaTransactionInfo(final Session session) {
-        return session.getAttribute("appVersion") + " / " + session.getAttribute("xmlVersion") + " / " +  session.getAttribute(TRANSACTION_ID);
+        return session.getAttribute("appVersion") + " / " + session.getAttribute("xmlVersion") + " / " +  session.getAttribute(C3Constants.TRANSACTION_ID);
     }
 
     private Boolean pensionStatementsRequired(final Session session) {
-        return "yes".equals(session.getAttribute("selfEmployedPayPensionScheme")) || "yes".equals(session.getAttribute("payPensionScheme"));
+        return C3Constants.YES.equals(session.getAttribute("selfEmployedPayPensionScheme")) || C3Constants.YES.equals(session.getAttribute("payPensionScheme"));
     }
 
     private Boolean hasStatutoryPay(final Session session) {
-        return "yes".equals(session.getAttribute("yourIncome_patmatadoppay"));
+        return C3Constants.YES.equals(session.getAttribute("yourIncome_patmatadoppay"));
     }
 
     private Boolean hasStatutorySickPay(final Session session) {
-        return "yes".equals(session.getAttribute("yourIncome_sickpay"));
+        return C3Constants.YES.equals(session.getAttribute("yourIncome_sickpay"));
     }
 
     private Boolean isCofcFinishedEmployment(final Session session) {
-        return "yes".equals(session.getAttribute("circsEmploymentFinished"));
+        return C3Constants.YES.equals(session.getAttribute("circsEmploymentFinished"));
     }
 
     private Boolean isCofcSelfEmployment(final Session session) {
-        return "yes".equals(session.getAttribute("circsSelfEmployment"));
+        return C3Constants.YES.equals(session.getAttribute("circsSelfEmployment"));
     }
 
     private Boolean isEmployment(final Session session) {
@@ -271,19 +276,19 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
     }
 
     private Boolean isClaimEmployment(final Session session) {
-        return "yes".equals(getEmployment(session)) || "yes".equals(getSelfEmployment(session));
+        return C3Constants.YES.equals(getEmployment(session)) || C3Constants.YES.equals(getSelfEmployment(session));
     }
 
     private Boolean isEmployedByEmployer(final Session session) {
-        return "yes".equals(getEmployment(session));
+        return C3Constants.YES.equals(getEmployment(session));
     }
 
     private Boolean isSelfEmployed(final Session session) {
-        return "yes".equals(getSelfEmployment(session));
+        return C3Constants.YES.equals(getSelfEmployment(session));
     }
 
     private Boolean isCircsEmployment(final Session session) {
-        return "yes".equals(session.getAttribute("circsEmployed"));
+        return C3Constants.YES.equals(session.getAttribute("circsEmployed"));
     }
 
     private String getSelfEmployment(final Session session) {
@@ -294,7 +299,7 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
         return (String)session.getAttribute("beenEmployedSince6MonthsBeforeClaim");
     }
 
-    private Boolean isClaim(final Session session) {
-        return "claim".equals(session.getAttribute("key"));
+    public Boolean isClaim(final Session session) {
+        return C3Constants.CLAIM.equals(session.getAttribute(C3Constants.KEY));
     }
 }

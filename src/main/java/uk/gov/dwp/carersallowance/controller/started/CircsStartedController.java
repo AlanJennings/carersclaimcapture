@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultChangeOfCircsController;
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 import uk.gov.dwp.carersallowance.xml.XmlClaimReader;
 
 import javax.inject.Inject;
@@ -58,7 +59,7 @@ public class CircsStartedController {
         LOG.info("circsReplicaEnabledProperty = " + circsReplicaEnabledProperty);
         LOG.info("circsReplicaDataFileProperty = " + circsReplicaDataFileProperty);
 
-        defaultChangeOfCircsController.createSessionVariables(request, response, getReplicateDataFile(), xmlMappingFile, xmlSchemaVersion, "circs");
+        defaultChangeOfCircsController.createSessionVariables(request, response, getReplicateDataFile(), xmlMappingFile, xmlSchemaVersion, C3Constants.CIRCS);
         if (ORIGIN_NI.equals(originTag)) {
             defaultChangeOfCircsController.getForm(request, model);
             return CURRENT_CIRCS_PAGE;

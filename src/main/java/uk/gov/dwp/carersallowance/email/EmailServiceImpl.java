@@ -9,6 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import uk.gov.dwp.carersallowance.database.TransactionIdService;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 
 import javax.inject.Inject;
 import javax.mail.Message;
@@ -61,13 +62,13 @@ public class EmailServiceImpl implements EmailService {
     }
 
     private void sendCircsEmail(final Session session, final String transactionId, final String emailBody) throws Exception {
-        final Boolean isWelshCommunication = "yes".equals(session.getAttribute("welshCommunication"));
+        final Boolean isWelshCommunication = C3Constants.YES.equals(session.getAttribute("welshCommunication"));
         final String subject = messageSource.getMessage("subject.cofc", null, null, Locale.getDefault());
         send(transactionId, subject, getEmailAddress(session), emailBody);
     }
 
     private void sendClaimEmail(final Session session, final String transactionId, final String emailBody) throws Exception {
-        final Boolean isWelshCommunication = "yes".equals(session.getAttribute("welshCommunication"));
+        final Boolean isWelshCommunication = C3Constants.YES.equals(session.getAttribute("welshCommunication"));
         final String subject = claimEmailSubject(session, isWelshCommunication);
         send(transactionId, subject, getEmailAddress(session), emailBody);
     }
@@ -90,11 +91,11 @@ public class EmailServiceImpl implements EmailService {
     }
 
     private Boolean hasSelfEmploymentPensionsAndExpenses(final Session session) {
-        return "yes".equals(session.getAttribute("selfEmployedPayPensionScheme"));
+        return C3Constants.YES.equals(session.getAttribute("selfEmployedPayPensionScheme"));
     }
 
     private Boolean isClaimEmployment(final Session session) {
-        if ("yes".equals(getEmployment(session)) || "yes".equals(getSelfEmployment(session))) {
+        if (C3Constants.YES.equals(getEmployment(session)) || C3Constants.YES.equals(getSelfEmployment(session))) {
             return true;
         }
         return false;
@@ -121,6 +122,6 @@ public class EmailServiceImpl implements EmailService {
     }
 
     private Boolean isClaim(final Session session) {
-        return "claim".equals(session.getAttribute("key"));
+        return C3Constants.CLAIM.equals(session.getAttribute(C3Constants.KEY));
     }
 }

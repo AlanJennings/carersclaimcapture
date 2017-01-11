@@ -63,7 +63,7 @@ public class FosteringAllowanceController extends AbstractFormController {
 //        }
 //
 //        validateMandatoryField(fieldValues, "fosteringAllowanceStillBeingPaidThisPay");
-//        if(fieldValue_Equals(fieldValues, "fosteringAllowanceStillBeingPaidThisPay", "no")) {
+//        if(fieldValue_Equals(fieldValues, "fosteringAllowanceStillBeingPaidThisPay", C3Constants.NO)) {
 //            validateMandatoryDateField(fieldValues, "fosteringAllowanceWhenDidYouLastGetPaid");
 //        }
 //

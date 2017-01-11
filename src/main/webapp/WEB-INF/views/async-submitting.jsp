@@ -7,16 +7,20 @@
 
 <t:mainPage pageTitle="async.submitting.title">
     <t:pageContent>
+        transactionId:${transactionId}
+        isClaim:${isClaim}
+        <input type="hidden" name="${cads:encrypt("transactionId")}" value="${transactionId}"/>
+        <input type="hidden" name="${cads:encrypt("isClaim")}" value="${isClaim}"/>
         <section id="jswrapper" hidden="true" class="carers-container">
             <h1 class="form-title heading-large">
-                <c:if test="${isClaim = true}"><t:message code="async.submitting.help1" /></c:if>
-                <c:if test="${isClaim = false}"><t:message code="async.submitting.help1.circs" /></c:if>
+                <c:if test="${isClaim}"><t:message code="async.submitting.help1" /></c:if>
+                <c:if test="${!isClaim}"><t:message code="async.submitting.help1.circs" /></c:if>
                 <span id="dots"></span>
             </h1>
             <div class="prompt submitting">
                 <p>
-                    <c:if test="${isClaim = true}"><t:message code="async.submitting.help2" /></c:if>
-                    <c:if test="${isClaim = false}"><t:message code="async.submitting.help2.circs" /></c:if>
+                    <c:if test="${isClaim}"><t:message code="async.submitting.help2" /></c:if>
+                    <c:if test="${!isClaim}"><t:message code="async.submitting.help2.circs" /></c:if>
                 </p>
                 <p><t:message code="async.submitting.help3" /></p>
             </div>
@@ -27,8 +31,8 @@
             <div class="prompt submitting">
                 <p><t:message code="async.submitting.refresh1" /></p>
                 <p>
-                    <c:if test="${isClaim = true}"><t:message code="async.submitting.refresh2" /></c:if>
-                    <c:if test="${isClaim = false}"><t:message code="async.submitting.refresh2.circs" /></c:if>
+                    <c:if test="${isClaim}"><t:message code="async.submitting.refresh2" /></c:if>
+                    <c:if test="${!isClaim}"><t:message code="async.submitting.refresh2.circs" /></c:if>
                 </p>
             </div>
 

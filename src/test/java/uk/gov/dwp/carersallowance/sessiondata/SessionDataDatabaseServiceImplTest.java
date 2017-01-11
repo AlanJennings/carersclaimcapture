@@ -9,6 +9,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.dwp.carersallowance.session.NoSessionException;
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyString;
@@ -59,7 +60,7 @@ public class SessionDataDatabaseServiceImplTest {
     public void testCreateSessionData() throws Exception {
         final ResponseEntity<String> response = new ResponseEntity("", HttpStatus.OK);
         when(restTemplate.exchange(anyString(), Mockito.<HttpMethod> any(), Mockito.<HttpEntity<String>> any(), Mockito.<Class<String>> any())).thenReturn(response);
-        Session session = sessionDataDatabaseServiceImpl.createSessionData("8a20d772-b998-486d-ba05-fd3ef75d4fd2", "claim");
+        Session session = sessionDataDatabaseServiceImpl.createSessionData("8a20d772-b998-486d-ba05-fd3ef75d4fd2", C3Constants.CLAIM);
         assertThat(session.getSessionId(), is("8a20d772-b998-486d-ba05-fd3ef75d4fd2"));
     }
 

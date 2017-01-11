@@ -1,11 +1,14 @@
 package uk.gov.dwp.carersallowance.configuration;
 
 import java.util.Locale;
+import java.util.concurrent.Executor;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -20,12 +23,18 @@ import org.springframework.web.servlet.view.JstlView;
 import uk.gov.dwp.carersallowance.handler.FilteredRequestMappingHandlerMapping;
 
 @EnableWebMvc
+@EnableAsync
 @Configuration
 @ComponentScan(basePackages = {"uk.gov.dwp.carersallowance", "gov.dwp.carers"})
 public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void configureDefaultServletHandling(final DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
+    }
+
+    @Bean
+    public Executor taskExecutor() {
+        return new SimpleAsyncTaskExecutor();
     }
 
     @Override

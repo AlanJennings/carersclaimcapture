@@ -1,9 +1,11 @@
 package uk.gov.dwp.carersallowance.xml;
 
+import uk.gov.dwp.carersallowance.utils.C3Constants;
+
 public class AssistedDecisionConstants {
     public static final int FIFTEENYEARSAND9MONTHS=15*12+9;
-    public static final String YESANSWER = "yes";
-    public static final String NOANSWER = "no";
+    public static final String YESANSWER = C3Constants.YES;
+    public static final String NOANSWER = C3Constants.NO;
     public static final String QBPIP = "PIP";
     public static final String QBAFIP = "AFIP";
     public static final String BRITISH = "British";

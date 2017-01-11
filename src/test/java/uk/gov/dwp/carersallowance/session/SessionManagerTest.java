@@ -13,6 +13,7 @@ import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionServiceImpl;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
 import uk.gov.dwp.carersallowance.sessiondata.SessionDataFactory;
 import uk.gov.dwp.carersallowance.sessiondata.SessionDataMapServiceImpl;
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -65,7 +66,7 @@ public class SessionManagerTest {
         when(cookieManager.getApplicationVersionNumber()).thenReturn("3.15");
         mappingFileURL = SessionManager.class.getClassLoader().getResource(XML_MAPPING_FILE);
         session = new Session("1234");
-        session.setAttribute("key", "claim");
+        session.setAttribute(C3Constants.KEY, C3Constants.CLAIM);
         sessionDataService = new SessionDataMapServiceImpl();
         claimEncryptionService = new ClaimEncryptionServiceImpl(false, messageSource);
         when(sessionDataFactory.getSessionDataService()).thenReturn(sessionDataService);
@@ -75,26 +76,26 @@ public class SessionManagerTest {
 
     @Test
     public void testGetSession() throws Exception {
-        session = sessionDataService.createSessionData("1234", "claim");
+        session = sessionDataService.createSessionData("1234", C3Constants.CLAIM);
         final Session session1 = sessionManager.getSession("1234");
         org.assertj.core.api.Assertions.assertThat(session1).isEqualToComparingFieldByField(session);
     }
 
     @Test
     public void testCreateSession() throws Exception {
-        org.assertj.core.api.Assertions.assertThat(sessionManager.createSession("1234", "claim")).isEqualToComparingFieldByField(session);
+        org.assertj.core.api.Assertions.assertThat(sessionManager.createSession("1234", C3Constants.CLAIM)).isEqualToComparingFieldByField(session);
     }
 
     @Test(expected = NoSessionException.class)
     public void testRemoveSession() throws Exception {
-        sessionDataService.createSessionData("1234", "claim");
+        sessionDataService.createSessionData("1234", C3Constants.CLAIM);
         sessionManager.removeSession("1234");
         sessionDataService.getSessionData("1234");
     }
 
     @Test
     public void testCreateSessionVariables() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, "0.27", "claim");
+        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, "0.27", C3Constants.CLAIM);
         verify(cookieManager, times(1)).addGaCookie(request, response);
         verify(cookieManager, times(1)).addSessionCookie(Matchers.any(HttpServletResponse.class), anyString());
         verify(cookieManager, times(1)).addVersionCookie(response);
@@ -113,7 +114,7 @@ public class SessionManagerTest {
     @Test
     public void testSaveSession() throws Exception {
         final String sessionId = "1234";
-        final Session session1 = sessionDataService.createSessionData("1234", "claim");
+        final Session session1 = sessionDataService.createSessionData("1234", C3Constants.CLAIM);
         session1.setAttribute("test", "test2");
         sessionManager.saveSession(session1);
         org.assertj.core.api.Assertions.assertThat(session1).isEqualToComparingFieldByField(sessionManager.getSession(sessionId));
@@ -121,18 +122,18 @@ public class SessionManagerTest {
 
     @Test
     public void testLoadDefaultData() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml", mappingFileURL, "0.27", "claim");
+        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml", mappingFileURL, "0.27", C3Constants.CLAIM);
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
         session = sessionManager.getSession(sessionId);
-        assertThat(session.getAttribute("over35HoursAWeek"), is("yes"));
-        assertThat(session.getAttribute("over16YearsOld"), is("yes"));
+        assertThat(session.getAttribute("over35HoursAWeek"), is(C3Constants.YES));
+        assertThat(session.getAttribute("over16YearsOld"), is(C3Constants.YES));
         assertThat(session.getAttribute("originCountry"), is("GB"));
     }
 
     @Test
     public void testLoadClaimDate() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml", mappingFileURL, "0.27", "claim");
+        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml", mappingFileURL, "0.27", C3Constants.CLAIM);
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
         session = sessionManager.getSession(sessionId);
@@ -143,7 +144,7 @@ public class SessionManagerTest {
 
     @Test
     public void testLoadReplicaData() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, "0.27", "claim");
+        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, "0.27", C3Constants.CLAIM);
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
         session = sessionManager.getSession(sessionId);
@@ -162,7 +163,7 @@ public class SessionManagerTest {
 
     @Test
     public void testXmlVersionOverwritesReplicaData() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, "XXX", "claim");
+        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, "XXX", C3Constants.CLAIM);
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
         session = sessionManager.getSession(sessionId);

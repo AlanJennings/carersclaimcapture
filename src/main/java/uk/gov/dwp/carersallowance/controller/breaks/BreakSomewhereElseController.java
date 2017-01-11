@@ -17,6 +17,7 @@ import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.transformations.TransformationManager;
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 
 /**
  * A new empty care break has an index of -1;
@@ -93,7 +94,7 @@ public class BreakSomewhereElseController extends AbstractFormController {
 
         getLegacyValidation().validateMandatoryDateField(fieldValues, "careeSomewhereElseStartDate");
         getLegacyValidation().validateMandatoryField(fieldValues, "careeSomewhereElseEndedTime");
-        if(getLegacyValidation().fieldValue_Equals(fieldValues, "careeSomewhereElseEndedTime", "yes")) {
+        if(getLegacyValidation().fieldValue_Equals(fieldValues, "careeSomewhereElseEndedTime", C3Constants.YES)) {
             getLegacyValidation().validateMandatoryDateField(fieldValues, "careeSomewhereElseEndDate");
         }
 

@@ -18,6 +18,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMapping;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
 import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
@@ -158,7 +159,7 @@ public class XmlClaimReader {
             } else {
                 LOG.info("XmlClaim adding string:" + key + "->" + data);
                 // TODO Fixup case on yes / no to be consistent between claim and webapp
-                values.put(key, data.replace("No", "no").replace("Yes", "yes"));
+                values.put(key, data.replace("No", C3Constants.NO).replace("Yes", C3Constants.YES));
             }
         }
     }

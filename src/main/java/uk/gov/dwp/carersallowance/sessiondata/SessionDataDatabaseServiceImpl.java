@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.dwp.carersallowance.session.NoSessionException;
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 import utils.XorEncryption;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
@@ -57,7 +58,7 @@ public class SessionDataDatabaseServiceImpl implements SessionDataService {
     @Override
     public Session createSessionData(final String sessionId, final String claimType) {
         final Session session = new Session(sessionId);
-        session.setAttribute("key", claimType);
+        session.setAttribute(C3Constants.KEY, claimType);
         return saveSessionData(session);
     }
 

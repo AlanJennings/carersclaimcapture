@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
 import uk.gov.dwp.carersallowance.xml.XmlBuilder;
 import uk.gov.dwp.carersallowance.xml.XmlClaimReader;
@@ -76,7 +77,7 @@ public class XmlClaimReaderTest {
         for (String name : values.keySet()) {
             LOG.debug("VALUE:{}=>{}\n", name, values.get(name));
         }
-        assertThat(sessionValues.get("thirdParty"), is("no"));
+        assertThat(sessionValues.get("thirdParty"), is(C3Constants.NO));
         assertThat(sessionValues.get("nameAndOrganisation"), is("Jenny Bloggs Preston carers"));
     }
 }

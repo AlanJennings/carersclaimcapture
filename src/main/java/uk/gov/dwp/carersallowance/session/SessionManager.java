@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 import uk.gov.dwp.carersallowance.xml.XmlBuilder;
 import uk.gov.dwp.carersallowance.xml.XmlClaimReader;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
@@ -97,9 +98,9 @@ public class SessionManager {
                 LOG.info("Replica setting data for name:" + name + " to:" + values.get(name));
                 session.setAttribute(name, values.get(name));
             }
-            session.removeAttribute("transactionId");
-            session.setAttribute("over35HoursAWeek", "yes");
-            session.setAttribute("over16YearsOld", "yes");
+            session.removeAttribute(C3Constants.TRANSACTION_ID);
+            session.setAttribute("over35HoursAWeek", C3Constants.YES);
+            session.setAttribute("over16YearsOld", C3Constants.YES);
             session.setAttribute("originCountry", "GB");
         } catch (Exception e) {
             LOG.error("Exception loading replica data {}", e.toString(), e);

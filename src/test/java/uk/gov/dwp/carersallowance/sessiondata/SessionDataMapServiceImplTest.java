@@ -3,6 +3,7 @@ package uk.gov.dwp.carersallowance.sessiondata;
 import org.junit.Before;
 import org.junit.Test;
 import uk.gov.dwp.carersallowance.session.NoSessionException;
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.*;
@@ -21,7 +22,7 @@ public class SessionDataMapServiceImplTest {
 
     @Test
     public void testCreateAndGetSessionData() throws Exception {
-        sessionDataMapServiceImpl.createSessionData("1234", "claim");
+        sessionDataMapServiceImpl.createSessionData("1234", C3Constants.CLAIM);
         Session session = sessionDataMapServiceImpl.getSessionData("1234");
         assertThat(session, is(notNullValue()));
         assertThat(session.getSessionId(), is("1234"));
@@ -36,7 +37,7 @@ public class SessionDataMapServiceImplTest {
 
     @Test(expected = NoSessionException.class)
     public void testRemoveSessionData() throws Exception {
-        Session session = sessionDataMapServiceImpl.createSessionData("1234", "claim");
+        Session session = sessionDataMapServiceImpl.createSessionData("1234", C3Constants.CLAIM);
         org.assertj.core.api.Assertions.assertThat(sessionDataMapServiceImpl.getSessionData("1234")).isEqualToComparingFieldByField(session);
         sessionDataMapServiceImpl.removeSessionData("1234");
         sessionDataMapServiceImpl.getSessionData("1234");

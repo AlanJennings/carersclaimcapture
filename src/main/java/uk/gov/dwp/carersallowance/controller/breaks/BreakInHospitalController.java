@@ -94,7 +94,7 @@ public class BreakInHospitalController extends AbstractFormController {
 //            validateMandatoryDateField(fieldValues, "hospitalBreakCarerHospitalStartDate");
 //            validateMandatoryField(fieldValues, "hospitalBreakCarerHospitalStayEnded");
 //
-//            if(fieldValue_Equals(fieldValues, "hospitalBreakCarerHospitalStayEnded", "yes")) {
+//            if(fieldValue_Equals(fieldValues, "hospitalBreakCarerHospitalStayEnded", C3Constants.YES)) {
 //                validateMandatoryDateField(fieldValues, "hospitalBreakCarerHospitalEndDate");
 //            }
 //        }
@@ -103,7 +103,7 @@ public class BreakInHospitalController extends AbstractFormController {
 //            validateMandatoryDateField(fieldValues, "hospitalBreakCareeHospitalStartDate");
 //            validateMandatoryField(fieldValues, "hospitalBreakCareeHospitalStayEnded");
 //
-//            if(fieldValue_Equals(fieldValues, "hospitalBreakCareeHospitalStayEnded", "yes")) {
+//            if(fieldValue_Equals(fieldValues, "hospitalBreakCareeHospitalStayEnded", C3Constants.YES)) {
 //                validateMandatoryDateField(fieldValues, "hospitalBreakCareeHospitalEndDate");
 //                validateMandatoryField(fieldValues, "hospitalBreakCareeHospitalCarerStillCaring");
 //            }

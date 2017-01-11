@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMeth
 import uk.gov.dwp.carersallowance.session.*;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
 import uk.gov.dwp.carersallowance.transformations.TransformationManager;
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 import uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 import uk.gov.dwp.carersallowance.validations.FormValidations;
@@ -556,11 +557,11 @@ public class AbstractFormController {
     }
 
     public static Boolean getYesNoBooleanFieldValue(HttpServletRequest request, String fieldName) {
-        return getBooleanFieldValue(fieldName, "yes", "no", request.getParameterValues(fieldName));
+        return getBooleanFieldValue(fieldName, C3Constants.YES, C3Constants.NO, request.getParameterValues(fieldName));
     }
 
     public static Boolean getYesNoBooleanFieldValue(Session session, String fieldName) {
-        return getBooleanFieldValue(fieldName, "yes", "no", getSessionStringAttribute(session, fieldName));
+        return getBooleanFieldValue(fieldName, C3Constants.YES, C3Constants.NO, getSessionStringAttribute(session, fieldName));
     }
 
     public static String[] getSessionStringAttribute(Session session, String fieldName) {

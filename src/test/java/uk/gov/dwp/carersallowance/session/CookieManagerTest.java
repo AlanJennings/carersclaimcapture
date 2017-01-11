@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +34,7 @@ public class CookieManagerTest {
 
     @Before
     public void setUp() throws Exception {
-        cookieManager = new CookieManager(90, "_ga", "claim", 90, "GA1.1", 90, "4.02-SNAPSHOT", "C3Version");
+        cookieManager = new CookieManager(90, "_ga", C3Constants.CLAIM, 90, "GA1.1", 90, "4.02-SNAPSHOT", "C3Version");
         cookieCaptor = ArgumentCaptor.forClass(Cookie.class);
     }
 
@@ -56,7 +57,7 @@ public class CookieManagerTest {
     public void testAddSessionCookie() throws Exception {
         cookieManager.addSessionCookie(response, "1234");
         verify(response, times(1)).addCookie(cookieCaptor.capture());
-        assertThat("claim", is(cookieCaptor.getAllValues().get(0).getName()));
+        assertThat(C3Constants.CLAIM, is(cookieCaptor.getAllValues().get(0).getName()));
         assertThat("1234", is(cookieCaptor.getAllValues().get(0).getValue()));
     }
 }

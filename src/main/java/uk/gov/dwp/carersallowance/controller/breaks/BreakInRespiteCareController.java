@@ -17,6 +17,7 @@ import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.transformations.TransformationManager;
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 
 /**
  * A new empty care break has an index of -1;
@@ -97,7 +98,7 @@ public class BreakInRespiteCareController extends AbstractFormController {
             getLegacyValidation().validateMandatoryDateField(fieldValues, "respiteBreakCarerRespiteStartDate");
             getLegacyValidation().validateMandatoryField(fieldValues, "respiteBreakCarerRespiteStayEnded");
 
-            if(getLegacyValidation().fieldValue_Equals(fieldValues, "respiteBreakCarerRespiteStayEnded", "yes")) {
+            if(getLegacyValidation().fieldValue_Equals(fieldValues, "respiteBreakCarerRespiteStayEnded", C3Constants.YES)) {
                 getLegacyValidation().validateMandatoryDateField(fieldValues, "respiteBreakCarerRespiteEndDate");
                 getLegacyValidation().validateMandatoryField(fieldValues, "respiteBreakCarerRespiteStayMedicalCare");
             }
@@ -107,7 +108,7 @@ public class BreakInRespiteCareController extends AbstractFormController {
             getLegacyValidation().validateMandatoryDateField(fieldValues, "respiteBreakCareeRespiteStartDate");
             getLegacyValidation().validateMandatoryField(fieldValues, "respiteBreakCareeRespiteStayEnded");
 
-            if(getLegacyValidation().fieldValue_Equals(fieldValues, "respiteBreakCareeRespiteStayEnded", "yes")) {
+            if(getLegacyValidation().fieldValue_Equals(fieldValues, "respiteBreakCareeRespiteStayEnded", C3Constants.YES)) {
                 getLegacyValidation().validateMandatoryDateField(fieldValues, "respiteBreakCareeRespiteEndDate");
                 getLegacyValidation().validateMandatoryField(fieldValues, "respiteBreakCareeRespiteStayMedicalCare");
                 getLegacyValidation().validateMandatoryField(fieldValues, "respiteBreakCareeRespiteCarerStillCaring");

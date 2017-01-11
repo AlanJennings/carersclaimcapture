@@ -58,7 +58,7 @@ public class SickPayController extends AbstractFormController {
 //        LOG.trace("Starting BenefitsController.validate");
 //
 //        validateMandatoryField(fieldValues, "sickPayStillBeingPaidThisPay");
-//        if(fieldValue_Equals(fieldValues, "sickPayStillBeingPaidThisPay", "no")) {
+//        if(fieldValue_Equals(fieldValues, "sickPayStillBeingPaidThisPay", C3Constants.NO)) {
 //            validateMandatoryDateField(fieldValues, "sickPayWhenDidYouLastGetPaid");
 //        }
 //

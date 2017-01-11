@@ -9,11 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import uk.gov.dwp.carersallowance.sessiondata.Session;
 import uk.gov.dwp.carersallowance.submission.SubmitClaimService;
 
+import uk.gov.dwp.carersallowance.utils.C3Constants;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList.MappingException;
 
 /**
@@ -40,19 +43,26 @@ public class SubmitClaimController {
      * This allows an easy to submit route, but is only temporary.
      */
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
-    public String getForm(final HttpServletRequest request) {
-        return postForm(request);
+    public String getForm(final HttpServletRequest request, final Model model) {
+        return postForm(request, model);
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
-    public String postForm(final HttpServletRequest request) {
+    public String postForm(final HttpServletRequest request, final Model model) {
 
         LOG.trace("Starting SubmitClaimController.postForm");
         try {
             LOG.debug("request.getParameterMap() = {}", request.getParameterMap()); // log these jsut in case
 
-            submitClaimService.sendClaim(request);
+            final Session session = submitClaimService.getSession(request);
+            final String transactionId = submitClaimService.retrieveTransactionId(session);
+
+            LOG.info("Sending claim");
+            submitClaimService.sendClaim(session, transactionId, submitClaimService.getEmailBody(request, session));
             LOG.info("Sent claim");
+
+            model.addAttribute(C3Constants.TRANSACTION_ID, transactionId);
+            model.addAttribute(C3Constants.IS_CLAIM, submitClaimService.isClaim(session));
 
             return "redirect:" + SUCCESS_PAGE;
         } catch(IOException | InstantiationException | ParserConfigurationException | MappingException e) {

@@ -58,12 +58,12 @@ public class SelfEmployedPensionAndExpensesController extends AbstractFormContro
 //        LOG.trace("Starting BenefitsController.validate");
 //
 //        validateMandatoryField(fieldValues, "selfEmployedPayPensionScheme");
-//        if(fieldValue_Equals(fieldValues, "selfEmployedPayPensionScheme", "yes")) {
+//        if(fieldValue_Equals(fieldValues, "selfEmployedPayPensionScheme", C3Constants.YES)) {
 //            validateMandatoryField(fieldValues, "selfEmployedPayPensionSchemeText");
 //        }
 //
 //        validateMandatoryField(fieldValues, "selfEmployedHaveExpensesForJob");
-//        if(fieldValue_Equals(fieldValues, "selfEmployedHaveExpensesForJob", "yes")) {
+//        if(fieldValue_Equals(fieldValues, "selfEmployedHaveExpensesForJob", C3Constants.YES)) {
 //            validateMandatoryField(fieldValues, "selfEmployedHaveExpensesForJobText");
 //        }
 //

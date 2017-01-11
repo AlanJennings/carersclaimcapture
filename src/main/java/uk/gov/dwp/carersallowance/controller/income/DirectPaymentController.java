@@ -59,7 +59,7 @@ public class DirectPaymentController extends AbstractFormController {
 //        LOG.trace("Starting BenefitsController.validate");
 //
 //        validateMandatoryField(fieldValues, "directPaymentStillBeingPaidThisPay");
-//        if(fieldValue_Equals(fieldValues, "directPaymentStillBeingPaidThisPay", "no")) {
+//        if(fieldValue_Equals(fieldValues, "directPaymentStillBeingPaidThisPay", C3Constants.NO)) {
 //            validateMandatoryDateField(fieldValues, "directPaymentWhenDidYouLastGetPaid");
 //        }
 //
