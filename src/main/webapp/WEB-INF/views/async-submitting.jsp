@@ -7,8 +7,6 @@
 
 <t:mainPage pageTitle="async.submitting.title">
     <t:pageContent>
-        transactionId:${transactionId}
-        isClaim:${isClaim}
         <input type="hidden" name="${cads:encrypt("transactionId")}" value="${transactionId}"/>
         <input type="hidden" name="${cads:encrypt("isClaim")}" value="${isClaim}"/>
         <section id="jswrapper" hidden="true" class="carers-container">
