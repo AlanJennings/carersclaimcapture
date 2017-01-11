@@ -44,8 +44,8 @@ public class AsyncSubmittingController {
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
     public String getForm(HttpServletRequest request, final Model model) {
-        model.addAttribute(C3Constants.TRANSACTION_ID, request.getParameter(C3Constants.TRANSACTION_ID));
-        model.addAttribute(C3Constants.IS_CLAIM, request.getParameter(C3Constants.IS_CLAIM));
+        request.setAttribute(C3Constants.TRANSACTION_ID, request.getParameter(C3Constants.TRANSACTION_ID));
+        request.setAttribute(C3Constants.IS_CLAIM, request.getParameter(C3Constants.IS_CLAIM));
         return CURRENT_PAGE;
     }
 
@@ -58,8 +58,8 @@ public class AsyncSubmittingController {
 
             LOG.info("Checking transaction status:{} for transactionId:{}", transactionStatus, transactionId);
 
-            model.addAttribute(C3Constants.TRANSACTION_ID, transactionId);
-            model.addAttribute(C3Constants.IS_CLAIM, "true".equals(request.getParameter(C3Constants.IS_CLAIM)));
+            request.setAttribute(C3Constants.TRANSACTION_ID, transactionId);
+            request.setAttribute(C3Constants.IS_CLAIM, "true".equals(request.getParameter(C3Constants.IS_CLAIM)));
             return processTransactionStatusResponse(transactionStatus);
         } catch (NoSessionException nse) {
             return "redirect:" + SUCCESS_PAGE;

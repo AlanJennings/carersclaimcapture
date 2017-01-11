@@ -11,4 +11,5 @@ public class C3Constants {
     public static final String NO = "no";
     public static final String CLAIM = "claim";
     public static final String CIRCS = "circs";
+    public static final String TRUE = "true";
 }

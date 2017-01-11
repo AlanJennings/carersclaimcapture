@@ -59,7 +59,7 @@ public class SessionDataDatabaseServiceImpl implements SessionDataService {
     public Session createSessionData(final String sessionId, final String claimType) {
         final Session session = new Session(sessionId);
         session.setAttribute(C3Constants.KEY, claimType);
-        return saveSessionData(session);
+        return session;
     }
 
     @Override

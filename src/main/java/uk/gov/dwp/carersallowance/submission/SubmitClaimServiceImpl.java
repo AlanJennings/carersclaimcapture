@@ -43,7 +43,6 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
     private final String crUrl;
     private final SessionManager sessionManager;
     private final TransactionIdService transactionIdService;
-    private final ClaimEncryptionService claimEncryptionService;
     private final MessageSource messageSource;
     private final Counters counters;
     private final EmailService emailService;
@@ -58,7 +57,6 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
                                   @Value("${cr.url}") final String crUrl,
                                   final SessionManager sessionManager,
                                   final TransactionIdService transactionIdService,
-                                  final ClaimEncryptionService claimEncryptionService,
                                   final MessageSource messageSource,
                                   final Counters counters,
                                   final EmailService emailService) {
@@ -66,7 +64,6 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
         this.crUrl = crUrl;
         this.sessionManager = sessionManager;
         this.transactionIdService = transactionIdService;
-        this.claimEncryptionService = claimEncryptionService;
         this.messageSource = messageSource;
         this.counters = counters;
         this.emailService = emailService;
@@ -167,8 +164,6 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
      */
     private String buildClaimXml(final Session session, final String transactionId) throws IOException, InstantiationException, ParserConfigurationException, XPathMappingList.MappingException {
         Parameters.validateMandatoryArgs(session, "session");
-
-        claimEncryptionService.encryptClaim(session);
 
         Map<String, Object> sessionMap = new HashMap<>(session.getData());
 

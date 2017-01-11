@@ -81,11 +81,6 @@ public class SessionManagerTest {
         org.assertj.core.api.Assertions.assertThat(session1).isEqualToComparingFieldByField(session);
     }
 
-    @Test
-    public void testCreateSession() throws Exception {
-        org.assertj.core.api.Assertions.assertThat(sessionManager.createSession("1234", C3Constants.CLAIM)).isEqualToComparingFieldByField(session);
-    }
-
     @Test(expected = NoSessionException.class)
     public void testRemoveSession() throws Exception {
         sessionDataService.createSessionData("1234", C3Constants.CLAIM);

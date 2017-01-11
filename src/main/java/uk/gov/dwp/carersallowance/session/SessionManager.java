@@ -52,7 +52,7 @@ public class SessionManager {
         return claimEncryptionService.decryptClaim(sessionDataFactory.getSessionDataService().getSessionData(sessionId));
     }
 
-    public Session createSession(final String sessionId, final String claimType) {
+    private Session createSession(final String sessionId, final String claimType) {
         return sessionDataFactory.getSessionDataService().createSessionData(sessionId, claimType);
     }
 
@@ -81,6 +81,7 @@ public class SessionManager {
         session.setAttribute("xmlVersion", xmlSchemaVersion);
         session.setAttribute("originTag", originTag);
         session.setAttribute("appVersion", cookieManager.getApplicationVersionNumber());
+        sessionDataFactory.getSessionDataService().saveSessionData(session);
     }
 
     private void loadReplicaData(Session session, final String xmlFile, final URL mappingFile) {
@@ -105,7 +106,6 @@ public class SessionManager {
         } catch (Exception e) {
             LOG.error("Exception loading replica data {}", e.toString(), e);
         }
-        saveSession(session);
     }
 
     public String getSessionIdFromCookie(final HttpServletRequest request) {

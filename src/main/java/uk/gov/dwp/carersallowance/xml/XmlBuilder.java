@@ -26,6 +26,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import uk.gov.dwp.carersallowance.jsp.Functions;
 import uk.gov.dwp.carersallowance.session.IllegalFieldValueException;
 import uk.gov.dwp.carersallowance.utils.C3Constants;
 import uk.gov.dwp.carersallowance.utils.Parameters;
@@ -159,17 +160,17 @@ public class XmlBuilder {
                 } else {
                     throw new IllegalFieldValueException("Unsupported value class: " + value.getClass().getName(), (String) null, (String[]) null);
                 }
-            } else if (valueKey != null && valueKey.endsWith(".label")) {
+            } else if (valueKey != null && (valueKey.endsWith(".label") || valueKey.endsWith(".text"))) {
                 LOG.debug("Checking QuestionLabel:{}", valueKey);
-                String question = getQuestion(valueKey, null);
-                String relatedAnswerKey = valueKey.replace(".label", "");
+                String question = getQuestion(valueKey, values);
+                String relatedAnswerKey = valueKey.replace(".label", "").replace(".text", "");
                 // If we have a corresponding Answer and value set for this QuestionLabel then we add to xml
                 if (valuesByValueKey.containsKey(relatedAnswerKey)) {
                     LOG.debug("Adding QuestionLabel:{}", xpath);
                     addNode(xpath, question, true, localRootNode);
                 }
                 // Address carerAddress.label has carerAddressLineOne, carerAddressLineTwo
-                else if(valuesByValueKey.containsKey(relatedAnswerKey+"LineOne")){
+                else if (valuesByValueKey.containsKey(relatedAnswerKey + "LineOne")){
                     LOG.debug("Adding Address QuestionLabel:{}", xpath);
                     addNode(xpath, question, true, localRootNode);
                 }
@@ -197,10 +198,11 @@ public class XmlBuilder {
         }
     }
 
-    private String getQuestion(String questionKey, Object... parameters) {
+    private String getQuestion(String questionKey, final Map<String, Object> values) {
         // TODO throw exception and stop processing if gap in messages. But too many Income / Breaks gaps as of 10/01/2016
         String questionMessage;
         try {
+            Object[] parameters = getParameters(questionKey, values);
             questionMessage = messageSource.getMessage(questionKey, parameters, Locale.getDefault());
         } catch (NoSuchMessageException e) {
             LOG.error("NoSuchMessageException thrown looking for message for key:" + questionKey);
@@ -210,6 +212,18 @@ public class XmlBuilder {
             questionMessage = "ERROR " + questionKey + " - exception";
         }
         return (questionMessage);
+    }
+
+    private Object[] getParameters(final String questionKey, final Map<String, Object> values) {
+        try {
+            final String expression = messageSource.getMessage(questionKey + ".args", null, null, Locale.getDefault());
+            List<Object> expressions = evaluateExpressions(expression, values);
+            return (expression == null) ? null : expressions.toArray();
+        } catch (NoSuchMessageException e) {
+        } catch (Exception e) {
+            LOG.error("Exception thrown looking for message for key:" + questionKey);
+        }
+        return null;
     }
 
     /**
@@ -319,6 +333,7 @@ public class XmlBuilder {
      * @return
      */
     private Node getNamedNode(String xPath, Map<String, String> attributes, boolean attrExactMatch, Node localRootNode) {
+        //remove Line from path
         String[] pathElements = xPath.split(PATH_SEPARATOR);
         Node current = localRootNode;
         for (int index = 0; index < pathElements.length; index++) {
@@ -344,9 +359,12 @@ public class XmlBuilder {
             return null;
         }
 
+        Boolean hasChild = Boolean.FALSE;
+        Node child = null;
         NodeList children = node.getChildNodes();
         for (int index = 0; index < children.getLength(); index++) {
-            Node child = children.item(index);
+            child = children.item(index);
+            hasChild = Boolean.FALSE;
             String name = child.getNodeName();
             if (childName.equals(name)) {
                 if (attributes != null || attrExactMatch) {
@@ -355,11 +373,12 @@ public class XmlBuilder {
                         break;
                     }
                 }
-                return child;
+                hasChild = Boolean.TRUE;
+                break;
             }
         }
 
-        if (create) {
+        if ((create && !hasChild) || (create && "Line".equals(childName))) {
             // we can use node.getOwnerDocument also
             Element childNode = document.createElement(childName);
             node.appendChild(childNode);
@@ -371,7 +390,7 @@ public class XmlBuilder {
             return childNode;
         }
 
-        return null;
+        return hasChild ? child : null;
     }
 
     private boolean attrsMatch(Map<String, String> childAttrs, Map<String, String> attributes, boolean attrExactMatch) {
@@ -457,5 +476,230 @@ public class XmlBuilder {
 
     public Document getDocument() {
         return document;
+    }
+
+    private static final String CADS_TLD_PREFIX_END = "}";
+    private static final String CADS_TLD_PREFIX_START = "${cads:";
+
+    private List<String> splitExpressions(final String expressionStr) {
+        if (expressionStr == null) {
+            return null;
+        }
+
+        List<String> results = new ArrayList<>();
+
+        // split into token around ${}
+        char[] characters = expressionStr.toCharArray();    // don't trim, it will change the output
+        Deque<Integer> startStack = new ArrayDeque<>();
+        int end = 0;
+        for (int index = 0; index < characters.length; index++) {
+            switch(characters[index]) {
+                case '$':
+                    if ((index + 1) < characters.length && characters[index + 1] == '{') {
+                        if (index > end && startStack.isEmpty()) {
+                            String subExpression = expressionStr.substring(end, index);
+                            results.add(subExpression);
+                            end = index;
+                        }
+                        startStack.push(index);
+                        index++;
+                    }
+                    break;
+
+                case '}':
+                    if (startStack.isEmpty() == false) {
+                        Integer start = startStack.pop();
+                        if (startStack.isEmpty()) {
+                            end = index + 1;    // include 'end'
+                            String subExpression = expressionStr.substring(start, end);
+                            results.add(subExpression);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (startStack.isEmpty() == false) {
+            Integer firstStart = startStack.getFirst();
+            String subExpression = expressionStr.substring(firstStart);
+            results.add(subExpression);
+
+        } else if (end < characters.length) {
+            String subExpression = expressionStr.substring(end);
+            results.add(subExpression);
+        }
+
+        return results;
+    }
+
+
+    private List<Object> evaluateExpressions(final String expressionStr, final Map<String, Object> values) {
+        final String[] expressions = expressionStr.split("\\|");
+        List<Object> parameters = new ArrayList<>();
+        for (final String expression : expressions) {
+            parameters.add(evaluateExpression(expression, values));
+        }
+        return parameters;
+    }
+
+    private String evaluateExpression(final String expressionStr, final Map<String, Object> values) {
+        try {
+            if ("${careeFirstName} ${careeSurname}".equals(expressionStr)) {
+                return "@dpname";
+            }
+            if ("${carerFirstName} ${carerSurname}".equals(expressionStr)) {
+                return "@yourname";
+            }
+
+            List<String> subExpressions = splitExpressions(expressionStr);
+            if (subExpressions == null || subExpressions.isEmpty()) {
+                return "";
+            }
+
+            if (subExpressions.size() > 1) {
+                StringBuffer buffer = new StringBuffer();
+                for (String subExpression :subExpressions) {
+                    String result = evaluateExpression(subExpression, values);
+                    buffer.append(result);
+                }
+
+                return buffer.toString();
+            }
+
+            if (expressionStr != null && expressionStr.startsWith(CADS_TLD_PREFIX_START)) {
+                return evaluateCadsExpression(expressionStr, values);
+            } else {
+                return evaluateSingleExpression(expressionStr, values);
+            }
+        } catch(RuntimeException e) {
+            LOG.error("Unexpected RuntimeException evaluating: " + expressionStr, e);
+            throw e;
+        }
+    }
+
+    private String evaluateSingleExpression(final String expression, final Map<String, Object> values) {
+        try {
+            Object evaluatedValue;
+            if (expression.startsWith("${")) {
+                final String prop = StringUtils.substringBefore(StringUtils.substringAfter(expression, "${"), "}");
+                evaluatedValue = values.get(prop);
+            } else {
+                return expression;
+            }
+
+            if (evaluatedValue == null) {
+                return "";
+            }
+
+            String evaluatedExpression;
+            if (evaluatedValue instanceof String) {
+                evaluatedExpression = (String)evaluatedValue;
+            } else {
+                evaluatedExpression = evaluatedValue.toString();
+            }
+
+            if (evaluatedExpression.equals(expression)) {
+                // this results in at least one evaluation more than is needed, but allows for recursive evaluation
+                return evaluatedExpression;
+            }
+
+            // re-evaluate in case the results contains further expressions to be evaluated
+            return evaluateExpression(evaluatedExpression, values);
+        } catch (RuntimeException e) {
+            LOG.error("unexpected RuntimeException, evaluating single expression: " + expression);
+            throw e;
+        }
+    }
+
+    private String evaluateCadsExpression(final String expression, final Map<String, Object> values) {
+        try {
+            // e.g ${cads:dateOffset(dateOfClaim_day, dateOfClaim_month, dateOfClaim_year, "d MMMMMMMMMM yyyy", "")}"
+            if (StringUtils.isEmpty(expression)) {
+                return "";
+            }
+
+            if (expression.startsWith(CADS_TLD_PREFIX_START) == false || expression.endsWith(CADS_TLD_PREFIX_END) == false) {
+                throw new IllegalArgumentException("expression(" + expression + ") is  not of the expected form: " + CADS_TLD_PREFIX_START + " ... " + CADS_TLD_PREFIX_END);
+            }
+
+            // expecting ${cads:fnName(arg, arg, ...)}
+            String function = assertNotNull(expression.substring(CADS_TLD_PREFIX_START.length(), expression.length() - CADS_TLD_PREFIX_END.length()), "Unable to locate function"); // fnName(arg, arg, ...)
+            String functionName = assertNotNull(StringUtils.substringBefore(function, "("), "unable to locate function name");           // fnName
+            String allArguments = assertNotNull(function.substring(functionName.length()), "Unable to locate function brackets");            // (arg, arg, ...)
+            String rawArguments = allArguments.substring(1, allArguments.length() - 1);
+            String[] arguments = rawArguments.split(",");
+            for (int index = 0; index < arguments.length; index++) {
+                arguments[index] = arguments[index].trim();
+            }
+
+            switch (functionName) {
+                case "dateOffset": {
+                    if (arguments.length != 5) {
+                        throw new IllegalArgumentException("Wrong number of arguments for dateOffset. Expecting dateOffset(String dayField, String monthField, String yearField, String format, String offset)");
+                    }
+                    String dayField = toString(values.get(arguments[0]));
+                    String monthField = toString(values.get(arguments[1]));
+                    String yearField = toString(values.get(arguments[2]));
+                    String format = stripEnclosingQuotes(arguments[3]);
+                    String offset = stripEnclosingQuotes(arguments[4]);
+
+                    return Functions.dateOffset(dayField, monthField, yearField, format, offset);
+                }
+                case "dateOffsetFromCurrent" : {
+                    if (arguments.length != 2) {
+                        throw new IllegalArgumentException("Wrong number of arguments for dateOffsetFromCurrent. Expecting dateOffsetFromCurrent(String format, String offset)");
+                    }
+                    String format = stripEnclosingQuotes(arguments[0]);
+                    String offset = stripEnclosingQuotes(arguments[1]);
+                    return Functions.dateOffsetFromCurrent(format, offset);
+                }
+                case "prop" : {
+                    if (arguments.length != 1) {
+                        throw new IllegalArgumentException("Wrong number of arguments for prop. Expecting prop(String propertyValue)");
+                    }
+                    String prop = stripEnclosingQuotes(arguments[0]);
+                    return evaluateExpression(Functions.prop(prop), values);
+                }
+                default:
+                    throw new IllegalArgumentException("Unknown function: " + functionName);
+            }
+        } catch(RuntimeException e) {
+            LOG.error("Problems evaluating CADS expression: " + expression, e);
+            throw e;
+        }
+    }
+
+    private String stripEnclosingQuotes(final String string) {
+        if (string == null) {
+            return null;
+        }
+
+        if (string.length() < 2) {
+            return string;
+        }
+
+        // either single or double quotes
+        if ((string.charAt(0) == '"' && (string.charAt(string.length() - 1) == '"'))
+                || (string.charAt(0) == '\'' && (string.charAt(string.length() - 1) == '\''))) {
+            String trimmed = string.substring(1, string.length() - 1);
+            return trimmed;
+        }
+        return string;
+    }
+
+    private String assertNotNull(String string, String exceptionMessage) {
+        if(string == null) {
+            throw new IllegalArgumentException(exceptionMessage);
+        }
+        return string;
+    }
+
+    private String toString(Object value) {
+        if(value == null || value instanceof String) {
+            return (String)value;
+        }
+        return value.toString();
     }
 }
