@@ -48,7 +48,7 @@
 
     <!-- TODO: Probably should rearrange these a bit, so label and hints are outside the fieldset -->
     <fieldset class="question-group">
-        <legend class="form-label-bold"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </legend>
+        <legend class="form-label-bold" id="${cads:encrypt(pageScope.id)}_label"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </legend>
         <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore" />
         <ul class="form-date" id="${cads:encrypt(pageScope.id)}">
             <li class="form-group">

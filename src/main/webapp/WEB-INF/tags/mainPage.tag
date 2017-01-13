@@ -170,7 +170,14 @@
         
         <t:footer currentPage="${pageScope.currentPage}" />
         
-        <div id="global-app-error" class="app-error hidden"></div>            
+        <div id="global-app-error" class="app-error hidden"></div>
+        <c:if test="${!empty hash}" >
+            <script type="text/javascript">
+                $(function(){
+                    window.location = '#' + '${hash}';
+                });
+            </script>
+        </c:if>
     </body>
 </html>
 

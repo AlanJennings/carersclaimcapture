@@ -68,4 +68,72 @@ public class PreviewController extends AbstractFormController {
 
         LOG.trace("Ending BenefitsController.validate");
     }
+
+    public void displayParametersForPreviewPage() {
+        //toggle
+        //showBankDetails
+        //
+//        @toggle = @{
+//            !getBooleanProperty("cyaToggleVisible")
+//        }
+//        @yourDetails = @{claim.questionGroup[YourDetails].getOrElse(YourDetails())}
+//        @showBankDetails=@{
+//            claim.dateOfClaim match {
+//                case Some(dmy) => yourDetails.dateOfBirth.yearsDiffWith(dmy) < getIntProperty("age.hide.paydetails")
+//                case _ => false
+//            }
+//        }
+//        @contactDetails = @{
+//            claim.questionGroup[ContactDetails].getOrElse(ContactDetails())
+//        }
+//        @showSaveButton = @{
+//            contactDetails.wantsContactEmail match {
+//                case yesNo if yesNo == yes => true
+//                case _ => false
+//            }
+//        }
+    }
+
+    public void displayParametersForAboutYouPage() {
+//        @yourDetails = @{claim.questionGroup[YourDetails].getOrElse(YourDetails())}
+//        @contactDetails = @{claim.questionGroup[ContactDetails].getOrElse(ContactDetails())}
+//        @address = @{contactDetails.address}
+//        @claimDate = @{claim.questionGroup[ClaimDate].getOrElse(ClaimDate())}
+//        @email = @{
+//            contactDetails.wantsContactEmail match {
+//                case yesNo if yesNo == yes => messages("label.yes") + " - " + contactDetails.email.getOrElse("")
+//                case yesNo if yesNo == no => messages("label.no")
+//                case _ => ""
+//            }
+//        }
+//        @maritalStatusQG = @{
+//            claim.questionGroup[MaritalStatus].getOrElse(MaritalStatus())
+//        }
+//        @maritalStatus = @{
+//            maritalStatusQG.maritalStatus match {
+//                case Married => messages("maritalStatus.married")
+//                case Single => messages("maritalStatus.single")
+//                case Divorced => messages("maritalStatus.divorced")
+//                case Widowed => messages("maritalStatus.widowed")
+//                case Separated => messages("maritalStatus.separated")
+//                case Partner => messages("maritalStatus.livingWithPartner")
+//                case _ => ""
+//            }
+//        }
+//        @middleName = @{yourDetails.middleName.map(_+" ").getOrElse("")}
+//        @titleNames = @{
+//            s"${yourDetails.title} ${yourDetails.firstName} ${middleName}${yourDetails.surname}"
+//        }
+//
+//        @addressPostcode = @{
+//            s"${address.lineOne.getOrElse("")}${address.lineTwo.fold("")("<br/>"+_)}${address.lineThree.fold("")("<br/>"+_)} ${"<br/>"+contactDetails.postcode.getOrElse("")}"
+//        }
+//        @saveForLaterEnabled=@{
+//            getBooleanProperty("saveForLaterSaveEnabled")
+//        }
+//        @emailLabel=@{
+//            if(saveForLaterEnabled) messages("wantsEmailContactNew")
+//            else messages("wantsEmailContactOld")
+//        }
+    }
 }

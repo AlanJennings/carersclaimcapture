@@ -48,7 +48,7 @@
              errors="${pageScope.errors}">
 
     <fieldset class="question-group">
-        <legend class="form-label-bold"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </legend>
+        <legend class="form-label-bold" id="${cads:encrypt(pageScope.id)}_label"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </legend>
         <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
         <%-- sort-code is just a marker class there are no styles for it --%>
         <ul class="form-date sort-code" id="${cads:encrypt(pageScope.id)}">

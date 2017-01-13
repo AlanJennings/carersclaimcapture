@@ -39,7 +39,7 @@
              errors="${pageScope.errors}">
 
     <fieldset class="question-group">
-        <legend class="form-label-bold "><t:message code="${pageScope.labelKey}" args="${pageScope.labelKeyArgs}" /></legend>        
+        <legend class="form-label-bold " id="${cads:encrypt(pageScope.id)}_label"><t:message code="${pageScope.labelKey}" args="${pageScope.labelKeyArgs}" /></legend>
 
         <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
         <ul class="inline " id="${cads:encrypt(pageScope.id)}">

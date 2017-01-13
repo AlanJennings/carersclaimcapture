@@ -10,8 +10,8 @@
 
 <t:defaultValue value="${pageScope.innerClass}" defaultValue="break-data" var="innerClass" />
 
-<fieldset data-tag-type="panel" id="${pageScope.id}" class="form-elements results-detail">
-    <legend class="heading-medium form-class-bold"><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /></legend>
+<fieldset data-tag-type="panel" id="${cads:encrypt(pageScope.id)}" class="form-elements results-detail">
+    <legend class="heading-medium form-class-bold" id="${cads:encrypt(pageScope.id)}_label"><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /></legend>
     <div class="data-table">
         <ul class="${pageScope.innerClass}">
             <jsp:doBody/>

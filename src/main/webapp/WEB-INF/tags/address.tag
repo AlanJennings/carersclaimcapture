@@ -1,6 +1,7 @@
 <%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %>
 
 <%@ attribute name="name" required="true" %>
 
@@ -42,9 +43,9 @@
              errors="${pageScope.errors}">
                 
     <fieldset class="question-group">
-        <legend class="form-label-bold"><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /></legend>
+        <legend class="form-label-bold" id="${cads:encrypt(pageScope.id)}_label"><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /></legend>
         <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
-        <ul id="${pageScope.id}">  
+        <ul id="${cads:encrypt(pageScope.id)}">
             <t:textedit id="${pageScope.id}_lineOne" name="${pageScope.nameOne}" outerClass="form-group-compound" value="${pageScope.valueOne}" maxLength="${pageScope.maxLength}" tagNested="true" /> 
             <t:textedit id="${pageScope.id}_lineTwo" name="${pageScope.nameTwo}" outerClass="form-group-compound" value="${pageScope.valueTwo}" maxLength="${pageScope.maxLength}" tagNested="true" />
             <t:textedit id="${pageScope.id}_lineThree" name="${pageScope.nameThree}" outerClass="form-group-compound" value="${pageScope.valueThree}" maxLength="${pageScope.maxLength}" tagNested="true" />
