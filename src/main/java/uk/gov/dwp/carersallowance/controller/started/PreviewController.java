@@ -147,7 +147,7 @@ public class PreviewController extends AbstractFormController {
         model.addAttribute("maritalStatus", session.getAttribute("maritalStatus"));
         setDateIntoModel("carerDateOfBirth", session, model);
         model.addAttribute("carerAddressWithPostcode", getAddressWithPostcode("carer", session));
-        model.addAttribute("carerHowWeContactYou", session.getAttribute("carerHowWeContactYou"));
+        model.addAttribute("carerHowWeContactYou", notGivenIfEmpty((String)session.getAttribute("carerHowWeContactYou")));
         model.addAttribute("previewCarerMail", mergeStrings(" - ", StringUtils.capitalize((String)session.getAttribute("carerWantsEmailContact")), (String)session.getAttribute("carerMail")));
         model.addAttribute("carerMailLabel", getEmailLabel());
 
@@ -250,5 +250,12 @@ public class PreviewController extends AbstractFormController {
     private String mergeStrings(final String delimiter, final String... values) {
         String merged = Arrays.asList(values).stream().filter(StringUtils::isNotBlank).collect(Collectors.joining(delimiter));
         return merged;
+    }
+
+    private String notGivenIfEmpty(final String value) {
+        if (StringUtils.isEmpty(value)) {
+            return "Not given";
+        }
+        return value;
     }
 }
