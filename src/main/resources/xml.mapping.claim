@@ -175,7 +175,7 @@ declarationText.line3                           = DWPBody/DWPCATransaction/DWPCA
 declarationText.line4                           = DWPBody/DWPCATransaction/DWPCAClaim/Declaration/DeclarationStatement/Content[@order="4"]
 declarationText.line5                           = DWPBody/DWPCATransaction/DWPCAClaim/Declaration/DeclarationStatement/Content[@order="5"]
 declarationText.line8                           = DWPBody/DWPCATransaction/DWPCAClaim/Declaration/DeclarationStatement/Content[@order="6"]
-Unknown mapping for                               DWPBody/DWPCATransaction/DWPCAClaim/DeclarationQuestion/QuestionLabel
+Unknown mapping for                             = DWPBody/DWPCATransaction/DWPCAClaim/DeclarationQuestion/QuestionLabel
 thirdParty.label                                = DWPBody/DWPCATransaction/DWPCAClaim/Declaration/DeclarationQuestion/QuestionLabel[messages("thirdParty.label")]
 thirdParty                                      = DWPBody/DWPCATransaction/DWPCAClaim/Declaration/DeclarationQuestion/Answer
 nameAndOrganisation.label                       = DWPBody/DWPCATransaction/DWPCAClaim/Declaration/DeclarationNameOrg/QuestionLabel[messages("nameAndOrganisation.label")]

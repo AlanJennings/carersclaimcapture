@@ -9,6 +9,7 @@
     <t:pageContent>
         <input type="hidden" name="${cads:encrypt("transactionId")}" value="${transactionId}"/>
         <input type="hidden" name="${cads:encrypt("isClaim")}" value="${isClaim}"/>
+        <input type="hidden" name="${cads:encrypt("retryCount")}" value="${retryCount}"/>
         <section id="jswrapper" hidden="true" class="carers-container">
             <h1 class="form-title heading-large">
                 <c:if test="${isClaim}"><t:message code="async.submitting.help1" /></c:if>

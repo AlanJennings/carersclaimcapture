@@ -40,6 +40,9 @@ public class ClaimHeaderItemsTest {
     @Mock
     private MessageSource messageSource;
 
+    @Mock
+    private ServerSideResolveArgs serverSideResolveArgs;
+
     @Before
     public void setUp() throws Exception {
         Map<String, Object> sessionMap = new HashMap<>();
@@ -51,7 +54,7 @@ public class ClaimHeaderItemsTest {
         sessionMap.put("origin", origin);
         sessionMap.put("language", language);
 
-        xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
+        xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource, serverSideResolveArgs);
         String xml = xmlBuilder.render(true, false);
         xpath = XPathFactory.newInstance().newXPath();
     }

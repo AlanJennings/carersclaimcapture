@@ -29,6 +29,9 @@ public class ClaimAssistedDecisionTest {
     @Mock
     private MessageSource messageSource;
 
+    @Mock
+    private ServerSideResolveArgs serverSideResolveArgs;
+
     @Before
     public void setUp() throws Exception {
         sessionMap = new HashMap<>();
@@ -43,7 +46,7 @@ public class ClaimAssistedDecisionTest {
 
     @Test
     public void checkClaimXmlContainsDefaultAssistedDecisionReason() throws Exception {
-        XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
+        XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource, serverSideResolveArgs);
         String reason = xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DWPCAClaim/AssistedDecisions/AssistedDecision/Reason");
         String decision = xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DWPCAClaim/AssistedDecisions/AssistedDecision/RecommendedDecision");
         assertThat(reason, is("Check CIS for benefits. Send Pro517 if relevant."));
@@ -53,7 +56,7 @@ public class ClaimAssistedDecisionTest {
     @Test
     public void checkClaimXmlContainsAFIPAssistedDecisionReason() throws Exception {
         sessionMap.put("benefitsAnswer", "AFIP");
-        XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
+        XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource, serverSideResolveArgs);
         String reason = xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DWPCAClaim/AssistedDecisions/AssistedDecision/Reason");
         String decision = xmlBuilder.getNodeValue("/DWPBody/DWPCATransaction/DWPCAClaim/AssistedDecisions/AssistedDecision/RecommendedDecision");
         assertThat(reason, is("Assign to AFIP officer on CAMLite workflow."));

@@ -24,8 +24,8 @@ public class ResolveArgs extends BodyTagSupport {
     private static final long serialVersionUID = 3407131412410043137L;
     private static final Logger LOG = LoggerFactory.getLogger(ResolveArgs.class);
 
-    private static final String CADS_TLD_PREFIX_END = "}";
-    private static final String CADS_TLD_PREFIX_START = "${cads:";
+    protected static final String CADS_TLD_PREFIX_END = "}";
+    protected static final String CADS_TLD_PREFIX_START = "${cads:";
 
     private String varName;
 
@@ -55,7 +55,7 @@ public class ResolveArgs extends BodyTagSupport {
         }
     }
 
-    private List<String> splitExpressions(String expressionStr) {
+    protected List<String> splitExpressions(String expressionStr) {
         if(expressionStr == null) {
             return null;
         }
@@ -187,7 +187,8 @@ public class ResolveArgs extends BodyTagSupport {
             String functionName = assertNotNull(StringUtils.substringBefore(function, "("), "unable to locate function name");           // fnName
             String allArguments = assertNotNull(function.substring(functionName.length()), "Unable to locate function brackets");            // (arg, arg, ...)
             String rawArguments = allArguments.substring(1, allArguments.length() - 1);
-            String[] arguments = rawArguments.split(",");
+            //date in preview has comma in date format
+            String[] arguments = rawArguments.replaceAll("\"", "'").split(",(?=(?:[^']*'[^']*')*[^']*$)", -1);
             for(int index = 0; index < arguments.length; index++) {
                 arguments[index] = arguments[index].trim();
             }
@@ -230,7 +231,7 @@ public class ResolveArgs extends BodyTagSupport {
         }
     }
 
-    private String stripEnclosingQuotes(String string) {
+    protected String stripEnclosingQuotes(String string) {
         if(string == null) {
             return null;
         }
@@ -249,7 +250,7 @@ public class ResolveArgs extends BodyTagSupport {
         return string;
     }
 
-    private String toString(Object value) {
+    protected String toString(Object value) {
         if(value == null || value instanceof String) {
             return (String)value;
         }
@@ -257,7 +258,7 @@ public class ResolveArgs extends BodyTagSupport {
         return value.toString();
     }
 
-    private String assertNotNull(String string, String exceptionMessage) {
+    protected String assertNotNull(String string, String exceptionMessage) {
         if(string == null) {
             throw new IllegalArgumentException(exceptionMessage);
         }

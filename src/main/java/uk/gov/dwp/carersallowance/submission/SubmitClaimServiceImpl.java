@@ -25,6 +25,7 @@ import uk.gov.dwp.carersallowance.utils.C3Constants;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
+import uk.gov.dwp.carersallowance.xml.ServerSideResolveArgs;
 import uk.gov.dwp.carersallowance.xml.XmlBuilder;
 
 import javax.inject.Inject;
@@ -169,7 +170,7 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
 
         sessionMap.put("dateTimeGenerated", ClaimXmlUtil.currentDateTime("dd-MM-yyyy HH:mm"));
 
-        final XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
+        final XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource, new ServerSideResolveArgs());
         final String xml = xmlBuilder.render(true, false);
         LOG.debug("xml:{}", xml);
         final String signedXml = signClaim(xml, transactionId);

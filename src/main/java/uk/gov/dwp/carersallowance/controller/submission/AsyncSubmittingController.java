@@ -1,5 +1,6 @@
 package uk.gov.dwp.carersallowance.controller.submission;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +45,7 @@ public class AsyncSubmittingController {
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
     public String getForm(HttpServletRequest request, final Model model) {
-        request.setAttribute(C3Constants.TRANSACTION_ID, request.getParameter(C3Constants.TRANSACTION_ID));
-        request.setAttribute(C3Constants.IS_CLAIM, request.getParameter(C3Constants.IS_CLAIM));
-        return CURRENT_PAGE;
+        return postForm(request, model);
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
@@ -54,13 +53,24 @@ public class AsyncSubmittingController {
         LOG.trace("Starting AsyncSubmittingController.postForm");
         try {
             final String transactionId = request.getParameter(C3Constants.TRANSACTION_ID);
-            String transactionStatus = transactionIdService.getTransactionStatusById(transactionId);
-
-            LOG.info("Checking transaction status:{} for transactionId:{}", transactionStatus, transactionId);
-
+            String retryCount = request.getParameter("retryCount");
+            if (StringUtils.isEmpty(retryCount)) {
+                retryCount = "0";
+            }
             request.setAttribute(C3Constants.TRANSACTION_ID, transactionId);
-            request.setAttribute(C3Constants.IS_CLAIM, "true".equals(request.getParameter(C3Constants.IS_CLAIM)));
-            return processTransactionStatusResponse(transactionStatus);
+            request.setAttribute(C3Constants.IS_CLAIM, C3Constants.TRUE.equals(request.getParameter(C3Constants.IS_CLAIM)));
+            request.setAttribute("retryCount", Integer.valueOf(retryCount) + 1);
+
+            if (StringUtils.isEmpty(transactionId)) {
+                return processTransactionStatusResponse(null, Integer.valueOf(retryCount));
+            }
+
+            String transactionStatus = transactionIdService.getTransactionStatusById(transactionId);
+            if (StringUtils.isEmpty(transactionStatus)) {
+                transactionStatus = GENERATED;
+            }
+            LOG.info("Checking transaction status:{} for transactionId:{}", transactionStatus, transactionId);
+            return processTransactionStatusResponse(transactionStatus, Integer.valueOf(retryCount));
         } catch (NoSessionException nse) {
             return "redirect:" + SUCCESS_PAGE;
         } catch(RuntimeException e) {
@@ -71,11 +81,11 @@ public class AsyncSubmittingController {
         }
     }
 
-    private String processTransactionStatusResponse(final String transactionStatus) {
+    private String processTransactionStatusResponse(final String transactionStatus, final Integer retryCount) {
         if (SUCCESS.equals(transactionStatus) || ACKNOWLEDGED.equals(transactionStatus)) {
             return "redirect:" + SUCCESS_PAGE;
         }
-        if (SUBMITTED.equals(transactionStatus) || GENERATED.equals(transactionStatus)) {
+        if ((SUBMITTED.equals(transactionStatus) || GENERATED.equals(transactionStatus)) && retryCount < 5) {
             return CURRENT_PAGE;
         }
         if (SERVICE_UNAVAILABLE.equals(transactionStatus)) {

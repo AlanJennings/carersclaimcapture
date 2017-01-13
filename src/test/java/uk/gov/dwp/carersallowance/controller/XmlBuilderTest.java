@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import uk.gov.dwp.carersallowance.utils.C3Constants;
 import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
+import uk.gov.dwp.carersallowance.xml.ServerSideResolveArgs;
 import uk.gov.dwp.carersallowance.xml.XmlBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +35,9 @@ public class XmlBuilderTest {
     @Mock
     private MessageSource messageSource;
 
+    @Mock
+    private ServerSideResolveArgs serverSideResolveArgs;
+
     @Before
     public void setUp() throws Exception {
         sessionMap = new HashMap<>();
@@ -49,7 +53,7 @@ public class XmlBuilderTest {
     @Test
     public void testDocument() {
         try {
-            XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
+            XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource, serverSideResolveArgs);
             assertThat(xmlBuilder.getNodeValue("/DWPBody/Version"), is(xmlVersion));
         } catch (Exception e) {
             LOG.error("Exception calling XmlBuilder :", e);
@@ -59,12 +63,20 @@ public class XmlBuilderTest {
     @Test
     public void testXml() {
         try {
-            XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource);
+            XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource, serverSideResolveArgs);
             String xml = xmlBuilder.render(true, false);
             assertTrue(xml.startsWith("<?xml"));
             assertTrue(xml.contains("<DWPBody"));
         } catch (Exception e) {
             LOG.error("Exception calling XmlBuilder :", e);
         }
+    }
+
+    @Test
+    public void test() {
+        String s = "dateOfClaim_day, dateOfClaim_month, dateOfClaim_year, 'dd MMMMMMMMMM, yyyy', ''";
+        String[] data = s.split(",(?=(?:[^']*'[^']*')*[^']*$)", -1);
+        LOG.debug("{}", data);
+
     }
 }
