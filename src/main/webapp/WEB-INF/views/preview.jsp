@@ -13,7 +13,7 @@
                     <t:validationSummary errors="${pageScope.errors}" />
 
                     <p class="text"><t:message code="preview.info" /></p>
-                    <c:if test="${toggle}" >
+                    <c:if test="${disableChangeButton}" >
                         <p class="text helper-prompt"><t:message code="preview.helper" /></p>
                     </c:if>
 
@@ -52,7 +52,7 @@
                             <ul>
                                 <li><button type="submit" name="action" id="next" value="next" class="button" aria-label="<t:message code="next" />"><t:message code="next" /></button></li>
                                 <c:if test="${showSaveButton}" >
-                                    <li><t:saveButton /></li>
+                                    <li><t:saveButton isSaveEnabled="${isSaveEnabled}" showSaveButton="${howSaveButton}" beenInPreview="${beenInPreview}" path="/preview" saveForLaterUrl="${saveForLaterUrl}" /></li>
                                 </c:if>
                             </ul>
                         </nav>

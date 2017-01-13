@@ -5,7 +5,7 @@
 <%@ attribute name="id" %>
 <%@ attribute name="name" %>
 <%@ attribute name="value" %>
-<%@ attribute name="disableLink" %>
+<%@ attribute name="displayChangeButton" %>
 <%@ attribute name="link" %>
 
 <tr class="review-change" id="${id}">
@@ -16,8 +16,8 @@
         <t:message code="${value}" />
 	</td>
 	<td id="${id}_linkContainer" class="review-action hide-print">
-		<c:if test="${disableLink eq \"false\"}" >
-            <a class="previewChangeLink secondary" id="${id}_link" href="test${link}" onclick>
+		<c:if test="${displayChangeButton eq \"true\"}" >
+            <a class="previewChangeLink secondary" id="${id}_link" href="${link}" onclick>
                 <t:message code="preview.change" />
                 <span class="visuallyhidden"><t:message code="${name}" /> (optional)</span>
             </a>
