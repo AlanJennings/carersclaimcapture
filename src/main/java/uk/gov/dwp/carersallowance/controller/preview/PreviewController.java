@@ -41,6 +41,7 @@ public class PreviewController extends AbstractFormController {
     private final Integer hidePayDetails;
     private final Boolean saveForLaterSaveEnabled;
     private final String saveForLaterUrl;
+    private final String originTag;
     private static final String PREVIEW_MAPPING_CLAIM = "preview.mappings.claim";
     private final Map<String, PreviewMapping> previewMappings;
 
@@ -53,12 +54,14 @@ public class PreviewController extends AbstractFormController {
                              @Value("${preview.display.change.button}") final Boolean displayChangeButton,
                              @Value("${age.hide.paydetails}") final Integer hidePayDetails,
                              @Value("${save.for.later.save.enabled}") final Boolean saveForLaterSaveEnabled,
-                             @Value("${save.for.later.url}") final String saveForLaterUrl) {
+                             @Value("${save.for.later.url}") final String saveForLaterUrl,
+                             @Value("${origin.tag}") final String originTag) {
         super(sessionManager, messageSource, transformationManager);
         this.displayChangeButton = displayChangeButton;
         this.hidePayDetails = hidePayDetails;
         this.saveForLaterSaveEnabled = saveForLaterSaveEnabled;
         this.saveForLaterUrl = saveForLaterUrl;
+        this.originTag = originTag;
         this.previewMappings = loadPreviewMappings();
     }
 
@@ -104,6 +107,7 @@ public class PreviewController extends AbstractFormController {
         displayParametersForAboutYouPage(model, session);
         displayParametersForNationalityPage(model, session);
         displayParametersForPartnerDetailsPage(model, session);
+        displayParametersForCareYouProvidePage(model, session);
         sessionManager.saveSession(session);
         return super.getForm(request, model);
     }
@@ -144,6 +148,7 @@ public class PreviewController extends AbstractFormController {
         model.addAttribute("isSaveEnabled", saveForLaterSaveEnabled);
         model.addAttribute("saveForLaterUrl", saveForLaterUrl);
         model.addAttribute("beenInPreview", C3Constants.TRUE.equals(session.getAttribute("beenInPreview")));
+        model.addAttribute("isOriginGB", isOriginGB());
     }
 
     public Boolean checkDateDifference(final String before, final String after, final Session session, final Integer check) {
@@ -228,8 +233,29 @@ public class PreviewController extends AbstractFormController {
         model.addAttribute("isPartnerPersonYouCareForLink", getLink("partner_isPersonCareFor"));
     }
 
+    public void displayParametersForCareYouProvidePage(final Model model, final Session session) {
+        model.addAttribute("careeFullName", getFullName("caree", session));
+        setDateIntoModel("careeDateOfBirth", session, model);
+        model.addAttribute("showHidePartnerDetails", checkNo((String)session.getAttribute("hadPartnerSinceClaimDate")) || checkNo((String)session.getAttribute("isPartnerPersonYouCareFor")));
+        model.addAttribute("careeRelationship", session.getAttribute("careeRelationship"));
+        model.addAttribute("careeSameAddressWithPostcode", getAddressIfNo("careeSameAddress", "caree", session));
+
+        model.addAttribute("careeFullNameLink", getLink("care_you_provide_name"));
+        model.addAttribute("careeDateOfBirthLink", getLink("care_you_provide_dob"));
+        model.addAttribute("careeRelationshipLink", getLink("care_you_provide_relationship"));
+        model.addAttribute("careeAddressLink", getLink("care_you_provide_address"));
+    }
+
+    private Boolean isOriginGB() {
+        return "GB".equals(originTag);
+    }
+
     private Boolean checkYes(String checkValue) {
         return C3Constants.YES.equals(checkValue);
+    }
+
+    private Boolean checkNo(String checkValue) {
+        return C3Constants.NO.equals(checkValue);
     }
 
     private String getDetailsMessage(String value) {
@@ -261,6 +287,14 @@ public class PreviewController extends AbstractFormController {
 
     private String getLink(final String indexIntoList) {
         return "/preview/redirect/" + indexIntoList;
+    }
+
+    private String getAddressIfNo(String addCheckValue, final String startIndex, final Session session) {
+        final String checkValue = (String)session.getAttribute(addCheckValue);
+        if (C3Constants.NO.equals(checkValue)) {
+            return getMessage(checkValue) + "<br/>" + getAddressWithPostcode(startIndex, session);
+        }
+        return getMessage(checkValue);
     }
 
     private String getAddressWithPostcode(final String startIndex, final Session session) {

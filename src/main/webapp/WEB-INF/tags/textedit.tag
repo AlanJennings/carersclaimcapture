@@ -88,7 +88,7 @@
 
     <label class="form-label-bold" for="${cads:encrypt(pageScope.id)}" id="${pageScope.id}_label"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </label>
     <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
-    <input type="text" class="form-control ${pageScope.additionalClasses}" id="${cads:encrypt(pageScope.id)}" name="${pageScope.name}" value="${pageScope.value}" maxLength="${pageScope.maxLength}" autocomplete="off">
+    <input type="text" class="form-control ${pageScope.additionalClasses}" id="${cads:encrypt(pageScope.id)}" name="${cads:encrypt(pageScope.name)}" value="${pageScope.value}" maxLength="${pageScope.maxLength}" autocomplete="off">
     <t:hint hintTextKey="${pageScope.hintAfterKey}" parentName="${pageScope.name}" element="hintAfter" />
 
 </t:component>

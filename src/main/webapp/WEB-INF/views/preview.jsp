@@ -21,8 +21,8 @@
                         <%@include file="preview/aboutYou.jsp"%>
                         <%@include file="preview/nationality.jsp"%>
                         <%@include file="preview/yourPartnerDetails.jsp"%>
-<%--
                         <%@include file="preview/careYouProvide.jsp"%>
+<%--
                         <%@include file="preview/breaksInCare.jsp"%>
                         <%@include file="preview/education.jsp"%>
                         <%@include file="preview/yourIncome.jsp"%>
