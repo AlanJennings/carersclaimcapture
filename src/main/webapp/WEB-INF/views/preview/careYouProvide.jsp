@@ -5,11 +5,11 @@
 
 <t:accordion label="/care-you-provide/their-personal-details.pageTitle" openLabel="open-care-you-provide" closeLabel="close-care-you-provide" track="true">
 	<c:if test="${showHidePartnerDetails}" >
-        <t:fieldWithLink id="care_you_provide_name" name="preview.fullName.label" value="careeFullName" displayChangeButton="${displayChangeButton}" link="${careeFullNameLink}" />
-        <t:fieldWithLink id="care_you_provide_dob" name="careeDateOfBirth.label" value="cads:dateOffset(careeDateOfBirth_day, careeDateOfBirth_month, careeDateOfBirth_year, 'dd MMMMMMMMMM, yyyy', '')" displayChangeButton="${displayChangeButton}" link="${careeDateOfBirthLink}" />
+        <t:fieldWithLink id="care_you_provide_name" name="preview.fullName.label" value="${careeFullName}" displayChangeButton="${displayChangeButton}" link="${careeFullNameLink}" />
+        <t:fieldWithLink id="care_you_provide_dob" name="careeDateOfBirth.label" value="${cads:dateOffset(careeDateOfBirth_day, careeDateOfBirth_month, careeDateOfBirth_year, 'dd MMMMMMMMMM, yyyy', '')}" displayChangeButton="${displayChangeButton}" link="${careeDateOfBirthLink}" />
     </c:if>
-    <t:fieldWithLink id="care_you_provide_relationship" name="careeRelationship.label" value="careeRelationship" displayChangeButton="${displayChangeButton}" link="${careeRelationshipLink}" />
-    <t:fieldWithLink id="care_you_provide_address" name="careeSameAddress.label" value="careeSameAddressWithPostcode" displayChangeButton="${displayChangeButton}" link="${careeAddressLink}" />
+    <t:fieldWithLink id="care_you_provide_relationship" name="careeRelationship.label" value="${careeRelationship}" displayChangeButton="${displayChangeButton}" link="${careeRelationshipLink}" />
+    <t:fieldWithLink id="care_you_provide_address" name="careeSameAddress.label" value="${careeSameAddressWithPostcode}" displayChangeButton="${displayChangeButton}" link="${careeAddressLink}" />
     <%-- Commented out until new page UC question converted into C3 Java
     <t:fieldWithLink id="care_you_provide_spent35HoursCaring", messages("spent35HoursCaring",dpname), messages("label."+aboutTheCare.spent35HoursCaring.getOrElse("")),disableLink = disableChangeButton, elementId = Some("spent35HoursCaring")) />
     <c:if test="${isOriginGB}" >

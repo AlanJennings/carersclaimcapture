@@ -13,7 +13,7 @@
 		<b><t:message code="${name}" /></b>
 	</td>
 	<td id="${id}_value" class="review-value">
-        <t:message code="${value}" />
+        ${value}
 	</td>
 	<td id="${id}_linkContainer" class="review-action hide-print">
 		<c:if test="${displayChangeButton eq \"true\"}" >

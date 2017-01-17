@@ -109,7 +109,8 @@ public class PreviewController extends AbstractFormController {
         displayParametersForNationalityPage(model, session);
         displayParametersForPartnerDetailsPage(model, session);
         displayParametersForCareYouProvidePage(model, session);
-        displayBreaksInCarePage(model, session);
+        displayParametersForBreaksInCarePage(model, session);
+        displayParametersForEductionPage(model, session);
         sessionManager.saveSession(session);
         return super.getForm(request, model);
     }
@@ -248,7 +249,7 @@ public class PreviewController extends AbstractFormController {
         model.addAttribute("careeAddressLink", getLink("care_you_provide_address"));
     }
 
-    public void displayBreaksInCarePage(final Model model, final Session session) {
+    public void displayParametersForBreaksInCarePage(final Model model, final Session session) {
         model.addAttribute("hasBreaksForTypeHospital", StringUtils.isEmpty((String)session.getAttribute("hospitalBreakWhoInHospital")));
         model.addAttribute("hasBreaksForTypeCareHome", StringUtils.isEmpty((String)session.getAttribute("respiteBreakWhoInRespite")));
         model.addAttribute("anyBreakMessage", anyBreakTypeGiven((String)session.getAttribute("hospitalBreakWhoInHospital"), (String)session.getAttribute("respiteBreakWhoInRespite")));
@@ -260,6 +261,24 @@ public class PreviewController extends AbstractFormController {
         model.addAttribute("hospitalBreakLink", getLink("breaks_hospital"));
         model.addAttribute("careHomeBreakLink", getLink("breaks_carehome"));
         model.addAttribute("otherBreakLink", getLink("breaks_breaktype_other"));
+    }
+
+    public void displayParametersForEductionPage(final Model model, final Session session) {
+        model.addAttribute("showBeenInEducationSinceClaimDate", checkYes((String)session.getAttribute("beenInEducationSinceClaimDate")));
+        model.addAttribute("beenInEducationSinceClaimDate", getMessage((String)session.getAttribute("beenInEducationSinceClaimDate")));
+        setDateIntoModel("educationStartDate", session, model);
+        setDateIntoModel("educationExpectedEndDate", session, model);
+        model.addAttribute("courseTitle", session.getAttribute("courseTitle"));
+        model.addAttribute("nameOfSchoolCollegeOrUniversity", session.getAttribute("nameOfSchoolCollegeOrUniversity"));
+        model.addAttribute("nameOfMainTeacherOrTutor", session.getAttribute("nameOfMainTeacherOrTutor"));
+        model.addAttribute("courseContactNumber", getDetailsNotProvidedMessage((String)session.getAttribute("courseContactNumber")));
+
+        model.addAttribute("beenInEducationSinceClaimDateLink", getLink("education_beenInEducationSinceClaimDate"));
+        model.addAttribute("educationStartDateLink", getLink("education_courseTitle"));
+        model.addAttribute("courseTitleLink", getLink("education_nameOfSchool"));
+        model.addAttribute("nameOfSchoolCollegeOrUniversityLink", getLink("education_nameOfTutor"));
+        model.addAttribute("nameOfMainTeacherOrTutorLink", getLink("education_contactNumber"));
+        model.addAttribute("courseContactNumberLink", getLink("education_startEndDates"));
     }
 
     private String breakTypeGiven(final String value) {
@@ -293,6 +312,13 @@ public class PreviewController extends AbstractFormController {
             return mergeStrings(" - ", getMessage(value), getMessage("preview.detailsProvided.simple"));
         }
         return getMessage(value);
+    }
+
+    private String getDetailsNotProvidedMessage(String value) {
+        if (StringUtils.isEmpty(value)) {
+            return getMessage("preview.detailsNotProvided");
+        }
+        return value;
     }
 
     private String firstElseSecond(final String first, String second) {
