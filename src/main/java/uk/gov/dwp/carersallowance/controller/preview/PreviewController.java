@@ -103,6 +103,7 @@ public class PreviewController extends AbstractFormController {
         displayParametersForPreviewPage(model, session);
         displayParametersForAboutYouPage(model, session);
         displayParametersForNationalityPage(model, session);
+        displayParametersForPartnerDetailsPage(model, session);
         sessionManager.saveSession(session);
         return super.getForm(request, model);
     }
@@ -194,9 +195,9 @@ public class PreviewController extends AbstractFormController {
         model.addAttribute("eeaGuardQuestion", getMessage((String)session.getAttribute("eeaGuardQuestion")));
         model.addAttribute("benefitsFromEEADetails", getDetailsMessage((String)session.getAttribute("benefitsFromEEADetails")));
         model.addAttribute("workingForEEADetails", getDetailsMessage((String)session.getAttribute("workingForEEADetails")));
-        model.addAttribute("showEEA", C3Constants.YES.equals(session.getAttribute("eeaGuardQuestion")));
-        model.addAttribute("showArrivedInUK", checkTrue((String)session.getAttribute("arrivedInUK")));
-        model.addAttribute("showLiveInUKNow", checkTrue((String)session.getAttribute("liveInUKNow")));
+        model.addAttribute("showEEA", checkYes((String)session.getAttribute("eeaGuardQuestion")));
+        model.addAttribute("showArrivedInUK", checkYes((String)session.getAttribute("arrivedInUK")));
+        model.addAttribute("showLiveInUKNow", checkYes((String)session.getAttribute("liveInUKNow")));
 
         model.addAttribute("nationalityLink", getLink("about_you_nationality"));
         model.addAttribute("alwaysLivedInUKLink", getLink("about_you_alwaysliveinuk"));
@@ -210,8 +211,25 @@ public class PreviewController extends AbstractFormController {
         model.addAttribute("workingForEEADetailsLink", getLink("about_you_workingForEEA"));
     }
 
-    private Boolean checkTrue(String checkValue) {
-        return C3Constants.TRUE.equals(checkValue);
+    public void displayParametersForPartnerDetailsPage(final Model model, final Session session) {
+        model.addAttribute("partnerDetailsFullName", getFullName("partnerDetails", session));
+        model.addAttribute("hadPartnerSinceClaimDate", getMessage((String)session.getAttribute("hadPartnerSinceClaimDate")));
+        setDateIntoModel("partnerDetailsDateOfBirth", session, model);
+        model.addAttribute("partnerDetailsNationality", session.getAttribute("partnerDetailsNationality"));
+        model.addAttribute("partnerDetailsSeparated", getMessage((String)session.getAttribute("partnerDetailsSeparated")));
+        model.addAttribute("isPartnerPersonYouCareFor", getMessage((String)session.getAttribute("isPartnerPersonYouCareFor")));
+        model.addAttribute("showHadPartnerSinceClaimDate", checkYes((String)session.getAttribute("hadPartnerSinceClaimDate")));
+
+        model.addAttribute("hadPartnerSinceClaimDateLink", getLink("partner_hadPartner"));
+        model.addAttribute("partnerDetailsFullNameLink", getLink("partner_name"));
+        model.addAttribute("partnerDetailsDateOfBirthLink", getLink("partner_dateOfBirth"));
+        model.addAttribute("partnerDetailsNationalityLink", getLink("partner_nationality"));
+        model.addAttribute("partnerDetailsSeparatedLink", getLink("partner_seperated"));
+        model.addAttribute("isPartnerPersonYouCareForLink", getLink("partner_isPersonCareFor"));
+    }
+
+    private Boolean checkYes(String checkValue) {
+        return C3Constants.YES.equals(checkValue);
     }
 
     private String getDetailsMessage(String value) {
