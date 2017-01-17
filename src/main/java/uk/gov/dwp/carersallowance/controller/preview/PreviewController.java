@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,6 +109,7 @@ public class PreviewController extends AbstractFormController {
         displayParametersForNationalityPage(model, session);
         displayParametersForPartnerDetailsPage(model, session);
         displayParametersForCareYouProvidePage(model, session);
+        displayBreaksInCarePage(model, session);
         sessionManager.saveSession(session);
         return super.getForm(request, model);
     }
@@ -246,6 +248,34 @@ public class PreviewController extends AbstractFormController {
         model.addAttribute("careeAddressLink", getLink("care_you_provide_address"));
     }
 
+    public void displayBreaksInCarePage(final Model model, final Session session) {
+        model.addAttribute("hasBreaksForTypeHospital", StringUtils.isEmpty((String)session.getAttribute("hospitalBreakWhoInHospital")));
+        model.addAttribute("hasBreaksForTypeCareHome", StringUtils.isEmpty((String)session.getAttribute("respiteBreakWhoInRespite")));
+        model.addAttribute("anyBreakMessage", anyBreakTypeGiven((String)session.getAttribute("hospitalBreakWhoInHospital"), (String)session.getAttribute("respiteBreakWhoInRespite")));
+        model.addAttribute("hospitalBreakMessage", breakTypeGiven((String)session.getAttribute("hospitalBreakWhoInHospital")));
+        model.addAttribute("careHomeBreakMessage", breakTypeGiven((String)session.getAttribute("respiteBreakWhoInRespite")));
+        model.addAttribute("otherBreakMessage", breakTypeGiven((String)session.getAttribute("carerSomewhereElseWhereYou")));
+
+        model.addAttribute("anyBreakLink", getLink("breaks_breaktype"));
+        model.addAttribute("hospitalBreakLink", getLink("breaks_hospital"));
+        model.addAttribute("careHomeBreakLink", getLink("breaks_carehome"));
+        model.addAttribute("otherBreakLink", getLink("breaks_breaktype_other"));
+    }
+
+    private String breakTypeGiven(final String value) {
+        if (StringUtils.isEmpty(value)) {
+            getMessage(C3Constants.NO);
+        }
+        return getDetailsMessage(C3Constants.YES);
+    }
+
+    private String anyBreakTypeGiven(final String... value) {
+        if (ArrayUtils.isEmpty(value)) {
+            getMessage(C3Constants.NO);
+        }
+        return getMessage(C3Constants.YES);
+    }
+
     private Boolean isOriginGB() {
         return "GB".equals(originTag);
     }
@@ -292,7 +322,7 @@ public class PreviewController extends AbstractFormController {
     private String getAddressIfNo(String addCheckValue, final String startIndex, final Session session) {
         final String checkValue = (String)session.getAttribute(addCheckValue);
         if (C3Constants.NO.equals(checkValue)) {
-            return getMessage(checkValue) + "<br/>" + getAddressWithPostcode(startIndex, session);
+            return getMessage(checkValue) + "<br/><br/>" + getAddressWithPostcode(startIndex, session);
         }
         return getMessage(checkValue);
     }
