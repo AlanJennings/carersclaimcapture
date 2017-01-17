@@ -121,7 +121,7 @@ wantsEmailContactOld=carerWantsEmailContact.label
 mail=carerMail.label
 mailConfirmation=carerMailConfirmation.label
 
-s2b.g1=/about-you/nationality-and-residency.pageTitle
+s2b.g1=/nationality/where-you-live.pageTitle
 nationality=nationality.label
 label.british=nationality.optionLabels.British
 label.anothercountry=nationality.optionLabels.Other
@@ -138,7 +138,7 @@ trip52weeks.helper=trip52Weeks.hintBefore
 tripDetails=tripDetails.label
 tripDetails.helper=tripDetails.hintBefore
 
-s2b.g2=/about-you/other-eea-state-or-switzerland.pageTitle
+s2b.g2=/nationality/payments-from-abroad.pageTitle
 eeaGuardQuestion.answer=eeaGuardQuestion.label
 eeaGuardQuestion.helperAbove=eeaGuardQuestion.hintBefore
 benefitsFromEEA=benefitsFromEEADetails.label
@@ -539,7 +539,7 @@ s1_2.g1.legend=page.claim-date.text
 s2.g1=page.your-details.text
 s2.g2=page.marital-status.text
 s2.g3=page.contact-details.text
-s2b.longName=page.nationality-and-residency.text
+s2b.longName=page.where-you-live.text
 s3.g1=page.personal-details.text
 s4.g1=page.their-personal-details.text
 s4.g4=page.more-about-the-care.text

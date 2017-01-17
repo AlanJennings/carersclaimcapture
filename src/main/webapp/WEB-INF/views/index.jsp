@@ -81,8 +81,8 @@
                     <li><a href="${baseRef}about-you/your-details">your-details</a> (/about-you/your-details)</li>
                     <li><a href="${baseRef}about-you/marital-status">marital-status</a></li>
                     <li><a href="${baseRef}about-you/contact-details">contact-details</a></li>
-                    <li><a href="${baseRef}about-you/nationality-and-residency">nationality-and-residency</a></li>
-                    <li><a href="${baseRef}about-you/other-eea-state-or-switzerland">other-eea-state-or-switzerland</a></li>            
+                    <li><a href="${baseRef}nationality/where-you-live">where-you-live</a></li>
+                    <li><a href="${baseRef}nationality/payments-from-abroad">payments-from-abroad</a></li>
                 </ul>
             </div>
     

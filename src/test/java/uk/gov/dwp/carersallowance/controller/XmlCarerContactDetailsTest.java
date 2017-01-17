@@ -6,8 +6,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dwp.carersallowance.utils.C3Constants;
+import uk.gov.dwp.carersallowance.utils.LoadFile;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
-import uk.gov.dwp.carersallowance.xml.XmlBuilder;
 import uk.gov.dwp.carersallowance.xml.XmlClaimReader;
 
 import java.io.File;
@@ -19,7 +19,6 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-
 public class XmlCarerContactDetailsTest {
     private static final Logger LOG = LoggerFactory.getLogger(XmlCarerContactDetailsTest.class);
     private XPathMappingList valueMappings;
@@ -27,7 +26,7 @@ public class XmlCarerContactDetailsTest {
     @Before
     public void setUp() throws Exception {
         URL claimTemplateUrl = XmlClaimReader.class.getClassLoader().getResource("xml.mapping.claim");
-        List<String> xmlMappings = XmlBuilder.readLines(claimTemplateUrl);
+        List<String> xmlMappings = LoadFile.readLines(claimTemplateUrl);
         valueMappings = new XPathMappingList();
         valueMappings.add(xmlMappings);
     }

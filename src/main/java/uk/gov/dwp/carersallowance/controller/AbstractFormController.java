@@ -42,7 +42,7 @@ public class AbstractFormController {
     public static final String   PHONE_REGEX = "[ 0123456789]{0,20}";       // probably convert to an enum
     public static final String   EMAIL_REGEX = "[ 0123456789]{0,20}";       // probably convert to an enum
 
-    private MessageSource     messageSource;
+    protected MessageSource  messageSource;
     protected SessionManager sessionManager;
     private ValidationSummary validationSummary;
     protected List<String>      pageList;
@@ -59,8 +59,8 @@ public class AbstractFormController {
             "/about-you/your-details",
             "/about-you/marital-status",
             "/about-you/contact-details",
-            "/about-you/nationality-and-residency",
-            "/about-you/other-eea-state-or-switzerland",
+            "/nationality/where-you-live",
+            "/nationality/payments-from-abroad",
             "/your-partner/personal-details",
             "/care-you-provide/their-personal-details",
             "/care-you-provide/more-about-the-care",

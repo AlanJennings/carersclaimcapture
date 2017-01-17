@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
 import uk.gov.dwp.carersallowance.utils.C3Constants;
-import uk.gov.dwp.carersallowance.xml.XmlBuilder;
+import uk.gov.dwp.carersallowance.utils.LoadFile;
 import uk.gov.dwp.carersallowance.xml.XmlClaimReader;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
 import uk.gov.dwp.carersallowance.sessiondata.SessionDataFactory;
@@ -88,7 +88,7 @@ public class SessionManager {
         try {
             LOG.info("Using XMLFile " + xmlFile);
             LOG.info("Using mapping file " + mappingFile);
-            List<String> xmlMappings = XmlBuilder.readLines(mappingFile);
+            List<String> xmlMappings = LoadFile.readLines(mappingFile);
             XPathMappingList valueMappings = new XPathMappingList();
             valueMappings.add(xmlMappings);
             String xml = IOUtils.toString(XmlClaimReader.class.getClassLoader().getResourceAsStream(xmlFile),Charset.defaultCharset());

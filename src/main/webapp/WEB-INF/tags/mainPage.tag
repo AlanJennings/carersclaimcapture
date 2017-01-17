@@ -1,7 +1,6 @@
 <%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<%@ taglib prefix="cads" uri="http://uk.gov.dwp.carersallowance/functions" %>
 
 <%@ attribute name="page" %>
 <%@ attribute name="pageTitle" %>
@@ -175,7 +174,7 @@
         <c:if test="${!empty hash}" >
             <script type="text/javascript">
                 $(function(){
-                    window.location = '#' + '${cads:encrypt(hash)}_label';
+                    window.location = '#' + '${hash}_label';
                 });
             </script>
         </c:if>

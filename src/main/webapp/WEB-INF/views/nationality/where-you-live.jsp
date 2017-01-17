@@ -8,7 +8,7 @@
 
     <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
 
-        <t:radiobuttons name="nationality"  optionValues="British|Another nationality" optionLabelKeys="British|Other"/>
+        <t:radiobuttons name="nationality" optionValues="British|Another nationality" optionLabelKeys="British|Other"/>
 
         <t:hiddenPanel id="actualNationalityWrap" triggerId="nationality" triggerValue="Another nationality">
             <t:textedit name="actualnationality" />
@@ -20,9 +20,9 @@
             <t:yesnofield name="liveInUKNow" />
 
             <t:hiddenPanel id="liveInUKNowYesWrap" triggerId="liveInUKNow" triggerValue="yes">
-                <t:radiobuttons name="arrivedInUK" optionValues="less|more" />
+                <t:radiobuttons name="arrivedInUK" optionValues="Less than 3 years ago|More than 3 years ago" optionLabelKeys="less|more" />
 
-                <t:hiddenPanel id="arrivedInUKRecentWrap" triggerId="arrivedInUK" triggerValue="less">
+                <t:hiddenPanel id="arrivedInUKRecentWrap" triggerId="arrivedInUK" triggerValue="Less than 3 years ago">
                     <t:datefield name="arrivedInUKDate" />
                     <t:textedit name="arrivedInUKFrom" />
                 </t:hiddenPanel>

@@ -28,6 +28,7 @@ import org.w3c.dom.NodeList;
 
 import uk.gov.dwp.carersallowance.session.IllegalFieldValueException;
 import uk.gov.dwp.carersallowance.utils.C3Constants;
+import uk.gov.dwp.carersallowance.utils.LoadFile;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMapping;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
@@ -59,7 +60,7 @@ public class XmlBuilder {
     private Map<String, XPathMappingList> loadXPathMappings() throws IOException, XPathMappingList.MappingException {
         Map<String, XPathMappingList> mappings = new HashMap<>();
         URL claimTemplateUrl = this.getClass().getClassLoader().getResource(XML_MAPPING__CLAIM);
-        List<String> xmlMappings = readLines(claimTemplateUrl);
+        List<String> xmlMappings = LoadFile.readLines(claimTemplateUrl);
         XPathMappingList valueMappings = new XPathMappingList();
         valueMappings.add(xmlMappings);
         mappings.put(null, valueMappings);
@@ -74,20 +75,6 @@ public class XmlBuilder {
         namespaces.put("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
         namespaces.put("xsi:schemaLocation", "http://www.govtalk.gov.uk/dwp/carers-allowance file:/future/schema/ca/CarersAllowance_Schema.xsd");
         return namespaces;
-    }
-
-    public static List<String> readLines(final URL url) throws IOException {
-        if (url == null) {
-            return null;
-        }
-        InputStream inputStream = null;
-        try {
-            inputStream = url.openStream();
-            List<String> list = IOUtils.readLines(inputStream, Charset.defaultCharset());
-            return list;
-        } finally {
-            IOUtils.closeQuietly(inputStream);
-        }
     }
 
     private Document createDocument(String rootNodeName, Map<String, String> namespaces) throws ParserConfigurationException {

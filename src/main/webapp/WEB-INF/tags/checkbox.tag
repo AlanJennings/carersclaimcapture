@@ -48,7 +48,7 @@
         <c:set var="checked" value="checked" />
     </c:if>
     
-    <label for="${cads:encrypt(pageScope.id)}" class="${pageScope.labelClass}" id="${cads:encrypt(pageScope.id)}_label">
+    <label for="${cads:encrypt(pageScope.id)}" class="${pageScope.labelClass}" id="${pageScope.id}_label">
         <span class="form-label-bold"><t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" /></span>
         <input type="checkbox" id="${cads:encrypt(pageScope.id)}" name="${cads:encrypt(pageScope.name)}" class="${pageScope.additionalClasses}" value="${pageScope.checkedValue}" ${pageScope.checked} style="top: 24px;">
         <span><t:message code="${pageScope.textKey}" /></span>

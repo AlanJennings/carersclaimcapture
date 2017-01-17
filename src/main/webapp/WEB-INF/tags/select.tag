@@ -37,7 +37,7 @@
              outerStyle="${pageScope.outerStyle}" 
              errors="${pageScope.errors}">
     
-    <label class="form-label-bold" for="${cads:encrypt(pageScope.id)}" id="${cads:encrypt(pageScope.id)}_label"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </label>
+    <label class="form-label-bold" for="${cads:encrypt(pageScope.id)}" id="${pageScope.id}_label"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </label>
     <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
     
     <select id="${cads:encrypt(pageScope.id)}" name="${cads:encrypt(pageScope.name)}" class="form-control ${pageScope.additionalClasses}">

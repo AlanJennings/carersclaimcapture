@@ -1135,7 +1135,7 @@
       <ClassStats class="uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultFormController$MessageSourceAccessor" sourceFile="DefaultFormController.java" interface="false" size="16" bugs="0"/>
     </PackageStats>
     <PackageStats package="uk.gov.dwp.carersallowance.controller.started" total_bugs="0" total_types="1" total_size="22">
-      <ClassStats class="uk.gov.dwp.carersallowance.controller.started.PreviewController" sourceFile="PreviewController.java" interface="false" size="22" bugs="0"/>
+      <ClassStats class="uk.gov.dwp.carersallowance.controller.preview.PreviewController" sourceFile="PreviewController.java" interface="false" size="22" bugs="0"/>
     </PackageStats>
     <PackageStats package="uk.gov.dwp.carersallowance.data" total_bugs="0" total_types="6" total_size="126">
       <ClassStats class="uk.gov.dwp.carersallowance.data.AbstractQuestion" sourceFile="AbstractQuestion.java" interface="false" size="37" bugs="0"/>
