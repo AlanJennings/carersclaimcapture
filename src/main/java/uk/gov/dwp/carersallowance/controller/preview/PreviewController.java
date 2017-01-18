@@ -111,17 +111,10 @@ public class PreviewController extends AbstractFormController {
         displayParametersForCareYouProvidePage(model, session);
         displayParametersForBreaksInCarePage(model, session);
         displayParametersForEductionPage(model, session);
+        displayParametersForBankDetailsPage(model, session);
+        displayParametersForAdditionalInfoPage(model, session);
         sessionManager.saveSession(session);
         return super.getForm(request, model);
-    }
-
-    private void setReturnToSummaryHash(final Session session, final Model model) {
-        final String returnToSummaryHash = (String)session.getAttribute("returnToSummary");
-        if (StringUtils.isEmpty(returnToSummaryHash)) {
-            return;
-        }
-        model.addAttribute("hash", returnToSummaryHash);
-        session.removeAttribute("returnToSummary");
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
@@ -139,11 +132,6 @@ public class PreviewController extends AbstractFormController {
         return createRedirection(redirectTo);
     }
 
-    private String createRedirection(final String redirectTo) {
-        final PreviewMapping previewMapping = previewMappings.get(redirectTo);
-        return "redirect:" + previewMapping.getUrl() + "#" + previewMapping.getHash() + "_label";
-    }
-
     public void displayParametersForPreviewPage(final Model model, final Session session) {
         model.addAttribute("displayChangeButton", displayChangeButton);
         model.addAttribute("saveButton", C3Constants.YES.equals(session.getAttribute("carerWantsContactEmail")));
@@ -152,27 +140,7 @@ public class PreviewController extends AbstractFormController {
         model.addAttribute("saveForLaterUrl", saveForLaterUrl);
         model.addAttribute("beenInPreview", C3Constants.TRUE.equals(session.getAttribute("beenInPreview")));
         model.addAttribute("isOriginGB", isOriginGB());
-    }
-
-    public Boolean checkDateDifference(final String before, final String after, final Session session, final Integer check) {
-        LocalDate dateBefore = getDate(before, session);
-        LocalDate dateAfter = getDate(after, session);
-        if (dateBefore != null && dateAfter != null) {
-            long years = ChronoUnit.YEARS.between(dateBefore, dateAfter);
-            return years < check;
-        }
-        return false;
-    }
-
-    public LocalDate getDate(final String date, final Session session) {
-        final String day = (String)session.getAttribute(date + "_day");
-        final String month = (String)session.getAttribute(date + "_month");
-        final String year = (String)session.getAttribute(date + "_year");
-        if (StringUtils.isNotEmpty(day) && StringUtils.isNotEmpty(month) && StringUtils.isNotEmpty(year)) {
-            final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-            return LocalDate.parse(year + month + day, formatter);
-        }
-        return null;
+        model.addAttribute("languageNotWelsh", !"cy".equals(session.getAttribute("language")));
     }
 
     public void displayParametersForAboutYouPage(final Model model, final Session session) {
@@ -180,7 +148,7 @@ public class PreviewController extends AbstractFormController {
         model.addAttribute("maritalStatus", session.getAttribute("maritalStatus"));
         setDateIntoModel("carerDateOfBirth", session, model);
         model.addAttribute("carerAddressWithPostcode", getAddressWithPostcode("carer", session));
-        model.addAttribute("carerHowWeContactYou", notGivenIfEmpty((String)session.getAttribute("carerHowWeContactYou")));
+        model.addAttribute("carerHowWeContactYou", notGivenIfEmpty((String)session.getAttribute("carerHowWeContactYou"), null));
         model.addAttribute("previewCarerMail", mergeStrings(" - ", getMessage((String)session.getAttribute("carerWantsEmailContact")), (String)session.getAttribute("carerMail")));
         model.addAttribute("carerMailLabel", getEmailLabel());
 
@@ -281,6 +249,65 @@ public class PreviewController extends AbstractFormController {
         model.addAttribute("courseContactNumberLink", getLink("education_startEndDates"));
     }
 
+    public void displayParametersForBankDetailsPage(final Model model, final Session session) {
+        model.addAttribute("bankDetailsEntered", notGivenIfEmptyElseDetailsProvided((String)session.getAttribute("accountNumber"), "preview.bankDetailsNotGiven"));
+        model.addAttribute("bankDetailsLink", getLink("bank_details"));
+    }
+
+    public void displayParametersForAdditionalInfoPage(final Model model, final Session session) {
+        model.addAttribute("additionalInfoAnswer", getDetailsMessage((String)session.getAttribute("anythingElse")));
+        model.addAttribute("additionalInfoWelsh", getMessage((String)session.getAttribute("welshCommunication")));
+        model.addAttribute("thirdPartyDetailsMessage", addThirdPartyMessage(session));
+
+        model.addAttribute("additionalInfoAnswerLink", getLink("additional_info"));
+        model.addAttribute("additionalInfoWelshLink", getLink("additional_info_welsh"));
+        model.addAttribute("thirdPartyDetailsMessageLink", getLink("third_party"));
+    }
+
+    private String addThirdPartyMessage(final Session session) {
+        if (C3Constants.NO.equals(session.getAttribute("thirdParty"))) {
+            return mergeStrings(" ", (String)session.getAttribute("nameAndOrganisation"),
+                    getMessage("preview.thirdParty.onBehalfOf"),
+                    (String)session.getAttribute("carerFirstName"), (String)session.getAttribute("carerSurname"));
+        }
+        return mergeStrings(" ", (String)session.getAttribute("carerFirstName"), (String)session.getAttribute("carerSurname"));
+    }
+
+    private void setReturnToSummaryHash(final Session session, final Model model) {
+        final String returnToSummaryHash = (String)session.getAttribute("returnToSummary");
+        if (StringUtils.isEmpty(returnToSummaryHash)) {
+            return;
+        }
+        model.addAttribute("hash", returnToSummaryHash);
+        session.removeAttribute("returnToSummary");
+    }
+
+    private String createRedirection(final String redirectTo) {
+        final PreviewMapping previewMapping = previewMappings.get(redirectTo);
+        return "redirect:" + previewMapping.getUrl() + "#" + previewMapping.getHash() + "_label";
+    }
+
+    public Boolean checkDateDifference(final String before, final String after, final Session session, final Integer check) {
+        LocalDate dateBefore = getDate(before, session);
+        LocalDate dateAfter = getDate(after, session);
+        if (dateBefore != null && dateAfter != null) {
+            long years = ChronoUnit.YEARS.between(dateBefore, dateAfter);
+            return years < check;
+        }
+        return false;
+    }
+
+    public LocalDate getDate(final String date, final Session session) {
+        final String day = (String)session.getAttribute(date + "_day");
+        final String month = (String)session.getAttribute(date + "_month");
+        final String year = (String)session.getAttribute(date + "_year");
+        if (StringUtils.isNotEmpty(day) && StringUtils.isNotEmpty(month) && StringUtils.isNotEmpty(year)) {
+            final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+            return LocalDate.parse(year + month + day, formatter);
+        }
+        return null;
+    }
+
     private String breakTypeGiven(final String value) {
         if (StringUtils.isEmpty(value)) {
             getMessage(C3Constants.NO);
@@ -299,29 +326,29 @@ public class PreviewController extends AbstractFormController {
         return "GB".equals(originTag);
     }
 
-    private Boolean checkYes(String checkValue) {
+    private Boolean checkYes(final String checkValue) {
         return C3Constants.YES.equals(checkValue);
     }
 
-    private Boolean checkNo(String checkValue) {
+    private Boolean checkNo(final String checkValue) {
         return C3Constants.NO.equals(checkValue);
     }
 
-    private String getDetailsMessage(String value) {
+    private String getDetailsMessage(final String value) {
         if (C3Constants.YES.equals(value)) {
             return mergeStrings(" - ", getMessage(value), getMessage("preview.detailsProvided.simple"));
         }
         return getMessage(value);
     }
 
-    private String getDetailsNotProvidedMessage(String value) {
+    private String getDetailsNotProvidedMessage(final String value) {
         if (StringUtils.isEmpty(value)) {
             return getMessage("preview.detailsNotProvided");
         }
         return value;
     }
 
-    private String firstElseSecond(final String first, String second) {
+    private String firstElseSecond(final String first, final String second) {
         if (StringUtils.isNotEmpty(first)) {
             return first;
         }
@@ -345,7 +372,7 @@ public class PreviewController extends AbstractFormController {
         return "/preview/redirect/" + indexIntoList;
     }
 
-    private String getAddressIfNo(String addCheckValue, final String startIndex, final Session session) {
+    private String getAddressIfNo(final String addCheckValue, final String startIndex, final Session session) {
         final String checkValue = (String)session.getAttribute(addCheckValue);
         if (C3Constants.NO.equals(checkValue)) {
             return getMessage(checkValue) + "<br/><br/>" + getAddressWithPostcode(startIndex, session);
@@ -376,14 +403,25 @@ public class PreviewController extends AbstractFormController {
         return merged;
     }
 
-    private String notGivenIfEmpty(final String value) {
+    private String notGivenIfEmpty(final String value, final String withExtraText) {
         if (StringUtils.isEmpty(value)) {
-            return getMessage("preview.notgiven");
+            return mergeStrings(" - ", getMessage("preview.notgiven"), getMessage(withExtraText));
         }
         return value;
     }
 
+    private String notGivenIfEmptyElseDetailsProvided(final String value, final String withExtraText) {
+        final String notGiven = notGivenIfEmpty(value, withExtraText);
+        if (StringUtils.isNotEmpty(value)) {
+            return getDetailsMessage(C3Constants.YES);
+        }
+        return notGiven;
+    }
+
     private String getMessage(final String code) {
+        if (code == null) {
+            return code;
+        }
         return messageSource.getMessage(code, null, null, Locale.getDefault());
     }
 }
