@@ -142,7 +142,7 @@ public class AbstractFormController {
     }
 
     public String[] getReadOnlyFields() {
-        return new String[]{"dateOfClaim_day", "dateOfClaim_month", "dateOfClaim_year"};
+        return new String[]{"dateOfClaim_day", "dateOfClaim_month", "dateOfClaim_year", "careeFirstName", "careeSurname"};
     }
 
     public String getPreviousPage(HttpServletRequest request) {

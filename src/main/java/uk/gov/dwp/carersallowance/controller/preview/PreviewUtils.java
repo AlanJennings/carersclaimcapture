@@ -175,4 +175,11 @@ public class PreviewUtils {
         }
         return messageSource.getMessage(code, null, null, Locale.getDefault());
     }
+
+    public String getOnlyDetailsMessage(final String value) {
+        if (StringUtils.isNotEmpty(value)) {
+            return getMessage("preview.detailsProvided.simple");
+        }
+        return "";
+    }
 }
