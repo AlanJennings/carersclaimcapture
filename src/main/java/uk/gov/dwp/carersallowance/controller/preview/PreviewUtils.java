@@ -37,7 +37,6 @@ public class PreviewUtils {
         return mergeStrings(" ", (String)session.getAttribute("carerFirstName"), (String)session.getAttribute("carerSurname"));
     }
 
-
     public Boolean checkDateDifference(final String before, final String after, final Session session, final Integer check) {
         LocalDate dateBefore = getDate(before, session);
         LocalDate dateAfter = getDate(after, session);
