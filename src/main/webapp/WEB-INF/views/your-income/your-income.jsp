@@ -18,6 +18,7 @@
                 <t:checkbox name="yourIncome_patmatadoppay" outerClass="no-class" />
                 <t:checkbox name="yourIncome_fostering" outerClass="no-class" />
                 <t:checkbox name="yourIncome_directpay" outerClass="no-class" />
+                <t:checkbox name="yourIncome_rentalincome" outerClass="no-class" />
                 <t:checkbox name="yourIncome_anyother" outerClass="no-class" />
            </t:group>
         </t:hiddenPanel>

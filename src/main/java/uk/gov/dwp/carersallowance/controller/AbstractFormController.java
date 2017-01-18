@@ -76,6 +76,7 @@ public class AbstractFormController {
 //            "/your-income/smp-spa-sap",
 //            "/your-income/fostering-allowance",
 //            "/your-income/direct-payment",
+//            "/your-income/rental-income",
 //            "/your-income/other-income",
             "/pay-details/how-we-pay-you",
             "/information/additional-info",

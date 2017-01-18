@@ -296,6 +296,10 @@
                     <QuestionLabel>Direct payment for caring for someone</QuestionLabel>
                     <Answer>No</Answer>
                 </DirectPayment>
+                <RentalIncomeInfo>
+                    <QuestionLabel>What rental income have you had since 08/04/2016?</QuestionLabel>
+                    <Answer>Some money paid by tenants</Answer>
+                </RentalIncomeInfo>
                 <AnyOtherPayment>
                     <QuestionLabel>Any other income, eg rental income</QuestionLabel>
                     <Answer>Yes</Answer>

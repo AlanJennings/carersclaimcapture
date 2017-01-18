@@ -326,6 +326,10 @@
                     <QuestionLabel>{yourIncome_directpay.text}</QuestionLabel>
                     <Answer>{yourIncome_directpay}</Answer>
                 </DirectPayment>
+                <RentalIncomeInfo>
+                    <QuestionLabel>{yourIncome_rentalincome.text}</QuestionLabel>
+                    <Answer>{yourIncome_rentalincome.text}</Answer>
+                </RentalIncomeInfo>
                 <AnyOtherPayment>
                     <QuestionLabel>{yourIncome_anyother.text}</QuestionLabel>
                     <Answer>{yourIncome_anyother.text}</Answer>
