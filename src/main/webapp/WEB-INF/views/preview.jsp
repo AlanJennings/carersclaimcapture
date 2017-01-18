@@ -24,9 +24,7 @@
                         <%@include file="preview/careYouProvide.jsp"%>
                         <%@include file="preview/breaksInCare.jsp"%>
                         <%@include file="preview/education.jsp"%>
-                        <%--
                         <%@include file="preview/yourIncome.jsp"%>
-                        --%>
                         <c:if test="${showBankDetails}" >
                             <%@include file="preview/bankDetails.jsp"%>
                         </c:if>
