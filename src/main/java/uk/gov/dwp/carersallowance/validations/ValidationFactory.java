@@ -68,6 +68,10 @@ public class ValidationFactory {
                 LOG.debug("Confirm Validation");
                 return new GroupAllValidation(condition);
 
+            case SORT_CODE:
+                LOG.debug("Sortcode Validation");
+                return new SortCodeValidation(condition);
+
             default:
                 throw new IllegalArgumentException("Unknown validation type: " + type);
         }
