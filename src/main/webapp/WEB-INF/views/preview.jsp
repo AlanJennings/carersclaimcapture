@@ -77,7 +77,6 @@
 	/>
 </div>
 
-
 <script type="text/javascript" src="<c:url value='/javascript/preview.js' />" ></script>
 <script type="text/javascript">
 	$(function(){
