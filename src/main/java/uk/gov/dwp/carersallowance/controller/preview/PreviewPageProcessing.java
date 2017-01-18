@@ -122,7 +122,7 @@ public class PreviewPageProcessing {
     }
 
     private void displayParametersForCareYouProvidePage(final Model model, final Session session) {
-        model.addAttribute("careeFirstNames", session.getAttribute("careeFirstNames"));
+        model.addAttribute("careeFirstName", session.getAttribute("careeFirstName"));
         model.addAttribute("careeSurname", session.getAttribute("careeSurname"));
         model.addAttribute("careeFullName", previewUtils.getFullName("caree", session));
         previewUtils.setDateIntoModel("careeDateOfBirth", session, model);
@@ -134,7 +134,7 @@ public class PreviewPageProcessing {
         model.addAttribute("spent35HoursCaring", previewUtils.getMessage((String)session.getAttribute("spent35HoursCaring")));
         model.addAttribute("otherCarer", previewUtils.getMessage((String)session.getAttribute("otherCarer")));
         model.addAttribute("otherCarerUc", previewUtils.getMessage((String)session.getAttribute("otherCarerUc")));
-        model.addAttribute("otherCarerUcDetails", previewUtils.getDetailsMessage((String)session.getAttribute("otherCarerUc")));
+        model.addAttribute("otherCarerUcDetails", previewUtils.getOnlyDetailsMessage((String)session.getAttribute("otherCarerUcDetails")));
 
         model.addAttribute("careeFullNameLink", previewUtils.getLink("care_you_provide_name"));
         model.addAttribute("careeDateOfBirthLink", previewUtils.getLink("care_you_provide_dob"));
