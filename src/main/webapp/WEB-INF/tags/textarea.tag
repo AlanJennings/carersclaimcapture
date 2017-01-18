@@ -54,7 +54,7 @@
 
 <c:if test="${pageScope.showRemainingChars=='true'}" >    
     <script type="text/javascript">
-        window.areaCounter("${id}", Number("${pageScope.maxLength}"));
+        window.areaCounter("${cads:encrypt(id)}", Number("${pageScope.maxLength}"));
     </script>
 </c:if>
 

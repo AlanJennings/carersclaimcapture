@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
+import uk.gov.dwp.carersallowance.jsp.Functions;
 import uk.gov.dwp.carersallowance.session.InconsistentFieldValuesException;
 import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 import uk.gov.dwp.carersallowance.utils.KeyValue;
@@ -122,7 +123,7 @@ public abstract class AbstractValidation implements Validation {
             String fieldConditionErrorKey = fieldName + ".validation." + validationCondition;   // e.g. carerDateOfBirth.validation.date.upperlimit
             String errorText = getErrorText(messageSource, validationName, validationCondition, fieldErrorKey, fieldConditionErrorKey);
 
-            validationSummary.addFormError(fieldName, fieldTitle, errorText);
+            validationSummary.addFormError(Functions.encrypt(fieldName), fieldTitle, errorText);
         } finally {
             LOG.trace("Ending AbstractValidation.failValidation");
         }
