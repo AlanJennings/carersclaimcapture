@@ -13,7 +13,8 @@ public enum ValidationType {
     GROUP_ANY("group_any", "%s.validation.group_any"),
     GROUP_ALL("group_all", "%s.validation.group_all"),
     REGEX("regex", "%s.validation.regex"),                              // note blank values are not checked against regex.
-    CONFIRM_FIELD("confirm_field", "%s.validation.confirm_field");
+    CONFIRM_FIELD("confirm_field", "%s.validation.confirm_field"),
+    SORT_CODE("sortcode", "%s.validation.sortcode");
 
     private String   property;
     private String   keyFormat;
