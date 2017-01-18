@@ -125,12 +125,11 @@
                     <QuestionLabel>{spent35HoursCaring.label}</QuestionLabel>
                     <Answer>{spent35HoursCaring}</Answer>
                 </Cared35Hours>
-<!--  
                 <OtherCarer>
-                    <QuestionLabel>Does anyone else spend 35 hours or more each week providing care for Jane Bloggs?{}</QuestionLabel>
-                    <Answer>No{}</Answer>
+                    <QuestionLabel>{otherCarer.label}</QuestionLabel>
+                    <Answer>{otherCarer}</Answer>
                 </OtherCarer>
--->
+
                 <!-- repeatable block, not sure how going to do this yet -->
                 <!-- and of course this has changed as well -->
                 <CareBreak>

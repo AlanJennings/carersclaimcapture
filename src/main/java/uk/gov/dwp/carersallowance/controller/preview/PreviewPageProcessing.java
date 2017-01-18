@@ -122,16 +122,28 @@ public class PreviewPageProcessing {
     }
 
     private void displayParametersForCareYouProvidePage(final Model model, final Session session) {
+        model.addAttribute("careeFirstNames", session.getAttribute("careeFirstNames"));
+        model.addAttribute("careeSurname", session.getAttribute("careeSurname"));
         model.addAttribute("careeFullName", previewUtils.getFullName("caree", session));
         previewUtils.setDateIntoModel("careeDateOfBirth", session, model);
         model.addAttribute("showHidePartnerDetails", previewUtils.checkNo((String)session.getAttribute("hadPartnerSinceClaimDate")) || previewUtils.checkNo((String)session.getAttribute("isPartnerPersonYouCareFor")));
         model.addAttribute("careeRelationship", session.getAttribute("careeRelationship"));
         model.addAttribute("careeSameAddressWithPostcode", previewUtils.getAddressIfNo("careeSameAddress", "caree", session));
+        model.addAttribute("showOtherCarer", previewUtils.checkYes((String)session.getAttribute("otherCarer")));
+        model.addAttribute("showOtherCarerUc", previewUtils.checkYes((String)session.getAttribute("otherCarerUc")));
+        model.addAttribute("spent35HoursCaring", previewUtils.getMessage((String)session.getAttribute("spent35HoursCaring")));
+        model.addAttribute("otherCarer", previewUtils.getMessage((String)session.getAttribute("otherCarer")));
+        model.addAttribute("otherCarerUc", previewUtils.getMessage((String)session.getAttribute("otherCarerUc")));
+        model.addAttribute("otherCarerUcDetails", previewUtils.getDetailsMessage((String)session.getAttribute("otherCarerUc")));
 
         model.addAttribute("careeFullNameLink", previewUtils.getLink("care_you_provide_name"));
         model.addAttribute("careeDateOfBirthLink", previewUtils.getLink("care_you_provide_dob"));
         model.addAttribute("careeRelationshipLink", previewUtils.getLink("care_you_provide_relationship"));
         model.addAttribute("careeAddressLink", previewUtils.getLink("care_you_provide_address"));
+        model.addAttribute("spent35HoursCaringLink", previewUtils.getLink("care_you_provide_spent35HoursCaring"));
+        model.addAttribute("otherCarerLink", previewUtils.getLink("care_you_provide_otherCarer"));
+        model.addAttribute("otherCarerUcLink", previewUtils.getLink("care_you_provide_otherCarerUc"));
+        model.addAttribute("otherCarerUcDetailsLink", previewUtils.getLink("care_you_provide_otherCarerUcDetails"));
     }
 
     private void displayParametersForBreaksInCarePage(final Model model, final Session session) {

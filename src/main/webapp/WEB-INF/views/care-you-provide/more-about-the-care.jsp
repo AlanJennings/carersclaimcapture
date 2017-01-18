@@ -5,18 +5,17 @@
 <!DOCTYPE html>
 
 <t:mainPage>
-
     <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
         <t:yesnofield name="spent35HoursCaring" />
 
-        <t:group name="otherResidenceGroup" >
-            <t:checkbox name="otherResidence_hospital" outerClass="no-class" />
-            <t:checkbox name="otherResidence_respite" outerClass="no-class" />
-            <t:checkbox name="otherResidence_none" outerClass="no-class" />
-        </t:group>
+        <t:yesnofield name="otherCarer" />
 
-        <t:yesnofield name="weeksNotCaring" />
+        <t:hiddenPanel id="otherCarerWrap" triggerId="otherCarer" triggerValue="yes">
+            <t:yesnofield name="otherCarerUc" />
 
+            <t:hiddenPanel id="otherCarerUcWrap" triggerId="otherCarerUc" triggerValue="yes">
+                <t:textarea name="otherCarerUcDetails" showRemainingChars="true" />
+            </t:hiddenPanel>
+        </t:hiddenPanel>
     </t:pageContent>
-
 </t:mainPage>    

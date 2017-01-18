@@ -10,16 +10,14 @@
     </c:if>
     <t:fieldWithLink id="care_you_provide_relationship" name="careeRelationship.label" value="${careeRelationship}" displayChangeButton="${displayChangeButton}" link="${careeRelationshipLink}" />
     <t:fieldWithLink id="care_you_provide_address" name="careeSameAddress.label" value="${careeSameAddressWithPostcode}" displayChangeButton="${displayChangeButton}" link="${careeAddressLink}" />
-    <%-- Commented out until new page UC question converted into C3 Java
-    <t:fieldWithLink id="care_you_provide_spent35HoursCaring", messages("spent35HoursCaring",dpname), messages("label."+aboutTheCare.spent35HoursCaring.getOrElse("")),disableLink = disableChangeButton, elementId = Some("spent35HoursCaring")) />
+    <t:fieldWithLink id="care_you_provide_spent35HoursCaring" name="spent35HoursCaring.label" value="${spent35HoursCaring}" displayChangeButton="${displayChangeButton}" link="${spent35HoursCaringLink}" />
     <c:if test="${isOriginGB}" >
-        <t:fieldWithLink id="care_you_provide_otherCarer", messages("otherCarer",dpname), messages("label."+aboutTheCare.otherCarer.getOrElse("")),disableLink = disableChangeButton, elementId = Some("otherCarer")) />
-        <c:if test="${aboutTheCare.equals(yes)}" >
-            <t:fieldWithLink id="care_you_provide_otherCarerUc" name="messages("otherCarerUc",dpname), messages("label."+aboutTheCare.otherCarerUc.getOrElse("")),disableLink = disableChangeButton, elementId = Some("otherCarerUc")) />
+        <t:fieldWithLink id="care_you_provide_otherCarer" name="otherCarer.label" value="${otherCarer}" displayChangeButton="${displayChangeButton}" link="${otherCarerLink}" />
+        <c:if test="${showOtherCarer}" >
+            <t:fieldWithLink id="care_you_provide_otherCarerUc" name="otherCarerUc.label" value="${otherCarerUc}" displayChangeButton="${displayChangeButton}" link="${otherCarerUcLink}" />
         </c:if>
-        <c:if test="${aboutTheCare.otherCarerUc.equals(yes)}" >
-            <t:fieldWithLink id="care_you_provide_otherCarerUcDetails" name="otherCarerUcDetails", otherCarerUcDetailsText, disableLink = disableChangeButton, elementId = Some("otherCarerUcDetails")) />
+        <c:if test="${showOtherCarerUc}" >
+            <t:fieldWithLink id="care_you_provide_otherCarerUcDetails" name="otherCarerUcDetails.label" value="${otherCarerUcDetails}" displayChangeButton="${displayChangeButton}" link="${otherCarerUcDetailsLink}" />
         </c:if>
     </c:if>
-    --%>
 </t:accordion>

@@ -76,6 +76,8 @@
             
             panel.find('input[type="radio"]').removeAttr('checked');
             panel.find('input[type="checkbox"]').removeAttr('checked');
+            panel.find("[data-tag-type^='hiddenPanel']").hide();
+            panel.find("label.block-label.selected").removeClass("selected");
                             
         } else {
             // TODO, disable fields
