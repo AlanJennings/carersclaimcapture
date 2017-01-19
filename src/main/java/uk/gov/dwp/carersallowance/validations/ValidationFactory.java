@@ -52,6 +52,10 @@ public class ValidationFactory {
                 LOG.debug("Address Validation");
                 return AddressValidation.valueOf(condition);
 
+            case MIN_LENGTH:
+                LOG.debug("MinLength Validationn");
+                return new MinLengthValidation(condition);
+
             case CONFIRM_FIELD:
                 LOG.debug("Confirm Validation");
                 return new ConfirmValidation(condition);

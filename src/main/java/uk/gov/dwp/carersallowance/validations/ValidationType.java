@@ -7,6 +7,7 @@ import java.util.Arrays;
  */
 public enum ValidationType {
     MANDATORY("mandatory", "%s.validation.mandatory"),
+    MIN_LENGTH("minlength", "%s.validation.minlength"),
     MAX_LENGTH("maxLength", "%s.validation.maxlength"),
     DATE("date", "%s.validation.date", "%s.validation.date.lowerlimit", "%s.validation.date.upperlimit"),
     ADDRESS("address", "%s.validation.address"),
