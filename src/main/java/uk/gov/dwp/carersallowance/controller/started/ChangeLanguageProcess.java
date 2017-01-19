@@ -24,8 +24,10 @@ public class ChangeLanguageProcess {
     private void setLanguage(final HttpServletRequest request, final HttpServletResponse response, final String newLanguage) {
         Locale locale = LocaleUtils.toLocale(newLanguage);
         LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
-        localeResolver.setLocale(request, response, StringUtils.parseLocaleString(newLanguage));
-        Locale.setDefault(locale);
+        if (localeResolver != null) {
+            localeResolver.setLocale(request, response, StringUtils.parseLocaleString(newLanguage));
+            Locale.setDefault(locale);
+        }
     }
 
     private String getLanguage(final HttpServletRequest request) {

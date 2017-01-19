@@ -54,6 +54,7 @@ public class ApplicationCookieTest {
     public void testCookieSet() {
         try {
             when(request.getMethod()).thenReturn("GET");
+            when(request.getQueryString()).thenReturn(null);
             formController.getForm(request, response, model);
         } catch (Exception e) {
 
