@@ -11,15 +11,7 @@
 
         <t:hiddenPanel id="eeaWrapper" triggerId="eeaGuardQuestion" triggerValue="yes">
             <t:pre>
-                <p>
-                    These questions are about the following countries:
-                    <br>
-                    Austria, Belgium, Bulgaria, Croatia, Cyprus, Czech Republic,
-                    Denmark, Estonia, Finland, France, Germany, Gibraltar, Greece,
-                    Hungary, Iceland, Ireland, Italy, Latvia, Liechtenstein, Lithuania,
-                    Luxembourg, Malta, Netherlands, Norway, Poland, Portugal, Romania,
-                    Slovakia, Slovenia, Spain, Sweden and Switzerland.
-               </p>
+                <p><t:message code="eeaCountryHelp.label" /><br><t:message code="eeaCountryHelp" /></p>
            </t:pre>
 
            <t:yesnofield name="benefitsFromEEADetails" />

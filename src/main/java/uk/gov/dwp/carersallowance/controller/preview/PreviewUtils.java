@@ -72,10 +72,6 @@ public class PreviewUtils {
         return getMessage(C3Constants.YES);
     }
 
-    public Boolean isOriginGB(final String originTag) {
-        return "GB".equals(originTag);
-    }
-
     public Boolean checkYes(final String checkValue) {
         return C3Constants.YES.equals(checkValue);
     }

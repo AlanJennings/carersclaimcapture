@@ -23,30 +23,33 @@ import java.net.URL;
 public class ClaimStartedController {
     private static final Logger LOG = LoggerFactory.getLogger(ClaimStartedController.class);
 
-    private final String xmlSchemaVersion;
     private final Boolean replicaEnabledProperty;
     private final String replicaDataFileProperty;
     private final DefaultFormController defaultFormController;
     private final URL xmlMappingFile;
+    private final ChangeLanguageProcess changeLanguageProcess;
 
     private static final String CURRENT_PAGE = "/allowance/benefits";
 
     @Inject
-    public ClaimStartedController(final @Value("${xml.schema.version}") String xmlSchemaVersion,
-                                  final @Value("${replica.enabled}") Boolean replicaEnabledProperty,
+    public ClaimStartedController(final @Value("${replica.enabled}") Boolean replicaEnabledProperty,
                                   final @Value("${replica.datafile}") String replicaDataFileProperty,
                                   final DefaultFormController defaultFormController,
-                                  final @Value("${xml.mappingFile}") String mappingFile) {
-        this.xmlSchemaVersion=xmlSchemaVersion;
+                                  final @Value("${xml.mappingFile}") String mappingFile,
+                                  final ChangeLanguageProcess changeLanguageProcess) {
         this.replicaEnabledProperty = replicaEnabledProperty;
         this.replicaDataFileProperty = replicaDataFileProperty;
         this.defaultFormController = defaultFormController;
+        this.changeLanguageProcess = changeLanguageProcess;
         this.xmlMappingFile = XmlClaimReader.class.getClassLoader().getResource(mappingFile);
     }
 
     @RequestMapping(value = CURRENT_PAGE, method = RequestMethod.GET)
     public String getForm(final HttpServletRequest request, final HttpServletResponse response, final Model model) {
-        defaultFormController.createSessionVariables(request, response, getReplicateDataFile(), xmlMappingFile, xmlSchemaVersion, C3Constants.CLAIM);
+        if (request.getQueryString() == null || !request.getQueryString().contains("changing=true")) {
+            changeLanguageProcess.processChangeLanguage(request, response);
+            defaultFormController.createSessionVariables(request, response, getReplicateDataFile(), xmlMappingFile, C3Constants.CLAIM);
+        }
         defaultFormController.getForm(request, model);
         return CURRENT_PAGE;
     }

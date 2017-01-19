@@ -225,7 +225,7 @@ public class Functions {
     public static String prop(String code) {
         LOG.trace("Started Functions.prop");
         try {
-            return messageSource.getMessage(code, null, null, null);
+            return messageSource.getMessage(code, null, null, Locale.getDefault());
         } finally {
             LOG.trace("Ending Functions.prop");
         }

@@ -71,12 +71,4 @@ public class XmlBuilderTest {
             LOG.error("Exception calling XmlBuilder :", e);
         }
     }
-
-    @Test
-    public void test() {
-        String s = "dateOfClaim_day, dateOfClaim_month, dateOfClaim_year, 'dd MMMMMMMMMM, yyyy', ''";
-        String[] data = s.split(",(?=(?:[^']*'[^']*')*[^']*$)", -1);
-        LOG.debug("{}", data);
-
-    }
 }

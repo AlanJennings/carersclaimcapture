@@ -1,6 +1,7 @@
 <%@ tag description="Simple Wrapper Tag" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <%@attribute name="errors" required="true" type="uk.gov.dwp.carersallowance.validations.ValidationSummary" %>
 
@@ -8,8 +9,8 @@
 
 <c:if test="${pageScope.errors.hasFormErrors()}">
     <div class="validation-summary">
-        <h2 class="heading-small">Check the form</h2>
-        <p>Fix the following:</p>
+        <h2 class="heading-small"><t:message code="error.check.form" /></h2>
+        <p><t:message code="error.fix.following" /></p>
         <ol class="list-bullet">
             <c:forEach var="error" items="${pageScope.errors.formErrors}" varStatus="status">
                 <li>

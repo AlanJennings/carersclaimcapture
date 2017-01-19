@@ -43,16 +43,16 @@
 <main class="container" role="main" id="main">
     <div class="carers-allowance clearfix">
         <c:if test="${isPrototype == true}">
-        <div class="prototype">
-            <p><t:message code="prototype.message" /></p>
-        </div>
+            <div class="prototype">
+                <p><t:message code="prototype.message" /></p>
+            </div>
         </c:if>
-<noscript>
-        <section class="js-message">
-            <h2><t:message code="noJavascript.title" /></h2>
-            <p><t:message code="noJavascript.text" /></p>
-        </section>
-</noscript>
+        <noscript>
+            <section class="js-message">
+                <h2><t:message code="noJavascript.title" /></h2>
+                <p><t:message code="noJavascript.text" /></p>
+            </section>
+        </noscript>
         
         <div class="helper-mobile" id="helper-toggle">
             <a class="help">Get help</a>

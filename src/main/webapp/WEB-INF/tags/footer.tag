@@ -1,5 +1,6 @@
 <%@ tag description="Footer Tag" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <%@ attribute name="currentPage" required="true" type="java.lang.String"%>
 
@@ -7,53 +8,65 @@
     <div class="container clearfix">
         <div>
             <nav class="footer-nav language">
-                <a id="lang-cy" 
-                   href="/change-language/cy" 
-                   aria-label="Newid yr iaith diofyn i Gymraeg" 
-                   onmousedown="trackEvent('${pageScope.currentPage}','Language Selection Welsh');" 
-                   onkeydown="trackEvent('${pageScope.currentPage}','Language Selection Welsh');"
-                >Cymraeg</a>
-
+                <c:if test="${isOriginGB && (currentPage eq \"/allowance/benefits\" || currentPage eq \"/circumstances/report-changes/change-selection\")}" >
+                    <c:if test="${language eq \"Welsh\"}" >
+                        <a id="lang-en"
+                           href="/allowance/benefits?lang=en"
+                           aria-label="<t:message code="english.helper" />"
+                           onmousedown="trackEvent('${pageScope.currentPage}','Language Selection English');"
+                           onkeydown="trackEvent('${pageScope.currentPage}','Language Selection English');"><t:message code="english" /></a>
+                    </c:if>
+                    <c:if test="${language eq \"English\"}" >
+                        <a id="lang-cy"
+                           href="/allowance/benefits?lang=cy"
+                           aria-label="<t:message code="welsh.helper" />"
+                           onmousedown="trackEvent('${pageScope.currentPage}','Language Selection Welsh');"
+                           onkeydown="trackEvent('${pageScope.currentPage}','Language Selection Welsh');"><t:message code="welsh" /></a>
+                    </c:if>
+                </c:if>
                 <a id="cookies" 
                    href="/cookies/en" 
                    rel="external" 
                    target="_blank" 
-                   aria-label="This link opens in a new window"
+                   aria-label="<t:message code="footer.external.link" />"
                    onmousedown="trackEvent('${pageScope.currentPage}','Cookies - from footer');" 
                    onkeydown="trackEvent('${pageScope.currentPage}','Cookies - from footer');" 
-                >Cookies</a>
+                ><t:message code="cookies.link" /></a>
 
                 <a id="privacy" 
                    href="https://www.gov.uk/government/organisations/department-for-work-pensions/about/personal-information-charter" 
                    rel="external" 
                    target="privacyLink" 
-                   aria-label="This link opens in a new window"
+                   aria-label="<t:message code="footer.external.link" />"
                    onmousedown="trackEvent('${pageScope.currentPage}','Privacy');" 
                    onkeydown="trackEvent('${pageScope.currentPage}','Privacy');" 
-                >Privacy</a>
+                ><t:message code="privacy.link" /></a>
 
                 <a id="claim-feedback" 
                    href="https://www.gov.uk/done/apply-carers-allowance" 
                    rel="external" 
                    target="_blank" 
-                   aria-label="This link opens in a new window"
+                   aria-label="<t:message code="footer.external.link" />"
                    onmousedown="trackEvent('${pageScope.currentPage}','Feedback');" 
                    onkeydown="trackEvent('${pageScope.currentPage}','Feedback');" 
-                >Feedback</a>
+                ><t:message code="footer.feedback.link" /></a>
             </nav>
-            <p>Helpline - 0345 608 4321</p>
-            <p>Calls cost up to 9p a minute from landlines, calls from mobiles may cost more.</p>
-            <p>Made in Preston by Department for Work &amp; Pensions</p>
+
+            <p><t:message code="footer.helpline" /></p>
+            <c:if test="${isOriginGB}" >
+                <p><t:message code="footer.callcharges" /></p>
+            </c:if>
+            <p><t:message code="madePreston" /></p>
             <p class="ogl">
-                All content is available under the 
+                <t:message code="openGovLicensea" />
                 <a rel="external" 
                    href="http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3" 
                    target="openGovLink" 
                    aria-label="This link opens in a new window"
                    onmousedown="trackEvent('${pageScope.currentPage}','Open Government Licence');" 
                    onkeydown="trackEvent('${pageScope.currentPage}','Open Government Licence');" 
-                >Open Government Licence v3.0</a>
-                , except where otherwise stated
+                ><t:message code="openGovLicenseb" /></a>
+                <t:message code="openGovLicensec" />
             </p>
         </div>
         <div class="fr">
@@ -62,7 +75,7 @@
                target="crownLink" 
                onmousedown="trackEvent('${pageScope.currentPage}','Crown Copyright');" 
                onkeydown="trackEvent('${pageScope.currentPage}','Crown Copyright');"
-            >&copy; Crown Copyright</a>
+            >&copy; <t:message code="crownCopyright" /></a>
         </div>
     </div>
 </footer>

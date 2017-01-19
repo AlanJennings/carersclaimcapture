@@ -32,16 +32,13 @@ public abstract class AbstractValidation implements Validation {
      * @return the message or null if it does not exist
      */
     protected String getFieldLabel(MessageSource messageSource, String fieldName, String...args) {
-        Locale locale  = null;
-        String fieldTitle = messageSource.getMessage(fieldName + ".label", args, "{" + fieldName + ".label}", locale);
+        String fieldTitle = messageSource.getMessage(fieldName + ".label", args, "{" + fieldName + ".label}", Locale.getDefault());
         return fieldTitle;
     }
 
     private String[] getFieldLabelArgs(MessageSource messageSource, String fieldName, Map<String, String[]> existingFieldValues) {
         try {
-            Locale locale  = null;
-
-            String fieldTitleArgs = messageSource.getMessage(fieldName + ".label.args", null, null, locale);
+            String fieldTitleArgs = messageSource.getMessage(fieldName + ".label.args", null, null, Locale.getDefault());
 
             if(StringUtils.isBlank(fieldTitleArgs)) {
                 return null;

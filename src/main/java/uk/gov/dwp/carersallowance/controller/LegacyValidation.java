@@ -105,7 +105,7 @@ public class LegacyValidation {
      */
     private String getFieldLabel(String fieldName, Object... args) {
         Locale locale  = null;
-        String fieldTitle = messageSource.getMessage(fieldName + ".label", args, "{" + fieldName + ".label}", locale);
+        String fieldTitle = messageSource.getMessage(fieldName + ".label", args, "{" + fieldName + ".label}", Locale.getDefault());
         return fieldTitle;
     }
 
@@ -151,7 +151,7 @@ public class LegacyValidation {
     private boolean validationEnabled(String fieldName, LegacyValidation.ValidationType type) {
         Locale locale  = null;
         String defaultValue = null;
-        String validation = messageSource.getMessage(fieldName + ".validation." + type.getProperty(), null, defaultValue, locale);
+        String validation = messageSource.getMessage(fieldName + ".validation." + type.getProperty(), null, defaultValue, Locale.getDefault());
         boolean enabled = Boolean.valueOf(validation);
 
         return enabled;

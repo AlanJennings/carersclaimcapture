@@ -3,9 +3,21 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
+<spring:eval var="isPrototype" expression="@environment.getProperty('prototype.disclaimer')"/>
 <t:mainPage pageTitle="preview.title">
     <main class="container" role="main" id="main">
         <div class="carers-allowance clearfix">
+            <c:if test="${isPrototype == true}">
+                <div class="prototype">
+                    <p><t:message code="prototype.message" /></p>
+                </div>
+            </c:if>
+            <noscript>
+                <section class="js-message">
+                    <h2><t:message code="noJavascript.title" /></h2>
+                    <p><t:message code="noJavascript.text" /></p>
+                </section>
+            </noscript>
             <div class="grid-row main-grid">
                 <article class="column-full-width main-content">
                     <h1 class="form-title heading-large"><t:message code="preview.summary" /></h1>

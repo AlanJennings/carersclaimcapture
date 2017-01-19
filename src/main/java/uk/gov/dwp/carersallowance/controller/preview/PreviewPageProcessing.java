@@ -56,8 +56,7 @@ public class PreviewPageProcessing {
         model.addAttribute("isSaveEnabled", saveForLaterSaveEnabled);
         model.addAttribute("saveForLaterUrl", saveForLaterUrl);
         model.addAttribute("beenInPreview", C3Constants.TRUE.equals(session.getAttribute("beenInPreview")));
-        model.addAttribute("isOriginGB", previewUtils.isOriginGB(originTag));
-        model.addAttribute("languageNotWelsh", !"cy".equals(session.getAttribute("language")));
+        model.addAttribute("languageNotWelsh", !C3Constants.WELSH_LANG.equals(session.getAttribute("language")));
     }
 
     private void displayParametersForAboutYouPage(final Model model, final Session session) {
@@ -89,7 +88,7 @@ public class PreviewPageProcessing {
         model.addAttribute("benefitsFromEEADetails", previewUtils.getDetailsMessage((String)session.getAttribute("benefitsFromEEADetails")));
         model.addAttribute("workingForEEADetails", previewUtils.getDetailsMessage((String)session.getAttribute("workingForEEADetails")));
         model.addAttribute("showEEA", previewUtils.checkYes((String)session.getAttribute("eeaGuardQuestion")));
-        model.addAttribute("showArrivedInUK", previewUtils.checkYes((String)session.getAttribute("arrivedInUK")));
+        model.addAttribute("showArrivedInUK", StringUtils.isNotEmpty((String)session.getAttribute("arrivedInUK")));
         model.addAttribute("showLiveInUKNow", previewUtils.checkYes((String)session.getAttribute("liveInUKNow")));
 
         model.addAttribute("nationalityLink", previewUtils.getLink("about_you_nationality"));

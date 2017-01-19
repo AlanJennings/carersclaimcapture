@@ -26,9 +26,9 @@ public class CircsStartedController {
     private final DefaultChangeOfCircsController defaultChangeOfCircsController;
     private final Boolean circsReplicaEnabledProperty;
     private final String circsReplicaDataFileProperty;
-    private final String xmlSchemaVersion;
     private final String originTag;
     private final URL xmlMappingFile;
+    private final ChangeLanguageProcess changeLanguageProcess;
 
     private static final String CURRENT_CIRCS_PAGE = "/circumstances/report-changes/selection";
     private static final String CHANGE_SELECTION_PAGE = "/circumstances/report-changes/change-selection";
@@ -39,14 +39,14 @@ public class CircsStartedController {
                                   @Value("${xml.circsMappingFile}") String mappingFile,
                                   @Value("${circs.replica.enabled}") final Boolean circsReplicaEnabledProperty,
                                   @Value("${circs.replica.datafile}") final String circsReplicaDataFileProperty,
-                                  final @Value("${xml.schema.version}") String xmlSchemaVersion,
-                                  @Value("${origin.tag}") final String originTag) {
+                                  @Value("${origin.tag}") final String originTag,
+                                  final ChangeLanguageProcess changeLanguageProcess) {
         this.xmlMappingFile = XmlClaimReader.class.getClassLoader().getResource(mappingFile);
         this.defaultChangeOfCircsController = defaultChangeOfCircsController;
         this.circsReplicaEnabledProperty = circsReplicaEnabledProperty;
         this.circsReplicaDataFileProperty = circsReplicaDataFileProperty;
-        this.xmlSchemaVersion = xmlSchemaVersion;
         this.originTag = originTag;
+        this.changeLanguageProcess = changeLanguageProcess;
     }
 
     @RequestMapping(value = CURRENT_CIRCS_PAGE, method = RequestMethod.POST)
@@ -59,7 +59,10 @@ public class CircsStartedController {
         LOG.info("circsReplicaEnabledProperty = " + circsReplicaEnabledProperty);
         LOG.info("circsReplicaDataFileProperty = " + circsReplicaDataFileProperty);
 
-        defaultChangeOfCircsController.createSessionVariables(request, response, getReplicateDataFile(), xmlMappingFile, xmlSchemaVersion, C3Constants.CIRCS);
+        if (request.getQueryString() == null || !request.getQueryString().contains("changing=true")) {
+            changeLanguageProcess.processChangeLanguage(request, response);
+            defaultChangeOfCircsController.createSessionVariables(request, response, getReplicateDataFile(), xmlMappingFile, C3Constants.CIRCS);
+        }
         if (ORIGIN_NI.equals(originTag)) {
             defaultChangeOfCircsController.getForm(request, model);
             return CURRENT_CIRCS_PAGE;

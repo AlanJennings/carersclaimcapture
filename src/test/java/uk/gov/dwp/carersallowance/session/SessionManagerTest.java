@@ -70,7 +70,7 @@ public class SessionManagerTest {
         sessionDataService = new SessionDataMapServiceImpl();
         claimEncryptionService = new ClaimEncryptionServiceImpl(false, messageSource);
         when(sessionDataFactory.getSessionDataService()).thenReturn(sessionDataService);
-        sessionManager = new SessionManager(cookieManager, sessionDataFactory, claimEncryptionService, "GB");
+        sessionManager = new SessionManager(cookieManager, sessionDataFactory, claimEncryptionService, "GB", "0.27");
         objectCaptor = ArgumentCaptor.forClass(Object.class);
     }
 
@@ -90,7 +90,7 @@ public class SessionManagerTest {
 
     @Test
     public void testCreateSessionVariables() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, "0.27", C3Constants.CLAIM);
+        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, C3Constants.CLAIM);
         verify(cookieManager, times(1)).addGaCookie(request, response);
         verify(cookieManager, times(1)).addSessionCookie(Matchers.any(HttpServletResponse.class), anyString());
         verify(cookieManager, times(1)).addVersionCookie(response);
@@ -117,7 +117,7 @@ public class SessionManagerTest {
 
     @Test
     public void testLoadDefaultData() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml", mappingFileURL, "0.27", C3Constants.CLAIM);
+        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml", mappingFileURL, C3Constants.CLAIM);
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
         session = sessionManager.getSession(sessionId);
@@ -128,7 +128,7 @@ public class SessionManagerTest {
 
     @Test
     public void testLoadClaimDate() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml", mappingFileURL, "0.27", C3Constants.CLAIM);
+        sessionManager.createSessionVariables(request, response, "claimreader-claimdate.xml", mappingFileURL, C3Constants.CLAIM);
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
         session = sessionManager.getSession(sessionId);
@@ -139,7 +139,7 @@ public class SessionManagerTest {
 
     @Test
     public void testLoadReplicaData() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, "0.27", C3Constants.CLAIM);
+        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, C3Constants.CLAIM);
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
         session = sessionManager.getSession(sessionId);
@@ -158,7 +158,8 @@ public class SessionManagerTest {
 
     @Test
     public void testXmlVersionOverwritesReplicaData() throws Exception {
-        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, "XXX", C3Constants.CLAIM);
+        sessionManager = new SessionManager(cookieManager, sessionDataFactory, claimEncryptionService, "GB", "XXX");
+        sessionManager.createSessionVariables(request, response, "claimreader-claimant.xml", mappingFileURL, C3Constants.CLAIM);
         verify(request, times(1)).setAttribute(anyString(), objectCaptor.capture());
         final String sessionId = objectCaptor.getValue().toString();
         session = sessionManager.getSession(sessionId);

@@ -3,6 +3,7 @@ package uk.gov.dwp.carersallowance.session;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import uk.gov.dwp.carersallowance.controller.started.ChangeLanguageProcess;
 import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
 import uk.gov.dwp.carersallowance.utils.C3Constants;
 import uk.gov.dwp.carersallowance.utils.LoadFile;
@@ -32,16 +34,19 @@ public class SessionManager {
     private final CookieManager cookieManager;
     private final ClaimEncryptionService claimEncryptionService;
     private final String originTag;
+    private final String xmlSchemaVersion;
 
     @Inject
     public SessionManager(final CookieManager cookieManager,
                           final SessionDataFactory sessionDataFactory,
                           final ClaimEncryptionService claimEncryptionService,
-                          @Value("${origin.tag}") final String originTag){
+                          @Value("${origin.tag}") final String originTag,
+                          @Value("${xml.schema.version}") final String xmlSchemaVersion){
         this.cookieManager = cookieManager;
         this.sessionDataFactory = sessionDataFactory;
         this.claimEncryptionService = claimEncryptionService;
         this.originTag = originTag;
+        this.xmlSchemaVersion = xmlSchemaVersion;
     }
 
     public String createSessionId() {
@@ -64,13 +69,13 @@ public class SessionManager {
         sessionDataFactory.getSessionDataService().saveSessionData(claimEncryptionService.encryptClaim(session));
     }
 
-    public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile, final String xmlSchemaVersion, final String claimType) {
+    public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile, final String claimType) {
         cookieManager.addVersionCookie(response);
         cookieManager.addGaCookie(request, response);
-        createSessionData(request, response, xmlFile, mappingFile, xmlSchemaVersion, claimType);
+        createSessionData(request, response, xmlFile, mappingFile, claimType);
     }
 
-    private void createSessionData(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile, final String xmlSchemaVersion, final String claimType) {
+    private void createSessionData(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile, final String claimType) {
         final String sessionId = createSessionId();
         Session session = createSession(sessionId, claimType);
         request.setAttribute(Session.SESSION_ID, sessionId);
@@ -80,8 +85,16 @@ public class SessionManager {
         }
         session.setAttribute("xmlVersion", xmlSchemaVersion);
         session.setAttribute("originTag", originTag);
+        session.setAttribute("isOriginGB", "GB".equals(originTag));
         session.setAttribute("appVersion", cookieManager.getApplicationVersionNumber());
+        setLanguage(session);
         sessionDataFactory.getSessionDataService().saveSessionData(session);
+    }
+
+    private void setLanguage(final Session session) {
+        Locale locale = Locale.getDefault();
+        final String localeLang = locale.getLanguage();
+        session.setAttribute("language", C3Constants.WELSH_LANG.equals(localeLang) ? C3Constants.WELSH : C3Constants.ENGLISH);
     }
 
     private void loadReplicaData(Session session, final String xmlFile, final URL mappingFile) {

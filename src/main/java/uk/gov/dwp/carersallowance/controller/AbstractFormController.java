@@ -122,7 +122,7 @@ public class AbstractFormController {
             return null;
         }
 
-        String fieldNameList = messageSource.getMessage(pageName + ".fields", null, null, null);
+        String fieldNameList = messageSource.getMessage(pageName + ".fields", null, null, Locale.getDefault());
         LOG.debug("fieldNameList = {}", fieldNameList);
         if(fieldNameList == null) {
             return null;
@@ -142,7 +142,7 @@ public class AbstractFormController {
     }
 
     public String[] getReadOnlyFields() {
-        return new String[]{"dateOfClaim_day", "dateOfClaim_month", "dateOfClaim_year", "careeFirstName", "careeSurname"};
+        return new String[]{"dateOfClaim_day", "dateOfClaim_month", "dateOfClaim_year", "careeFirstName", "careeSurname", "language", "isOriginGB"};
     }
 
     public String getPreviousPage(HttpServletRequest request) {
@@ -965,12 +965,10 @@ public class AbstractFormController {
         }
     }
 
-    public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile, final String xmlSchemaVersion, final String claimType) {
+    public void createSessionVariables(final HttpServletRequest request, final HttpServletResponse response, final String xmlFile, final URL mappingFile, final String claimType) {
         LOG.debug("Starting AbstractFormController.createSessionVariables");
         try {
-            if (request.getQueryString() == null || !request.getQueryString().contains("changing=true")) {
-                sessionManager.createSessionVariables(request, response, xmlFile, mappingFile, xmlSchemaVersion, claimType);
-            }
+            sessionManager.createSessionVariables(request, response, xmlFile, mappingFile, claimType);
         } catch (RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;

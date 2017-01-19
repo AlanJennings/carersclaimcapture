@@ -141,27 +141,25 @@
         <header role="banner" class="global-header" id="global-header">
             <div class="wrapper clearfix">
                 <a href="https://www.gov.uk" title="Go to the gov.uk homepage" target="govlink" class="crown">GOV.UK</a>
-                <h1 class="heading-medium">Carer's Allowance</h1>
+                <h1 class="heading-medium"><t:message code="main.page.title" /></h1>
             </div>
         </header>
         <!--end header-->
         
         <div id="global-cookie-message">
-            <p>This service uses cookies. 
+            <p><t:message code="cookiePolicy" />
                 <a rel="external"
                    target="_blank" 
                    href="/cookies/en" 
                    onmousedown="trackEvent(&#x27;<c:out value='${pageScope.currentPage}' />&#x27;,&#x27;Cookies - from banner&#x27;);" 
                    onkeydown="trackEvent(&#x27;<c:out value='${pageScope.currentPage}' />&#x27;,&#x27;Cookies - from banner&#x27;);"
-                >Find out more</a>
+                ><t:message code="cookiePolicyAnchor" /></a>
             </p>
         </div>
         
         <div id="global-browser-prompt">
             <p>
-                For a safer, faster, better experience online you should upgrade your browser. 
-                <a href="https://www.gov.uk/support/browsers">Find out more about browsers</a> 
-                <a href="#" class="dismiss" title="Dismiss this message">Close</a>
+                <t:message code="latestBrowserUpdate" />
             </p>
         </div>
 

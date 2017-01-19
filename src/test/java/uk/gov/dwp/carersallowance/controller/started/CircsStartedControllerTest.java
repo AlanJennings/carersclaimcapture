@@ -48,13 +48,16 @@ public class CircsStartedControllerTest {
     @Mock
     private SessionManager sessionManager;
 
+    @Mock
+    private ChangeLanguageProcess changeLanguageProcess;
+
     private List<String> attributes;
 
     @Before
     public void setUp() throws Exception {
         when(sessionManager.getSessionIdFromCookie(request)).thenReturn("12345");
         when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))).thenReturn(session);
-        circsStartedController = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE, false, null, "0.27", "GB");
+        circsStartedController = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE, false, null, "GB", changeLanguageProcess);
         attributes = new ArrayList<>();
     }
 
@@ -72,7 +75,7 @@ public class CircsStartedControllerTest {
 
     @Test
     public void testShowCircsGBNIRForm() throws Exception {
-        circsStartedController = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE, false, null, "0.27", "GB-NIR");
+        circsStartedController = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE, false, null, "GB-NIR", changeLanguageProcess);
         assertThat(circsStartedController.showCircsForm(request, response, model), is("/circumstances/report-changes/selection"));
     }
 }

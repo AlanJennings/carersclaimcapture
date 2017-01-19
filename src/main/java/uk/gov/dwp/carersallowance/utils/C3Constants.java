@@ -12,4 +12,8 @@ public class C3Constants {
     public static final String CLAIM = "claim";
     public static final String CIRCS = "circs";
     public static final String TRUE = "true";
+    public static final String WELSH_LANG = "cy";
+    public static final String WELSH = "Welsh";
+    public static final String ENGLISH_LANG = "en";
+    public static final String ENGLISH = "English";
 }
