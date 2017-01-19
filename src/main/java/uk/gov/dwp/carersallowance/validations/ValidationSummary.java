@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
+import uk.gov.dwp.carersallowance.jsp.Functions;
 
 public class ValidationSummary {
     private static final Logger LOG = LoggerFactory.getLogger(ValidationSummary.class);
@@ -54,7 +55,7 @@ public class ValidationSummary {
         }
 
         for(ValidationError error: formErrors) {
-            if(id.equals(error.getId())) {
+            if(Functions.encrypt(id).equals(error.getId())) {
                 return error;
             }
         }
