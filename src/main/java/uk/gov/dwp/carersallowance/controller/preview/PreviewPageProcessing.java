@@ -80,7 +80,7 @@ public class PreviewPageProcessing {
         model.addAttribute("previewNationality", previewUtils.firstElseSecond((String)session.getAttribute("actualnationality"), (String)session.getAttribute("nationality")));
         model.addAttribute("alwaysLivedInUK", previewUtils.getMessage((String)session.getAttribute("alwaysLivedInUK")));
         model.addAttribute("liveInUKNow", previewUtils.getMessage((String)session.getAttribute("liveInUKNow")));
-        model.addAttribute("arrivedInUK", session.getAttribute("arrivedInUK"));
+        model.addAttribute("arrivedInUK", previewUtils.getMessage((String)session.getAttribute("arrivedInUK")));
         previewUtils.setDateIntoModel("arrivedInUKDate", session, model);
         model.addAttribute("arrivedInUKFrom", session.getAttribute("arrivedInUKFrom"));
         model.addAttribute("trip52Weeks", previewUtils.getDetailsMessage((String)session.getAttribute("trip52Weeks")));

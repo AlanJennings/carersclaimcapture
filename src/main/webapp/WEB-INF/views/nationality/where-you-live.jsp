@@ -20,9 +20,9 @@
             <t:yesnofield name="liveInUKNow" />
 
             <t:hiddenPanel id="liveInUKNowYesWrap" triggerId="liveInUKNow" triggerValue="yes">
-                <t:radiobuttons name="arrivedInUK" optionValues="Less than 3 years ago|More than 3 years ago" optionLabelKeys="less|more" />
+                <t:radiobuttons name="arrivedInUK" optionValues="less|more" />
 
-                <t:hiddenPanel id="arrivedInUKRecentWrap" triggerId="arrivedInUK" triggerValue="Less than 3 years ago">
+                <t:hiddenPanel id="arrivedInUKRecentWrap" triggerId="arrivedInUK" triggerValue="less">
                     <t:datefield name="arrivedInUKDate" />
                     <t:textedit name="arrivedInUKFrom" />
                 </t:hiddenPanel>

@@ -7,11 +7,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import uk.gov.dwp.carersallowance.encryption.FieldEncryptionServiceImpl;
 import uk.gov.dwp.carersallowance.utils.Parameters;
@@ -67,7 +67,7 @@ public class Functions {
             }
             String result = dateFormatter.format(date);
             LOG.debug("result = {}", dateField);
-            return result;
+            return returnDateMonthConvertedToLocale(result);
         } finally {
             LOG.trace("Ending Functions.dateOffset");
         }
@@ -87,10 +87,26 @@ public class Functions {
 
             String result = dateFormatter.format(date);
             LOG.debug("result = {}", result);
-            return result;
+            return returnDateMonthConvertedToLocale(result);
         } finally {
             LOG.trace("Ending Functions.dateOffsetFromCurrent");
         }
+    }
+
+    private static String returnDateMonthConvertedToLocale(final String result) {
+        //get the month and get message
+        //return prop(monthCode);
+        final String[] dates = result.split(" ");
+        String newMonth;
+        if (dates[1].endsWith(",")) {
+            newMonth = prop("datePlaceholder." + StringUtils.substringBefore(dates[1], ",")) + ",";
+        } else {
+            newMonth = prop("datePlaceholder." + dates[1]);
+        }
+        if (newMonth != null) {
+            dates[1] = newMonth;
+        }
+        return String.join(" ", dates);
     }
 
     private static String pad(String string, int minSize, char paddingCharacter) {
@@ -187,7 +203,7 @@ public class Functions {
     }
 
     private static Date applyDateOffset(Date date, int amount, String unit) {
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
         calendar.setTime(date);
         switch(unit) {
             case "minute":
