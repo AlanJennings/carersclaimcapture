@@ -238,10 +238,10 @@ public class Functions {
         return result;
     }
 
-    public static String prop(String code) {
+    public static String prop(final String code, final String... args) {
         LOG.trace("Started Functions.prop");
         try {
-            return messageSource.getMessage(code, null, null, Locale.getDefault());
+            return messageSource.getMessage(code, args, null, Locale.getDefault());
         } finally {
             LOG.trace("Ending Functions.prop");
         }

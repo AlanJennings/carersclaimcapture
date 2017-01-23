@@ -219,8 +219,11 @@ public class ResolveArgs extends BodyTagSupport {
                     if (arguments.length != 1) {
                         throw new IllegalArgumentException("Wrong number of arguments for prop. Expecting prop(String propertyValue)");
                     }
+
                     String prop = stripEnclosingQuotes(arguments[0]);
-                    return evaluateExpression(jspAppContext, elContext, Functions.prop(prop));
+                    //check for argument
+                    String args = Functions.prop(prop + ".args");
+                    return evaluateExpression(jspAppContext, elContext, Functions.prop(prop, args));
                 }
                 default:
                     throw new IllegalArgumentException("Unknown function: " + functionName);
