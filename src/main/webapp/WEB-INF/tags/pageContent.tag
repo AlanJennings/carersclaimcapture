@@ -33,7 +33,7 @@
 <jsp:useBean id="_pageContentMap" class="java.util.HashMap" scope="request"/>
 
 <%-- Expose a context object for this tag (i.e. pageContext) to allow for communication with nested tag (errors in particular) --%>
-<%@ variable name-given="pageContent" declare="false" variable-class="java.lang.Map" scope="NESTED" %> <%-- TODO this is not working, the use:Bean and c:set is doing ALL the work --%>
+<%@ variable name-given="pageContent" declare="false" variable-class="java.util.Map" scope="NESTED" %> <%-- TODO this is not working, the use:Bean and c:set is doing ALL the work --%>
 <c:set var="pageContent" value="${_pageContentMap}" scope="request"/>
 <c:set target="${pageContent}" property="errors" value="${pageScope.errors}"/>
 <spring:eval var="isPrototype" expression="@environment.getProperty('prototype.disclaimer')"/>
@@ -55,7 +55,7 @@
         </noscript>
         
         <div class="helper-mobile" id="helper-toggle">
-            <a class="help">Get help</a>
+            <a class="help"><t:message code="${help.title}" /></a>
         </div>
     
         <div class="grid-row main-grid">
@@ -64,7 +64,7 @@
                 
                 <c:if test="${not empty pageScope.backLink}">
                     <nav class="back-nav" role="navigation">
-                        <a id="topBackButton" href="<c:url value='${pageScope.backLink}' />">Back</a>
+                        <a id="topBackButton" href="<c:url value='${pageScope.backLink}' />"><t:message code="back" /></a>
                     </nav>
                 </c:if>
                 
@@ -83,9 +83,7 @@
                     
                     <fieldset class="form-elements form-eligibility">
                         <ul data-tag-type="page">
-                            
                             <jsp:doBody/>
-                            
                         </ul>
                     </fieldset>
 
@@ -100,7 +98,7 @@
                 
                 <c:if test="${not empty pageScope.backLink}">
                     <nav class="back-nav" role="navigation">
-                        <a id="bottomBackButton" href="<c:url value='${pageScope.backLink}' />">Back</a>
+                        <a id="bottomBackButton" href="<c:url value='${pageScope.backLink}' />"><t:message code="back" /></a>
                     </nav>
                 </c:if>
                              

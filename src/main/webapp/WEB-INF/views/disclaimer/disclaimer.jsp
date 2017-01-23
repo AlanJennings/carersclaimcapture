@@ -16,23 +16,12 @@
             <ul class="list-bullet">
                 <li><t:message code="disclaimer.section2.line1" /></li>
                 <li><t:message code="disclaimer.section2.line2" /></li>
-                <li><t:message code="disclaimer.section2.line3" />
-                    <a rel="external" 
-                       href="https://www.gov.uk/find-your-local-council" 
-                       target="_blank" 
-                    ><t:message code="disclaimer.section2.line4" /></a> 
-                    <t:message code="disclaimer.section2.line5" />
-                </li>
+                <li><t:message code="disclaimer.section2.line3" /></li>
             </ul>
         </t:htmlsection>
 
         <t:htmlsection name="disclaimer.section3">
-            <p><t:message code="disclaimer.section3.line1" />
-                <a rel="external" 
-                   href="https://www.gov.uk/carers-allowance/what-youll-get" 
-                   target="_blank"
-                ><t:message code="disclaimer.section3.line2" /></a>.
-            </p>
+            <p><t:message code="disclaimer.section3.line1" /></p>
         </t:htmlsection>
     
         <t:htmlsection name="disclaimer.section4"><p><t:message code="disclaimer.section4.line1" /></p></t:htmlsection>

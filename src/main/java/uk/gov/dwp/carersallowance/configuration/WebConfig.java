@@ -101,6 +101,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasenames("classpath:messages","classpath:circs_messages");
         messageSource.setCacheSeconds(10); //reload messages every 10 seconds
+        messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
 }

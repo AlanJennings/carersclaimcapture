@@ -57,6 +57,7 @@ public class PreviewPageProcessing {
         model.addAttribute("saveForLaterUrl", saveForLaterUrl);
         model.addAttribute("beenInPreview", C3Constants.TRUE.equals(session.getAttribute("beenInPreview")));
         model.addAttribute("languageNotWelsh", !C3Constants.WELSH_LANG.equals(session.getAttribute("language")));
+        model.addAttribute("nameAndOrganisation", session.getAttribute("nameAndOrganisation"));
     }
 
     private void displayParametersForAboutYouPage(final Model model, final Session session) {

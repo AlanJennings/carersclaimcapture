@@ -16,10 +16,10 @@
                 <li>
                     <c:choose>
                         <c:when test="${fn:contains(pageScope.error.displayName, '.label}')}">
-                            <a href="#<c:out value="${pageScope.error.id}"/>"><c:out value="${pageScope.error.errorMessage}"/></a>
+                            <a href="#<c:out value="${pageScope.error.id}"/>">${pageScope.error.errorMessage}</a>
                         </c:when>
                         <c:otherwise>
-                            <a href="#<c:out value="${pageScope.error.id}"/>"><c:out value="${pageScope.error.displayName}"/> - <c:out value="${pageScope.error.errorMessage}"/></a>
+                            <a href="#<c:out value="${pageScope.error.id}"/>">${pageScope.error.displayName} - ${pageScope.error.errorMessage}</a>
                         </c:otherwise>
                     </c:choose>
                 </li>
