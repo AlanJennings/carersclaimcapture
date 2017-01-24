@@ -30,9 +30,9 @@ public class PreviewUtils {
 
     public String addThirdPartyMessage(final Session session) {
         if (C3Constants.NO.equals(session.getAttribute("thirdParty"))) {
-            return getMessage("preview.thirdParty.onBehalfOf");
+            return "preview.thirdParty.onBehalfOf";
         }
-        return getMessage("preview.thirdParty.completedByCarer");
+        return "preview.thirdParty.completedByCarer";
     }
 
     public Boolean checkDateDifference(final String before, final String after, final Session session, final Integer check) {

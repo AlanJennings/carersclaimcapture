@@ -7,6 +7,6 @@
     <c:if test="${languageNotWelsh && isOriginGB}" >
         <t:fieldWithLink id="additional_info_welsh" name="welshCommunication.label" value="${additionalInfoWelsh}" displayChangeButton="${displayChangeButton}" link="${additionalInfoWelshLink}" />
     </c:if>
-    <t:fieldWithLink id="third_party" name="preview.thirdParty.completedOnBehalf" value="${thirdPartyDetailsMessage}" displayChangeButton="${displayChangeButton}" link="${thirdPartyDetailsMessageLink}" />
+    <t:fieldWithLink id="third_party" name="preview.thirdParty.completedOnBehalf" value="${thirdPartyDetailsMessage}" useMessageForValue="true" displayChangeButton="${displayChangeButton}" link="${thirdPartyDetailsMessageLink}" />
 </t:accordion>
 

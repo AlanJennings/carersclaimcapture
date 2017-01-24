@@ -5,6 +5,7 @@
 <%@ attribute name="id" %>
 <%@ attribute name="name" %>
 <%@ attribute name="value" %>
+<%@ attribute name="useMessageForValue" %>
 <%@ attribute name="displayChangeButton" %>
 <%@ attribute name="link" %>
 
@@ -13,7 +14,8 @@
 		<b><t:message code="${name}" /></b>
 	</td>
 	<td id="${id}_value" class="review-value">
-        ${value}
+		<c:if test="${useMessageForValue eq \"true\"}"><t:message code="${value}" /></c:if>
+		<c:if test="${empty useMessageForValue}">${value}</c:if>
 	</td>
 	<td id="${id}_linkContainer" class="review-action hide-print">
 		<c:if test="${displayChangeButton eq \"true\"}" >
