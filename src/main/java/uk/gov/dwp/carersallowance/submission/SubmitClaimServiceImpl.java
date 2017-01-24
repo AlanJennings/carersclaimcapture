@@ -75,8 +75,7 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
     public void sendClaim(final Session session, final String transactionId, final String emailBody) throws IOException, InstantiationException, ParserConfigurationException, XPathMappingList.MappingException {
         final String xml = buildClaimXml(session, transactionId);
 
-        //transactionIdService.insertTransactionStatus(transactionId, "0100", type, thirdParty, circsType, lang, jsEnabled, email, saveForLaterEmail);
-        transactionIdService.insertTransactionStatus(transactionId, Status.GENERATED.getStatus(), getClaimType(session), null, null, (String) session.getAttribute("language"), getJsEnabled(session), null, null);
+        transactionIdService.insertTransactionStatus(transactionId, Status.GENERATED.getStatus(), getClaimType(session), getCircsType(session), null, (String) session.getAttribute("language"), getJsEnabled(session), null, null);
 
         sendClaim(xml, transactionId, session, emailBody);
         LOG.info("Sent claim for transactionId :{}", session.getAttribute(C3Constants.TRANSACTION_ID));
@@ -297,5 +296,29 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
 
     public Boolean isClaim(final Session session) {
         return C3Constants.CLAIM.equals(session.getAttribute(C3Constants.KEY));
+    }
+
+    private Integer getCircsType(final Session session) {
+        if (C3Constants.CIRCS.equals(session.getAttribute(C3Constants.KEY)) && session.getAttribute("changeTypeAnswer") != null) {
+            switch((String)session.getAttribute("changeTypeAnswer")) {
+                case "stoppedProvidingCare" :
+                    return 0;
+                case "changeOfAddress" :
+                    return 1;
+                case "incomeChanged" :
+                    return 2;
+                case "changePaymentDetails" :
+                    return 3;
+                case "somethingElse" :
+                    return 4;
+                case "patientAway" :
+                    return 5;
+                case "carerAway" :
+                    return 5;
+                default:
+                    return null;
+            }
+        }
+        return null;
     }
 }
