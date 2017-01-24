@@ -8,6 +8,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import uk.gov.dwp.carersallowance.utils.KeyValue;
 
+/**
+ * @author David Hutchinson (drh@elegantsolutions.co.uk) on 5 Oct 2016.
+ */
 public class Dependency {
     private String dependantField;
     private String fieldValue;
