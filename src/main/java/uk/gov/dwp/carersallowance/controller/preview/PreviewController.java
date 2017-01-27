@@ -29,7 +29,6 @@ import uk.gov.dwp.carersallowance.utils.LoadFile;
 public class PreviewController extends AbstractFormController {
     private static final Logger LOG = LoggerFactory.getLogger(PreviewController.class);
 
-    private static final String PAGE_NAME     = "page.preview";
     private static final String CURRENT_PAGE  = "/preview";
     private static final String REDIRECT_PAGE = "/preview/redirect/{redirectTo}";
     private static final String PREVIEW_MAPPING_CLAIM = "preview.mappings.claim";
@@ -49,10 +48,10 @@ public class PreviewController extends AbstractFormController {
 
     private Map<String, PreviewMapping> loadPreviewMappings() {
         try {
-            Map<String, PreviewMapping> mappings = new HashMap<>();
-            URL claimTemplateUrl = this.getClass().getClassLoader().getResource(PREVIEW_MAPPING_CLAIM);
-            List<String> previewMappings = LoadFile.readLines(claimTemplateUrl);
-            for (String mapping : previewMappings) {
+            final Map<String, PreviewMapping> mappings = new HashMap<>();
+            final URL claimTemplateUrl = this.getClass().getClassLoader().getResource(PREVIEW_MAPPING_CLAIM);
+            final List<String> previewMappings = LoadFile.readLines(claimTemplateUrl);
+            for (final String mapping : previewMappings) {
                 if (StringUtils.isNotEmpty(mapping)) {
                     String[] mappingValue = mapping.split("=");
                     mappings.put(mappingValue[0].trim(), new PreviewMapping(mappingValue[1]));
@@ -63,16 +62,6 @@ public class PreviewController extends AbstractFormController {
             LOG.error("Failed to load preview mapping file.", ioe);
             throw new RuntimeException(ioe);
         }
-    }
-
-    @Override
-    public String getCurrentPage(HttpServletRequest request) {
-        return CURRENT_PAGE;
-    }
-
-    @Override
-    public String getPageName() {
-        return PAGE_NAME;
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)
@@ -91,9 +80,7 @@ public class PreviewController extends AbstractFormController {
     }
 
     @RequestMapping(value=REDIRECT_PAGE, method = RequestMethod.GET)
-    public String redirect(@PathVariable String redirectTo,
-                           HttpServletRequest request,
-                           Model model) {
+    public String redirect(@PathVariable final String redirectTo, final HttpServletRequest request) {
         final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
         session.setAttribute("returnToSummary", redirectTo);
         sessionManager.saveSession(session);

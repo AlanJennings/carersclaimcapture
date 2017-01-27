@@ -76,7 +76,7 @@ public class CircsStartedControllerTest {
 
         when(sessionManager.getSessionIdFromCookie(request)).thenReturn("12345");
         when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))).thenReturn(session);
-        circsStartedController = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE, false, null, "GB", changeLanguageProcess);
+        circsStartedController = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE, false, null, "GB", changeLanguageProcess, sessionManager);
         attributes = new ArrayList<>();
     }
 
@@ -94,7 +94,7 @@ public class CircsStartedControllerTest {
 
     @Test
     public void testShowCircsGBNIRForm() throws Exception {
-        circsStartedController = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE, false, null, "GB-NIR", changeLanguageProcess);
+        circsStartedController = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE, false, null, "GB-NIR", changeLanguageProcess, sessionManager);
         assertThat(circsStartedController.showCircsForm(request, response, model), is("/circumstances/report-changes/selection"));
     }
 }

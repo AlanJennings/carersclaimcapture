@@ -103,11 +103,11 @@ public class EmploymentSummaryController extends AbstractFormController {
         LOG.trace("Started EmploymentSummaryController.getForm");
         try {
             final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
-            final List<Map<String, String>> employments = getFieldCollections(session, FIELD_COLLECTION_NAME);
-            if (employments == null || employments.isEmpty()) {
-                return "redirect:" + YOUR_INCOME;
-            }
-            model.addAttribute(FIELD_COLLECTION_NAME, employments);
+//            final List<Map<String, String>> employments = getFieldCollections(session, FIELD_COLLECTION_NAME);
+//            if (employments == null || employments.isEmpty()) {
+//                return "redirect:" + YOUR_INCOME;
+//            }
+//            model.addAttribute(FIELD_COLLECTION_NAME, employments);
             return super.getForm(request, model);
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
@@ -130,26 +130,26 @@ public class EmploymentSummaryController extends AbstractFormController {
             final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
             if (StringUtils.isEmpty(idToChange) == false) {
                 try {
-                    final String editPage = editFieldCollectionRecord(session, idToChange, FIELD_COLLECTION_NAME, ID_FIELD, EDITING_PAGE);
+                    final String editPage = ""; //editFieldCollectionRecord(session, idToChange, FIELD_COLLECTION_NAME, ID_FIELD, EDITING_PAGE);
                     session.setAttribute("moreEmployment", C3Constants.YES);
                     sessionManager.saveSession(session);
                     return editPage;
                 } catch (UnknownRecordException e) {
-                    getLegacyValidation().addFormError(idToChange, "break from care", "Unable to edit item");
+                    getValidationSummary().addFormError(idToChange, "break from care", "Unable to edit item");
                 }
             }
 
             if (StringUtils.isEmpty(idToDelete) == false) {
                 try {
-                    final String currentPage = deleteFieldCollectionRecord(session, idToDelete, request, FIELD_COLLECTION_NAME, ID_FIELD);
+                    final String currentPage = ""; //deleteFieldCollectionRecord(session, idToDelete, request, FIELD_COLLECTION_NAME, ID_FIELD);
                     sessionManager.saveSession(session);
-                    final List<Map<String, String>> employments = getFieldCollections(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)), FIELD_COLLECTION_NAME);
-                    if (employments == null || employments.isEmpty()) {
-                        return "redirect:" + YOUR_INCOME;
-                    }
+//                    final List<Map<String, String>> employments = getFieldCollections(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request)), FIELD_COLLECTION_NAME);
+//                    if (employments == null || employments.isEmpty()) {
+//                        return "redirect:" + YOUR_INCOME;
+//                    }
                     return currentPage;
                 } catch (UnknownRecordException e) {
-                    getLegacyValidation().addFormError(idToDelete, "break from care", "Unable to delete item");
+                    getValidationSummary().addFormError(idToDelete, "break from care", "Unable to delete item");
                 }
             }
 
@@ -171,7 +171,7 @@ public class EmploymentSummaryController extends AbstractFormController {
         }
         final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
         final String[] fieldCollectionFields = FieldCollection.aggregateFieldLists(getFields(BEEN_EMPLOYED_PAGE), getFields(JOB_DETAILS_PAGE_NAME), getFields(LAST_WAGE_PAGE_NAME), getFields(PENSION_EXPENSES_PAGE_NAME), new String[]{ ID_FIELD });
-        populateFieldCollectionEntry(session, FIELD_COLLECTION_NAME, fieldCollectionFields, ID_FIELD);
+        //populateFieldCollectionEntry(session, FIELD_COLLECTION_NAME, fieldCollectionFields, ID_FIELD);
         session.removeAttribute("moreEmployment");
         sessionManager.saveSession(session);
         return nextPage;
@@ -189,12 +189,12 @@ public class EmploymentSummaryController extends AbstractFormController {
             return nextPage;
         }
         final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
-        final List<Map<String, String>> employments = getFieldCollections(session, FIELD_COLLECTION_NAME);
-        if (CollectionUtils.isEmpty(employments) && C3Constants.YES.equals(session.getAttribute("beenEmployedSince6MonthsBeforeClaim"))) {
-            session.setAttribute("moreEmployment", C3Constants.YES);
-            sessionManager.saveSession(session);
-            return "redirect:" + JOB_DETAILS_PAGE_NAME;
-        }
+//        final List<Map<String, String>> employments = getFieldCollections(session, FIELD_COLLECTION_NAME);
+//        if (CollectionUtils.isEmpty(employments) && C3Constants.YES.equals(session.getAttribute("beenEmployedSince6MonthsBeforeClaim"))) {
+//            session.setAttribute("moreEmployment", C3Constants.YES);
+//            sessionManager.saveSession(session);
+//            return "redirect:" + JOB_DETAILS_PAGE_NAME;
+//        }
         return nextPage;
     }
 

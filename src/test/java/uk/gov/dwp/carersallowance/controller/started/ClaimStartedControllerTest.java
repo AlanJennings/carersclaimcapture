@@ -72,7 +72,7 @@ public class ClaimStartedControllerTest {
 
         when(sessionManager.getSessionIdFromCookie(request)).thenReturn("12345");
         when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))).thenReturn(session);
-        claimStartedController = new ClaimStartedController(false, "", defaultFormController, MAPPING_FILE, changeLanguageProcess);
+        claimStartedController = new ClaimStartedController(false, "", defaultFormController, MAPPING_FILE, changeLanguageProcess, sessionManager);
         attributes = new ArrayList<>();
     }
 

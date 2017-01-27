@@ -78,7 +78,7 @@ public class OriginPageTestNI {
         messageSource = MessageSourceTestUtils.loadMessageSource("messages.properties");
         pageOrder = new PageOrder(messageSource, "circs");
         defaultChangeOfCircsController = new DefaultChangeOfCircsController(sessionManager, messageSource, transformationManager, pageOrder);
-        controller = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE, false, null, "GB-NIR", changeLanguageProcess);
+        controller = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE, false, null, "GB-NIR", changeLanguageProcess, sessionManager);
 
         //  Setup webapp context
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();

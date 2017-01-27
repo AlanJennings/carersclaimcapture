@@ -13,6 +13,7 @@ public enum ValidationType {
     ADDRESS("address", "%s.validation.address"),
     GROUP_ANY("group_any", "%s.validation.group_any"),
     GROUP_ALL("group_all", "%s.validation.group_all"),
+    GROUP_ANY_OR("group_any_or", "%s.validation.group_any_or", "%s.validation.group_any_or_or"),
     REGEX("regex", "%s.validation.regex"),                              // note blank values are not checked against regex.
     CONFIRM_FIELD("confirm_field", "%s.validation.confirm_field"),
     SORT_CODE("sortcode", "%s.validation.sortcode");

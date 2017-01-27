@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultFormController;
+import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.utils.C3Constants;
 import uk.gov.dwp.carersallowance.xml.XmlClaimReader;
 
@@ -28,6 +29,7 @@ public class ClaimStartedController {
     private final DefaultFormController defaultFormController;
     private final URL xmlMappingFile;
     private final ChangeLanguageProcess changeLanguageProcess;
+    private final SessionManager sessionManager;
 
     private static final String CURRENT_PAGE = "/allowance/benefits";
 
@@ -36,11 +38,13 @@ public class ClaimStartedController {
                                   final @Value("${replica.datafile}") String replicaDataFileProperty,
                                   final DefaultFormController defaultFormController,
                                   final @Value("${xml.mappingFile}") String mappingFile,
-                                  final ChangeLanguageProcess changeLanguageProcess) {
+                                  final ChangeLanguageProcess changeLanguageProcess,
+                                  final SessionManager sessionManager) {
         this.replicaEnabledProperty = replicaEnabledProperty;
         this.replicaDataFileProperty = replicaDataFileProperty;
         this.defaultFormController = defaultFormController;
         this.changeLanguageProcess = changeLanguageProcess;
+        this.sessionManager = sessionManager;
         this.xmlMappingFile = XmlClaimReader.class.getClassLoader().getResource(mappingFile);
     }
 
@@ -48,7 +52,7 @@ public class ClaimStartedController {
     public String getForm(final HttpServletRequest request, final HttpServletResponse response, final Model model) {
         if (request.getQueryString() == null || !request.getQueryString().contains("changing=true")) {
             changeLanguageProcess.processChangeLanguage(request, response);
-            defaultFormController.createSessionVariables(request, response, getReplicateDataFile(), xmlMappingFile, C3Constants.CLAIM);
+            sessionManager.createSessionVariables(request, response, getReplicateDataFile(), xmlMappingFile, C3Constants.CLAIM);
         }
         defaultFormController.getForm(request, model);
         return CURRENT_PAGE;

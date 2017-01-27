@@ -46,7 +46,7 @@
              outerStyle="${pageScope.outerStyle}" 
              errors="${pageScope.errors}">
 
-    <!-- TODO: Probably should rearrange these a bit, so label and hints are outside the fieldset -->
+    <%-- TODO: Probably should rearrange these a bit, so label and hints are outside the fieldset --%>
     <fieldset class="question-group">
         <legend class="form-label-bold" id="${pageScope.id}_label"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </legend>
         <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore" />
