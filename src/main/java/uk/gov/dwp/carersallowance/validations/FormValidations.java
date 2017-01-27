@@ -15,6 +15,7 @@ import org.springframework.context.MessageSource;
 
 import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 import uk.gov.dwp.carersallowance.utils.Parameters;
+import uk.gov.dwp.carersallowance.utils.PropertyUtils;
 
 public class FormValidations {
     private static final Logger LOG = LoggerFactory.getLogger(FormValidations.class);
@@ -25,7 +26,7 @@ public class FormValidations {
 
     private String                        formName;
     private List<String>                  fields;
-    private Map<String, Dependency>       dependencies;
+    private Dependencies                  dependencies;
     private Map<String, List<Validation>> validations;
     private RegexValidation               globalRegexValidation;
 
@@ -50,11 +51,11 @@ public class FormValidations {
             this.formName = formName;
 
             fields = fieldNames;
-            dependencies = initDependencies(messageSource, fields);
+            dependencies = new Dependencies(messageSource, VALIDATION_DEPENDENCY_KEY_FORMAT, fields, fields);
             validations = initValidations(messageSource, fields);
 
             LOG.debug("Configuring global regex");
-            String globalRegex = trimQuotes(messageSource.getMessage(GLOBAL_REGEX_VALIDATION_KEY, null, null, Locale.getDefault()));
+            String globalRegex = PropertyUtils.trimQuotes(messageSource.getMessage(GLOBAL_REGEX_VALIDATION_KEY, null, null, Locale.getDefault()));
             globalRegexValidation = new RegexValidation(GLOBAL_REGEX_VALIDATION_KEY, globalRegex);
 
         } catch(RuntimeException e) {
@@ -181,43 +182,6 @@ public class FormValidations {
         }
     }
 
-    private Map<String, Dependency> initDependencies(MessageSource messageSource, List<String> fields) throws ParseException {
-        LOG.trace("Started FormValidations.initDependencies");
-        try {
-            // add dependencies
-            // e.g. nameAndOrganisation.validation.dependency = thirdParty=no
-            Map<String, Dependency> results = new HashMap<>();
-            for(String field: fields) {
-                String key = String.format(VALIDATION_DEPENDENCY_KEY_FORMAT, field);    // e.g. nameAndOrganisation.validation.dependency
-                String rawDependency = getMessage(messageSource, key);                 // e.g. thirdParty=no
-                LOG.debug("{} = {}", key, rawDependency);
-                if(rawDependency != null) {
-                    rawDependency = trimQuotes(rawDependency);
-                    LOG.info("Adding field({}) dependency {} = {}", field, key, rawDependency);
-                    try {
-                        Dependency dependency = Dependency.parseSingleLine(rawDependency);
-                        dependency.validateFieldNames(fields);
-                        Dependency existingDependency = results.get(field);
-                        if(existingDependency != null) {
-                            LOG.debug("Adding to existing field dependencies");
-                            Dependency aggregateDependency = Dependency.AggregateDependency.aggregate(existingDependency, dependency);
-                            results.put(field, aggregateDependency);
-                        } else {
-                            results.put(field, dependency);
-                        }
-                    } catch (UnknownFieldException e) {
-                        LOG.error("Invalid config: ", e);
-                        throw new ParseException("Problems parsing dependency information(" + rawDependency + ") for " + key, 0);
-                    }
-                }
-            }
-
-            return results;
-        } finally {
-            LOG.trace("Ending FormValidations.initDependencies");
-        }
-    }
-
     public ValidationSummary validate(ValidationSummary validationSummary,
                                       MessageSource messageSource,
                                       TransformationManager transformationManager,
@@ -244,7 +208,7 @@ public class FormValidations {
                     continue;
                 }
 
-                if(areDependenciesFulfilled(field, requestFieldValues) == false) {
+                if(dependencies.areDependenciesFulfilled(field, requestFieldValues) == false) {
                     LOG.debug("Skipping. Unfulfilled dependencies for field {}: it is not enabled", field);
                     continue;
                 }
@@ -260,54 +224,6 @@ public class FormValidations {
         } finally {
             LOG.trace("Ending FormValidations.validate");
         }
-    }
-
-    /**
-     * Report whether all the dependencies for this field are fulfilled
-     * and therefore all the validations are in force (e.g. the conditions
-     * for an enclosing fold-out have been fulfilled)
-     */
-    private boolean areDependenciesFulfilled(String field, Map<String, String[]> fieldValues) {
-        LOG.trace("Started FormValidations.areDependenciesFulfilled");
-        try {
-            Parameters.validateMandatoryArgs(field, "field");
-            LOG.debug("Checking dependencies for field: '{}'", field);
-
-            Dependency dependency = dependencies.get(field);
-            if(dependency == null) {
-                // this field has no dependencies, so the validations are all enabled
-                LOG.debug("No dependencies for field, skipping");
-                return true;
-            }
-
-            String[] values = fieldValues.get(dependency.getDependantField());
-            LOG.debug("dependent field({}) required value = {}, actual values = {}", dependency.getDependantField(), dependency.getFieldValue(), values == null ? null : Arrays.asList(values));
-            boolean fulfilled = dependency.isFulfilled(values);
-            if(fulfilled == false) {
-                LOG.debug("condition is not fulfilled");
-                return false;
-            }
-
-            // make sure the dependent field is enabled.
-            LOG.debug("Condition is met, checking parent dependencies");
-            return areDependenciesFulfilled(dependency.getDependantField(), fieldValues);
-        } finally {
-            LOG.trace("Ending FormValidations.areDependenciesFulfilled");
-        }
-    }
-
-    private String trimQuotes(String string) {
-        if(string == null) {
-            return null;
-        }
-
-        string = string.trim();
-        if(string.length() >= 2 && string.charAt(0) == '"' && string.charAt(string.length() -1) == '"') {
-            LOG.debug("Trimming external quotes");
-            return string.substring(1, string.length() -1);
-        }
-
-        return string;
     }
 
     public String toString() {

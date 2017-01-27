@@ -32,7 +32,7 @@
     <head>
         <!-- current page = <c:out value='${pageScope.currentPage}' /> -->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>${pageScope.pageTitle}</title>
+        <title><t:message code="${page}.browserTitle" /></title>
 
         <!-- Styles for old Internet Explorer Browsers -->
         <!--[if IE 6]><link href="/stylesheet/header-footer-only-ie6.css" media="screen" rel="stylesheet" type="text/css"><![endif]-->

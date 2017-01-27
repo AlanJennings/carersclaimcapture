@@ -3,11 +3,15 @@ package uk.gov.dwp.carersallowance.configuration;
 import java.util.Locale;
 import java.util.concurrent.Executor;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.expression.ParseException;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -20,6 +24,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import uk.gov.dwp.carersallowance.controller.PageOrder;
 import uk.gov.dwp.carersallowance.handler.FilteredRequestMappingHandlerMapping;
 
 @EnableWebMvc
@@ -59,6 +64,17 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
       registry.addViewController("/").setViewName("/index");
+    }
+
+    @Bean(name = "pageCircsOrder")
+    public PageOrder getCircsPageOrder(final MessageSource messageSource, @Value("${form.circs.name}") final String circsFormName) throws Exception {
+        return new PageOrder(messageSource, circsFormName);
+    }
+
+    @Bean(name = "pageOrder")
+    @Primary
+    public PageOrder getClaimPageOrder(final MessageSource messageSource, @Value("${form.claim.name}") final String claimFormName) throws Exception {
+        return new PageOrder(messageSource, claimFormName);
     }
 
     @Bean

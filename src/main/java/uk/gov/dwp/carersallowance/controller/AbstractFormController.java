@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,6 +24,7 @@ import uk.gov.dwp.carersallowance.session.*;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
 import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 import uk.gov.dwp.carersallowance.utils.C3Constants;
+import uk.gov.dwp.carersallowance.utils.CollectionUtils;
 import uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 import uk.gov.dwp.carersallowance.validations.FormValidations;
@@ -39,62 +39,25 @@ public class AbstractFormController {
     protected static final String HTTP_POST = "POST";
     protected static final String HTTP_GET = "GET";
 
-    public static final String   PHONE_REGEX = "[ 0123456789]{0,20}";       // probably convert to an enum
-    public static final String   EMAIL_REGEX = "[ 0123456789]{0,20}";       // probably convert to an enum
-
-    protected MessageSource  messageSource;
-    protected SessionManager sessionManager;
+    protected final MessageSource  messageSource;
+    protected final SessionManager sessionManager;
+    private final TransformationManager transformationManager;
+    private final PageOrder pageOrder;
     private ValidationSummary validationSummary;
-    protected List<String>      pageList;
-
-    private TransformationManager transformationManager;
-
-    protected static final String[] PAGES = {
-            "/allowance/benefits",
-            "/allowance/eligibility",
-            "/allowance/approve",
-            "/disclaimer/disclaimer",
-            "/third-party/third-party",
-            "/your-claim-date/claim-date",
-            "/about-you/your-details",
-            "/about-you/marital-status",
-            "/about-you/contact-details",
-            "/nationality/where-you-live",
-            "/nationality/payments-from-abroad",
-            "/your-partner/personal-details",
-            "/care-you-provide/their-personal-details",
-            "/care-you-provide/more-about-the-care",
-            "/breaks/breaks-in-care",
-            "/education/your-course-details",
-            "/your-income/your-income",
-            //removed to get through journey
-//            "/your-income/employment/been-employed",
-//            "/your-income/self-employment/self-employment-dates",
-//            "/your-income/self-employment/pensions-and-expenses",
-//            "/your-income/employment/additional-info",
-//            "/your-income/statutory-sick-pay",
-//            "/your-income/smp-spa-sap",
-//            "/your-income/fostering-allowance",
-//            "/your-income/direct-payment",
-//            "/your-income/rental-income",
-//            "/your-income/other-income",
-            "/pay-details/how-we-pay-you",
-            "/information/additional-info",
-            "/preview",
-            "/consent-and-declaration/declaration",
-            "/submit-claim"
-    };
 
     private LegacyValidation  legacyValidation; //  TODO remove this
 
-    public AbstractFormController(final SessionManager sessionManager, final MessageSource messageSource, final TransformationManager transformationManager) {
+    public AbstractFormController(final SessionManager sessionManager,
+                                  final MessageSource messageSource,
+                                  final TransformationManager transformationManager,
+                                  final PageOrder pageOrder) {
         this.sessionManager = sessionManager;
         this.messageSource = messageSource;
         this.transformationManager = transformationManager;
+        this.pageOrder = pageOrder;
 
         validationSummary = new ValidationSummary();
         legacyValidation = new LegacyValidation(messageSource, validationSummary);
-        pageList = Arrays.asList(PAGES);
     }
 
     protected LegacyValidation getLegacyValidation() { return legacyValidation; }
@@ -145,38 +108,8 @@ public class AbstractFormController {
         return new String[]{"dateOfClaim_day", "dateOfClaim_month", "dateOfClaim_year", "careeFirstName", "careeSurname", "language", "isOriginGB", "carerFirstName", "carerSurname"};
     }
 
-    public String getPreviousPage(HttpServletRequest request) {
-        return getPreviousPage(request, pageList);
-    }
-
-    public String getPreviousPage(HttpServletRequest request, List<String> currentPageList) {
-        String currentPage = getCurrentPage(request);
-        int index = currentPageList.indexOf(currentPage);
-        if(index == -1 || index == 0) {
-            // not found or first
-            return null;
-        }
-        String previousPage = currentPageList.get(index - 1);
-        return previousPage;
-    }
-
-    public String getNextPage(HttpServletRequest request) {
-        return getNextPage(request, pageList);
-    }
-    /**
-     * @param request TODO will almost definitely replace request with a reference to
-     *                     the internalized application state (cf. session)
-     * @return
-     */
-    public String getNextPage(HttpServletRequest request, List<String> currentPageList) {
-        String currentPage = getCurrentPage(request);
-        int index = currentPageList.indexOf(currentPage);
-        if(index == -1 || index == (currentPageList.size() -1)) {
-            // not found or last
-            return null;
-        }
-        String nextPage = currentPageList.get(index + 1);
-        return nextPage;
+    public String getNextPage(final String currentPage, Session session) {
+        return pageOrder.getNextPage(currentPage, session);
     }
 
     public String getForm(HttpServletRequest request, Model model) {
@@ -191,26 +124,25 @@ public class AbstractFormController {
             String path = request.getServletPath();
             LOG.info("path = {}", path);
 
-            model.addAttribute("previousPage", getPreviousPage(request));   // not sure if we can use this as the request data is not available yet
-            model.addAttribute("currentPage", getCurrentPage(request));
-            model.addAttribute("nextPage", getNextPage(request));           // not sure if we can use this as the request data is not available yet
-//            model.addAttribute("pageTitle", getPageTitle());
+            final String currentPage = getCurrentPage(request);
+            final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
+            model.addAttribute("previousPage", pageOrder.getPreviousPage(currentPage, session));   // not sure if we can use this as the request data is not available yet
+            model.addAttribute("currentPage", currentPage);
 
             // if we copy everything then we don't need a static list
             // in which case the fields used are defined by the jsp, which is far less visible
             // it would also remove the distinction between shared & readonly fields and ordinary fields
             // so we probably could verify if a field name was duplicated.
             // So probably best to stick to a list of fields, but make it data driven (in messages.properties)
-            String[] fields = getFields(getCurrentPage(request));
+            String[] fields = getFields(currentPage);
             if(fields == null || fields.length == 0) {
                 fields = getFields(getPageName());
             }
-            final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
             copyFromSessionToModel(session, fields, model);
             copyFromSessionToModel(session, getSharedFields(), model);
             copyFromSessionToModel(session, getReadOnlyFields(), model);
 
-            return getCurrentPage(request);        // returns the view name
+            return currentPage;        // returns the view name
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;
@@ -253,7 +185,7 @@ public class AbstractFormController {
 
             final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
 
-            Map<String, String[]> existingFieldValues = getAllFieldValues(session);
+            Map<String, String[]> existingFieldValues = CollectionUtils.getAllFieldValues(session);
             validate(fields, request.getParameterMap(), existingFieldValues);
 
             if(hasErrors()) {
@@ -284,7 +216,7 @@ public class AbstractFormController {
             // is part of the previous screen and not the one we are going to.  We don't know if the previous page
             // had a hash location, as the hash location is never submitted to the server
             // there are various things we *could* do with javascript, but none of them will work in the no-javascript journey
-            String nextPage = "redirect:" + getNextPage(request) + "#";
+            String nextPage = "redirect:" + getNextPage(getCurrentPage(request), session) + "#";
             LOG.debug("next page = {}", nextPage);
 
             return nextPage;
@@ -293,39 +225,6 @@ public class AbstractFormController {
             throw e;
         } finally {
             LOG.trace("Ending AbstractFormController.postForm");
-        }
-    }
-
-    private Map<String, String[]> getAllFieldValues(Session session) {
-        LOG.trace("Started AbstractFormController.getAllFieldValues");
-        try {
-            if(session == null) {
-                return null;
-            }
-
-            StringBuffer buffer = new StringBuffer();
-
-            Map<String, String[]> map = new HashMap<>();
-            List<String> sessionNames = session.getAttributeNames();
-            Collections.sort(sessionNames);
-            for(String attrName: sessionNames) {
-                Object attrValue = session.getAttribute(attrName);
-                if(attrValue instanceof String) {
-                    buffer.append(attrName).append(" = ").append((String)attrValue).append(", ");
-                    String[] attrValues = new String[]{(String)attrValue};
-                    map.put(attrName, attrValues);
-                } else if(attrValue instanceof String[]) {
-                    buffer.append(attrName).append(" = ").append(Arrays.asList((String[])attrValue)).append(", ");
-                    map.put(attrName, (String[])attrValue);
-                } else {
-                    // do nothing
-                }
-            }
-
-            LOG.debug("all field values = {}", buffer.toString());
-            return map;
-        } finally {
-            LOG.trace("Ending AbstractFormController.getAllFieldValues");
         }
     }
 
@@ -457,53 +356,8 @@ public class AbstractFormController {
         return true;
     }
 
-    public String safeTrim(String value) {
-        if(value == null) {
-            return null;
-        }
-        return value.trim();
-    }
-
     protected boolean hasErrors() {
         return validationSummary.hasFormErrors();
-    }
-
-    protected void logRequest(HttpServletRequest request) {
-        LOG.info("request = {}", request);
-        if(request == null) {
-            return;
-        }
-
-        LOG.debug("\trequest URL = '{}{}'", request.getRequestURL(), request.getQueryString() == null ? "" : "?" + request.getQueryString());
-        LOG.debug("\tmethod = {}, contentType = {}, character encoding = {}, async context = {}", request.getMethod(), request.getContentType(), request.getCharacterEncoding(), request.getAsyncContext());
-
-        List<String> paramNames = Collections.list(request.getParameterNames());
-        LOG.debug("\tparameter names = {}", paramNames);
-        for(String paramName: paramNames) {
-            LOG.debug("\tparameter: '{}' = '{}'", paramName, new LoggingObjectWrapper(request.getParameterValues(paramName)));
-        }
-
-        List<String> attrNames = Collections.list(request.getAttributeNames());
-        LOG.debug("\tattribute names = {}", attrNames);
-        for(String attrName: attrNames) {
-            String attrValueStr = null;
-            Object attrValue = request.getAttribute(attrName);
-            if(attrValue != null) {
-                attrValueStr = attrValue.getClass().getName() + "@" + System.identityHashCode(attrValue);
-            }
-            LOG.debug("\tattribute: '{}' = '{}'", attrName, attrValueStr);
-        }
-
-        List<String> headerNames = Collections.list(request.getHeaderNames());
-        LOG.debug("\theader names = {}", headerNames);
-        for(String header: headerNames) {
-            LOG.debug("\theader: '{}' = '{}'", header, request.getHeader(header));
-        }
-
-        Cookie[] cookies = request.getCookies();
-        for(Cookie cookie: cookies) {
-            LOG.debug("\tcookie: '{}' = '{}'", cookie.getName(), cookie.getValue());  // there are other properties as well
-        }
     }
 
     protected List<Map<String, String>> getFieldCollections(Session session, String collectionName) {
@@ -550,11 +404,6 @@ public class AbstractFormController {
         } finally {
             LOG.trace("Ending AbstractFormController.getFieldCollections");
         }
-    }
-
-    protected void setFieldCollections(Session session, String collectionName, List<Map<String, String>> values) {
-        Parameters.validateMandatoryArgs(new Object[]{session, collectionName}, new String[]{"session", "collectionName"});
-        session.setAttribute(collectionName,  values);
     }
 
     public static Boolean getYesNoBooleanFieldValue(HttpServletRequest request, String fieldName) {
@@ -662,14 +511,6 @@ public class AbstractFormController {
         return result;
     }
 
-//    protected String getFieldCollectionName() {
-//        return null;
-//    }
-
-//    protected String getFieldCollectionIdField() {
-//        return null;
-//    }
-
     /**
      * Populate a fieldCollection entry from session field values as identified by the "fields"
      * parameter with the specific entry being identified by the "idField" value.
@@ -746,44 +587,6 @@ public class AbstractFormController {
 
         } finally {
             LOG.trace("Ending AbstractFormController.populateFieldCollectionEntry");
-        }
-    }
-
-    protected String getFormEditFieldCollection(Session session, HttpServletRequest request, Model model, String fieldCollectionName, String idField) {
-        LOG.trace("Started EmploymentDetailsController.getForm");
-        try {
-            String destination = getFormInternal(request, model);
-
-            // if the ID field is populated then we are editing an existing record
-            // and we should load the data, but only if we have not failed validation
-            // otherwise it is a new record and everything is already up to date.
-            String editIdValue = request.getParameter(idField);
-            LOG.debug("editIdValue = {}", editIdValue);
-            if(StringUtils.isEmpty(editIdValue) == false && getValidationSummary().hasFormErrors() == false) {
-                LOG.debug("populating edit data");
-                List<Map<String, String>> records = getFieldCollections(session, fieldCollectionName, true);
-                Map<String, String> record = FieldCollection.getFieldCollection(records, idField, editIdValue);
-                LOG.debug("record = {}", record);
-                model.addAllAttributes(record);
-            }
-            return destination;
-        } catch(RuntimeException e) {
-            LOG.error("Unexpected RuntimeException", e);
-            throw e;
-        } finally {
-            LOG.trace("Ending EmploymentDetailsController.getForm\n");
-        }
-    }
-
-    protected String urlWithArguments(String url, String argumentName, String argumentValue) {
-        if(StringUtils.isEmpty(url) || StringUtils.isEmpty(argumentName)) {
-            return url;
-        }
-
-        if(url.contains("?")) {
-            return url + "&" + argumentName + "=" + argumentValue;
-        } else {
-            return url + "?" + argumentName + "=" + argumentValue;
         }
     }
 
@@ -902,10 +705,6 @@ public class AbstractFormController {
         }
 
         LOG.trace("Ending AbstractFormController.validate");
-    }
-
-    public interface Validation {
-        boolean validate(String value);
     }
 
     public boolean supportsRequest(HttpServletRequest request) {

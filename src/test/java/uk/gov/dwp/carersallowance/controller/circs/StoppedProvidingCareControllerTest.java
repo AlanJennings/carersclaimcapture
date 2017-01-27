@@ -9,8 +9,11 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
+import uk.gov.dwp.carersallowance.controller.PageOrder;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
+import uk.gov.dwp.carersallowance.utils.MessageSourceTestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,13 +28,17 @@ public class StoppedProvidingCareControllerTest {
     private static final String STOPPED_PROVIDING_CARE_PAGE = "/circumstances/report-changes/stopped-caring";
     private static final String NEXT_PAGE                   = "redirect:/circumstances/consent-and-declaration/declaration#";
 
-    @InjectMocks
     private StoppedProvidingCareController controller;
 
     @Mock
     private SessionManager sessionManager;
+
     @Mock
+    private TransformationManager transformationManager;
+
     private MessageSource messageSource;
+
+    private PageOrder pageOrder;
 
     private Session session;
 
@@ -42,8 +49,12 @@ public class StoppedProvidingCareControllerTest {
     private Model model;
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         session = new Session();
+        messageSource = MessageSourceTestUtils.loadMessageSource("messages.properties");
+        pageOrder = new PageOrder(messageSource, "circs");
+        controller = new StoppedProvidingCareController(sessionManager, messageSource, transformationManager, pageOrder);
+
         when(sessionManager.getSession(anyString())).thenReturn(session);
         when(request.getServletPath()).thenReturn(STOPPED_PROVIDING_CARE_PAGE);
     }

@@ -9,23 +9,23 @@ public class KeyValue {
     /**
      * Split key/value around the
      * @param string
-     * @param startSeperator
+     * @param startSeparator
      */
-    public KeyValue(String string, String seperator) {
-        this(string, seperator, null);
+    public KeyValue(String string, String startSeparator) {
+        this(string, startSeparator, null);
     }
 
-    public KeyValue(String string, String startSeperator, String endSeparator) {
+    public KeyValue(String string, String startSeparator, String endSeparator) {
         if(StringUtils.isBlank(string)) {
             return;
         }
 
-        if(StringUtils.isBlank(startSeperator)) {
+        if(StringUtils.isBlank(startSeparator)) {
             key = string.trim();
             return;
         }
 
-        int pos = string.indexOf(startSeperator);
+        int pos = string.indexOf(startSeparator);
         if(pos < 0) {
             key = string.trim();
             return;

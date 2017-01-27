@@ -9,10 +9,15 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
+import uk.gov.dwp.carersallowance.controller.PageOrder;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
+import uk.gov.dwp.carersallowance.utils.MessageSourceTestUtils;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.Locale;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -25,8 +30,7 @@ public class AboutYouControllerTest {
     private static final String SESSION_ATTRIBUTE = "changeTypeAnswer";
     private static final String STOPPED_PROVIDING_CARE = "stoppedProvidingCare";
     private static final String INCOME_CHANGED = "incomeChanged";
-    private static final String PATIENT_AWAY = "patientAway";
-    private static final String CARER_AWAY = "carerAway";
+    private static final String BREAK_FROM_CARING = "breakFromCaring";
     private static final String CHANGE_OF_ADDRESS = "changeOfAddress";
     private static final String CHANGE_PAYMENT_DETAILS = "changePaymentDetails";
     private static final String SOMETHING_ELSE = "somethingElse";
@@ -39,13 +43,17 @@ public class AboutYouControllerTest {
     private static final String PAYMENT_CHANGE_PAGE     = "redirect:/circumstances/report-changes/payment-change#";
     private static final String OTHER_CHANGE_PAGE       = "redirect:/circumstances/report-changes/other-change#";
 
-    @InjectMocks
     private AboutYouController controller;
 
     @Mock
     private SessionManager sessionManager;
-    @Mock
+
     private MessageSource messageSource;
+
+    @Mock
+    private TransformationManager transformationManager;
+
+    private PageOrder pageOrder;
 
     private Session session;
 
@@ -56,8 +64,12 @@ public class AboutYouControllerTest {
     private Model model;
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         session = new Session();
+        messageSource = MessageSourceTestUtils.loadMessageSource("messages.properties");
+        pageOrder = new PageOrder(messageSource, "circs");
+
+        controller = new AboutYouController(sessionManager, messageSource, transformationManager, pageOrder);
         when(sessionManager.getSession(null)).thenReturn(session);
         when(request.getServletPath()).thenReturn(ABOUT_YOU_PAGE);
     }
@@ -81,14 +93,8 @@ public class AboutYouControllerTest {
     }
 
     @Test
-    public void givenPostCallWithPatientAwayResponseThenShouldReturnCorrectPage() {
-        session.setAttribute(SESSION_ATTRIBUTE, PATIENT_AWAY);
-        Assert.assertThat(controller.postForm(request, model), is(equalTo(BREAKS_IN_CARE_PAGE)));
-    }
-
-    @Test
-    public void givenPostCallWithCarerAwayResponseThenShouldReturnCorrectPage() {
-        session.setAttribute(SESSION_ATTRIBUTE, CARER_AWAY);
+    public void givenPostCallWithBreakFromCaringResponseThenShouldReturnCorrectPage() {
+        session.setAttribute(SESSION_ATTRIBUTE, BREAK_FROM_CARING);
         Assert.assertThat(controller.postForm(request, model), is(equalTo(BREAKS_IN_CARE_PAGE)));
     }
 

@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 
 <t:mainPage analytics="true">
- 
+
     <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
         
         <t:yesnofield name="beenInEducationSinceClaimDate" />

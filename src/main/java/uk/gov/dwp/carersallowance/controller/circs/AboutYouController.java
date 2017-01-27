@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
+import uk.gov.dwp.carersallowance.controller.PageOrder;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
 import uk.gov.dwp.carersallowance.transformations.TransformationManager;
@@ -41,50 +42,11 @@ public class AboutYouController extends AbstractFormController {
     private static final String CHANGE_PAYMENT_DETAILS = "changePaymentDetails";
     private static final String SOMETHING_ELSE = "somethingElse";
 
-    public AboutYouController(SessionManager sessionManager, MessageSource messageSource, final TransformationManager transformationManager) {
-        super(sessionManager, messageSource, transformationManager);
-    }
-
-    @Override
-    public String getNextPage(HttpServletRequest request) {
-        //  Get session data
-        final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
-        Map<String,Object> sessionData = session.getData();
-        String changeTypeAnswer = (String) sessionData.get(CHANGE_TYPE_ANSWER_KEY);
-
-        //  Set return value based on change type answer in session data
-        String returnValue;
-        switch (changeTypeAnswer) {
-            case STOPPED_PROVIDING_CARE:
-                returnValue = STOPPED_CARING_PAGE;
-                break;
-            case INCOME_CHANGED:
-                returnValue = EMPLOYMENT_CHANGE_PAGE;
-                break;
-            case PATIENT_AWAY:
-                returnValue = BREAKS_IN_CARE_PAGE;
-                break;
-            case CARER_AWAY:
-                returnValue = BREAKS_IN_CARE_PAGE;
-                break;
-            case CHANGE_OF_ADDRESS:
-                returnValue = ADDRESS_CHANGE_PAGE;
-                break;
-            case CHANGE_PAYMENT_DETAILS:
-                returnValue = PAYMENT_CHANGE_PAGE;
-                break;
-            case SOMETHING_ELSE:
-                returnValue = OTHER_CHANGE_PAGE;
-                break;
-            default:
-                returnValue = null;
-        }
-        return returnValue;
-    }
-
-    @Override
-    public String getPreviousPage(HttpServletRequest request) {
-        return PREVIOUS_PAGE;
+    public AboutYouController(final SessionManager sessionManager,
+                              final MessageSource messageSource,
+                              final TransformationManager transformationManager,
+                              final PageOrder pageOrder) {
+        super(sessionManager, messageSource, transformationManager, pageOrder);
     }
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.GET)

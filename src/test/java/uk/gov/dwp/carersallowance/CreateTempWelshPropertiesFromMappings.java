@@ -1,6 +1,7 @@
 package uk.gov.dwp.carersallowance;
 
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.gov.dwp.carersallowance.utils.LoadFile;
@@ -84,4 +85,10 @@ public class CreateTempWelshPropertiesFromMappings {
             LOG.error("Failed to create mapping file.", e);
         }
     }
+
+//    @Test
+//    public void createTestTempClaimWelshFile() throws Exception {
+//        CreateTempWelshPropertiesFromMappings createTempWelshPropertiesFromMappings = new CreateTempWelshPropertiesFromMappings();
+//        createTempWelshPropertiesFromMappings.createTestTempClaimWelshFile();
+//    }
 }

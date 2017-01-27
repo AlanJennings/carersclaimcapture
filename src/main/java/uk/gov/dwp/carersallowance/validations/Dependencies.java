@@ -82,7 +82,7 @@ public class Dependencies {
             }
 
             String[] values = fieldValues.get(dependency.getDependantField());
-            LOG.debug("dependent field({}) required value = {}, actual values = {}", dependency.getDependantField(), dependency.getFieldValue(), values == null ? null : Arrays.asList(values));
+            LOG.debug("dependent field({}) required value = {}, actual value = {}", dependency.getDependantField(), dependency.getFieldValue(), values == null ? null : Arrays.asList(values));
             boolean fulfilled = dependency.isFulfilled(values);
             if(fulfilled == false) {
                 LOG.debug("condition is not fulfilled");

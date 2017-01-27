@@ -40,9 +40,9 @@
     <label class="form-label-bold" for="${cads:encrypt(pageScope.id)}" id="${pageScope.id}_label"> <t:message code="${pageScope.labelKey}" parentName="${pageScope.name}" element="label" args="${pageScope.labelKeyArgs}" /> </label>
     <t:hint hintTextKey="${pageScope.hintBeforeKey}" parentName="${pageScope.name}" element="hintBefore"/>
     
-    <select id="${cads:encrypt(pageScope.id)}" name="${cads:encrypt(pageScope.name)}" class="form-control ${pageScope.additionalClasses}">
+    <select id="${cads:encrypt(pageScope.id)}" name="${cads:encrypt(pageScope.name)}" class="${pageScope.additionalClasses}">
         <c:if test="${pageScope.includeBlank='true'}" >
-            <option value="">Select</option>
+            <option value=""><t:message code="pleaseSelect" /></option>
         </c:if>
         
         <c:forTokens items="${pageScope.optionValues}" delims="|" var="optionValue" varStatus="optionValueIndex">

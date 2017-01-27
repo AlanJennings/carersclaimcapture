@@ -97,6 +97,10 @@ public class Functions {
         //get the month and get message
         //return prop(monthCode);
         final String[] dates = result.split(" ");
+        if (dates == null || dates.length == 1) {
+            return result;
+        }
+
         String newMonth;
         if (dates[1].endsWith(",")) {
             newMonth = prop("datePlaceholder." + StringUtils.substringBefore(dates[1], ",")) + ",";

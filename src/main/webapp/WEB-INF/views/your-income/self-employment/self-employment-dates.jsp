@@ -7,7 +7,9 @@
 <t:mainPage>
 
     <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
-        
+
+        <t:textedit name="typeOfWork" />
+
         <t:yesnofield name="stillSelfEmployed" />
         
         <t:hiddenPanel id="stillSelfEmployedWrap" triggerId="stillSelfEmployed" triggerValue="no" >
@@ -19,7 +21,7 @@
         <t:hiddenPanel id="moreThanYearAgoWrapYes" triggerId="moreThanYearAgo" triggerValue="yes" >
             <t:yesnofield name="haveAccounts" />
             
-            <t:hiddenWarning id="haveAccountsWrapYes" triggerId="haveAccounts" triggerValue="yes" >
+            <t:hiddenWarning id="haveAccountsWrapYes" triggerId="haveAccounts" triggerValue="yes" outerClass="form-hint">
                 <t:message code="haveAccountsWrapYes.text" />
             </t:hiddenWarning>
             

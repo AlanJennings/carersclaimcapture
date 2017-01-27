@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.MessageSource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -16,10 +17,15 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import uk.gov.dwp.carersallowance.controller.PageOrder;
+import uk.gov.dwp.carersallowance.controller.circs.AboutYouController;
 import uk.gov.dwp.carersallowance.controller.circs.StoppedProvidingCareController;
 import uk.gov.dwp.carersallowance.controller.started.C3Application;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
+import uk.gov.dwp.carersallowance.utils.MessageSourceTestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -38,10 +44,6 @@ public class StoppedProvidingCarePageTest {
     private static final String NEXT_PAGE = "/circumstances/consent-and-declaration/declaration#";
     private MockMvc mockMvc;
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @InjectMocks
     private StoppedProvidingCareController controller;
 
     @Mock
@@ -52,20 +54,31 @@ public class StoppedProvidingCarePageTest {
 
     private Session session;
 
-    @Before
-    public void setup() {
-        //  Setup webapp context
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    private MessageSource messageSource;
 
-        // Get the controller from the webapp context
-        controller = (StoppedProvidingCareController) webApplicationContext.getBean("stoppedProvidingCareController");
+    @Mock
+    private TransformationManager transformationManager;
+
+    private PageOrder pageOrder;
+
+    @Before
+    public void setup() throws Exception {
+        // Inject mocks into the controller
+        MockitoAnnotations.initMocks(this);
+
+        messageSource = MessageSourceTestUtils.loadMessageSource("messages.properties");
+        pageOrder = new PageOrder(messageSource, "circs");
+        controller = new StoppedProvidingCareController(sessionManager, messageSource, transformationManager, pageOrder);
+
+        //  Setup webapp context
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setPrefix("/WEB-INF/view/");
+        viewResolver.setSuffix(".jsp");
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).setViewResolvers(viewResolver).build();
 
         // Setup session data
         session = new Session();
         session.setAttribute("changeTypeAnswer", "stoppedProvidingCare");
-
-        // Inject mocks into the controller
-        MockitoAnnotations.initMocks(this);
 
         // Set up mock responses - mocks session ID
         when(sessionManager.getSessionIdFromCookie(anyObject())).thenReturn("AB123456");
@@ -85,7 +98,6 @@ public class StoppedProvidingCarePageTest {
 
     @Test
     public void givenStoppedProvidingCareRequestThenNextPageReturned() throws Exception {
-
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post(STOPPED_PROVIDING_CARE_PAGE);
         requestBuilder.servletPath(STOPPED_PROVIDING_CARE_PAGE);
 

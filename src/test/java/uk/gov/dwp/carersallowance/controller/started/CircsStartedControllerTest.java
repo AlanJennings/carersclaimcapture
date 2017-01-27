@@ -6,12 +6,17 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
+import uk.gov.dwp.carersallowance.controller.PageOrder;
+import uk.gov.dwp.carersallowance.controller.circs.AboutYouController;
 import uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultChangeOfCircsController;
 
 import uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultFormController;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
+import uk.gov.dwp.carersallowance.transformations.TransformationManager;
+import uk.gov.dwp.carersallowance.utils.MessageSourceTestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,10 +44,8 @@ public class CircsStartedControllerTest {
     @Mock
     private Model model;
 
-    @InjectMocks
     private DefaultChangeOfCircsController defaultChangeOfCircsController;
 
-    @InjectMocks
     private DefaultFormController defaultFormController;
 
     @Mock
@@ -51,10 +54,26 @@ public class CircsStartedControllerTest {
     @Mock
     private ChangeLanguageProcess changeLanguageProcess;
 
+    @Mock
+    private TransformationManager transformationManager;
+
+    private MessageSource messageSource;
+
+    private PageOrder pageOrder;
+
+    private PageOrder pageCircsOrder;
+
     private List<String> attributes;
 
     @Before
     public void setUp() throws Exception {
+        messageSource = MessageSourceTestUtils.loadMessageSource("messages.properties");
+        pageOrder = new PageOrder(messageSource, "claim");
+        pageCircsOrder = new PageOrder(messageSource, "circs");
+
+        defaultChangeOfCircsController = new DefaultChangeOfCircsController(sessionManager, messageSource, transformationManager, pageCircsOrder);
+        defaultFormController = new DefaultFormController(sessionManager, messageSource, transformationManager, pageOrder);
+
         when(sessionManager.getSessionIdFromCookie(request)).thenReturn("12345");
         when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))).thenReturn(session);
         circsStartedController = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE, false, null, "GB", changeLanguageProcess);

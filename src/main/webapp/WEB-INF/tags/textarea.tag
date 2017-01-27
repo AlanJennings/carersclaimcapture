@@ -46,7 +46,7 @@
         <textarea class="form-control ${pageScope.additionalClasses}" id="${cads:encrypt(pageScope.id)}" name="${cads:encrypt(pageScope.name)}" maxLength="${pageScope.maxLength}" >${pageScope.value}</textarea>
         <c:if test="${pageScope.showRemainingChars=='true'}" >
             <c:set var="remainingChars" value="${pageScope.maxLength - fn:length(pageScope.value)}" />
-            <p class="form-hint countdown">${pageScope.remainingChars} characters left</p>
+            <p class="form-hint countdown">${pageScope.remainingChars} <t:message code="charsLeft" /></p>
         </c:if>
         <t:hint hintTextKey="${pageScope.hintAfterKey}" parentName="${pageScope.name}" element="hintAfter"/>
 

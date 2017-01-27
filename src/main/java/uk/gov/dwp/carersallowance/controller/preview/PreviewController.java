@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
 
+import uk.gov.dwp.carersallowance.controller.PageOrder;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
 import uk.gov.dwp.carersallowance.transformations.TransformationManager;
@@ -39,8 +40,9 @@ public class PreviewController extends AbstractFormController {
     public PreviewController(final SessionManager sessionManager,
                              final MessageSource messageSource,
                              final TransformationManager transformationManager,
-                             final PreviewPageProcessing previewPageProcessing) {
-        super(sessionManager, messageSource, transformationManager);
+                             final PreviewPageProcessing previewPageProcessing,
+                             final PageOrder pageOrder) {
+        super(sessionManager, messageSource, transformationManager, pageOrder);
         this.previewPageProcessing = previewPageProcessing;
         this.previewMappings = loadPreviewMappings();
     }
