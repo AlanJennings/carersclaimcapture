@@ -254,8 +254,14 @@ public class ResolveArgs extends BodyTagSupport {
     }
 
     protected String toString(Object value) {
-        if(value == null || value instanceof String) {
+        if(value == null) {
             return (String)value;
+        }
+        if (value instanceof String) {
+            return (String)value;
+        }
+        if (value instanceof String[]) {
+            return ((String[])value)[0];
         }
 
         return value.toString();

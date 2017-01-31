@@ -1,10 +1,6 @@
 package uk.gov.dwp.carersallowance.validations;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -12,10 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 
 import uk.gov.dwp.carersallowance.jsp.Functions;
+import uk.gov.dwp.carersallowance.jsp.ResolveArgs;
 import uk.gov.dwp.carersallowance.session.InconsistentFieldValuesException;
 import uk.gov.dwp.carersallowance.transformations.TransformationManager;
 import uk.gov.dwp.carersallowance.utils.KeyValue;
 import uk.gov.dwp.carersallowance.utils.Parameters;
+import uk.gov.dwp.carersallowance.xml.ServerSideResolveArgs;
 
 public abstract class AbstractValidation implements Validation {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractValidation.class);
@@ -47,11 +45,15 @@ public abstract class AbstractValidation implements Validation {
             LOG.debug("fieldTitleArgs = {}", fieldTitleArgs);
             String[] args = fieldTitleArgs.split(ARG_SEPARATOR);
             String[] decodedArgs = new String[args.length];
+            ServerSideResolveArgs serverSideResolveArgs = new ServerSideResolveArgs();
             for(int index = 0; index < args.length; index++) {
                 String arg = args[index].trim();
                 LOG.debug("arg = {}", arg);
                 if(StringUtils.isBlank(arg)) {
                     decodedArgs[index] = "";
+                } else if(arg.startsWith("${cads:") && arg.endsWith("}")) {
+                    LOG.warn("field label argument({}) is not a fieldName, using literal value", arg);
+                    decodedArgs[index] = (String)serverSideResolveArgs.evaluateExpressions(arg, convertToObjectMap(existingFieldValues)).get(0);
                 } else if(arg.startsWith("${") && arg.endsWith("}")) {
                     LOG.debug("extracting field value");
                     String argFieldName = arg.substring("${".length(), arg.length() - "}".length());
@@ -77,6 +79,14 @@ public abstract class AbstractValidation implements Validation {
             LOG.error("Unexpected RuntimeException: ", e);
             throw e;
         }
+    }
+
+    private Map<String, Object> convertToObjectMap(Map<String, String[]> existingFieldValues) {
+        Map<String, Object> converted = new HashMap<>();
+        for (String existingKey : existingFieldValues.keySet()) {
+            converted.put(existingKey, existingFieldValues.get(existingKey));
+        }
+        return converted;
     }
 
     protected boolean isEmpty(String[] values) {

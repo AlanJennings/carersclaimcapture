@@ -1,19 +1,43 @@
 package uk.gov.dwp.carersallowance.session;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
+import uk.gov.dwp.carersallowance.utils.LoggingObjectWrapper;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 
 public final class FieldCollection {
+    private static final Logger LOG = LoggerFactory.getLogger(FieldCollection.class);
 
     private FieldCollection() {}
+
+    public static String[] getFields(final MessageSource messageSource, final String pageName) {
+        return getFields(messageSource, pageName, ".fields");
+    }
+
+    public static String[] getFields(final MessageSource messageSource, final String pageName, final String fieldName) {
+        LOG.debug("pageName = {}, fieldName = {}", pageName, fieldName);
+        if (pageName == null) {
+            return null;
+        }
+
+        String fieldNameList = messageSource.getMessage(pageName + fieldName, null, null, Locale.getDefault());
+        LOG.debug("fieldNameList = {}", fieldNameList);
+        if (fieldNameList == null) {
+            return null;
+        }
+
+        String[] fieldNames = fieldNameList.split(",");
+        for (int index = 0; index < fieldNames.length; index++) {
+            fieldNames[index] = fieldNames[index].trim();
+        }
+
+        LOG.debug("fieldNames = {}", new LoggingObjectWrapper(fieldNames));
+        return fieldNames;
+    }
 
     /**
      * return the subset of allFieldValues named by fieldNames, (also map to single values).
@@ -50,22 +74,6 @@ public final class FieldCollection {
         }
 
         return null;
-    }
-
-    public static String[] aggregateFieldLists(String[]...fieldArrays) {
-        if(fieldArrays == null) {
-            return null;
-        }
-
-        Set<String> fieldSet = new HashSet<>();
-        for(String[] fields: fieldArrays) {
-            for(String field: fields) {
-                fieldSet.add(field);
-            }
-        }
-
-        String[] allFields = fieldSet.toArray(new String[]{});
-        return allFields;
     }
 
     /**

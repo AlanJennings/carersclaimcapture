@@ -68,6 +68,10 @@ public class ValidationFactory {
                 LOG.debug("GroupAny Validation");
                 return new GroupAnyValidation(condition);
 
+            case GROUP_ANY_OR:
+                LOG.debug("GroupAnyOr Validation");
+                return new GroupAnyOrValidation(condition, additionalParameters);
+
             case GROUP_ALL:
                 LOG.debug("Confirm Validation");
                 return new GroupAllValidation(condition);

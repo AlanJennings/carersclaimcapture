@@ -1,26 +1,86 @@
 package uk.gov.dwp.carersallowance.subform;
-import org.apache.commons.lang.StringUtils;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
+import org.springframework.util.CollectionUtils;
 import uk.gov.dwp.carersallowance.session.FieldCollection;
 import uk.gov.dwp.carersallowance.session.UnknownRecordException;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
 import uk.gov.dwp.carersallowance.utils.Parameters;
-import uk.gov.dwp.carersallowance.utils.PropertyUtils;
+import uk.gov.dwp.carersallowance.validations.Dependency;
 
-import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
   * Created by peterwhitehead on 27/01/2017.
   */
 public class SubFormProcessing {
     private static final Logger LOG = LoggerFactory.getLogger(SubFormProcessing.class);
-    
-    public String deleteFieldCollectionRecord(final Session session, final String idToDelete, final HttpServletRequest request, final String fieldCollectionName, final String idField) {
+
+    //subform.claim.employment
+    private static final String FIELD_COLLECTION_NAME           = "subform.%s.field.collection.name"; // = employment
+    private static final String FIELD_COLLECTION_RECORD_ID      = "subform.%s.field.collection.record.id"; // = employment_id
+    private static final String FIRST_PAGE_ON_EMPTY             = "subform.%s.first.page.on.empty.collection"; // = your-income/employment/job-details
+    private static final String LAST_PAGE_CLEAR_ATTRIBUTES      = "subform.%s.last.page.clear.attributes"; // = moreEmployment
+    private static final String COLLECTION_EMPTY_ON_DELETE_PAGE = "subform.%s.collection.empty.on.delete.page"; // = /your-income/your-income
+    private static final String ON_EDIT_SET_ATTRIBUTE           = "subform.%s.on.edit.set.attributes"; // = moreEmployment=yes
+
+    private final String subFormName;
+    private final String fieldCollectionName;
+    private final String fieldCollectionRecordId;
+    private final String firstPageOnEmpty;
+    private final List<String> lastPageClearAttributes;
+    private final String emptyOnDeletePage;
+    private final List<Dependency> onEditSetAttributes;
+    private final MessageSource messageSource;
+
+    public SubFormProcessing(final String subFormName, final MessageSource messageSource) {
+        this.subFormName = subFormName;
+        this.messageSource = messageSource;
+        this.fieldCollectionName = getMessage(String.format(FIELD_COLLECTION_NAME, subFormName));
+        this.fieldCollectionRecordId = getMessage(String.format(FIELD_COLLECTION_RECORD_ID, subFormName));
+        this.firstPageOnEmpty = getMessage(String.format(FIRST_PAGE_ON_EMPTY, subFormName));
+        this.emptyOnDeletePage = getMessage(String.format(COLLECTION_EMPTY_ON_DELETE_PAGE, subFormName));
+        this.lastPageClearAttributes = getLastPageAttributes(getMessage(String.format(LAST_PAGE_CLEAR_ATTRIBUTES, subFormName)));
+        this.onEditSetAttributes = getOnEditAttributes(getMessage(String.format(ON_EDIT_SET_ATTRIBUTE, subFormName)));
+    }
+
+    private List<Dependency> getOnEditAttributes(final String message) {
+        final List<Dependency> dependencies = new ArrayList<>();
+        if (message == null) {
+            return dependencies;
+        }
+        final String[] attributes = message.split(",");
+        for (final String attribute : attributes) {
+            try {
+                dependencies.add(Dependency.parseSingleLine(attribute));
+            } catch (ParseException pe) {
+                LOG.error("unable to parse edit attribute:{}", attribute, pe);
+            }
+        }
+        return dependencies;
+    }
+
+    private List<String> getLastPageAttributes(final String message) {
+        if (message == null) {
+            return new ArrayList<>();
+        }
+        return Stream.of(message.split(",")).collect(Collectors.toList());
+    }
+
+    private String getMessage(final String code) {
+        return messageSource.getMessage(code, null, null, Locale.getDefault());
+    }
+
+    private String deleteFieldCollectionRecord(final Session session, final String idToDelete, final String currentPage, final String fieldCollectionName, final String idField) {
         LOG.trace("Starting SubFormProcessing.deleteEmployment");
         try {
-            Parameters.validateMandatoryArgs(new Object[]{idToDelete, request, session}, new String[]{ "idToDelete", "request", "session" });
+            Parameters.validateMandatoryArgs(new Object[]{idToDelete, currentPage, session}, new String[]{ "idToDelete", "currentPage", "session" });
     
             Integer foundIndex = null;
             final List<Map<String, String>> fieldCollectionList = getFieldCollections(session, fieldCollectionName, false);
@@ -38,28 +98,33 @@ public class SubFormProcessing {
                 throw new UnknownRecordException("Unknown record id: " + idToDelete);
             }
     
-            return "redirect:" + PropertyUtils.getCurrentPage(request);
+            return "redirect:" + currentPage;
         } finally {
             LOG.trace("Ending SubFormProcessing.deleteEmployment");
         }
     }
     
-    public String editFieldCollectionRecord(final Session session, final String idToChange, final String fieldCollectionName, final String idField, final String editingPage) {
-        Parameters.validateMandatoryArgs(new Object[]{idToChange, session}, new String[]{"idToChange", "session"});
+    private String editFieldCollectionRecord(final Session session, final String idToChange, final String fieldCollectionName, final String idField, final String editingPage) {
+        LOG.trace("Starting SubFormProcessing.editFieldCollectionRecord");
+        try {
+            Parameters.validateMandatoryArgs(new Object[]{idToChange, session}, new String[]{"idToChange", "session"});
 
-        // copy the record values into the edit fields in the session
-        final List<Map<String, String>> records = getFieldCollections(session, fieldCollectionName, true);
-        final Map<String, String> record = FieldCollection.getFieldCollection(records, idField, idToChange);
-        if (record == null) {
-            throw new UnknownRecordException("Unknown record id: " + idToChange);
-        } else {
-            String[] fields = record.keySet().toArray(new String[]{});
-            copyMapToSession(record, fields, session);
+            // copy the record values into the edit fields in the session
+            final List<Map<String, String>> records = getFieldCollections(session, fieldCollectionName, true);
+            final Map<String, String> record = FieldCollection.getFieldCollection(records, idField, idToChange);
+            if (record == null) {
+                throw new UnknownRecordException("Unknown record id: " + idToChange);
+            } else {
+                String[] fields = record.keySet().toArray(new String[]{});
+                copyMapToSession(record, fields, session);
+            }
+            return "redirect:" + editingPage;
+        } finally {
+            LOG.trace("Ending SubFormProcessing.editFieldCollectionRecord");
         }
-        return "redirect:" + editingPage;
     }
     
-    public String getNextIdValue(final List<Map<String, String>> fieldCollectionList, final String idFieldName) {
+    private String getNextIdValue(final List<Map<String, String>> fieldCollectionList, final String idFieldName) {
         int value = 0;
         for (int index = 0; index < fieldCollectionList.size(); index++) {
             final Map<String, String> existingFieldCollection = fieldCollectionList.get(index);
@@ -95,8 +160,8 @@ public class SubFormProcessing {
      *
      * @throws IllegalArgumentException if the record being edited cannot be found.
      */
-    public void populateFieldCollectionEntry(final Session session, final String fieldCollectionName, final String[] fields, final String idField) {
-        LOG.trace("Starting AbstractFormController.populateFieldCollectionEntry");
+    private void populateFieldCollectionEntry(final Session session, final String fieldCollectionName, final String[] fields, final String idField) {
+        LOG.trace("Starting SubFormProcessing.populateFieldCollectionEntry");
         try {
             Parameters.validateMandatoryArgs(session,  "session");
     
@@ -152,16 +217,16 @@ public class SubFormProcessing {
             }
             LOG.debug("fieldCollection after = {}", fieldCollection);
             LOG.debug("getFieldCollections('<fieldCollectionName>') = {}", getFieldCollections(session, fieldCollectionName, false));
-    
+
             // clean up the session by removing the individual field values for the item create/edit screens
             removeFromSession(session, fields);
         } finally {
-            LOG.trace("Ending AbstractFormController.populateFieldCollectionEntry");
+            LOG.trace("Ending SubFormProcessing.populateFieldCollectionEntry");
         }
     }
     
     private void removeFromSession(final Session session, final String[] fieldNames) {
-        LOG.trace("Started AbstractFormController.removeFromSession");
+        LOG.trace("Started SubFormProcessing.removeFromSession");
         try {
             Parameters.validateMandatoryArgs(session, "session");
             if (fieldNames == null) {
@@ -173,12 +238,12 @@ public class SubFormProcessing {
                 session.removeAttribute(fieldName);
             }
         } finally {
-            LOG.trace("Ending AbstractFormController.removeFromSession");
+            LOG.trace("Ending SubFormProcessing.removeFromSession");
         }
     }
     
     private void copyMapToSession(Map<String, String> map, String[] fieldNames, Session session) {
-        LOG.trace("Started AbstractFormController.copyMapToSession");
+        LOG.trace("Started SubFormProcessing.copyMapToSession");
         try {
             Parameters.validateMandatoryArgs(new Object[]{map, session}, new String[]{"map", "session"});
             if (fieldNames == null) {
@@ -191,7 +256,7 @@ public class SubFormProcessing {
                 session.setAttribute(fieldName, fieldValue);
             }
         } finally {
-            LOG.trace("Ending AbstractFormController.copyMapToSession");
+            LOG.trace("Ending SubFormProcessing.copyMapToSession");
         }
     }
     
@@ -200,8 +265,8 @@ public class SubFormProcessing {
      * make the list the field collection list? (yuk)
      */
     @SuppressWarnings({ "unchecked" })
-    protected List<Map<String, String>> getFieldCollections(final Session session, final String collectionName, final Boolean create) {
-        LOG.trace("Started AbstractFormController.getFieldCollections");
+    private List<Map<String, String>> getFieldCollections(final Session session, final String collectionName, final Boolean create) {
+        LOG.trace("Started SubFormProcessing.getFieldCollections");
         try {
             Parameters.validateMandatoryArgs(session, "session");
             LOG.debug("collectionName = {}, create = {}", collectionName, create);
@@ -232,7 +297,7 @@ public class SubFormProcessing {
     
             throw new IllegalStateException("FieldCollection List not of expected type:" + value.getClass().getName() + ", expecting " + List.class.getName());
         } finally {
-            LOG.trace("Ending AbstractFormController.getFieldCollections");
+            LOG.trace("Ending SubFormProcessing.getFieldCollections");
         }
     }
     
@@ -241,7 +306,7 @@ public class SubFormProcessing {
      * return those that have String or String[] values along with their keys in a map.
      * @return return a map of values or null if session is null
      */
-    public static Map<String, String[]> getSessionStringAttributes(final Session session) {
+    private Map<String, String[]> getSessionStringAttributes(final Session session) {
         if (session == null) {
             return null;
         }
@@ -259,5 +324,93 @@ public class SubFormProcessing {
             }
         }
         return map;
+    }
+
+    private void setSessionAttributesOnEdit(final Session session) {
+        for (final Dependency dependency : onEditSetAttributes) {
+            session.setAttribute(dependency.getDependantField(), dependency.getFieldValue());
+        }
+    }
+
+    public String processEditRowInCollection(final String idToChange, final Session session) throws UnknownRecordException {
+        LOG.trace("Started SubFormProcessing.processEditRowInCollection");
+        try {
+            if (StringUtils.isEmpty(idToChange) == false) {
+                final String editPage = editFieldCollectionRecord(session, idToChange, fieldCollectionName, fieldCollectionRecordId, firstPageOnEmpty);
+                for (final Dependency dependency : onEditSetAttributes) {
+                    session.setAttribute(dependency.getDependantField(), dependency.getFieldValue());
+                }
+                return editPage;
+            }
+            return null;
+        } finally {
+            LOG.trace("Ending SubFormProcessing.processEditRowInCollection");
+        }
+    }
+
+    public String processDeleteRowInCollection(final String idToDelete, final String currentPage, final Session session) throws UnknownRecordException {
+        LOG.trace("Started SubFormProcessing.processDeleteRowInCollection");
+        try {
+            if (StringUtils.isEmpty(idToDelete) == false) {
+                final String newPage = deleteFieldCollectionRecord(session, idToDelete, currentPage, fieldCollectionName, fieldCollectionRecordId);
+                final List<Map<String, String>> collection = getFieldCollections(session, fieldCollectionName, false);
+                if (collection == null || collection.isEmpty()) {
+                    return "redirect:" + emptyOnDeletePage;
+                }
+                return newPage;
+            }
+            return null;
+        } finally {
+            LOG.trace("Ending SubFormProcessing.processDeleteRowInCollection");
+        }
+    }
+
+    public String processLastPageInCollection(final Session session, final MessageSource messageSource, final List<String> pageList) {
+        LOG.trace("Started SubFormProcessing.processLastPageInCollection");
+        try {
+            final List<String[]> fields = pageList.stream().map(field -> FieldCollection.getFields(messageSource, field)).collect(Collectors.toList());
+            fields.add(new String[]{ fieldCollectionRecordId });
+            final String[] fieldCollectionFields = convertToStringArray(fields);
+            populateFieldCollectionEntry(session, fieldCollectionName, fieldCollectionFields, fieldCollectionRecordId);
+            for (final String attribute : lastPageClearAttributes) {
+                session.removeAttribute(attribute);
+            }
+            //return first page again
+            return pageList.get(0);
+        } finally {
+            LOG.trace("Ending SubFormProcessing.processLastPageInCollection");
+        }
+    }
+
+    private String[] convertToStringArray(List<String[]> fieldArrays) {
+        Set<String> fieldSet = new HashSet<>();
+        for (String[] fields: fieldArrays) {
+            for(String field: fields) {
+                fieldSet.add(field);
+            }
+        }
+        return fieldSet.toArray(new String[]{});
+    }
+
+    public String processFirstPageInCollection(final String firstPage, final Session session) {
+        LOG.trace("Started SubFormProcessing.processFirstPageInCollection");
+        try {
+            final List<Map<String, String>> collection = getFieldCollections(session, fieldCollectionName, false);
+            if (CollectionUtils.isEmpty(collection)) {
+                setSessionAttributesOnEdit(session);
+                return firstPageOnEmpty;
+            }
+            return firstPage;
+        } finally {
+            LOG.trace("Ending SubFormProcessing.processFirstPageInCollection");
+        }
+    }
+
+    public String previousOnEmpty(final String currentPage, final String previousPage, final Session session) {
+        final List<Map<String, String>> collection = getFieldCollections(session, fieldCollectionName, false);
+        if (currentPage.equals(firstPageOnEmpty) && CollectionUtils.isEmpty(collection)) {
+            return emptyOnDeletePage;
+        }
+        return previousPage;
     }
 }

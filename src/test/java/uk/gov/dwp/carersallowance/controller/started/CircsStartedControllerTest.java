@@ -76,6 +76,7 @@ public class CircsStartedControllerTest {
 
         when(sessionManager.getSessionIdFromCookie(request)).thenReturn("12345");
         when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))).thenReturn(session);
+        when(request.getServletPath()).thenReturn("/circumstances/report-changes/selection");
         circsStartedController = new CircsStartedController(defaultChangeOfCircsController, MAPPING_FILE, false, null, "GB", changeLanguageProcess, sessionManager);
         attributes = new ArrayList<>();
     }

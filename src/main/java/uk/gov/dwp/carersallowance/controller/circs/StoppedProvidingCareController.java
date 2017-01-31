@@ -37,7 +37,7 @@ public class StoppedProvidingCareController extends AbstractFormController {
     public String postForm(HttpServletRequest request, Model model) {
         LOG.trace("Starting StoppedProvidingCareController.postForm");
         try {
-            return super.postForm(request, model);
+            return super.postForm(request, null, null, model);
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;

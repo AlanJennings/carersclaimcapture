@@ -2,8 +2,10 @@ package uk.gov.dwp.carersallowance.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Locale;
 
 public class PropertyUtils {
     private static final Logger LOG = LoggerFactory.getLogger(PropertyUtils.class);

@@ -71,6 +71,7 @@ public class ClaimStartedControllerTest {
         defaultFormController = new DefaultFormController(sessionManager, messageSource, transformationManager, pageOrder);
 
         when(sessionManager.getSessionIdFromCookie(request)).thenReturn("12345");
+        when(request.getServletPath()).thenReturn("/allowance/benefits");
         when(sessionManager.getSession(sessionManager.getSessionIdFromCookie(request))).thenReturn(session);
         claimStartedController = new ClaimStartedController(false, "", defaultFormController, MAPPING_FILE, changeLanguageProcess, sessionManager);
         attributes = new ArrayList<>();

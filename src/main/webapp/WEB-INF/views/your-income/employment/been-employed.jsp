@@ -22,14 +22,14 @@
                             </c:if>
                         </dl>
                         <div class="actions">
-                            <button type="submit" id="changerow_${employmentPosition['employment_id']}" class="actionButton" name="changeSubFormElement" value="${employmentPosition['employment_id']}" aria-label="<t:message code="change.button" />"><t:message code="change" /></button>
+                            <button type="submit" id="changerow_${employmentPosition['employment_id']}" class="actionButton" name="changeSubFormRecord" value="${employmentPosition['employment_id']}" aria-label="<t:message code="change.button" />"><t:message code="change" /></button>
                             <button type="button" id="deleterow_${employmentPosition['employment_id']}" class="actionButton" name="deleteEmployment" value="${employmentPosition['employment_id']}" onclick="window.showPanel('delete_${employmentPosition['employment_id']}', true)" aria-label="<t:message code="delete.button" />"><t:message code="delete" /></button>
                         </div>
                     </li>
                     <t:hiddenWarning id="delete_${employmentPosition['employment_id']}" outerClass="prompt breaks-prompt validation-summary" triggerId="deleterow_${employmentPosition['employment_id']}" triggerValue="changerow_${employmentPosition['employment_id']}">
                         <p class="normalMsg"><t:message code="delete.employment.message" /></p>
                         <button type="button" class="button row secondary" id="noDeleteButton" value="${employmentPosition['employment_id']}" onclick="window.hidePanel('delete_${employmentPosition['employment_id']}', true)" aria-label="<t:message code="no.delete.label" />" ><t:message code="no.delete" /></button>
-                        <button type="submit" class="button row warning" id="yesDeleteButton" name="changeSubFormElement" value="${employmentPosition['employment_id']}" aria-label="<t:message code="yes.delete.label" />" ><t:message code="yes.delete" /></button>
+                        <button type="submit" class="button row warning" id="yesDeleteButton" name="deleteSubFormRecord" value="${employmentPosition['employment_id']}" aria-label="<t:message code="yes.delete.label" />" ><t:message code="yes.delete" /></button>
                     </t:hiddenWarning>
                 </c:forEach>
             </t:panel>

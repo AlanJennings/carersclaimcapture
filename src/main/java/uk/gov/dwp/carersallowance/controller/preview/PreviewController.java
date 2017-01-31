@@ -76,7 +76,7 @@ public class PreviewController extends AbstractFormController {
 
     @RequestMapping(value=CURRENT_PAGE, method = RequestMethod.POST)
     public String postForm(HttpServletRequest request, Model model) {
-        return super.postForm(request, model);
+        return super.postForm(request, null, null, model);
     }
 
     @RequestMapping(value=REDIRECT_PAGE, method = RequestMethod.GET)

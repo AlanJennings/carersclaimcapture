@@ -1,6 +1,5 @@
 package uk.gov.dwp.carersallowance.controller;
 
-import java.net.URL;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Locale;
@@ -15,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
 
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 import uk.gov.dwp.carersallowance.session.*;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
@@ -35,17 +35,17 @@ public class AbstractFormController {
     protected final MessageSource  messageSource;
     protected final SessionManager sessionManager;
     private final TransformationManager transformationManager;
-    private final PageOrder pageOrder;
+    private final PageOrder pageOrdering;
     private ValidationSummary validationSummary;
 
     public AbstractFormController(final SessionManager sessionManager,
                                   final MessageSource messageSource,
                                   final TransformationManager transformationManager,
-                                  final PageOrder pageOrder) {
+                                  final PageOrder pageOrdering) {
         this.sessionManager = sessionManager;
         this.messageSource = messageSource;
         this.transformationManager = transformationManager;
-        this.pageOrder = pageOrder;
+        this.pageOrdering = pageOrdering;
         this.validationSummary = new ValidationSummary();
     }
 
@@ -57,41 +57,12 @@ public class AbstractFormController {
     public Session           getSession(String sessionId)   { return sessionManager.getSession(sessionId); }
     public ValidationSummary getValidationSummary()         { return validationSummary; }
 
-    public String[] getFields(String pageName) {
-        return getFields(messageSource, pageName);
-    }
-
-    public static String[] getFields(MessageSource messageSource, String pageName) {
-        LOG.debug("pageName = {}", pageName);
-        if(pageName == null) {
-            return null;
-        }
-
-        String fieldNameList = messageSource.getMessage(pageName + ".fields", null, null, Locale.getDefault());
-        LOG.debug("fieldNameList = {}", fieldNameList);
-        if(fieldNameList == null) {
-            return null;
-        }
-
-        String[] fieldNames = fieldNameList.split(",");
-        for(int index = 0; index < fieldNames.length; index++) {
-            fieldNames[index] = fieldNames[index].trim();
-        }
-
-        LOG.debug("fieldNames = {}", new LoggingObjectWrapper(fieldNames));
-        return fieldNames;
-    }
-
     public String[] getSharedFields() {
         return null;
     }
 
     public String[] getReadOnlyFields() {
-        return new String[]{"dateOfClaim_day", "dateOfClaim_month", "dateOfClaim_year", "careeFirstName", "careeSurname", "language", "isOriginGB", "carerFirstName", "carerSurname"};
-    }
-
-    public String getNextPage(final String currentPage, Session session) {
-        return pageOrder.getNextPage(currentPage, session);
+        return new String[]{"dateOfClaim_day", "dateOfClaim_month", "dateOfClaim_year", "careeFirstName", "careeSurname", "language", "isOriginGB", "carerFirstName", "carerSurname", "employerName"};
     }
 
     public String getForm(HttpServletRequest request, Model model) {
@@ -108,7 +79,7 @@ public class AbstractFormController {
 
             final String currentPage = PropertyUtils.getCurrentPage(request);
             final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
-            model.addAttribute("previousPage", pageOrder.getPreviousPage(currentPage, session));   // not sure if we can use this as the request data is not available yet
+            model.addAttribute("previousPage", pageOrdering.getPreviousPage(currentPage, session));   // not sure if we can use this as the request data is not available yet
             model.addAttribute("currentPage", currentPage);
 
             // if we copy everything then we don't need a static list
@@ -116,11 +87,14 @@ public class AbstractFormController {
             // it would also remove the distinction between shared & readonly fields and ordinary fields
             // so we probably could verify if a field name was duplicated.
             // So probably best to stick to a list of fields, but make it data driven (in messages.properties)
-            String[] fields = getFields(currentPage);
+            String[] fields = FieldCollection.getFields(messageSource, currentPage);
+            String[] additionalFields = FieldCollection.getFields(messageSource, currentPage, ".additional.fields.for.model");
             if(fields == null || fields.length == 0) {
-                fields = getFields(getPageName());
+                fields = FieldCollection.getFields(messageSource, getPageName());
+                additionalFields = FieldCollection.getFields(messageSource, getPageName(), ".additional.fields.for.model");
             }
             copyFromSessionToModel(session, fields, model);
+            copyFromSessionToModel(session, additionalFields, model);
             copyFromSessionToModel(session, getSharedFields(), model);
             copyFromSessionToModel(session, getReadOnlyFields(), model);
 
@@ -154,23 +128,28 @@ public class AbstractFormController {
      * Including RedirectAttributes is needed if we wish redirects to work at all
      * even if we never use it!!
      */
-    public String postForm(HttpServletRequest request, Model model) {
+    public String postForm(final HttpServletRequest request, @ModelAttribute("changeSubFormRecord") final String idToChange, @ModelAttribute("deleteSubFormRecord") final String idToDelete, final Model model) {
 
         LOG.trace("Starting AbstractFormController.postForm");
         try {
             LOG.debug("request.getParameterMap() = {}", request.getParameterMap());
 
-            String pageName = request.getParameter("pageName");
-            String[] fields = getFields(pageName);
+            final String pageName = request.getParameter("pageName");
+            final String[] fields = FieldCollection.getFields(messageSource, pageName);
+            final String currentPage = PropertyUtils.getCurrentPage(request);
 
             getValidationSummary().reset();
 
             final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
 
             Map<String, String[]> existingFieldValues = CollectionUtils.getAllFieldValues(session);
-            validate(fields, request.getParameterMap(), existingFieldValues);
 
-            if(hasErrors()) {
+            String changeDeletePage = pageOrdering.deleteChangeRecord(idToDelete, idToChange, currentPage, session, getValidationSummary());
+            if (changeDeletePage == null) {
+                validate(fields, request.getParameterMap(), existingFieldValues);
+            }
+
+            if (hasErrors()) {
                 LOG.info("there are validation errors, re-showing form");
                 String form = getForm(request, model);
 
@@ -182,15 +161,14 @@ public class AbstractFormController {
                 return form;
             }
 
-            copyFromRequestToSession(session, request, fields);
-            copyFromRequestToSession(session, request, getSharedFields());
+            if (changeDeletePage == null) {
+                copyFromRequestToSession(session, request, fields);
+                copyFromRequestToSession(session, request, getSharedFields());
+            }
 
             finalizePostForm(request);
 
-            sessionManager.saveSession(session);
-
             // add the fieldCollection id field to the url (if its populated)
-
             // we need to add the # to the end of the redirect url to stop the browser from inheriting the hash url
             // from the previous page ('cos its a redirect), see https://www.w3.org/TR/cuap#uri
             // we needed to do a redirect so that we show the page we are on, rather than the page we submitted to
@@ -198,7 +176,13 @@ public class AbstractFormController {
             // is part of the previous screen and not the one we are going to.  We don't know if the previous page
             // had a hash location, as the hash location is never submitted to the server
             // there are various things we *could* do with javascript, but none of them will work in the no-javascript journey
-            String nextPage = "redirect:" + getNextPage(PropertyUtils.getCurrentPage(request), session) + "#";
+            String nextPage;
+            if (changeDeletePage == null) {
+                nextPage = "redirect:" + pageOrdering.pageProcessing(currentPage, session) + "#";
+            } else {
+                nextPage = changeDeletePage + "#";
+            }
+            sessionManager.saveSession(session);
             LOG.debug("next page = {}", nextPage);
 
             return nextPage;
@@ -209,6 +193,11 @@ public class AbstractFormController {
             LOG.trace("Ending AbstractFormController.postForm");
         }
     }
+
+    private String getMessage(final String code) {
+        return messageSource.getMessage(code, null, null, Locale.getDefault());
+    }
+
 
     protected void finalizePostForm(HttpServletRequest request) {
         // do nothing
@@ -291,14 +280,6 @@ public class AbstractFormController {
 
     protected boolean hasErrors() {
         return validationSummary.hasFormErrors();
-    }
-
-    public static Boolean getYesNoBooleanFieldValue(HttpServletRequest request, String fieldName) {
-        return getBooleanFieldValue(fieldName, C3Constants.YES, C3Constants.NO, request.getParameterValues(fieldName));
-    }
-
-    public static Boolean getYesNoBooleanFieldValue(Session session, String fieldName) {
-        return getBooleanFieldValue(fieldName, C3Constants.YES, C3Constants.NO, getSessionStringAttribute(session, fieldName));
     }
 
     public static String[] getSessionStringAttribute(Session session, String fieldName) {
@@ -433,7 +414,7 @@ public class AbstractFormController {
      * Data driven request holder
      * @throws NoSuchRequestHandlingMethodException
      */
-    public String handleRequest(HttpServletRequest request, HttpServletResponse response, Model model) throws NoSuchRequestHandlingMethodException {
+    public String handleRequest(final HttpServletRequest request, final HttpServletResponse response, @ModelAttribute("changeSubFormRecord") final String idToChange, @ModelAttribute("deleteSubFormRecord") final String idToDelete, final Model model) throws NoSuchRequestHandlingMethodException {
         LOG.info("Started AbstractFormController.handleRequest");
         Parameters.validateMandatoryArgs(request, "request");
         try {
@@ -444,7 +425,7 @@ public class AbstractFormController {
             if (HTTP_GET.equalsIgnoreCase(method)) {
                 return getForm(request, model);
             } else if (HTTP_POST.equalsIgnoreCase(method)) {
-                return postForm(request, model);
+                return postForm(request, idToChange, idToDelete, model);
             } else {
                 LOG.error("Request method {} is not supported in request: {}", method, path);
                 throw new NoSuchRequestHandlingMethodException(request);
