@@ -350,11 +350,11 @@
                                 <Answer>{employerName}</Answer>
                             </Name>
                             <Address>
-                                <QuestionLabel>{employerAddress.label}</QuestionLabel>
+                                <QuestionLabel>{employmentAddress.label}</QuestionLabel>
                                 <Answer>
-                                    <Line>{employerAddressLineOne}</Line>
-                                    <Line>{employerAddressLineTwo}</Line>
-                                    <Line>{employerAddressLineThree}</Line>
+                                    <Line>{employmentAddressLineOne}</Line>
+                                    <Line>{employmentAddressLineTwo}</Line>
+                                    <Line>{employmentAddressLineThree}</Line>
                                     <PostCode>{employmentPostcode}</PostCode>
                                 </Answer>
                             </Address>

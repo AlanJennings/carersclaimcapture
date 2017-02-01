@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -194,11 +193,6 @@ public class AbstractFormController {
         }
     }
 
-    private String getMessage(final String code) {
-        return messageSource.getMessage(code, null, null, Locale.getDefault());
-    }
-
-
     protected void finalizePostForm(HttpServletRequest request) {
         // do nothing
     }
@@ -280,78 +274,6 @@ public class AbstractFormController {
 
     protected boolean hasErrors() {
         return validationSummary.hasFormErrors();
-    }
-
-    public static String[] getSessionStringAttribute(Session session, String fieldName) {
-        Object object = session.getAttribute(fieldName);
-        if(object == null) {
-            return null;
-        }
-
-        if(object instanceof String[]) {
-            return (String[])object;
-        } else if(object instanceof String) {
-            return new String[]{(String)object};
-        } else {
-            throw new IllegalFieldValueException("value is not a String or String[] instance, but: " + object.getClass().getName(), null);
-        }
-    }
-
-    /**
-     * Return True or False object if the values match the trueValue or falseValue parameters
-     *
-     * all comparisons are case-insensitive
-     *
-     * @return null if the inputs are null,
-     *         Boolean.TRUE if all the values the same as the 'trueValue' parameter
-     *         Boolean.FALSE if all the values the same as the 'falseValue' parameter
-     *         or throw an expcetion if it is confused
-     *
-     * @throws IllegalFieldValueException if one or more of the values is neither the 'trueFalse' or 'falseValue'
-     * @throws InconsistentFieldValuesException if the values are not consistent, i.e. both true and false
-     */
-    public static Boolean getBooleanFieldValue(String fieldName, String trueValue, String falseValue, String[] values) {
-        Parameters.validateMandatoryArgs(new Object[]{trueValue, falseValue}, new String[]{"trueValue", "falseValue"});
-        if(values == null || values.length == 0) {
-            return null;
-        }
-
-        boolean yes = false;
-        boolean no = false;
-        boolean other = false;
-
-        // not a single valued boolean, so check all values
-        for(String value : values) {
-            if(trueValue.equalsIgnoreCase(value)) {
-                yes = true;
-            } else if(falseValue.equalsIgnoreCase(value)) {
-                no = true;
-            } else if(StringUtils.isEmpty(value) == false) {
-                other = true;
-            }
-        }
-
-        // there were no matches, i.e. all null or empty, so return null
-        if(other == false && no == false && yes == false) {
-            return null;
-        }
-
-        // there was nothing un-recognised
-        if(other == false) {
-            if(yes == true && no == false) {
-                return Boolean.TRUE;        // we only had matches against trueValue
-            } else if(yes == false && no == true) {
-                return Boolean.FALSE;       // we only had matches against trueValue
-            }
-        }
-
-        if(other == true) {
-            // we had unrecognized values that did not match either trueValue or falseValue
-            throw new IllegalFieldValueException(fieldName, values);
-        }
-
-        // we had matches to both trueValue AND falseValue
-        throw new InconsistentFieldValuesException(fieldName, values);
     }
 
     /**

@@ -687,3 +687,4 @@ breaks.none=breaks_none.text
 breaktype_other=moreBreaksInCare.label
 breaks.breaktype.other.helper=moreBreaksInCare.hintBefore
 
+thankyou=/thankyou/apply-carers.pageTitle

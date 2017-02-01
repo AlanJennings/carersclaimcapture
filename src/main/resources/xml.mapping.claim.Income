@@ -22,10 +22,10 @@ startJobBeforeClaimDate.label                   = DWPBody/DWPCATransaction/DWPCA
 startJobBeforeClaimDate                         = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/DidJobStartBeforeClaimDate/Answer
 employerName.label                              = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/Name/QuestionLabel[messages("employerName.label")]
 employerName                                    = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/Name/Answer
-employerAddressLineOne.label                    = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/Address/QuestionLabel[messages("employerAddressLineOne.label")]
-employerAddressLineOne                          = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/Address/Answer/Line[@order="1"]
-employerAddressLineTwo                          = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/Address/Answer/Line[@order="2"]
-employerAddressLineThree                        = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/Address/Answer/Line[@order="3"]
+employmentAddressLineOne.label                    = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/Address/QuestionLabel[messages("employmentAddressLineOne.label")]
+employmentAddressLineOne                          = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/Address/Answer/Line[@order="1"]
+employmentAddressLineTwo                          = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/Address/Answer/Line[@order="2"]
+employmentAddressLineThree                        = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/Address/Answer/Line[@order="3"]
 employmentPostcode                              = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/Address/Answer/PostCode
 employmentPhoneNumber.label                     = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/EmployersPhoneNumber/QuestionLabel[messages("employmentPhoneNumber.label")]
 employmentPhoneNumber                           = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/EmployersPhoneNumber/Answer

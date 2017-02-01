@@ -143,8 +143,8 @@ public class XmlBuilder {
                     }
                 } else if (value instanceof List) {
                     // field collection, we can't reliably assert the parameterized types, so will go with <?>
-                    List<Map<String, String>> fieldCollectionList = castFieldCollectionList(value);
-                    add(fieldCollectionList, xpath);
+                    List<Map<String, Object>> fieldCollectionList = castFieldCollectionList(value);
+                    add(fieldCollectionList, document);
                 } else {
                     throw new IllegalFieldValueException("Unsupported value class: " + value.getClass().getName(), (String) null, (String[]) null);
                 }
@@ -250,23 +250,19 @@ public class XmlBuilder {
         return node;
     }
 
-    private void add(List<Map<String, String>> fieldCollectionList, String xPath) {
-//        // create enclosing node, one per list item using order attribute, then create the inner values
-//        if(fieldCollectionList == null) {
-//            return;
-//        }
-//
-//        for(int index = 0; index < fieldCollectionList.size(); index++) {
-//            Map<String, String> fieldCollection = fieldCollectionList.get(index);
-//            Node collectionNode = getNamedNode(xPath, addToAttrMap(null, "order", Integer.toString(index)), false, document);
-//            this.add(fieldCollection, valueMappings, collectionNode);
-//            Node textNode = document.createTextNode(value);
-//            current.appendChild(textNode);
-//        }
-        throw new UnsupportedOperationException("Not implemented");
+    private void add(List<Map<String, Object>> fieldCollectionList, Document document) {
+        // create enclosing node, one per list item using order attribute, then create the inner values
+        if (fieldCollectionList == null) {
+            return;
+        }
+
+        for (int index = 0; index < fieldCollectionList.size(); index++) {
+            Map<String, Object> fieldCollection = fieldCollectionList.get(index);
+            addNodes(fieldCollection, null, document);
+        }
     }
 
-    private List<Map<String, String>> castFieldCollectionList(Object untypedfieldCollection) {
+    private List<Map<String, Object>> castFieldCollectionList(Object untypedfieldCollection) {
         if ((untypedfieldCollection instanceof List) == false) {
             throw new IllegalArgumentException("field collection list is not a 'List'");
         }
@@ -287,7 +283,7 @@ public class XmlBuilder {
         }
 
         @SuppressWarnings("unchecked")
-        List<Map<String, String>> result = (List<Map<String, String>>) list;
+        List<Map<String, Object>> result = (List<Map<String, Object>>) list;
 
         return result;
     }
