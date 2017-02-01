@@ -6,21 +6,16 @@
 
 <!DOCTYPE html>
 <t:mainPage>
-
     <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
-        
-        <!-- breaksInCare = '<c:out value="${breaks}" />' -->
         <c:if test="${not empty breaks}">
-            <c:set var="moreBreaksLabel" value="Have you had any more breaks from caring for this person since ${dateOfClaim}?" />
-            
             <t:panel id="breaks">
-
-                <table>
+                <h2 class="heading-medium" id="summary-heading"><t:message code="breaks.summary.title" /></h2>
+                <table id="summary-table">
                     <tr>
-                        <th>Who</th>
-                        <th>Where</th>
-                        <th>From</th>
-                        <th>To</th>
+                        <th><t:message code="breaks.summary.who" /></th>
+                        <th><t:message code="breaks.summary.where" /></th>
+                        <th><t:message code="breaks.summary.from" /></th>
+                        <th><t:message code="breaks.summary.to" /></th>
                         <th></th>
                     </tr>
                     
@@ -31,7 +26,7 @@
                             <tr id="break_${careBreak['break_id']}">
                                 <c:if test="${careBreak['hospitalBreakWhoInHospital']=='Carer'}">
                                     <td>${carerFirstName} ${carerSurname}</td>
-                                    <td>Hospital</td>
+                                    <td><t:message code="otherResidence_hospital.text" /></td>
                                     <td>
                                         ${cads:dateOffset(careBreak['hospitalBreakCarerHospitalStartDate_day'], 
                                                                    careBreak['hospitalBreakCarerHospitalStartDate_month'], 
@@ -49,7 +44,7 @@
                                 </c:if>
                                 <c:if test="${careBreak['hospitalBreakWhoInHospital']=='Caree'}">
                                     <td>${careeFirstName} ${careeSurname}</td>
-                                    <td>Hospital</td>
+                                    <td><t:message code="otherResidence_hospital.text" /></td>
                                     <td>
                                         ${cads:dateOffset(careBreak['hospitalBreakCareeHospitalStartDate_day'], 
                                                                    careBreak['hospitalBreakCareeHospitalStartDate_month'], 
@@ -76,7 +71,7 @@
                             <tr id="break_${careBreak['break_id']}">
                                 <c:if test="${careBreak['respiteBreakWhoInRespite']=='Carer'}">
                                     <td>${carerFirstName} ${carerSurname}</td>
-                                    <td>Respite or a Care Home</td>
+                                    <td><t:message code="otherResidence_respite.text" /></td>
                                     <td>
                                         ${cads:dateOffset(careBreak['respiteBreakCarerRespiteStartDate_day'], 
                                                                    careBreak['respiteBreakCarerRespiteStartDate_month'], 
@@ -94,7 +89,7 @@
                                 </c:if>
                                 <c:if test="${careBreak['respiteBreakWhoInRespite']=='Caree'}">
                                     <td>${careeFirstName} ${careeSurname}</td>
-                                    <td>Respite or a Care Home</td>
+                                    <td><t:message code="otherResidence_respite.text" /></td>
                                     <td>
                                         ${cads:dateOffset(careBreak['respiteBreakCareeRespiteStartDate_day'], 
                                                                    careBreak['respiteBreakCareeRespiteStartDate_month'], 
@@ -147,10 +142,12 @@
             </t:panel>
         </c:if>
 
-        <t:yesnofield name="moreBreaksInCare" labelKeyArgs="${cads:dateOffset(dateOfClaim_day, dateOfClaim_month, dateOfClaim_year, 'd MMMMMMMMMM yyyy', '')}|${careeFirstName}|${careeSurname}"/>
-        <t:hiddenPanel id="moreBreaksInCareWrap" triggerId="moreBreaksInCare" triggerValue="yes">
-            <t:radiobuttons name="moreBreaksInCareResidence" optionValues="hospital|respite|somewhere else" optionLabelKeys="hospital|respite|elsewhere" />
-        </t:hiddenPanel>
+        <t:group name="moreBreaksInCareResidenceGroup">
+            <t:checkbox name="breaks_hospital" outerClass="no-class" />
+            <t:checkbox name="breaks_respite" outerClass="no-class" />
+            <t:checkbox name="breaks_none" outerClass="no-class" checkedValue="none" />
+        </t:group>
+        <t:yesnofield name="moreBreaksInCare" />
         
     </t:pageContent>
     

@@ -3,6 +3,7 @@ package uk.gov.dwp.carersallowance.validations;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -157,6 +158,28 @@ public class Dependency {
             if(unknownFields.isEmpty() == false) {
                 throw new UnknownFieldException("Unknown fields: " + unknownFields, unknownFields);
             }
+        }
+
+        public boolean isFulfilled(Map<String, String[]> fieldValues) {
+            for (Dependency dependency: dependencies) {
+                if (dependency.getDependantField() == null) {
+                    return Boolean.TRUE;
+                }
+            }
+
+            Boolean fulfilled = Boolean.TRUE;
+            for (Dependency dependency: dependencies) {
+                final String[] values = fieldValues.get(dependency.getDependantField());
+                if (values == null || values.length == 0) {
+                    return Boolean.FALSE;
+                }
+                for (String value: values) {
+                    if (dependency.getFieldValue().equals(value) == false) {
+                        fulfilled = Boolean.FALSE;
+                    }
+                }
+            }
+            return fulfilled;
         }
 
         public String toString() {

@@ -5,12 +5,10 @@
 <!DOCTYPE html>
 
 <t:mainPage>
-
     <script type="text/javascript" src="<c:url value='/javascript/isMondayOrFriday.js' />" ></script>
 
     <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
-        <input type="hidden" name="break_id" value="${break_id}" >
-        <input type="hidden" name="breakInCareType" value="elsewhere" >
+        <input type="hidden" name="breakInCareOther" value="elsewhere" >
         
         <t:htmlsection name="breakSomewhereElseIntro">
             <p><t:message code="breakSomewhereElseIntro.text"/></p>
@@ -42,7 +40,5 @@
         <t:hiddenPanel id="carerSomewhereElseWhereCareeWrap" triggerId="carerSomewhereElseWhereCaree" triggerValue="somewhere else">
             <t:textarea name="carerSomewhereElseWhereCareeOtherText" showRemainingChars="true" />
         </t:hiddenPanel>
-
     </t:pageContent>
-
 </t:mainPage>   

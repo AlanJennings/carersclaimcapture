@@ -40,15 +40,18 @@ public class Dependencies {
                     rawDependency = PropertyUtils.trimQuotes(rawDependency);
                     LOG.info("Adding field({}) dependency {} = {}", field, key, rawDependency);
                     try {
-                        Dependency dependency = Dependency.parseSingleLine(rawDependency);
-                        dependency.validateFieldNames(referenceFields);
-                        Dependency existingDependency = results.get(field);
-                        if(existingDependency != null) {
-                            LOG.debug("Adding to existing field dependencies");
-                            Dependency aggregateDependency = Dependency.AggregateDependency.aggregate(existingDependency, dependency);
-                            results.put(field, aggregateDependency);
-                        } else {
-                            results.put(field, dependency);
+                        String[] dependencyData = rawDependency.split("&");
+                        for (final String dependencyData1 : dependencyData) {
+                            Dependency dependency = Dependency.parseSingleLine(dependencyData1);
+                            dependency.validateFieldNames(referenceFields);
+                            Dependency existingDependency = results.get(field);
+                            if (existingDependency != null) {
+                                LOG.debug("Adding to existing field dependencies");
+                                Dependency aggregateDependency = Dependency.AggregateDependency.aggregate(existingDependency, dependency);
+                                results.put(field, aggregateDependency);
+                            } else {
+                                results.put(field, dependency);
+                            }
                         }
                     } catch (UnknownFieldException e) {
                         LOG.error("Invalid config: ", e);
@@ -75,22 +78,32 @@ public class Dependencies {
             LOG.debug("Checking dependencies for field: '{}'", field);
 
             Dependency dependency = dependencies.get(field);
-            if(dependency == null) {
+            if (dependency == null) {
                 // this field has no dependencies, so the validations are all enabled
                 LOG.debug("No dependencies for field, skipping");
                 return true;
             }
 
-            String[] values = fieldValues.get(dependency.getDependantField());
-            LOG.debug("dependent field({}) required value = {}, actual value = {}", dependency.getDependantField(), dependency.getFieldValue(), values == null ? null : Arrays.asList(values));
-            boolean fulfilled = dependency.isFulfilled(values);
-            if(fulfilled == false) {
+            boolean fulfilled;
+            Dependency.AggregateDependency aggregateDependency = null;
+            if (dependency instanceof Dependency.AggregateDependency) {
+                aggregateDependency = (Dependency.AggregateDependency)dependency;
+                fulfilled = aggregateDependency.isFulfilled(fieldValues);
+            } else {
+                String[] values = fieldValues.get(dependency.getDependantField());
+                LOG.debug("dependent field({}) required value = {}, actual value = {}", dependency.getDependantField(), dependency.getFieldValue(), values == null ? null : Arrays.asList(values));
+                fulfilled = dependency.isFulfilled(values);
+            }
+            if (fulfilled == false) {
                 LOG.debug("condition is not fulfilled");
                 return false;
             }
 
             // make sure the dependent field is enabled.
             LOG.debug("Condition is met, checking parent dependencies");
+            if (aggregateDependency != null) {
+                return true;
+            }
             return areDependenciesFulfilled(dependency.getDependantField(), fieldValues);
         } finally {
             LOG.trace("Ending FormValidations.areDependenciesFulfilled");

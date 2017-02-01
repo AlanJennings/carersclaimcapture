@@ -4,11 +4,9 @@
 
 <!DOCTYPE html>
 
-<t:mainPage page="page.break-in-respite-care" currentPage="${currentPage}">
-
-    <t:pageContent errors="${validationErrors}" page="page.break-in-respite-care" backLink="${previousPage}">
-        <input type="hidden" name="break_id" value="${break_id}" >
-        <input type="hidden" name="breakInCareType" value="respite" >
+<t:mainPage>
+    <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
+        <input type="hidden" name="breakInCareRespite" value="respite" >
         
         <t:htmlsection name="breakInRespiteIntro">
             <p><t:message code="breakInRespiteIntro.text"/></p>

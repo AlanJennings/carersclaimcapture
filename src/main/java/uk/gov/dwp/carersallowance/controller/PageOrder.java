@@ -187,10 +187,15 @@ public class PageOrder {
             return true;
         }
         try {
-            final Dependency dependency = Dependency.parseSingleLine(nextParentPageDependency);
-            if (dependency.getDependantField() != null && data.get(dependency.getDependantField()) != null) {
-                return data.get(dependency.getDependantField()).equals(dependency.getFieldValue());
+            String[] nextDependencies = nextParentPageDependency.split("&");
+            Boolean dependenciesMet = Boolean.FALSE;
+            for (final String nextDependency : nextDependencies) {
+                final Dependency dependency = Dependency.parseSingleLine(nextDependency);
+                if (dependenciesMet == Boolean.FALSE && dependency.getDependantField() != null && data.get(dependency.getDependantField()) != null) {
+                    dependenciesMet = data.get(dependency.getDependantField()).equals(dependency.getFieldValue());
+                }
             }
+            return dependenciesMet;
         } catch (ParseException pe) {
             //do nothing
         }
