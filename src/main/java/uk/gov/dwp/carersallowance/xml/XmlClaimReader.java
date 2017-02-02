@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.CharacterData;
@@ -45,22 +46,42 @@ public class XmlClaimReader {
     private static final Set<String> IGNORE_MAPPING = new HashSet<>(Arrays.asList(new String[]{
             "DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/Evidence/Title"       // TODO
     }));
-    private static final Map<String, String> collections = new HashMap<>();
+    private final List<CollectionDetails> collections = new ArrayList<>();
 
 
     private XPathMappingList valueMappings;
     private Map<String, Object> values;
     private List<String> errors;
     private boolean sessionVariablesOnly;
+    private String mappingFileName;
 
     public XmlClaimReader(String xmlFile, boolean sessionVariablesOnly, final URL mappingFile) throws Exception {
         String xml = IOUtils.toString(XmlClaimReader.class.getClassLoader().getResourceAsStream(xmlFile), Charset.defaultCharset());
+        createMappings(mappingFile);
+        Document document = (Document) XmlPrettyPrinter.stringToNode(xml);
+        createCollectionDetails();
+        createSessionValues(sessionVariablesOnly, document);
+    }
+
+    private void createMappings(URL mappingFile) throws Exception {
         List<String> xmlMappings = LoadFile.readLines(mappingFile);
         valueMappings = new XPathMappingList();
         valueMappings.add(xmlMappings);
-        Document document = (Document) XmlPrettyPrinter.stringToNode(xml);
-        collections.put("JobDetails", "JobDetails");
-        createSessionValues(sessionVariablesOnly, document);
+        this.mappingFileName = StringUtils.substringAfterLast(mappingFile.getFile(), "/");
+    }
+
+    private void createAdditionalMappings(final String fileName) throws Exception {
+        URL xmlMappingFile = XmlClaimReader.class.getClassLoader().getResource(fileName);
+        if (xmlMappingFile != null) {
+            List<String> xmlMappings = LoadFile.readLines(xmlMappingFile);
+            if (xmlMappings != null) {
+                valueMappings.add(xmlMappings);
+            }
+        }
+    }
+
+    private void createCollectionDetails() {
+        collections.add(new CollectionDetails("JobDetails", "DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/", "DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/CurrentlyEmployed/QuestionLabel"));
     }
 
     public XmlClaimReader(String xml, XPathMappingList valueMappings, boolean sessionVariablesOnly) throws InstantiationException {
@@ -144,25 +165,17 @@ public class XmlClaimReader {
                 XPathMapping value = entry.getValue();
                 LOG.info("key :" + key + "  value :"+  value.toString());
             }
-
-
-            List<XPathMapping> mappings=valueMappings.getList();
-            for (XPathMapping m : mappings){
-                if (m!=null && m.getXpath()!=null && m.getXpath().equals(parentPath)){
-                    LOG.error("BIZARRE found mapping for "+parentPath+" by looping but not by map lookup. Needs further investigation");
-                    LOG.info("valueMappings :" + valueMappings.toString());
-                    LOG.debug("Loop found matching xpath for parent:{}", parentPath);
-                    mapping=m;
-                }
-            }
+            mapping = findMapping(parentPath);
         }
 
         if (IGNORE_MAPPING.contains(parentPath)) {
             return; // do nothing
         } else if (mapping == null) {
-            LOG.error("Unknown mapping for {}", parentPath);
-            errors.add("Unknown mapping for " + parentPath);
-            //throw new IllegalStateException("Unknown mapping for " + parentPath);
+            if (!createCollection(parentPath, data)) {
+                LOG.error("Unknown mapping for {}", parentPath);
+                errors.add("Unknown mapping for " + parentPath);
+                throw new IllegalStateException("Unknown mapping for " + parentPath);
+            }
         } else {
             String key = mapping.getValue();
             String processingInstruction = mapping.getProcessingInstruction();
@@ -177,6 +190,57 @@ public class XmlClaimReader {
                 values.put(key, data.replace("No", C3Constants.NO).replace("Yes", C3Constants.YES));
             }
         }
+    }
+
+    private boolean createCollection(String parentPath, String data) {
+        try {
+            CollectionDetails collectionDetails = findParentPath(parentPath);
+            if (collectionDetails != null) {
+                Map<String, Object> latestValues;
+                List<Map<String, Object>> collection = (List<Map<String, Object>>) values.get(collectionDetails.getCollectionName());
+                if (collectionDetails.getNewMapKey().equals(parentPath)) {
+                    latestValues = new HashMap<>();
+                    if (collection == null) {
+                        collection = new ArrayList<>();
+                        values.put(collectionDetails.getCollectionName(), collection);
+                    }
+                    latestValues.put(collectionDetails.collectionName + "_id", String.valueOf(collection.size()+1));
+                    collection.add(latestValues);
+                } else {
+                    latestValues = collection.get(collection.size()-1);
+                }
+                //find mapping
+                XPathMapping map = findMapping(StringUtils.substringBefore(parentPath.replace(collectionDetails.startWith, ""), "["));
+                if (map == null) {
+                    createAdditionalMappings(mappingFileName + "." + collectionDetails.collectionName.toLowerCase());
+                    map = findMapping(parentPath.replace(collectionDetails.startWith, ""));
+                }
+                if (map != null) {
+                    latestValues.put(map.getValue(), data.replace("No", C3Constants.NO).replace("Yes", C3Constants.YES));
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            LOG.error("Unknown failure.", e);
+            return false;
+        }
+        return true;
+    }
+
+    private XPathMapping findMapping(String path) {
+        List<XPathMapping> mappings = valueMappings.getList();
+        for (XPathMapping m : mappings){
+            if (m != null && m.getXpath() != null && m.getXpath().equals(path)){
+                LOG.error("BIZARRE found mapping for "+ path + " by looping but not by map lookup. Needs further investigation");
+                LOG.info("valueMappings :" + valueMappings.toString());
+                LOG.debug("Loop found matching xpath for parent:{}", path);
+                return m;
+            }
+        }
+        return null;
     }
 
     private void createDateMapping(String keystub, String datestring) {
@@ -270,5 +334,37 @@ public class XmlClaimReader {
             buffer.append(key).append(" = ").append(map.get(key));
         }
         return buffer.toString();
+    }
+
+    public CollectionDetails findParentPath(final String newMapKey) {
+        for (CollectionDetails collectionDetails : collections) {
+            if (newMapKey.equals(collectionDetails.getNewMapKey()) || newMapKey.startsWith(collectionDetails.getStartWith())) {
+                return collectionDetails;
+            }
+        }
+        return null;
+    }
+
+    class CollectionDetails {
+        private final String startWith;
+        private final String newMapKey;
+        private final String collectionName;
+        public CollectionDetails(final String collectionName, final String startWith, final String newMapKey) {
+            this.collectionName = collectionName;
+            this.startWith = startWith;
+            this.newMapKey = newMapKey;
+        }
+
+        public String getStartWith() {
+            return startWith;
+        }
+
+        public String getNewMapKey() {
+            return newMapKey;
+        }
+
+        public String getCollectionName() {
+            return collectionName;
+        }
     }
 }
