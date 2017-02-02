@@ -51,19 +51,19 @@ public class XmlBuilder {
         Parameters.validateMandatoryArgs(new Object[]{rootNodeName}, new String[]{"rootNodeName"});
         Map<String, String> namespaces = getNamespaces();
         document = createDocument(rootNodeName, namespaces);
-        this.valueMappings = loadXPathMappings();
+        this.valueMappings = loadXPathMappings(null, XML_MAPPING__CLAIM);
 
         addAssistedDecisionToClaim(values);
         addNodes(values, null, document);
     }
 
-    private Map<String, XPathMappingList> loadXPathMappings() throws IOException, XPathMappingList.MappingException {
+    private Map<String, XPathMappingList> loadXPathMappings(final String elementName, final String xmlMapping) throws IOException, XPathMappingList.MappingException {
         Map<String, XPathMappingList> mappings = new HashMap<>();
-        URL claimTemplateUrl = this.getClass().getClassLoader().getResource(XML_MAPPING__CLAIM);
+        URL claimTemplateUrl = this.getClass().getClassLoader().getResource(xmlMapping);
         List<String> xmlMappings = LoadFile.readLines(claimTemplateUrl);
         XPathMappingList valueMappings = new XPathMappingList();
         valueMappings.add(xmlMappings);
-        mappings.put(null, valueMappings);
+        mappings.put(elementName, valueMappings);
         return mappings;
     }
 
@@ -144,7 +144,7 @@ public class XmlBuilder {
                 } else if (value instanceof List) {
                     // field collection, we can't reliably assert the parameterized types, so will go with <?>
                     List<Map<String, Object>> fieldCollectionList = castFieldCollectionList(value);
-                    add(fieldCollectionList, document);
+                    add(fieldCollectionList, document, valueKey, xpath);
                 } else {
                     throw new IllegalFieldValueException("Unsupported value class: " + value.getClass().getName(), (String) null, (String[]) null);
                 }
@@ -250,15 +250,22 @@ public class XmlBuilder {
         return node;
     }
 
-    private void add(List<Map<String, Object>> fieldCollectionList, Document document) {
+    private void add(List<Map<String, Object>> fieldCollectionList, Document document, String elementName, String xPath) {
         // create enclosing node, one per list item using order attribute, then create the inner values
         if (fieldCollectionList == null) {
             return;
         }
-
-        for (int index = 0; index < fieldCollectionList.size(); index++) {
-            Map<String, Object> fieldCollection = fieldCollectionList.get(index);
-            addNodes(fieldCollection, null, document);
+        try {
+            this.valueMappings.put(elementName, loadXPathMappings(elementName, XML_MAPPING__CLAIM + "." + elementName.toLowerCase()).get(elementName));
+            for (int index = 0; index < fieldCollectionList.size(); index++) {
+                Map<String, Object> fieldCollection = fieldCollectionList.get(index);
+                Element childNode = document.createElement(elementName);
+                addNodes(fieldCollection, elementName, childNode);
+                Node node = getNamedNode(xPath, null, false, document);
+                node.appendChild(childNode);
+            }
+        } catch (Exception e) {
+            LOG.error("Unable to add collection.", e);
         }
     }
 

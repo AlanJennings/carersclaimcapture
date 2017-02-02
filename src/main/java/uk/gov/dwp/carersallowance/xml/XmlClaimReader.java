@@ -1,5 +1,7 @@
 package uk.gov.dwp.carersallowance.xml;
 
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.CharacterData;
@@ -19,6 +22,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import uk.gov.dwp.carersallowance.utils.C3Constants;
+import uk.gov.dwp.carersallowance.utils.LoadFile;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMapping;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
 import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
@@ -41,20 +45,31 @@ public class XmlClaimReader {
     private static final Set<String> IGNORE_MAPPING = new HashSet<>(Arrays.asList(new String[]{
             "DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/Evidence/Title"       // TODO
     }));
+    private static final Map<String, String> collections = new HashMap<>();
+
 
     private XPathMappingList valueMappings;
     private Map<String, Object> values;
     private List<String> errors;
     private boolean sessionVariablesOnly;
 
-    public XmlClaimReader(String xml, XPathMappingList valueMappings, boolean sessionVariablesOnly) throws InstantiationException {
-        this((Document) XmlPrettyPrinter.stringToNode(xml), valueMappings, sessionVariablesOnly);
+    public XmlClaimReader(String xmlFile, boolean sessionVariablesOnly, final URL mappingFile) throws Exception {
+        String xml = IOUtils.toString(XmlClaimReader.class.getClassLoader().getResourceAsStream(xmlFile), Charset.defaultCharset());
+        List<String> xmlMappings = LoadFile.readLines(mappingFile);
+        valueMappings = new XPathMappingList();
+        valueMappings.add(xmlMappings);
+        Document document = (Document) XmlPrettyPrinter.stringToNode(xml);
+        collections.put("JobDetails", "JobDetails");
+        createSessionValues(sessionVariablesOnly, document);
     }
 
-    public XmlClaimReader(Document xml, XPathMappingList valueMappings, boolean sessionVariablesOnly) {
+    public XmlClaimReader(String xml, XPathMappingList valueMappings, boolean sessionVariablesOnly) throws InstantiationException {
+        createSessionValues(sessionVariablesOnly, (Document) XmlPrettyPrinter.stringToNode(xml));
         this.valueMappings = valueMappings;
-        this.sessionVariablesOnly = sessionVariablesOnly;
+    }
 
+    private void createSessionValues(boolean sessionVariablesOnly, Document xml) {
+        this.sessionVariablesOnly = sessionVariablesOnly;
         errors = new ArrayList<>();
         values = new HashMap<>();
         parseXml(values, xml.getFirstChild(), null, 0, ACTIVE_ATTRS);
@@ -147,7 +162,7 @@ public class XmlClaimReader {
         } else if (mapping == null) {
             LOG.error("Unknown mapping for {}", parentPath);
             errors.add("Unknown mapping for " + parentPath);
-            throw new IllegalStateException("Unknown mapping for " + parentPath);
+            //throw new IllegalStateException("Unknown mapping for " + parentPath);
         } else {
             String key = mapping.getValue();
             String processingInstruction = mapping.getProcessingInstruction();

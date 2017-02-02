@@ -1,12 +1,10 @@
 xmlVersion                                      = DWPBody/Version
 appVersion                                      = DWPBody/ClaimVersion
-origin                                          = DWPBody/Origin
-
+originTag                                       = DWPBody/Origin
 transactionId                                   = DWPBody/DWPCATransaction/TransactionId
 transactionId.attribute                         = DWPBody/DWPCATransaction/[@id]
 dateTimeGenerated                               = DWPBody/DWPCATransaction/DateTimeGenerated
 language                                        = DWPBody/DWPCATransaction/LanguageUsed
-
 dateOfClaim.label                               = DWPBody/DWPCATransaction/DWPCAClaim/DateOfClaim/QuestionLabel[messages("dateOfClaim.label")]                         = DWPBody/DWPCATransaction/DWPCAClaim/DateOfClaim/QuestionLabel[messages("dateOfClaim.label")]
 dateOfClaim                                     = DWPBody/DWPCATransaction/DWPCAClaim/DateOfClaim/Answer[@type="date"]
 benefitsAnswer.label                            = DWPBody/DWPCATransaction/DWPCAClaim/QualifyingBenefit/QuestionLabel[messages("benefitsAnswer.label")]
@@ -107,40 +105,7 @@ yourIncome_rentalincome.text                    = DWPBody/DWPCATransaction/DWPCA
 yourIncome_rentalincome                         = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/RentalIncome/Answer
 yourIncome_anyother.text                        = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/AnyOtherPayment/QuestionLabel[messages("yourIncome_anyother.label")]
 yourIncome_anyother                             = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/AnyOtherPayment/Answer
-finishedThisJob.label                           = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/CurrentlyEmployed/QuestionLabel[messages("finishedThisJob.label")]
-finishedThisJob                                 = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/CurrentlyEmployed/Answer
-startJobBeforeClaimDate.label                   = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/DidJobStartBeforeClaimDate/QuestionLabel[messages("startJobBeforeClaimDate.label")]
-startJobBeforeClaimDate                         = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/DidJobStartBeforeClaimDate/Answer
-employerName.label                              = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/Name/QuestionLabel[messages("employerName.label")]
-employerName                                    = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/Name/Answer
-employmentAddress.label                           = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/Address/QuestionLabel[messages("employmentAddressLineOne.label")]
-employmentAddressLineOne                          = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/Address/Answer/Line[@order="1"]
-employmentAddressLineTwo                          = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/Address/Answer/Line[@order="2"]
-employmentAddressLineThree                        = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/Address/Answer/Line[@order="3"]
-employmentPostcode                              = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/Address/Answer/PostCode
-employmentPhoneNumber.label                     = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/EmployersPhoneNumber/QuestionLabel[messages("employmentPhoneNumber.label")]
-employmentPhoneNumber                           = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/EmployersPhoneNumber/Answer
-employmentLastPaidDate.label                    = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Pay/DateLastPaid/QuestionLabel[messages("employmentLastPaidDate.label")]
-employmentLastPaidDate                          = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Pay/DateLastPaid/Answer[@type="date"]
-employmentGrossPayCurrency.label                = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Pay/GrossPayment/Answer/Currency[messages("employmentGrossPayCurrency.label")]
-employmentGrossPay.label                        = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Pay/GrossPayment/QuestionLabel[messages("employmentGrossPay.label")]
-employmentGrossPay                              = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Pay/GrossPayment/Answer/Amount
-employmentPayInclusions.label                   = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Pay/IncludedInWage/QuestionLabel[messages("employmentPayInclusions.label")]
-employmentPayInclusions                         = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Pay/IncludedInWage/Answer
-employmentPaymentFrequencyOtherText.label       = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Pay/PayFrequency/QuestionLabel[messages("employmentPaymentFrequencyOtherText.label")]
-employmentPaymentFrequencyOtherText             = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Pay/PayFrequency/Answer
-employmentwhenGetPaid.label                     = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Pay/UsualPayDay/QuestionLabel[messages("employmentwhenGetPaid.label")]
-employmentwhenGetPaid                           = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Pay/UsualPayDay/Answer
-employmentSameAmountEachTime.label              = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Pay/ConstantEarnings/QuestionLabel[messages("employmentSameAmountEachTime.label")]
-employmentSameAmountEachTime                    = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Pay/ConstantEarnings/Answer
-payPensionScheme.label                          = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/PaidForPension/QuestionLabel[messages("payPensionScheme.label")]
-payPensionScheme                                = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/PaidForPension/Answer
-payForThings.label                              = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/PaidForThingsToDoJob/QuestionLabel[messages("payForThings.label")]
-payForThings                                    = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/PaidForThingsToDoJob/Answer
-haveExpensesForJob.label                        = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/PaidForJobExpenses/QuestionLabel[messages("haveExpensesForJob.label")]
-haveExpensesForJob                              = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/PaidForJobExpenses/Answer
-moreEmployment.label                            = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/OtherEmployment/QuestionLabel[messages("moreEmployment.label")]
-moreEmployment                                  = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/OtherEmployment/Answer
+JobDetails                                      = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment
 empAdditionalInfo.label                         = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/EmploymentAdditionalInfo/QuestionLabel[messages("empAdditionalInfo.label")]
 empAdditionalInfo                               = DWPBody/DWPCATransaction/DWPCAClaim/Incomes/EmploymentAdditionalInfo/Answer
 hadPartnerSinceClaimDate.label                  = DWPBody/DWPCATransaction/DWPCAClaim/HavePartner/QuestionLabel[messages("hadPartnerSinceClaimDate.label")]

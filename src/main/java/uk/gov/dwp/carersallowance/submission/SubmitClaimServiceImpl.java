@@ -80,7 +80,7 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
         sendClaim(xml, transactionId, session, emailBody);
         LOG.info("Sent claim for transactionId :{}", session.getAttribute(C3Constants.TRANSACTION_ID));
     }
-
+    
     private Integer getJsEnabled(final Session session) {
         if ("true".equals(session.getAttribute("jsEnabled"))) {
             return JS_ENABLED;

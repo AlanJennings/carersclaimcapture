@@ -1,8 +1,6 @@
 package uk.gov.dwp.carersallowance.session;
 
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
@@ -11,20 +9,16 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import uk.gov.dwp.carersallowance.controller.started.ChangeLanguageProcess;
 import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
 import uk.gov.dwp.carersallowance.utils.C3Constants;
-import uk.gov.dwp.carersallowance.utils.LoadFile;
 import uk.gov.dwp.carersallowance.xml.XmlClaimReader;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
 import uk.gov.dwp.carersallowance.sessiondata.SessionDataFactory;
-import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
 
 @Service
 public class SessionManager {
@@ -101,11 +95,7 @@ public class SessionManager {
         try {
             LOG.info("Using XMLFile " + xmlFile);
             LOG.info("Using mapping file " + mappingFile);
-            List<String> xmlMappings = LoadFile.readLines(mappingFile);
-            XPathMappingList valueMappings = new XPathMappingList();
-            valueMappings.add(xmlMappings);
-            String xml = IOUtils.toString(XmlClaimReader.class.getClassLoader().getResourceAsStream(xmlFile),Charset.defaultCharset());
-            XmlClaimReader claimReader = new XmlClaimReader(xml, valueMappings, true);
+            XmlClaimReader claimReader = new XmlClaimReader(xmlFile, true, mappingFile);
 
             Map<String, Object> values = claimReader.getValues();
             for (String name : values.keySet()) {
