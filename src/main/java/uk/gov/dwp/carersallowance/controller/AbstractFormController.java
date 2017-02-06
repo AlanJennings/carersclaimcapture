@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
 
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 import uk.gov.dwp.carersallowance.session.*;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
