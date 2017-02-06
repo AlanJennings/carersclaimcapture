@@ -85,8 +85,8 @@ public class XmlClaimReader {
     }
 
     public XmlClaimReader(String xml, XPathMappingList valueMappings, boolean sessionVariablesOnly) throws InstantiationException {
-        createSessionValues(sessionVariablesOnly, (Document) XmlPrettyPrinter.stringToNode(xml));
         this.valueMappings = valueMappings;
+        createSessionValues(sessionVariablesOnly, (Document) XmlPrettyPrinter.stringToNode(xml));
     }
 
     private void createSessionValues(boolean sessionVariablesOnly, Document xml) {

@@ -34,6 +34,6 @@ public class ApplicationTransactionIdTest {
     public void testGetTransactionId() throws Exception {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
         final String date = simpleDateFormat.format(new Date());
-        assertThat(transactionIdService.getTransactionId(), is(date.substring(2,4) + "010000001"));
+        assertThat(transactionIdService.getTransactionId(), is(date.substring(2,6) + "0000001"));
     }
 }

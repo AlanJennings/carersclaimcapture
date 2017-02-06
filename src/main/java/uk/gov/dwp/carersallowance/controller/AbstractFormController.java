@@ -182,6 +182,7 @@ public class AbstractFormController {
                 nextPage = changeDeletePage + "#";
             }
             sessionManager.saveSession(session);
+
             LOG.debug("next page = {}", nextPage);
 
             return nextPage;

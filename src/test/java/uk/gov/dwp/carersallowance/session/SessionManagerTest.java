@@ -144,7 +144,7 @@ public class SessionManagerTest {
         final String sessionId = objectCaptor.getValue().toString();
         session = sessionManager.getSession(sessionId);
         assertThat(session.getAttribute("appVersion"), is("3.15"));
-        assertThat(session.getAttribute("origin"), is("GB"));
+        assertThat(session.getAttribute("originTag"), is("GB"));
         assertThat(session.getAttribute("language"), is("English"));
         assertThat(session.getAttribute("dateOfClaim_day"), is("20"));
         assertThat(session.getAttribute("dateOfClaim_month"), is("04"));

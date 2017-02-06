@@ -30,7 +30,6 @@ public class ClaimHeaderItemsTest {
     private static final Logger LOG = LoggerFactory.getLogger(ClaimHeaderItemsTest.class);
 
     private XmlBuilder xmlBuilder;
-    private XPath xpath;
     private String appVersion = "3.14";
     private String xmlVersion = "0.27";
     private String transactionId = "16011234";
@@ -51,12 +50,10 @@ public class ClaimHeaderItemsTest {
         sessionMap.put("dateTimeGenerated", ClaimXmlUtil.currentDateTime("dd-MM-yyyy HH:mm"));
         sessionMap.put("xmlVersion", xmlVersion);
         sessionMap.put("appVersion", appVersion);
-        sessionMap.put("origin", origin);
+        sessionMap.put("originTag", origin);
         sessionMap.put("language", language);
 
         xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource, serverSideResolveArgs);
-        String xml = xmlBuilder.render(true, false);
-        xpath = XPathFactory.newInstance().newXPath();
     }
 
     @Test

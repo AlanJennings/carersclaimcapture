@@ -94,9 +94,11 @@ public class Dependency {
 
     public static class AggregateDependency extends Dependency {
         private List<Dependency> dependencies;
+        private List<Dependency> orDependencies;
 
         private AggregateDependency(Dependency dependency) {
             dependencies = new ArrayList<>();
+            orDependencies = new ArrayList<>();
 
             add(dependency);
         }
@@ -107,9 +109,7 @@ public class Dependency {
 
         private void addAggregate(AggregateDependency otherDependencies) {
             if(otherDependencies != null) {
-                for(Dependency dependency: otherDependencies.getDependencies()) {
-                    add(dependency);
-                }
+                otherDependencies.getDependencies().forEach(this::add);
             }
         }
 
@@ -129,6 +129,28 @@ public class Dependency {
             }
         }
 
+        private void addAggregateOr(AggregateDependency otherDependencies) {
+            if(otherDependencies != null) {
+                otherDependencies.getDependencies().forEach(this::addOr);
+            }
+        }
+
+        private void addOr(Dependency dependency) {
+            if (dependency instanceof AggregateDependency) {
+                addAggregateOr((AggregateDependency)dependency);
+            } else if(dependency != null) {
+                orDependencies.add(dependency);
+            }
+        }
+
+        public void addOr(Dependency...otherDependencies) {
+            if (otherDependencies != null) {
+                for(Dependency dependency: otherDependencies) {
+                    addOr(dependency);
+                }
+            }
+        }
+
         public static AggregateDependency aggregate(Dependency first, Dependency...others) {
             AggregateDependency result;
             if(first instanceof AggregateDependency) {
@@ -137,6 +159,18 @@ public class Dependency {
                 result = new AggregateDependency(first);
             }
             result.add(others);
+
+            return result;
+        }
+
+        public static AggregateDependency aggregateOr(Dependency first, Dependency...others) {
+            AggregateDependency result;
+            if(first instanceof AggregateDependency) {
+                result = (AggregateDependency)first;
+            } else {
+                result = new AggregateDependency(first);
+            }
+            result.addOr(others);
 
             return result;
         }
@@ -171,15 +205,32 @@ public class Dependency {
             for (Dependency dependency: dependencies) {
                 final String[] values = fieldValues.get(dependency.getDependantField());
                 if (values == null || values.length == 0) {
-                    return Boolean.FALSE;
+                    fulfilled = Boolean.FALSE;
+                    break;
                 }
                 for (String value: values) {
                     if (dependency.getFieldValue().equals(value) == false) {
                         fulfilled = Boolean.FALSE;
+                        break;
                     }
                 }
             }
-            return fulfilled;
+
+            Boolean fullFilledOr = Boolean.FALSE;
+            for (Dependency dependency: orDependencies) {
+                final String[] values = fieldValues.get(dependency.getDependantField());
+                if (values == null || values.length == 0) {
+                    fullFilledOr = Boolean.FALSE;
+                    continue;
+                }
+                for (String value: values) {
+                    if (dependency.getFieldValue().equals(value) == true) {
+                        fullFilledOr = Boolean.TRUE;
+                        break;
+                    }
+                }
+            }
+            return fulfilled || fullFilledOr;
         }
 
         public String toString() {
@@ -192,5 +243,38 @@ public class Dependency {
 
             return buffer.toString();
         }
+    }
+
+    public static Boolean pageDependencyFulfilled(final Map<String, Object> data, final String pageDependency, Boolean returnOnNull) {
+        if (pageDependency == null) {
+            return returnOnNull;
+        }
+        try {
+            String[] nextDependencies = StringUtils.substringBefore(pageDependency, "|").split("&");
+            String[] orDependencies = StringUtils.substringAfter(pageDependency, "|").split("\\|");
+            Boolean dependenciesMet = Boolean.FALSE;
+            for (final String nextDependency : nextDependencies) {
+                final Dependency dependency = Dependency.parseSingleLine(nextDependency);
+                if (dependenciesMet == Boolean.FALSE && dependency.getDependantField() != null && data.get(dependency.getDependantField()) != null) {
+                    dependenciesMet = data.get(dependency.getDependantField()).equals(dependency.getFieldValue());
+                }
+            }
+            Boolean dependenciesOrMet = Boolean.FALSE;
+            for (final String orDependency : orDependencies) {
+                final Dependency dependency = Dependency.parseSingleLine(orDependency);
+                if (dependency != null) {
+                    if (dependency.getDependantField() != null && data.get(dependency.getDependantField()) != null) {
+                        dependenciesOrMet = data.get(dependency.getDependantField()).equals(dependency.getFieldValue());
+                    }
+                    if (dependenciesOrMet == Boolean.TRUE) {
+                        break;
+                    }
+                }
+            }
+            return dependenciesMet || dependenciesOrMet;
+        } catch (ParseException pe) {
+            //do nothing
+        }
+        return true;
     }
 }

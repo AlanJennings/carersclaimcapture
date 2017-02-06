@@ -35,6 +35,9 @@ public class PageOrder {
     private static final String NESTED_FORM_PREFIX                      = "subform=";
     private static final String NEXT_PARENT_PAGE_DEPENDENCY_KEY_FORMAT  = "%s.move.to.next.parent.page.dependency";
     private static final String NESTED_FORM_FORMAT                      = NESTED_FORM_PREFIX + "%s";
+    private static final String FIRST_PAGE_DEPENDENCY                   = "subform.%s.first.page.dependency";
+    private static final String FIRST_PAGE                              = "subform.%s.first.page";
+    private static final String PREVIOUS_PAGE_EXCEPTIONS                = "%s.previous.page.exceptions";
 
     private String                  formName;
     private List<String>            pageList;
@@ -132,15 +135,20 @@ public class PageOrder {
     /**
      * If current page is blank, then return the first page
      */
-    public String getNextPage(final String currentPage, final Session session) {
+    public String getNextPage(final String currentPage, final Session session, final Boolean previousPage) {
         String nextPage;
         if (StringUtils.isBlank(currentPage)) {
-            nextPage = pageList.get(0);
+            String firstPageDependency = String.format(FIRST_PAGE_DEPENDENCY, formName);
+            if (previousPage == false && Dependency.pageDependencyFulfilled(session.getData(), getMessage(firstPageDependency), Boolean.FALSE)) {
+                return getMessage(String.format(FIRST_PAGE, formName));
+            } else {
+                nextPage = pageList.get(0);
+            }
         } else {
             // check if we are on a nested form
             final PageOrder currentPageOrder = getCurrentPageOrder(currentPage);
             if (currentPageOrder != this) {
-                return currentPageOrder.getNextPage(currentPage, session);
+                return currentPageOrder.getNextPage(currentPage, session, previousPage);
             }
 
             int index = pageList.indexOf(currentPage);
@@ -157,10 +165,10 @@ public class PageOrder {
                 final String pseudoFieldName = String.format(SUBFORM_PSEUDO_FIELDNAME, subFormName);
                 final String nextParentPageDependency = String.format(NEXT_PARENT_PAGE_DEPENDENCY_KEY_FORMAT, pseudoFieldName);
                 final PageOrder parentForm = currentPageOrder.getParentForm();
-                if (parentForm.isNextParentPageDependencyFulfilled(session.getData(), getMessage(nextParentPageDependency))) {
+                if (Dependency.pageDependencyFulfilled(session.getData(), getMessage(nextParentPageDependency), Boolean.TRUE)) {
                     // return to the point we dropped out of the parent
                     final String nestedFormName = String.format(NESTED_FORM_FORMAT, subFormName);
-                    return parentForm.getNextPage(nestedFormName, session);
+                    return parentForm.getNextPage(nestedFormName, session, previousPage);
                 } else {
                     nextPage = pageList.get(0);
                 }
@@ -174,32 +182,12 @@ public class PageOrder {
             dependencyNextPage = convertNestedDeclarationToPseudoFieldName(nextPage);
         }
         if (areDependenciesFulfilled(CollectionUtils.getAllFieldValues(session), dependencyNextPage) == false) {
-            return getNextPage(nextPage, session);
+            return getNextPage(nextPage, session, previousPage);
         }
 
-        nextPage = getPage(nextPage, session);
+        nextPage = getPage(nextPage, session, previousPage);
 
         return nextPage;
-    }
-
-    private Boolean isNextParentPageDependencyFulfilled(final Map<String, Object> data, final String nextParentPageDependency) {
-        if (nextParentPageDependency == null) {
-            return true;
-        }
-        try {
-            String[] nextDependencies = nextParentPageDependency.split("&");
-            Boolean dependenciesMet = Boolean.FALSE;
-            for (final String nextDependency : nextDependencies) {
-                final Dependency dependency = Dependency.parseSingleLine(nextDependency);
-                if (dependenciesMet == Boolean.FALSE && dependency.getDependantField() != null && data.get(dependency.getDependantField()) != null) {
-                    dependenciesMet = data.get(dependency.getDependantField()).equals(dependency.getFieldValue());
-                }
-            }
-            return dependenciesMet;
-        } catch (ParseException pe) {
-            //do nothing
-        }
-        return true;
     }
 
     private boolean areDependenciesFulfilled(final Map<String, String[]> session, final String pseudoFieldName) {
@@ -268,23 +256,24 @@ public class PageOrder {
         if (isNestedFormFieldName(previousPage)) {
             dependencyPreviousPage = convertNestedDeclarationToPseudoFieldName(previousPage);
         }
-        if (areDependenciesFulfilled(CollectionUtils.getAllFieldValues(session), dependencyPreviousPage) == false) {
+        final String previousPageExceptions = getMessage(String.format(PREVIOUS_PAGE_EXCEPTIONS, formName));
+        if ((previousPageExceptions != null && !previousPageExceptions.contains(dependencyPreviousPage)) && areDependenciesFulfilled(CollectionUtils.getAllFieldValues(session), dependencyPreviousPage) == false) {
             return getPreviousPage(previousPage, session);
         }
 
-        previousPage = getPage(previousPage, session);
+        previousPage = getPage(previousPage, session, true);
 
         return previousPageOnEmpty(currentPage, previousPage, session);
     }
 
-    private String getPage(final String page, final Session session) {
+    private String getPage(final String page, final Session session, final Boolean previousPage) {
         if (isNestedFormFieldName(page)) {   // e.g. subform=breaks
             final String nestedFormName = page.substring(NESTED_FORM_PREFIX.length()).trim();
             if (nestedForms.containsKey(nestedFormName) == false) {
                 throw new IllegalArgumentException("Unknown nested form: " + nestedFormName);
             }
             final PageOrder nestedForm = nestedForms.get(nestedFormName);
-            return nestedForm.getNextPage(null, session);
+            return nestedForm.getNextPage(null, session, previousPage);
         }
         return page;
     }
@@ -364,15 +353,18 @@ public class PageOrder {
     }
 
     public String pageProcessing(final String currentPage, final Session session) {
+        String nextPage = null;
         if (isLastPage(currentPage)) {
-            return getSubFormProcessorForPage(currentPage).processLastPageInCollection(session, messageSource, getCurrentPageList(currentPage));
-        } else {
-            String nextPage = nextPageProcessing(getNextPageInList(currentPage, session), session);
+            nextPage = getSubFormProcessorForPage(currentPage).processLastPageInCollection(session, messageSource, getCurrentPageList(currentPage));
+        }
+        if (nextPage == null) {
+            nextPage = nextPageProcessing(getNextPageInList(currentPage, session), session);
             if (nextPage == null) {
-                nextPage = getNextPage(currentPage, session);
+                nextPage = getNextPage(currentPage, session, false);
             }
             return nextPage;
         }
+        return nextPage;
     }
 
     private String nextPageProcessing(final String nextPage, final Session session) {

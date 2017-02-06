@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -40,7 +41,8 @@ public class Dependencies {
                     rawDependency = PropertyUtils.trimQuotes(rawDependency);
                     LOG.info("Adding field({}) dependency {} = {}", field, key, rawDependency);
                     try {
-                        String[] dependencyData = rawDependency.split("&");
+                        String[] dependencyData = StringUtils.substringBefore(rawDependency, "|").split("&");
+                        String[] dependencyOrData = StringUtils.substringAfter(rawDependency, "|").split("\\|");
                         for (final String dependencyData1 : dependencyData) {
                             Dependency dependency = Dependency.parseSingleLine(dependencyData1);
                             dependency.validateFieldNames(referenceFields);
@@ -51,6 +53,19 @@ public class Dependencies {
                                 results.put(field, aggregateDependency);
                             } else {
                                 results.put(field, dependency);
+                            }
+                        }
+                        for (final String dependencyData1 : dependencyOrData) {
+                            Dependency dependency = Dependency.parseSingleLine(dependencyData1);
+                            if (dependency != null) {
+                                dependency.validateFieldNames(referenceFields);Dependency existingDependency = results.get(field);
+                                if (existingDependency != null) {
+                                    LOG.debug("Adding to existing field dependencies");
+                                    Dependency aggregateDependency = Dependency.AggregateDependency.aggregateOr(existingDependency, dependency);
+                                    results.put(field, aggregateDependency);
+                                } else {
+                                    results.put(field, dependency);
+                                }
                             }
                         }
                     } catch (UnknownFieldException e) {

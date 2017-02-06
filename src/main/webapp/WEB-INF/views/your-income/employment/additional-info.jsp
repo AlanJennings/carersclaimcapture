@@ -5,13 +5,11 @@
 <!DOCTYPE html>
 
 <t:mainPage>
-
     <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
         <t:yesnofield name="empAdditionalInfo" />
 
         <t:hiddenPanel id="empAdditionalInfoWrap" triggerId="empAdditionalInfo" triggerValue="yes">
-            <t:textarea name="empAdditionalInfoText" showRemainingChars="true" labelKey="blankLabel"/>
+            <t:textarea name="empAdditionalInfoText" maxLength="3000" showRemainingChars="true" />
         </t:hiddenPanel>
     </t:pageContent>
-
 </t:mainPage>    

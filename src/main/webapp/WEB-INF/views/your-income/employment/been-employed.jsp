@@ -26,7 +26,7 @@
                             <button type="button" id="deleterow_${employmentPosition['JobDetails_id']}" class="actionButton" name="deleteEmployment" value="${employmentPosition['JobDetails_id']}" onclick="window.showPanel('delete_${employmentPosition['JobDetails_id']}', true)" aria-label="<t:message code="delete.button" />"><t:message code="delete" /></button>
                         </div>
                     </li>
-                    <t:hiddenWarning id="delete_${employmentPosition['JobDetails_id']}" outerClass="prompt breaks-prompt validation-summary" triggerId="deleterow_${employmentPosition['JobDetails_id']}" triggerValue="changerow_${employmentPosition['JobDetails_id']}">
+                    <t:hiddenWarning id="delete_${employmentPosition['JobDetails_id']}" outerClass="prompt breaks-prompt validation-summary" triggerId="deleterow_${employmentPosition['JobDetails_id']}" triggerValue="deleterow_${employmentPosition['JobDetails_id']}">
                         <p class="normalMsg"><t:message code="delete.employment.message" /></p>
                         <button type="button" class="button row secondary" id="noDeleteButton" value="${employmentPosition['JobDetails_id']}" onclick="window.hidePanel('delete_${employmentPosition['JobDetails_id']}', true)" aria-label="<t:message code="no.delete.label" />" ><t:message code="no.delete" /></button>
                         <button type="submit" class="button row warning" id="yesDeleteButton" name="deleteSubFormRecord" value="${employmentPosition['JobDetails_id']}" aria-label="<t:message code="yes.delete.label" />" ><t:message code="yes.delete" /></button>

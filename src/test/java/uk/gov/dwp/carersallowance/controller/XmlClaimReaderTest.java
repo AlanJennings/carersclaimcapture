@@ -56,7 +56,7 @@ public class XmlClaimReaderTest {
         assertThat(claimReader.getErrors().size(), is(0));
         Map<String, Object> sessionValues = claimReader.getValues();
         assertThat(sessionValues.get("xmlVersion"), is("0.27"));
-        assertThat(sessionValues.get("origin"), is("GB"));
+        assertThat(sessionValues.get("originTag"), is("GB"));
         assertThat(sessionValues.get("appVersion"), is("3.15"));
         assertThat(sessionValues.get("dateOfClaim_day"), is("20"));
         assertThat(sessionValues.get("dateOfClaim_month"), is("04"));

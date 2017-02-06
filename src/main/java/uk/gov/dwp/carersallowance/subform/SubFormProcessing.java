@@ -23,17 +23,21 @@ public class SubFormProcessing {
     private static final Logger LOG = LoggerFactory.getLogger(SubFormProcessing.class);
 
     //subform.claim.employment
-    private static final String FIELD_COLLECTION_NAME           = "subform.%s.field.collection.name"; // = employment
-    private static final String FIELD_COLLECTION_RECORD_ID      = "subform.%s.field.collection.record.id"; // = employment_id
-    private static final String FIRST_PAGE_ON_EMPTY             = "subform.%s.first.page.on.empty.collection"; // = your-income/employment/job-details
-    private static final String LAST_PAGE_CLEAR_ATTRIBUTES      = "subform.%s.last.page.clear.attributes"; // = moreEmployment
-    private static final String COLLECTION_EMPTY_ON_DELETE_PAGE = "subform.%s.collection.empty.on.delete.page"; // = /your-income/your-income
-    private static final String ON_EDIT_SET_ATTRIBUTE           = "subform.%s.on.edit.set.attributes"; // = moreEmployment=yes
+    private static final String FIELD_COLLECTION_NAME           = "subform.%s.field.collection.name";
+    private static final String FIELD_COLLECTION_RECORD_ID      = "subform.%s.field.collection.record.id";
+    private static final String FIRST_PAGE_ON_EMPTY             = "subform.%s.first.page.on.empty.collection";
+    private static final String LAST_PAGE_CLEAR_ATTRIBUTES      = "subform.%s.last.page.clear.attributes";
+    private static final String COLLECTION_EMPTY_ON_DELETE_PAGE = "subform.%s.collection.empty.on.delete.page";
+    private static final String ON_EDIT_SET_ATTRIBUTE           = "subform.%s.on.edit.set.attributes";
+    private static final String LAST_TO_FIRST_PAGE_DEPENDENCY   = "subform.%s.last.page.first.page.dependency";
+    private static final String IGNORE_FIELDS                   = "subform.%s.ignore.fields";
 
     private final String subFormName;
     private final String fieldCollectionName;
     private final String fieldCollectionRecordId;
     private final String firstPageOnEmpty;
+    private final String lastToFirstPage;
+    private final String ignoreFields;
     private final List<String> lastPageClearAttributes;
     private final String emptyOnDeletePage;
     private final List<Dependency> onEditSetAttributes;
@@ -46,6 +50,8 @@ public class SubFormProcessing {
         this.fieldCollectionRecordId = getMessage(String.format(FIELD_COLLECTION_RECORD_ID, subFormName));
         this.firstPageOnEmpty = getMessage(String.format(FIRST_PAGE_ON_EMPTY, subFormName));
         this.emptyOnDeletePage = getMessage(String.format(COLLECTION_EMPTY_ON_DELETE_PAGE, subFormName));
+        this.lastToFirstPage = getMessage(String.format(LAST_TO_FIRST_PAGE_DEPENDENCY, subFormName));
+        this.ignoreFields = getMessage(String.format(IGNORE_FIELDS, subFormName));
         this.lastPageClearAttributes = getLastPageAttributes(getMessage(String.format(LAST_PAGE_CLEAR_ATTRIBUTES, subFormName)));
         this.onEditSetAttributes = getOnEditAttributes(getMessage(String.format(ON_EDIT_SET_ATTRIBUTE, subFormName)));
     }
@@ -219,13 +225,13 @@ public class SubFormProcessing {
             LOG.debug("getFieldCollections('<fieldCollectionName>') = {}", getFieldCollections(session, fieldCollectionName, false));
 
             // clean up the session by removing the individual field values for the item create/edit screens
-            removeFromSession(session, fields);
+            removeFromSession(session, fields, fieldCollectionName);
         } finally {
             LOG.trace("Ending SubFormProcessing.populateFieldCollectionEntry");
         }
     }
     
-    private void removeFromSession(final Session session, final String[] fieldNames) {
+    private void removeFromSession(final Session session, final String[] fieldNames, String fieldCollectionName) {
         LOG.trace("Started SubFormProcessing.removeFromSession");
         try {
             Parameters.validateMandatoryArgs(session, "session");
@@ -235,7 +241,9 @@ public class SubFormProcessing {
     
             LOG.debug("fieldNames = {}", Arrays.asList(fieldNames));
             for (final String fieldName: fieldNames) {
-                session.removeAttribute(fieldName);
+                if (ignoreFields == null || ignoreFields.contains(fieldCollectionName + "." + fieldName) == false) {
+                    session.removeAttribute(fieldName);
+                }
             }
         } finally {
             LOG.trace("Ending SubFormProcessing.removeFromSession");
@@ -376,7 +384,10 @@ public class SubFormProcessing {
                 session.removeAttribute(attribute);
             }
             //return first page again
-            return pageList.get(0);
+            if (Dependency.pageDependencyFulfilled(session.getData(), lastToFirstPage, Boolean.TRUE)) {
+                return pageList.get(0);
+            }
+            return null;
         } finally {
             LOG.trace("Ending SubFormProcessing.processLastPageInCollection");
         }
