@@ -58,7 +58,7 @@ public class AboutYouController extends AbstractFormController {
     public String postForm(HttpServletRequest request, Model model) {
         LOG.trace("Starting AboutYouController.postForm");
         try {
-            return super.postForm(request, null, null, model);
+            return super.postForm(request, model);
         } catch(RuntimeException e) {
             LOG.error("Unexpected RuntimeException", e);
             throw e;

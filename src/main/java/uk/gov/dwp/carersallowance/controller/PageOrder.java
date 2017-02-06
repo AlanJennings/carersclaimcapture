@@ -381,32 +381,55 @@ public class PageOrder {
         return getSubFormProcessorForPage(currentPage).previousOnEmpty(currentPage, previousPage, session);
     }
 
-    public String changeRecord(final String idToChange, final String currentPage, final Session session, final ValidationSummary validationSummary) {
+    private String changeRecord(final String idToChange, final String collectionName, final String currentPage, final Session session, final ValidationSummary validationSummary) {
         try {
-            return getSubFormProcessorForPage(currentPage).processEditRowInCollection(idToChange, session);
+            if (StringUtils.isEmpty(idToChange) == false) {
+                return getSubFormProcessorForCollection(collectionName).processEditRowInCollection(idToChange, session);
+            }
         } catch (UnknownRecordException ure) {
             validationSummary.addFormError(idToChange, getMessage(currentPage + ".pageTitle"),  getMessage("edit.record"));
         }
         return null;
     }
 
-    public String deleteRecord(final String idToDelete, final String currentPage, final Session session, final ValidationSummary validationSummary) {
+    private String deleteRecord(final String idToDelete, final String collectionName, final String currentPage, final Session session, final ValidationSummary validationSummary) {
         try {
-            return getSubFormProcessorForPage(currentPage).processDeleteRowInCollection(idToDelete, currentPage, session);
+            return getSubFormProcessorForCollection(collectionName).processDeleteRowInCollection(idToDelete, currentPage, session);
         } catch (UnknownRecordException ure) {
             validationSummary.addFormError(idToDelete, getMessage(currentPage + ".pageTitle"),  getMessage("delete.record"));
         }
         return null;
     }
 
-    public String deleteChangeRecord(final String idToDelete, final String idToChange, final String currentPage, final Session session, final ValidationSummary validationSummary) {
-        String changeDeletePage = deleteRecord(idToDelete, currentPage, session, validationSummary);
-        if (changeDeletePage == null) {
-            changeDeletePage = changeRecord(idToChange, currentPage, session, validationSummary);
+    private SubFormProcessing getSubFormProcessorForCollection(final String collectionName) {
+        PageOrder pageOrder = getCurrentPageOrderForCollectionName(collectionName);
+        return pageOrder.subFormProcessing;
+    }
+
+    private PageOrder getCurrentPageOrderForCollectionName(final String collectionName) {
+        if (collectionName.equalsIgnoreCase(subFormProcessing.getFieldCollectionName())) {
+            return this;
         }
-        return changeDeletePage;
+
+        for (final PageOrder nestedForm : nestedForms.values()) {
+            if (nestedForm.getCurrentPageOrderForCollectionName(collectionName) != null) {
+                return nestedForm;
+            }
+        }
+        return null;
+    }
+
+    public String deleteChangeRecord(final String idToDeleteWithCollectionName, final String idToChangeWithCollectionName, final String currentPage, final Session session, final ValidationSummary validationSummary) {
+        if (StringUtils.isEmpty(idToDeleteWithCollectionName) == false) {
+            final String collectionName = StringUtils.substringBefore(idToDeleteWithCollectionName, "_");
+            final String idToDelete = StringUtils.substringAfter(idToDeleteWithCollectionName, "_");
+            return deleteRecord(idToDelete, collectionName, currentPage, session, validationSummary);
+        }
+        if (StringUtils.isEmpty(idToChangeWithCollectionName) == false) {
+            final String collectionName = StringUtils.substringBefore(idToChangeWithCollectionName, "_");
+            final String idToChange = StringUtils.substringAfter(idToChangeWithCollectionName, "_");
+            return changeRecord(idToChange, collectionName, currentPage, session, validationSummary);
+        }
+        return null;
     }
 }
-
-
-

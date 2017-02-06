@@ -55,7 +55,7 @@ public class CircsStartedController {
 
     @RequestMapping(value = CURRENT_CIRCS_PAGE, method = RequestMethod.POST)
     public String postCircsForm(final HttpServletRequest request, final Model model) {
-        return defaultChangeOfCircsController.postForm(request, null, null, model);
+        return defaultChangeOfCircsController.postForm(request, model);
     }
 
     @RequestMapping(value = CURRENT_CIRCS_PAGE, method = RequestMethod.GET)

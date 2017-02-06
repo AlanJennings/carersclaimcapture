@@ -60,7 +60,7 @@ public class ClaimStartedController {
 
     @RequestMapping(value = CURRENT_PAGE, method = RequestMethod.POST)
     public String postForm(final HttpServletRequest request, final Model model) {
-        return defaultFormController.postForm(request, null, null, model);
+        return defaultFormController.postForm(request, model);
     }
 
     private String getReplicateDataFile() {

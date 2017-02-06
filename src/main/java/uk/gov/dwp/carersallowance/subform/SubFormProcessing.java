@@ -342,14 +342,11 @@ public class SubFormProcessing {
     public String processEditRowInCollection(final String idToChange, final Session session) throws UnknownRecordException {
         LOG.trace("Started SubFormProcessing.processEditRowInCollection");
         try {
-            if (StringUtils.isEmpty(idToChange) == false) {
-                final String editPage = editFieldCollectionRecord(session, idToChange, fieldCollectionName, fieldCollectionRecordId, firstPageOnEmpty);
-                for (final Dependency dependency : onEditSetAttributes) {
-                    session.setAttribute(dependency.getDependantField(), dependency.getFieldValue());
-                }
-                return editPage;
+            final String editPage = editFieldCollectionRecord(session, idToChange, fieldCollectionName, fieldCollectionRecordId, firstPageOnEmpty);
+            for (final Dependency dependency : onEditSetAttributes) {
+                session.setAttribute(dependency.getDependantField(), dependency.getFieldValue());
             }
-            return null;
+            return editPage;
         } finally {
             LOG.trace("Ending SubFormProcessing.processEditRowInCollection");
         }
@@ -358,15 +355,12 @@ public class SubFormProcessing {
     public String processDeleteRowInCollection(final String idToDelete, final String currentPage, final Session session) throws UnknownRecordException {
         LOG.trace("Started SubFormProcessing.processDeleteRowInCollection");
         try {
-            if (StringUtils.isEmpty(idToDelete) == false) {
-                final String newPage = deleteFieldCollectionRecord(session, idToDelete, currentPage, fieldCollectionName, fieldCollectionRecordId);
-                final List<Map<String, String>> collection = getFieldCollections(session, fieldCollectionName, false);
-                if (collection == null || collection.isEmpty()) {
-                    return "redirect:" + emptyOnDeletePage;
-                }
-                return newPage;
+            final String newPage = deleteFieldCollectionRecord(session, idToDelete, currentPage, fieldCollectionName, fieldCollectionRecordId);
+            final List<Map<String, String>> collection = getFieldCollections(session, fieldCollectionName, false);
+            if (collection == null || collection.isEmpty()) {
+                return "redirect:" + emptyOnDeletePage;
             }
-            return null;
+            return newPage;
         } finally {
             LOG.trace("Ending SubFormProcessing.processDeleteRowInCollection");
         }
@@ -422,5 +416,9 @@ public class SubFormProcessing {
             return emptyOnDeletePage;
         }
         return previousPage;
+    }
+
+    public String getFieldCollectionName() {
+        return fieldCollectionName;
     }
 }

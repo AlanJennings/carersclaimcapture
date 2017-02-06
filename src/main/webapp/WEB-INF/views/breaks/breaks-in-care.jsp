@@ -68,7 +68,7 @@
                                 </td>
                             </c:if>
                             <td class="actions">
-                                <button type="submit" id="changerowbreakshospital_${careBreak['breakshospital_id']}" class="actionButton" name="changeSubFormRecord" value="${careBreak['breakshospital_id']}" aria-label="<t:message code="change.button" />"><t:message code="change" /></button>
+                                <button type="submit" id="changerowbreakshospital_${careBreak['breakshospital_id']}" class="actionButton" name="changeSubFormRecord" value="breakshospital_${careBreak['breakshospital_id']}" aria-label="<t:message code="change.button" />"><t:message code="change" /></button>
                                 <button type="button" id="deleterowbreakshospital_${careBreak['breakshospital_id']}" class="actionButton" name="deleteBreaksHospital" value="${careBreak['breakshospital_id']}" onclick="window.showPanel('deleterowhospital_${careBreak['breakshospital_id']}', true)" aria-label="<t:message code="delete.button" />"><t:message code="delete" /></button>
                             </td>
                         </tr>
@@ -76,7 +76,7 @@
                             <td colspan="5">
                                 <p class="normalMsg">&nbsp;&nbsp;&nbsp;<t:message code="delete.break.message" /></p>
                                 &nbsp;&nbsp;&nbsp;<button type="button" class="button row secondary" id="noDeleteButtonHospital" value="${careBreak['breakshospital_id']}" onclick="window.hidePanel('deleterowhospital_${careBreak['breakshospital_id']}', true)" aria-label="<t:message code="no.delete.label" />" ><t:message code="no.delete" /></button>
-                                &nbsp;&nbsp;&nbsp;<button type="submit" class="button row warning" id="yesDeleteButtonHospital" name="deleteSubFormRecord" value="${careBreak['breakshospital_id']}" aria-label="<t:message code="yes.delete.label" />" ><t:message code="yes.delete" /></button>
+                                &nbsp;&nbsp;&nbsp;<button type="submit" class="button row warning" id="yesDeleteButtonHospital" name="deleteSubFormRecord" value="breakshospital_${careBreak['breakshospital_id']}" aria-label="<t:message code="yes.delete.label" />" ><t:message code="yes.delete" /></button>
                             </td>
                         </t:hiddenWarning>
                     </c:forEach>
@@ -129,14 +129,14 @@
                                 </td>
                             </c:if>
                             <td class="actions">
-                                <button type="submit" id="changerowbreaksrespite_${careBreak['breaksrespite_id']}" class="actionButton" name="changeSubFormRecord" value="${careBreak['breaksrespite_id']}" aria-label="<t:message code="change.button" />"><t:message code="change" /></button>
+                                <button type="submit" id="changerowbreaksrespite_${careBreak['breaksrespite_id']}" class="actionButton" name="changeSubFormRecord" value="breaksrespite_${careBreak['breaksrespite_id']}" aria-label="<t:message code="change.button" />"><t:message code="change" /></button>
                                 <button type="button" id="deleterowbreaksrespite_${careBreak['breaksrespite_id']}" class="actionButton" name="deleteBreaksRespite" value="${careBreak['breaksrespite_id']}" onclick="window.showPanel('deleterespite_${careBreak['breaksrespite_id']}', true)" aria-label="<t:message code="delete.button" />"><t:message code="delete" /></button>
                             </td>
                             <t:hiddenWarning id="deleterespite_${careBreak['breaksrespite_id']}" outerClass="prompt breaks-prompt validation-summary" triggerId="deleterowbreaksrespite_${careBreak['breaksrespite_id']}" triggerValue="deletebreaksrespite_${careBreak['breaksrespite_id']}" trwrap="true" colspanvalue="5">
                                 <td colspan="5">
                                     <p class="normalMsg">&nbsp;&nbsp;&nbsp;<t:message code="delete.break.message" /></p>
                                     &nbsp;&nbsp;&nbsp;<button type="button" class="button row secondary" id="noDeleteButtonRespite" value="${careBreak['breaksrespite_id']}" onclick="window.hidePanel('deleterespite_${careBreak['breaksrespite_id']}', true)" aria-label="<t:message code="no.delete.label" />" ><t:message code="no.delete" /></button>
-                                    &nbsp;&nbsp;&nbsp;<button type="submit" class="button row warning" id="yesDeleteButtonRespite" name="deleteSubFormRecord" value="${careBreak['breaksrespite_id']}" aria-label="<t:message code="yes.delete.label" />" ><t:message code="yes.delete" /></button>
+                                    &nbsp;&nbsp;&nbsp;<button type="submit" class="button row warning" id="yesDeleteButtonRespite" name="deleteSubFormRecord" value="breaksrespite_${careBreak['breaksrespite_id']}" aria-label="<t:message code="yes.delete.label" />" ><t:message code="yes.delete" /></button>
                                 </td>
                             </t:hiddenWarning>
                         </tr>
@@ -165,14 +165,14 @@
                                 </c:if>
                             </td>
                             <td class="actions">
-                                <button type="submit" id="changerowbreaksother_${careBreak['breaksother_id']}" class="actionButton" name="changeSubFormRecord" value="${careBreak['breaksother_id']}" aria-label="<t:message code="change.button" />"><t:message code="change" /></button>
+                                <button type="submit" id="changerowbreaksother_${careBreak['breaksother_id']}" class="actionButton" name="changeSubFormRecord" value="breaksother_${careBreak['breaksother_id']}" aria-label="<t:message code="change.button" />"><t:message code="change" /></button>
                                 <button type="button" id="deleterowbreaksother_${careBreak['breaksother_id']}" class="actionButton" name="deleteBreaksOther" value="${careBreak['breaksother_id']}" onclick="window.showPanel('deleteother_${careBreak['breaksother_id']}', true)" aria-label="<t:message code="delete.button" />"><t:message code="delete" /></button>
                             </td>
                             <t:hiddenWarning id="deleteother_${careBreak['breaksother_id']}" outerClass="prompt breaks-prompt validation-summary" triggerId="deleterowbreaksother_${careBreak['breaksother_id']}" triggerValue="deleterowbreaksother_${careBreak['breaksother_id']}" trwrap="true" colspanvalue="5">
                                 <td colspan="5">
                                     <p class="normalMsg">&nbsp;&nbsp;&nbsp;<t:message code="delete.break.message" /></p>
                                     &nbsp;&nbsp;&nbsp;<button type="button" class="button row secondary" id="noDeleteButtonOther" value="${careBreak['breaksother_id']}" onclick="window.hidePanel('deleteother_${careBreak['breaksother_id']}', true)" aria-label="<t:message code="no.delete.label" />" ><t:message code="no.delete" /></button>
-                                    &nbsp;&nbsp;&nbsp;<button type="submit" class="button row warning" id="yesDeleteButtonOther" name="deleteSubFormRecord" value="${careBreak['breaksother_id']}" aria-label="<t:message code="yes.delete.label" />" ><t:message code="yes.delete" /></button>
+                                    &nbsp;&nbsp;&nbsp;<button type="submit" class="button row warning" id="yesDeleteButtonOther" name="deleteSubFormRecord" value="breaksother_${careBreak['breaksother_id']}" aria-label="<t:message code="yes.delete.label" />" ><t:message code="yes.delete" /></button>
                                 </td>
                             </t:hiddenWarning>
                         </tr>

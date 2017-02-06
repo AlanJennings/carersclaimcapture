@@ -84,7 +84,7 @@ public class FilteredRequestMappingHandlerMapping extends RequestMappingHandlerM
                 if (defaultController == null || defaultController.supportsRequest(request) == false) {
                     return null;
                 }
-                HandlerMethod handlerMethod = new HandlerMethod(controller, "handleRequest", HttpServletRequest.class, HttpServletResponse.class, String.class, String.class, Model.class);
+                HandlerMethod handlerMethod = new HandlerMethod(controller, "handleRequest", HttpServletRequest.class, HttpServletResponse.class, Model.class);
                 return handlerMethod;
             } catch (NoSuchMethodException e) {
                 LOG.error("Unsupported request", e);

@@ -127,7 +127,7 @@ public class AbstractFormController {
      * Including RedirectAttributes is needed if we wish redirects to work at all
      * even if we never use it!!
      */
-    public String postForm(final HttpServletRequest request, @ModelAttribute("changeSubFormRecord") final String idToChange, @ModelAttribute("deleteSubFormRecord") final String idToDelete, final Model model) {
+    public String postForm(final HttpServletRequest request, final Model model) {
 
         LOG.trace("Starting AbstractFormController.postForm");
         try {
@@ -143,27 +143,14 @@ public class AbstractFormController {
 
             Map<String, String[]> existingFieldValues = CollectionUtils.getAllFieldValues(session);
 
-            String changeDeletePage = pageOrdering.deleteChangeRecord(idToDelete, idToChange, currentPage, session, getValidationSummary());
-            if (changeDeletePage == null) {
-                validate(fields, request.getParameterMap(), existingFieldValues);
-            }
+            validate(fields, request.getParameterMap(), existingFieldValues);
 
             if (hasErrors()) {
-                LOG.info("there are validation errors, re-showing form");
-                String form = getForm(request, model);
-
-                // add the values of the current form to the model as well as the session values
-                copyFromRequestToModel(request, fields, model);
-                copyFromRequestToModel(request, getSharedFields(), model);
-                model.addAttribute("validationErrors", getValidationSummary());
-
-                return form;
+                return processPageErrors(request, fields, model);
             }
 
-            if (changeDeletePage == null) {
-                copyFromRequestToSession(session, request, fields);
-                copyFromRequestToSession(session, request, getSharedFields());
-            }
+            copyFromRequestToSession(session, request, fields);
+            copyFromRequestToSession(session, request, getSharedFields());
 
             finalizePostForm(request);
 
@@ -175,12 +162,8 @@ public class AbstractFormController {
             // is part of the previous screen and not the one we are going to.  We don't know if the previous page
             // had a hash location, as the hash location is never submitted to the server
             // there are various things we *could* do with javascript, but none of them will work in the no-javascript journey
-            String nextPage;
-            if (changeDeletePage == null) {
-                nextPage = "redirect:" + pageOrdering.pageProcessing(currentPage, session) + "#";
-            } else {
-                nextPage = changeDeletePage + "#";
-            }
+            String nextPage = "redirect:" + pageOrdering.pageProcessing(currentPage, session) + "#";
+
             sessionManager.saveSession(session);
 
             LOG.debug("next page = {}", nextPage);
@@ -337,7 +320,7 @@ public class AbstractFormController {
      * Data driven request holder
      * @throws NoSuchRequestHandlingMethodException
      */
-    public String handleRequest(final HttpServletRequest request, final HttpServletResponse response, @ModelAttribute("changeSubFormRecord") final String idToChange, @ModelAttribute("deleteSubFormRecord") final String idToDelete, final Model model) throws NoSuchRequestHandlingMethodException {
+    public String handleRequest(final HttpServletRequest request, final HttpServletResponse response, final Model model) throws NoSuchRequestHandlingMethodException {
         LOG.info("Started AbstractFormController.handleRequest");
         Parameters.validateMandatoryArgs(request, "request");
         try {
@@ -348,7 +331,11 @@ public class AbstractFormController {
             if (HTTP_GET.equalsIgnoreCase(method)) {
                 return getForm(request, model);
             } else if (HTTP_POST.equalsIgnoreCase(method)) {
-                return postForm(request, idToChange, idToDelete, model);
+                if (request.getParameter("changeSubFormRecord") != null || request.getParameter("deleteSubFormRecord") != null) {
+                    return changeDeleteForm(request, model, request.getParameter("changeSubFormRecord"), request.getParameter("deleteSubFormRecord"));
+                } else {
+                    return postForm(request, model);
+                }
             } else {
                 LOG.error("Request method {} is not supported in request: {}", method, path);
                 throw new NoSuchRequestHandlingMethodException(request);
@@ -362,5 +349,44 @@ public class AbstractFormController {
         } finally {
             LOG.info("Ending AbstractFormController.handleRequest");
         }
+    }
+
+    private String changeDeleteForm(final HttpServletRequest request, final Model model, final String idToChange, final String idToDelete) {
+        LOG.trace("Starting AbstractFormController.changeDeleteForm");
+        try {
+            LOG.debug("request.getParameterMap() = {}", request.getParameterMap());
+
+            final String pageName = request.getParameter("pageName");
+            final String currentPage = PropertyUtils.getCurrentPage(request);
+            final String[] fields = FieldCollection.getFields(messageSource, pageName);
+
+            getValidationSummary().reset();
+
+            final Session session = sessionManager.getSession(sessionManager.getSessionIdFromCookie(request));
+
+            String changeDeletePage = pageOrdering.deleteChangeRecord(idToDelete, idToChange, currentPage, session, getValidationSummary());
+            if (hasErrors()) {
+                return processPageErrors(request, fields, model);
+            }
+            sessionManager.saveSession(session);
+            return changeDeletePage + "#";
+        } catch(RuntimeException e) {
+            LOG.error("Unexpected RuntimeException", e);
+            throw e;
+        } finally {
+            LOG.trace("Ending AbstractFormController.postForm");
+        }
+    }
+
+    private String processPageErrors(final HttpServletRequest request, final String[] fields, final Model model) {
+        LOG.info("there are validation errors, re-showing form");
+        String form = getForm(request, model);
+
+        // add the values of the current form to the model as well as the session values
+        copyFromRequestToModel(request, fields, model);
+        copyFromRequestToModel(request, getSharedFields(), model);
+        model.addAttribute("validationErrors", getValidationSummary());
+
+        return form;
     }
 }
