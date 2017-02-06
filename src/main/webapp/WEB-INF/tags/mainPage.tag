@@ -118,7 +118,7 @@
         <script type="text/javascript" src="/javascript/date.js" ></script>
         <script type="text/javascript" src="/javascript/bb.js" ></script>
         <script type="text/javascript" src="/javascript/stageprompt-2.0.1.js" ></script>
-        <script type="text/javascript" src="/javascript/custom.min.js" ></script>
+        <script type="text/javascript" src="/javascript/custom.js" ></script>
         <script type="text/javascript" src="/javascript/respond.min.js" ></script>
         <script type="text/javascript" src="/javascript/cleanupHashUrl.js" ></script>
 
