@@ -22,7 +22,6 @@ import java.util.stream.Stream;
 public class SubFormProcessing {
     private static final Logger LOG = LoggerFactory.getLogger(SubFormProcessing.class);
 
-    //subform.claim.employment
     private static final String FIELD_COLLECTION_NAME           = "subform.%s.field.collection.name";
     private static final String FIELD_COLLECTION_RECORD_ID      = "subform.%s.field.collection.record.id";
     private static final String FIRST_PAGE_ON_EMPTY             = "subform.%s.first.page.on.empty.collection";
