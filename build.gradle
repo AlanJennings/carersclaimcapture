@@ -194,7 +194,7 @@ springBoot {
 }
 
 war {
-    exclude('**/custom.js')
+    //exclude('**/custom.js')
     exclude('**/*.scss')
 }
 
