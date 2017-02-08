@@ -66,7 +66,7 @@ node ('master') {
         sh "fpm -s zip -t rpm --name ${app_name}-${app_ver}-db --version ${env.BUILD_NUMBER} --prefix /data/liquibase/${app_name} build/distributions/c3-${app_ver}-db.zip"
     }
     if (env.BRANCH_NAME == 'integration') {
-        stage ('Deploy to lab') {
+        stage ('Deploy to legacy lab') {
             sshagent(['8b4a081b-f1d6-424d-959f-ae9279d08b3b']) {
                 sh "scp build/libs/c3-${app_ver}-full.war ${app_name}lab@37.26.89.94:${app_name}-latest-SNAPSHOT-full.war"
                 sh "ssh ${app_name}lab@37.26.89.94 './deploy.sh restart > output.log 2>&1 &'"
@@ -74,8 +74,14 @@ node ('master') {
         }
         stage ('Add RedHat package to Lab repo') {
             sh 'cp *.rpm /opt/repo/cads/lab/'
-            build job: 'Update repository metadata', parameters: [string(name: 'REPO_NAME', value: 'lab')], wait: false
+            build job: 'Update repository metadata', parameters: [string(name: 'REPO_NAME', value: 'lab')], wait: true
         }
+       stage ('Update lab versions') {
+            build job: 'Update release versions', parameters: [string(name: 'ENV_NAME', value: 'lab')], wait: true
+       }
+       stage ('Deploy app to lab') {
+            build job: 'Deploy app to lab', parameters: [string(name: 'ENV_NAME', value: ${app_name})], wait: true
+       }
     }
     if (env.BRANCH_NAME == 'int-release') {
         stage ('Add RedHat package to Preview repo') {
