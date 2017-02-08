@@ -36,6 +36,7 @@ node ('master') {
         script: "${gradlebin} properties | grep name | awk '{print \$2}'",
         returnStdout: true
         ).trim()
+    app_name = "${app_name}java"
     def app_ver = sh (
         script: "${gradlebin} properties | grep version | awk '{print \$2}'",
         returnStdout: true
@@ -44,7 +45,7 @@ node ('master') {
     stage ('Gradle build and test') {
         try {
             withEnv(['_JAVA_OPTIONS=-Dcarers.keystore=/opt/carers-keystore/carerskeystore']) {
-                artifactoryGradle.run switches: '-Dgradle.user.home=$JENKINS_HOME/.gradle --no-daemon', buildFile: 'build.gradle', tasks: 'clean test build sourcesJar artifactoryPublish', buildInfo: buildInfo, server: server
+                artifactoryGradle.run switches: '-Dgradle.user.home=$JENKINS_HOME/.gradle --no-daemon', buildFile: 'build.gradle', tasks: 'clean test build sourcesJar zipDatabase artifactoryPublish', buildInfo: buildInfo, server: server
             }
             publishHTML([allowMissing: true, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'build/reports/tests/test/', reportFiles: 'index.html', reportName: 'Test Report'])
             junit keepLongStdio: true, testResults: 'build/test-results/test/*.xml'
@@ -59,13 +60,16 @@ node ('master') {
         server.publishBuildInfo buildInfo
     }
     stage ('Build service RedHat package') {
-        sh "fpm -s dir -t rpm --name ${app_name}-${app_ver} --version ${env.BUILD_NUMBER} --prefix /data/carers/${app_name}/${app_name}-${app_ver} build/libs/${app_name}-${app_ver}-full.war=/"
+        sh "fpm -s dir -t rpm --name ${app_name}-${app_ver} --version ${env.BUILD_NUMBER} --prefix /data/carers/${app_name}/${app_name}-${app_ver} build/libs/c3-${app_ver}-full.war=/"
+    }
+    stage ('Build DB updates RedHat package') {
+        sh "fpm -s zip -t rpm --name ${app_name}-${app_ver}-db --version ${env.BUILD_NUMBER} --prefix /data/liquibase/${app_name} build/distributions/c3-${app_ver}-db.zip"
     }
     if (env.BRANCH_NAME == 'integration') {
         stage ('Deploy to lab') {
             sshagent(['8b4a081b-f1d6-424d-959f-ae9279d08b3b']) {
-                sh 'scp build/libs/c3-*-SNAPSHOT-full.war c3javalab@37.26.89.94:c3java-latest-SNAPSHOT-full.war'
-                sh 'ssh c3javalab@37.26.89.94 "./deploy.sh restart > output.log 2>&1 &"'
+                sh "scp build/libs/c3-${app_ver}-full.war ${app_name}lab@37.26.89.94:${app_name}-latest-SNAPSHOT-full.war"
+                sh "ssh ${app_name}lab@37.26.89.94 './deploy.sh restart > output.log 2>&1 &'"
             }
         }
         stage ('Add RedHat package to Lab repo') {
