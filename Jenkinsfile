@@ -80,7 +80,7 @@ node ('master') {
             build job: 'Update release versions', parameters: [string(name: 'ENV_NAME', value: 'lab')], wait: true
        }
        stage ('Deploy app to lab') {
-            build job: 'Deploy app to lab', parameters: [string(name: 'APP_NAME', value: ${app_name})], wait: true
+            build job: 'Deploy app to lab', parameters: [string(name: 'APP_NAME', value: "${app_name}")], wait: true
        }
     }
     if (env.BRANCH_NAME == 'int-release') {
