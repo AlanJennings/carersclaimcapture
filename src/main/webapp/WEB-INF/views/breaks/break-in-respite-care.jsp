@@ -6,8 +6,8 @@
 
 <t:mainPage>
     <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
-        <input type="hidden" name="breakInCareRespite" value="respite" >
-        
+        <input type="hidden" name="breakInCareRespite" value="Respite" >
+
         <t:htmlsection name="breakInRespiteIntro">
             <p><t:message code="breakInRespiteIntro.text"/></p>
         </t:htmlsection>

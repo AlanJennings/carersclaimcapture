@@ -79,4 +79,20 @@ public class XmlClaimReaderTest {
         assertThat(sessionValues.get("thirdParty"), is(C3Constants.NO));
         assertThat(sessionValues.get("nameAndOrganisation"), is("Jenny Bloggs Preston carers"));
     }
+
+    @Test
+    public void loadXmlTest() throws Exception {
+        URL xmlfile = XmlClaimReader.class.getClassLoader().getResource("claimreader-caree.xml");
+        String xml = FileUtils.readFileToString(new File(xmlfile.toURI()), Charset.defaultCharset());
+
+        XmlClaimReader claimReader = new XmlClaimReader(xml, valueMappings, true);
+        assertThat(claimReader.getErrors().size(), is(0));
+        Map<String, Object> sessionValues = claimReader.getValues();
+        Map<String, Object> values = claimReader.getValues();
+        for (String name : values.keySet()) {
+            LOG.debug("VALUE:{}=>{}\n", name, values.get(name));
+        }
+        assertThat(sessionValues.get("thirdParty"), is(C3Constants.NO));
+        assertThat(sessionValues.get("nameAndOrganisation"), is("Jenny Bloggs Preston carers"));
+    }
 }

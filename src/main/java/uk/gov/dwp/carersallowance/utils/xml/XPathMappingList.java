@@ -1,14 +1,11 @@
 package uk.gov.dwp.carersallowance.utils.xml;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import uk.gov.dwp.carersallowance.controller.submission.SubmitClaimController;
 import uk.gov.dwp.carersallowance.utils.KeyValue;
 
 public class XPathMappingList {

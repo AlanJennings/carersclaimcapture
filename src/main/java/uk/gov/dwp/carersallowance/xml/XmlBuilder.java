@@ -51,7 +51,7 @@ public class XmlBuilder {
         Parameters.validateMandatoryArgs(new Object[]{rootNodeName}, new String[]{"rootNodeName"});
         Map<String, String> namespaces = getNamespaces();
         document = createDocument(rootNodeName, namespaces);
-        this.valueMappings = loadXPathMappings(null, XML_MAPPING__CLAIM);
+        //this.valueMappings = loadXPathMappings(null, XML_MAPPING__CLAIM);
 
         addAssistedDecisionToClaim(values);
         addNodes(values, null, document);

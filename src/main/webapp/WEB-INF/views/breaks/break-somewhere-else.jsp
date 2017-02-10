@@ -8,7 +8,7 @@
     <script type="text/javascript" src="<c:url value='/javascript/isMondayOrFriday.js' />" ></script>
 
     <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
-        <input type="hidden" name="breakInCareOther" value="elsewhere" >
+        <input type="hidden" name="breakInCareOther" value="Other" >
         
         <t:htmlsection name="breakSomewhereElseIntro">
             <p><t:message code="breakSomewhereElseIntro.text"/></p>
@@ -29,15 +29,15 @@
             </t:hiddenPanel>
         </t:hiddenPanel>
         
-        <t:radiobuttons name="carerSomewhereElseWhereYou" optionValues="on holiday|at home|somewhere else" optionLabelKeys="holiday|home|elsewhere" />
+        <t:radiobuttons name="carerSomewhereElseWhereYou" optionValues="on holiday|at home|Somewhere else" optionLabelKeys="holiday|home|elsewhere" />
 
-        <t:hiddenPanel id="carerSomewhereElseWhereYouWrap" triggerId="carerSomewhereElseWhereYou" triggerValue="somewhere else">
+        <t:hiddenPanel id="carerSomewhereElseWhereYouWrap" triggerId="carerSomewhereElseWhereYou" triggerValue="Somewhere else">
             <t:textarea name="carerSomewhereElseWhereYouOtherText" showRemainingChars="true" />
         </t:hiddenPanel>
 
-        <t:radiobuttons name="carerSomewhereElseWhereCaree" optionValues="on holiday|at home|somewhere else" optionLabelKeys="holiday|home|elsewhere"/>
+        <t:radiobuttons name="carerSomewhereElseWhereCaree" optionValues="on holiday|at home|Somewhere else" optionLabelKeys="holiday|home|elsewhere"/>
 
-        <t:hiddenPanel id="carerSomewhereElseWhereCareeWrap" triggerId="carerSomewhereElseWhereCaree" triggerValue="somewhere else">
+        <t:hiddenPanel id="carerSomewhereElseWhereCareeWrap" triggerId="carerSomewhereElseWhereCaree" triggerValue="Somewhere else">
             <t:textarea name="carerSomewhereElseWhereCareeOtherText" showRemainingChars="true" />
         </t:hiddenPanel>
     </t:pageContent>

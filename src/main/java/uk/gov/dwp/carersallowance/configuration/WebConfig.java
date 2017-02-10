@@ -86,7 +86,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         filteredRequestMappingHandlerMapping.setExclude("/images/**");
         filteredRequestMappingHandlerMapping.setExclude("/icons/**");
         filteredRequestMappingHandlerMapping.setExclude("/assets/images/**");
-        filteredRequestMappingHandlerMapping.setExclude("/async-submitting");
+        //filteredRequestMappingHandlerMapping.setExclude("/async-submitting");
         return filteredRequestMappingHandlerMapping;
     }
 

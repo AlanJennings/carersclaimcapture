@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <t:mainPage>
     <t:pageContent errors="${validationErrors}" backLink="${previousPage}">
-        <input type="hidden" name="breakInCareHospital" value="hospital" >
+        <input type="hidden" name="breakInCareHospital" value="Hospital" >
 
         <p><b><t:message code="hospitalBreak.text" /></b></p>
 

@@ -1,0 +1,24 @@
+
+breaks_hospital.label                               = BreaksSinceClaim/QuestionLabel[messages("breaks_hospital.label")]
+breaks_hospital                                     = BreaksSinceClaim/Answer
+
+moreBreaksInCare.label                              = BreaksOtherSinceClaim/QuestionLabel[messages("moreBreaksInCare.label")]
+moreBreaksInCare                                    = BreaksOtherSinceClaim/Answer
+
+breakInCareDPHospital.label                         = BreaksType/QuestionLabel[messages("breakInCareHospital.label")]
+breakInCareDPHospital                               = BreaksType/Answer
+
+hospitalBreakWhoInHospital.label                    = WhoWasAway/QuestionLabel[messages("hospitalBreakWhoInHospital.label")]
+hospitalBreakWhoInHospital                          = WhoWasAway/Answer
+
+hospitalBreakCareeHospitalStartDate.label           = StartDate/QuestionLabel[messages("hospitalBreakCareeHospitalStartDate.label")]
+hospitalBreakCareeHospitalStartDate                 = StartDate/Answer[@type="date"]
+
+hospitalBreakCareeHospitalStayEnded.label           = BreakEnded/QuestionLabel[messages("hospitalBreakCarerHospitalStayEnded.label")]
+hospitalBreakCareeHospitalStayEnded                 = BreakEnded/Answer
+
+hospitalBreakCareeHospitalEndDate.label             = EndDate/QuestionLabel[messages("hospitalBreakCarerHospitalEndDate.label")]
+hospitalBreakCareeHospitalEndDate                   = EndDate/Answer[@type="date"]
+
+hospitalBreakCareeHospitalCarerStillCaring.label    = BreaksInCareRespiteStillCaring/QuestionLabel[messages("hospitalBreakCareeHospitalCarerStillCaring.label")]
+hospitalBreakCareeHospitalCarerStillCaring          = BreaksInCareRespiteStillCaring/Answer

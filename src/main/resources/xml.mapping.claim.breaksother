@@ -1,0 +1,33 @@
+breaks_none.label                                   = BreaksSinceClaim/QuestionLabel[messages("breaks_none.label")]
+breaks_none                                         = BreaksSinceClaim/Answer
+
+moreBreaksInCare.label                              = BreaksOtherSinceClaim/QuestionLabel[messages("moreBreaksInCare.label")]
+moreBreaksInCare                                    = BreaksOtherSinceClaim/Answer
+
+breakInCareOther.label                              = BreaksType/QuestionLabel[messages("breakInCareOther.label")]
+breakInCareOther                                    = BreaksType/Answer
+
+careeSomewhereElseEndedTime.label                   = BreakStarted/QuestionLabel[messages("careeSomewhereElseEndedTime.label")]
+careeSomewhereElseEndedTime                         = BreakStarted/Answer
+
+careeSomewhereElseStartDate.label                   = StartDate/QuestionLabel[messages("careeSomewhereElseStartDate.label")]
+careeSomewhereElseStartDate                         = StartDate/Answer[@type="date"]
+
+careeSomewhereElseStartTime.label                   = StartTime/QuestionLabel[messages("careeSomewhereElseStartTime.label")]
+careeSomewhereElseStartTime                         = StartTime/Answer
+
+careeSomewhereElseEndDate.label                     = EndDate/QuestionLabel[messages("careeSomewhereElseEndDate.label")]
+careeSomewhereElseEndDate                           = EndDate/Answer[@type="date"]
+
+careeSomewhereElseEndTime.label                     = EndTime/QuestionLabel[messages("careeSomewhereElseEndTime.label")]
+careeSomewhereElseEndTime                           = EndTime/Answer
+
+carerSomewhereElseWhereYou.label                    = ReasonClaimant/QuestionLabel[messages("carerSomewhereElseWhereYou.label")]
+carerSomewhereElseWhereYouOtherText                 = ReasonClaimant/Other
+carerSomewhereElseWhereYou                          = ReasonClaimant/Answer
+
+carerSomewhereElseWhereCaree.label                  = ReasonCaree/QuestionLabel[messages("carerSomewhereElseWhereCaree.label")]
+carerSomewhereElseWhereCareeOtherText               = ReasonCaree/Other
+carerSomewhereElseWhereCaree                        = ReasonCaree/Answer
+
+

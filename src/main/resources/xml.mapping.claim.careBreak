@@ -1,2 +1,0 @@
-carerSurname                                    = DWPBody/DWPCATransaction/DWPCAClaim/Claimant/Surname/Answer
-carerSurname.label                              = DWPBody/DWPCATransaction/DWPCAClaim/Claimant/Surname/QuestionLabel[messages("carerSurname.label")]

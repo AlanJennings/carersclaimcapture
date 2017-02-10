@@ -1,0 +1,28 @@
+
+breaks_respite.label                                = BreaksSinceClaim/QuestionLabel[messages("breaks_respite.label")]
+breaks_respite                                      = BreaksSinceClaim/Answer
+
+moreBreaksInCare.label                              = BreaksOtherSinceClaim/QuestionLabel[messages("moreBreaksInCare.label")]
+moreBreaksInCare                                    = BreaksOtherSinceClaim/Answer
+
+breakInCareDPRespite.label                          = BreaksType/QuestionLabel[messages("breakInCareRespite.label")]
+breakInCareDPRespite                                = BreaksType/Answer
+
+respiteBreakWhoInRespite.label                      = WhoWasAway/QuestionLabel[messages("respiteBreakWhoInRespite.label")]
+respiteBreakWhoInRespite                            = WhoWasAway/Answer
+
+respiteBreakCareeRespiteStartDate.label             = StartDate/QuestionLabel[messages("respiteBreakCareeRespiteStartDate.label")]
+respiteBreakCareeRespiteStartDate                   = StartDate/Answer[@type="date"]
+
+respiteBreakCareeRespiteStayEnded.label             = BreakEnded/QuestionLabel[messages("respiteBreakCareeRespiteStayEnded.label")]
+respiteBreakCareeRespiteStayEnded                   = BreakEnded/Answer
+
+respiteBreakCareeRespiteEndDate.label               = EndDate/QuestionLabel[messages("respiteBreakCareeRespiteEndDate.label")]
+respiteBreakCareeRespiteEndDate                     = EndDate/Answer[@type="date"]
+
+respiteBreakCareeRespiteStayMedicalCare.label       = DpMedicalCare/QuestionLabel[messages("respiteBreakCareeRespiteStayMedicalCare.label")]
+respiteBreakCareeRespiteStayMedicalCare             = DpMedicalCare/Answer
+
+respiteBreakCareeRespiteCarerStillCaring.label      = BreaksInCareRespiteStillCaring/QuestionLabel[messages("respiteBreakCareeRespiteCarerStillCaring.label")]
+respiteBreakCareeRespiteCarerStillCaring            = BreaksInCareRespiteStillCaring/Answer
+

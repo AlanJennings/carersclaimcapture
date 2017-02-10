@@ -21,6 +21,7 @@
                     
                     <c:forEach items="${breakshospital}" var="careBreak">
                         <tr id="break_${careBreak['breakshospital_id']}" class="data-table">
+                            <p>${hospitalBreakWhoInHospital}</p>
                             <c:if test="${careBreak['hospitalBreakWhoInHospital']=='Carer'}">
                                 <td><t:message code="breaks.summary.you" /></td>
                                 <td><t:message code="breaks_hospital.text" /></td>
@@ -165,7 +166,7 @@
                                 </c:if>
                             </td>
                             <td class="actions">
-                                <button type="submit" id="changerowbreaksother_${careBreak['breaksother_id']}" class="actionButton" name="changeSubFormRecord" value="breaksother_${careBreak['breaksother_id']}" aria-label="<t:message code="change.button" />"><t:message code="change" /></button>
+                                <button type="submit" id="changerowbreaksother_${careBreak['breaksother_id']}" class="actionButton" name="changeSubFormRecord" value="${careBreak['breaksother_id']}" aria-label="<t:message code="change.button" />"><t:message code="change" /></button>
                                 <button type="button" id="deleterowbreaksother_${careBreak['breaksother_id']}" class="actionButton" name="deleteBreaksOther" value="${careBreak['breaksother_id']}" onclick="window.showPanel('deleteother_${careBreak['breaksother_id']}', true)" aria-label="<t:message code="delete.button" />"><t:message code="delete" /></button>
                             </td>
                             <t:hiddenWarning id="deleteother_${careBreak['breaksother_id']}" outerClass="prompt breaks-prompt validation-summary" triggerId="deleterowbreaksother_${careBreak['breaksother_id']}" triggerValue="deleterowbreaksother_${careBreak['breaksother_id']}" trwrap="true" colspanvalue="5">

@@ -111,15 +111,15 @@
                     <Answer>Grandma</Answer>
                 </RelationToClaimant>
                 <Cared35Hours>
-                    <QuestionLabel>Do you spend 35 hours or more each week providing care for Jane Bloggs?</QuestionLabel>
+                    <QuestionLabel>Do you spend 35 hours or more each week providing care for @dpname?</QuestionLabel>
                     <Answer>yes</Answer>
                 </Cared35Hours>
                 <OtherCarer>
-                    <QuestionLabel>Does anyone else spend 35 hours or more each week providing care for Jane Bloggs?</QuestionLabel>
+                    <QuestionLabel>Does anyone else spend 35 hours or more each week providing care for @dpname?</QuestionLabel>
                     <Answer>yes</Answer>
                 </OtherCarer>
                 <OtherCarerUc>
-                    <QuestionLabel>Are they getting the carer element of Universal Credit for Jane Bloggs?</QuestionLabel>
+                    <QuestionLabel>Are they getting the carer element of Universal Credit for @dpname?</QuestionLabel>
                     <Answer>yes</Answer>
                 </OtherCarerUc>
                 <OtherCarerUcDetails>
@@ -128,11 +128,11 @@
                 </OtherCarerUcDetails>
                 <CareBreak>
                     <BreaksSinceClaim>
-                        <QuestionLabel>Since 8 January 2016 have there been any times you or Jane Bloggs have been in hospital, respite or care home for at least a week?</QuestionLabel>
+                        <QuestionLabel>Since 8 January 2016 have there been any times you or @dpname have been in hospital, respite or care home for at least a week?</QuestionLabel>
                         <Answer>Hospital, Respite or care home</Answer>
                     </BreaksSinceClaim>
                     <BreaksOtherSinceClaim>
-                        <QuestionLabel>Have there been any times you've not provided care for Jane Bloggs for 35 hours a week?</QuestionLabel>
+                        <QuestionLabel>Have there been any times you've not provided care for @dpname for 35 hours a week?</QuestionLabel>
                         <Answer>Yes</Answer>
                     </BreaksOtherSinceClaim>
                 </CareBreak>
@@ -143,10 +143,10 @@
                     </BreaksType>
                     <WhoWasAway>
                         <QuestionLabel>Who was in hospital?</QuestionLabel>
-                        <Answer>Jane Bloggs</Answer>
+                        <Answer>@dpname</Answer>
                     </WhoWasAway>
                     <StartDate>
-                        <QuestionLabel>When was Jane Bloggs admitted?</QuestionLabel>
+                        <QuestionLabel>When was @dpname admitted?</QuestionLabel>
                         <Answer>09-07-2016</Answer>
                     </StartDate>
                     <BreakEnded>
@@ -154,11 +154,11 @@
                         <Answer>Yes</Answer>
                     </BreakEnded>
                     <EndDate>
-                        <QuestionLabel>When was Jane Bloggs discharged?</QuestionLabel>
+                        <QuestionLabel>When was @dpname discharged?</QuestionLabel>
                         <Answer>09-07-2016</Answer>
                     </EndDate>
                     <BreaksInCareRespiteStillCaring>
-                        <QuestionLabel>During this time in hospital, were you still providing care for Jane Bloggs for 35 hours a week?</QuestionLabel>
+                        <QuestionLabel>During this time in hospital, were you still providing care for @dpname for 35 hours a week?</QuestionLabel>
                         <Answer>Yes</Answer>
                     </BreaksInCareRespiteStillCaring>
                 </CareBreak>
@@ -169,10 +169,10 @@
                     </BreaksType>
                     <WhoWasAway>
                         <QuestionLabel>Who was in respite or a care home?</QuestionLabel>
-                        <Answer>Jane Bloggs</Answer>
+                        <Answer>@dpname</Answer>
                     </WhoWasAway>
                     <StartDate>
-                        <QuestionLabel>When was Jane Bloggs admitted?</QuestionLabel>
+                        <QuestionLabel>When was @dpname admitted?</QuestionLabel>
                         <Answer>09-07-2016</Answer>
                     </StartDate>
                     <BreakEnded>
@@ -180,15 +180,15 @@
                         <Answer>Yes</Answer>
                     </BreakEnded>
                     <EndDate>
-                        <QuestionLabel>When was Jane Bloggs discharged?</QuestionLabel>
+                        <QuestionLabel>When was @dpname discharged?</QuestionLabel>
                         <Answer>09-07-2016</Answer>
                     </EndDate>
                     <DpMedicalCare>
-                        <QuestionLabel>Did Jane Bloggs receive care from a medical professional during this time?</QuestionLabel>
+                        <QuestionLabel>Did @dpname receive care from a medical professional during this time?</QuestionLabel>
                         <Answer>Yes</Answer>
                     </DpMedicalCare>
                     <BreaksInCareRespiteStillCaring>
-                        <QuestionLabel>During this time in hospital, were you still providing care for Jane Bloggs for 35 hours a week?</QuestionLabel>
+                        <QuestionLabel>During this time in hospital, were you still providing care for @dpname for 35 hours a week?</QuestionLabel>
                         <Answer>Yes</Answer>
                     </BreaksInCareRespiteStillCaring>
                 </CareBreak>
@@ -215,18 +215,18 @@
                         <Answer>Somewhere else</Answer>
                     </ReasonClaimant>
                     <ReasonCaree>
-                        <QuestionLabel>Where was Jane Bloggs during this time?</QuestionLabel>
+                        <QuestionLabel>Where was @dpname during this time?</QuestionLabel>
                         <Other>Test2</Other>
                         <Answer>Somewhere else</Answer>
                     </ReasonCaree>
                 </CareBreak>
                 <CareBreak>
                     <BreaksSinceClaim>
-                        <QuestionLabel>Since 8 January 2016 have there been any other times you or Jane Bloggs have been in hospital, respite or care home for at least a week?</QuestionLabel>
+                        <QuestionLabel>Since 8 January 2016 have there been any other times you or @dpname have been in hospital, respite or care home for at least a week?</QuestionLabel>
                         <Answer>None</Answer>
                     </BreaksSinceClaim>
                     <BreaksOtherSinceClaim>
-                        <QuestionLabel>Have there been any other times you've not provided care for Jane Bloggs for 35 hours a week?</QuestionLabel>
+                        <QuestionLabel>Have there been any other times you've not provided care for @dpname for 35 hours a week?</QuestionLabel>
                         <Answer>No</Answer>
                     </BreaksOtherSinceClaim>
                 </CareBreak>
@@ -317,6 +317,78 @@
                     <Answer>Yes</Answer>
                 </AnyOtherPayment>
                 <Employment>
+                    <JobDetails>
+                        <Employer>
+                            <CurrentlyEmployed>
+                                <QuestionLabel>Have you finished this job?</QuestionLabel>
+                                <Answer>No</Answer>
+                            </CurrentlyEmployed>
+                            <DidJobStartBeforeClaimDate>
+                                <QuestionLabel>Did you start this job before 8 March 2016?</QuestionLabel>
+                                <Answer>Yes</Answer>
+                            </DidJobStartBeforeClaimDate>
+                            <Name>
+                                <QuestionLabel>Employer's name</QuestionLabel>
+                                <Answer>Hiding Consultants</Answer>
+                            </Name>
+                            <Address>
+                                <QuestionLabel>Address</QuestionLabel>
+                                <Answer>
+                                    <Line order="1">456 Street</Line>
+                                    <Line order="2">Newtown</Line>
+                                </Answer>
+                            </Address>
+                            <EmployersPhoneNumber>
+                                <QuestionLabel>Contact number</QuestionLabel>
+                                <Answer>01111111111</Answer>
+                            </EmployersPhoneNumber>
+                        </Employer>
+                        <Pay>
+                            <DateLastPaid>
+                                <QuestionLabel>When were you last paid?</QuestionLabel>
+                                <Answer>01-04-2016</Answer>
+                            </DateLastPaid>
+                            <GrossPayment>
+                                <QuestionLabel>What were you paid in your last wage?</QuestionLabel>
+                                <Answer>
+                                    <Currency>GBP</Currency>
+                                    <Amount>3000</Amount>
+                                </Answer>
+                            </GrossPayment>
+                            <IncludedInWage>
+                                <QuestionLabel>What was included in this pay?</QuestionLabel>
+                                <Answer>Some catnip on the side</Answer>
+                            </IncludedInWage>
+                            <PayFrequency>
+                                <QuestionLabel>How often are you paid?</QuestionLabel>
+                                <Answer>Weekly</Answer>
+                            </PayFrequency>
+                            <UsualPayDay>
+                                <QuestionLabel>When do you get paid?</QuestionLabel>
+                                <Answer>Fridays</Answer>
+                            </UsualPayDay>
+                            <ConstantEarnings>
+                                <QuestionLabel>Do you get the same amount each time?</QuestionLabel>
+                                <Answer>Yes</Answer>
+                            </ConstantEarnings>
+                        </Pay>
+                        <PaidForPension>
+                            <QuestionLabel>Do you pay into a pension?</QuestionLabel>
+                            <Answer>No</Answer>
+                        </PaidForPension>
+                        <PaidForThingsToDoJob>
+                            <QuestionLabel>Do you pay for things you need to do your job?</QuestionLabel>
+                            <Answer>No</Answer>
+                        </PaidForThingsToDoJob>
+                        <PaidForJobExpenses>
+                            <QuestionLabel>Do you have any care costs because of this work?</QuestionLabel>
+                            <Answer>No</Answer>
+                        </PaidForJobExpenses>
+                        <OtherEmployment>
+                            <QuestionLabel>Have you had any other jobs since 8 October 2015?</QuestionLabel>
+                            <Answer>No</Answer>
+                        </OtherEmployment>
+                    </JobDetails>
                     <JobDetails>
                         <Employer>
                             <CurrentlyEmployed>

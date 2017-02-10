@@ -1,200 +1,49 @@
 package uk.gov.dwp.carersallowance.xml;
 
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.CharacterData;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-import uk.gov.dwp.carersallowance.utils.C3Constants;
-import uk.gov.dwp.carersallowance.utils.LoadFile;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMapping;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
-import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
 
-/**
- * Read the claim data from the XML document
- *
- * When writing the XML document, we write the questions as well (labels), we don't need to read these
- * as they come from another source (messageSource)
- *
- * When we read duplicates from the XML they should be annotated with an order attribute, so all xpaths are unique
- * When we read a node with a @type attribute it implies an instruction (nominally for date parsing)
- */
-public class XmlClaimReader {
+public class XmlClaimReader extends AbstractXMLReader {
     private static final Logger LOG = LoggerFactory.getLogger(XmlClaimReader.class);
 
-    private Set<String> NOT_SUPPORTED = new HashSet<>(Arrays.asList(new String[]{"DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak"}));
-    private static final Set<String> ACTIVE_ATTRS = new HashSet<>(Arrays.asList(new String[]{"type", "order"}));
-    private static final String PATH_SEPARATOR = "/";
-    private static final Set<String> IGNORE_MAPPING = new HashSet<>(Arrays.asList(new String[]{
-            "DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/Evidence/Title"       // TODO
-    }));
-    private final List<CollectionDetails> collections = new ArrayList<>();
+    private String fileSuffix;
 
-
-    private XPathMappingList valueMappings;
-    private Map<String, Object> values;
-    private List<String> errors;
-    private boolean sessionVariablesOnly;
-    private String mappingFileName;
-
-    public XmlClaimReader(String xmlFile, boolean sessionVariablesOnly, final URL mappingFile) throws Exception {
-        String xml = IOUtils.toString(XmlClaimReader.class.getClassLoader().getResourceAsStream(xmlFile), Charset.defaultCharset());
-        createMappings(mappingFile);
-        Document document = (Document) XmlPrettyPrinter.stringToNode(xml);
-        createCollectionDetails();
-        createSessionValues(sessionVariablesOnly, document);
+    public XmlClaimReader(final String xmlFile, final Boolean sessionVariablesOnly, final URL mappingFile) throws Exception {
+        super(xmlFile, sessionVariablesOnly, mappingFile);
     }
 
-    private void createMappings(URL mappingFile) throws Exception {
-        List<String> xmlMappings = LoadFile.readLines(mappingFile);
-        valueMappings = new XPathMappingList();
-        valueMappings.add(xmlMappings);
-        this.mappingFileName = StringUtils.substringAfterLast(mappingFile.getFile(), "/");
+    public XmlClaimReader(final String xml, final XPathMappingList valueMapping, final Boolean sessionVariablesOnly) throws InstantiationException {
+        super(xml, valueMapping, sessionVariablesOnly);
+        NOT_SUPPORTED = new HashSet<>();
+        IGNORE_MAPPING = new HashSet<>(Arrays.asList(new String[]{
+                "DWPBody/DWPCATransaction/DWPCAClaim/EvidenceList/Evidence/Title"       // TODO
+        }));
     }
 
-    private void createAdditionalMappings(final String fileName) throws Exception {
-        URL xmlMappingFile = XmlClaimReader.class.getClassLoader().getResource(fileName);
-        if (xmlMappingFile != null) {
-            List<String> xmlMappings = LoadFile.readLines(xmlMappingFile);
-            if (xmlMappings != null) {
-                valueMappings.add(xmlMappings);
-            }
-        }
-    }
-
-    private void createCollectionDetails() {
+    @Override
+    protected void createCollectionDetails() {
         collections.add(new CollectionDetails("JobDetails", "DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/", "DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/CurrentlyEmployed/QuestionLabel"));
+        collections.add(new CollectionDetails("breakshospital", "DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/", "DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/BreaksType/QuestionLabel"));
+        collections.add(new CollectionDetails("breaksrespite", "DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/", "DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/BreaksType/QuestionLabel"));
+        collections.add(new CollectionDetails("breaksother", "DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/", "DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/BreaksType/QuestionLabel"));
     }
 
-    public XmlClaimReader(String xml, XPathMappingList valueMappings, boolean sessionVariablesOnly) throws InstantiationException {
-        this.valueMappings = valueMappings;
-        createSessionValues(sessionVariablesOnly, (Document) XmlPrettyPrinter.stringToNode(xml));
-    }
-
-    private void createSessionValues(boolean sessionVariablesOnly, Document xml) {
-        this.sessionVariablesOnly = sessionVariablesOnly;
-        errors = new ArrayList<>();
-        values = new HashMap<>();
-        parseXml(values, xml.getFirstChild(), null, 0, ACTIVE_ATTRS);
-    }
-
-    public Map<String, Object> getValues() {
-        return values;
-    }
-
-    public List<String> getErrors() {
-        return errors;
-    }
-
-    private void parseXml(Map<String, Object> values, Node node, String parentPath, Integer parentOrder, Set<String> activeAttrsLowerCase) {
-        if (node == null) {
-            return;
-        }
-
-        if (NOT_SUPPORTED.contains(parentPath)) {
-            return;
-        }
-
-        // found text node, create entry
-        LOG.debug("parentPath = {}", parentPath);
-        if (node instanceof CharacterData) {
-            createMapping(values, node, parentPath);
-        }
-
-        // otherwise create current node name
-        String nodePath = buildNodePath(node, parentPath, parentOrder, activeAttrsLowerCase);
-
-        // iterate over node children
-        NodeList children = node.getChildNodes();
-        Map<String, Integer> siblingTotals = getSiblingCount(children);
-        Map<String, Integer> currentSiblingCount = new HashMap<>();
-
-        for (int index = 0; index < children.getLength(); index++) {
-            Node child = children.item(index);
-            String childName = child.getNodeName();
-
-            Integer childOrder;
-            if (siblingTotals.get(childName) == null || siblingTotals.get(childName) == Integer.valueOf(1)) {
-                // when there is just a single instance we don't bother with an order attribute,
-                // which is most of the time
-                childOrder = null;
-            } else {
-                // we use order attribute, to maintain a one to one mapping (and maintain the order)
-                childOrder = currentSiblingCount.get(childName);
-                if (childOrder == null) {
-                    childOrder = Integer.valueOf(1);
-                } else {
-                    childOrder = Integer.valueOf(childOrder.intValue() + 1);
-                }
-                currentSiblingCount.put(childName, childOrder);
-            }
-            parseXml(values, child, nodePath, childOrder, activeAttrsLowerCase);
-        }
-    }
-
-    private void createMapping(Map<String, Object> values, Node xml, String parentPath) {
-        String data = ((CharacterData) xml).getData();
-        LOG.debug("Found Text: {}", data);
-
-        XPathMapping mapping = valueMappings.getXPathMap().get(parentPath);
-
-        // TODO ... fix this so dont need to loop around looking for DateOfClaim ... which exists but was not returned by get
-        // BIZARRE ??? Test works OK but running in app doesnot find mapping for DWPBody/DWPCATransaction/DWPCAClaim/DateOfClaim/Answer
-        if(mapping == null){
-
-            for (Map.Entry<String,XPathMapping> entry : valueMappings.getXPathMap().entrySet()) {
-                String key = entry.getKey();
-                XPathMapping value = entry.getValue();
-                LOG.info("key :" + key + "  value :"+  value.toString());
-            }
-            mapping = findMapping(parentPath);
-        }
-
-        if (IGNORE_MAPPING.contains(parentPath)) {
-            return; // do nothing
-        } else if (mapping == null) {
-            if (!createCollection(parentPath, data)) {
-                LOG.error("Unknown mapping for {}", parentPath);
-                errors.add("Unknown mapping for " + parentPath);
-                throw new IllegalStateException("Unknown mapping for " + parentPath);
-            }
-        } else {
-            String key = mapping.getValue();
-            String processingInstruction = mapping.getProcessingInstruction();
-            if (sessionVariablesOnly && key != null && (key.startsWith("/") || key.contains("."))) {
-                // do not store non-session variables
-            } else if (processingInstruction != null && processingInstruction.equals("@type=\"date\"")) {
-                LOG.info("XmlClaim adding date:" + key + "->" + data);
-                createDateMapping(key, data);
-            } else {
-                LOG.info("XmlClaim adding string:" + key + "->" + data);
-                // TODO Fixup case on yes / no to be consistent between claim and webapp
-                values.put(key, data.replace("No", C3Constants.NO).replace("Yes", C3Constants.YES));
-            }
-        }
-    }
-
-    private boolean createCollection(String parentPath, String data) {
+    @Override
+    protected boolean createCollection(final Map<String, Object> values, final Node node, final String parentPath, final String data) {
         try {
-            CollectionDetails collectionDetails = findParentPath(parentPath);
+            CollectionDetails collectionDetails = findParentPath(parentPath, node);
             if (collectionDetails != null) {
                 Map<String, Object> latestValues;
                 List<Map<String, Object>> collection = (List<Map<String, Object>>) values.get(collectionDetails.getCollectionName());
@@ -204,167 +53,81 @@ public class XmlClaimReader {
                         collection = new ArrayList<>();
                         values.put(collectionDetails.getCollectionName(), collection);
                     }
-                    latestValues.put(collectionDetails.collectionName + "_id", String.valueOf(collection.size()+1));
+                    latestValues.put(collectionDetails.getCollectionName() + "_id", String.valueOf(collection.size()+1));
                     collection.add(latestValues);
                 } else {
                     latestValues = collection.get(collection.size()-1);
                 }
                 //find mapping
-                XPathMapping map = findMapping(StringUtils.substringBefore(parentPath.replace(collectionDetails.startWith, ""), "["));
-                if (map == null) {
-                    createAdditionalMappings(mappingFileName + "." + collectionDetails.collectionName.toLowerCase());
-                    map = findMapping(parentPath.replace(collectionDetails.startWith, ""));
-                }
-                if (map != null) {
-                    latestValues.put(map.getValue(), data.replace("No", C3Constants.NO).replace("Yes", C3Constants.YES));
+                if (collectionDetails.getCollectionName().contains("breaks")) {
+                    addBreaks(collectionDetails, latestValues, parentPath, data);
+                } else if (collectionDetails.getCollectionName().contains("JobDetails")) {
+                    addJobDetails(collectionDetails, latestValues, parentPath, data);
                 } else {
                     return false;
                 }
             } else {
-                return false;
+                return true;
             }
         } catch (Exception e) {
-            LOG.error("Unknown failure.", e);
+            LOG.error("Unknown failure. parentPath:{}", parentPath, e);
             return false;
         }
         return true;
     }
 
-    private XPathMapping findMapping(String path) {
-        List<XPathMapping> mappings = valueMappings.getList();
-        for (XPathMapping m : mappings){
-            if (m != null && m.getXpath() != null && m.getXpath().equals(path)){
-                LOG.error("BIZARRE found mapping for "+ path + " by looping but not by map lookup. Needs further investigation");
-                LOG.info("valueMappings :" + valueMappings.toString());
-                LOG.debug("Loop found matching xpath for parent:{}", path);
-                return m;
-            }
+    private void addJobDetails(final CollectionDetails collectionDetails, final Map<String, Object> latestValues, final String parentPath, final String data) {
+        final String path = parentPath.replace(collectionDetails.getStartWith(), "");
+        XPathMapping xPathMapping = findMapping(path, collectionDetails.getCollectionName());
+        if (xPathMapping == null) {
+            createAdditionalMappings(mappingFileName + "." + collectionDetails.getCollectionName().toLowerCase(), collectionDetails.getCollectionName());
+            xPathMapping = findMapping(path, collectionDetails.getCollectionName());
+        }
+        processMapping(xPathMapping, latestValues, data);
+    }
+
+    private void addBreaks(final CollectionDetails collectionDetails, final Map<String, Object> latestValues, String parentPath, String data) {
+        //need to decipher which type of break it is BreaksType = DPHospital/YouHospital,DPRespite/YouRespite or Other
+        final String path = parentPath.replace(collectionDetails.getStartWith(), "");
+        XPathMapping xPathMapping = findMapping(path, fileSuffix);
+        if (xPathMapping == null) {
+            createAdditionalMappings(mappingFileName + ".breaks" + fileSuffix, fileSuffix);
+            xPathMapping = findMapping(path, fileSuffix);
+        }
+        processMapping(xPathMapping, latestValues, data.replace("@dpname", "Caree").replace("You", "Carer"));
+    }
+
+    private String getAnswerToBreakQuestion(final Node node) {
+        try {
+            return node.getParentNode().getNextSibling().getFirstChild().getNodeValue();
+        } catch (Exception e) {
+            LOG.error("Exception in getting answer ", e);
         }
         return null;
     }
 
-    private void createDateMapping(String keystub, String datestring) {
-        try {
-            values.put(keystub, null);
-            values.put(keystub + "_day", datestring.substring(0, 2));
-            values.put(keystub + "_month", datestring.substring(3, 5));
-            values.put(keystub + "_year", datestring.substring(6, 10));
-        } catch (Exception e) {
-            LOG.error("Failed to parse xml key:" + keystub + " from datestring:" + datestring);
-        }
-    }
-
-    private String buildNodePath(Node xml, String parentPath, Integer parentOrder, Set<String> activeAttrsLowerCase) {
-        String nodeName = xml.getNodeName();
-        if (xml instanceof Element) {
-            nodeName = nodeName + getAttrsAsString((Element) xml, activeAttrsLowerCase);
-        }
-
-        String nodePath;
-        if (parentPath == null) {
-            nodePath = nodeName;
-        } else {
-            nodePath = parentPath + PATH_SEPARATOR + nodeName;
-        }
-
-        // TODO put order in here
-        return nodePath;
-    }
-
-    private Map<String, Integer> getSiblingCount(NodeList nodes) {
-        if (nodes == null) {
-            return null;
-        }
-
-        Map<String, Integer> siblingCount = new HashMap<>();
-        for (int index = 0; index < nodes.getLength(); index++) {
-            Node node = nodes.item(index);
-            if (node instanceof CharacterData) {
-                continue;
+    private CollectionDetails findParentPath(final String parentPath, final Node node) {
+        if (parentPath.contains("DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak")) {
+            if (parentPath.equals("DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/BreaksType/QuestionLabel")) {
+                fileSuffix = getAnswerToBreakQuestion(node).toLowerCase();
             }
-
-            String nodeName = node.getNodeName();
-            Integer count = siblingCount.get(nodeName);
-            if (count == null) {
-                siblingCount.put(nodeName, Integer.valueOf(1));
-            } else {
-                siblingCount.put(nodeName, Integer.valueOf(count.intValue() + 1));
-            }
+            return findCollectionForSuffix("breaks" + fileSuffix.replace("dp", "").replace("you", ""));
         }
 
-        return siblingCount;
-    }
-
-    private String getAttrsAsString(Element element, Set<String> activeAttrsLowerCase) {
-        NamedNodeMap attrMap = element.getAttributes();
-        StringBuffer buffer = new StringBuffer();
-        for (int index = 0; index < attrMap.getLength(); index++) {
-            Node attr = attrMap.item(index);
-            String attrName = attr.getNodeName();
-            if (activeAttrsLowerCase.contains(attrName.toLowerCase())) {
-                String attrValue = attr.getNodeValue();
-
-                if (buffer.length() > 0) {
-                    buffer.append(",");
-                }
-                buffer.append("[@").append(attrName).append("=\"").append(attrValue).append("\"]");
-            }
-        }
-        return buffer.toString();
-    }
-
-    public static String join(Map<String, ? extends Object> map, String separator) {
-        if (map == null) {
-            return null;
-        }
-        if (separator == null) {
-            separator = "";
-        }
-
-        Set<String> keySet = map.keySet();
-        keySet.remove(null);    // null causes a problem for sort
-        List<String> keys = new ArrayList<String>(keySet);
-
-        Collections.sort(keys);
-        StringBuffer buffer = new StringBuffer();
-        for (String key : keys) {
-            if (buffer.length() > 0) {
-                buffer.append(separator);
-            }
-            buffer.append(key).append(" = ").append(map.get(key));
-        }
-        return buffer.toString();
-    }
-
-    public CollectionDetails findParentPath(final String newMapKey) {
         for (CollectionDetails collectionDetails : collections) {
-            if (newMapKey.equals(collectionDetails.getNewMapKey()) || newMapKey.startsWith(collectionDetails.getStartWith())) {
+            if (parentPath.equals(collectionDetails.getNewMapKey()) || parentPath.startsWith(collectionDetails.getStartWith())) {
                 return collectionDetails;
             }
         }
         return null;
     }
 
-    class CollectionDetails {
-        private final String startWith;
-        private final String newMapKey;
-        private final String collectionName;
-        public CollectionDetails(final String collectionName, final String startWith, final String newMapKey) {
-            this.collectionName = collectionName;
-            this.startWith = startWith;
-            this.newMapKey = newMapKey;
+    private CollectionDetails findCollectionForSuffix(String collectionName) {
+        for (CollectionDetails collectionDetails : collections) {
+            if (collectionDetails.getCollectionName().equals(collectionName)) {
+                return collectionDetails;
+            }
         }
-
-        public String getStartWith() {
-            return startWith;
-        }
-
-        public String getNewMapKey() {
-            return newMapKey;
-        }
-
-        public String getCollectionName() {
-            return collectionName;
-        }
+        return null;
     }
 }
