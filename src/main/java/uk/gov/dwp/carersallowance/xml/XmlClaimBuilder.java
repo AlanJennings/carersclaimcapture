@@ -37,8 +37,44 @@ public class XmlClaimBuilder extends XmlBuilder {
     }
 
     private void updateBreaks(final Document document) {
-        //get breaks change first if others exist and add new at end for None and No
+        int count = 0;
+        String hospital = "";
+        String respite = "";
+        String other = "No";
+        Node firstCareBreak = null;
 
+        //get breaks change first if others exist and add new at end for None and No
+        Node node = getNamedNode("DWPBody/DWPCATransaction/DWPCAClaim/Caree", null, false, document);
+        Node lastNode = getNamedNode("DWPBody/DWPCATransaction/DWPCAClaim/Caree/LiveSameAddress", null, false, document);
+        NodeList nodeList = node.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node1 = nodeList.item(i);
+            if ("CareBreak".equals(node1.getNodeName())) {
+                if (count == 0) {
+                    firstCareBreak = node1;
+                }
+                count++;
+                NodeList nodeList1 = node1.getChildNodes();
+                for (int x = 0; x < nodeList1.getLength(); x++) {
+                    Node node2 = nodeList1.item(x);
+                    //Answer
+                    String value = node2.getFirstChild().getNextSibling().getFirstChild().getNodeValue();
+                    if ("DPHospital".equals(value) || "YouHospital".equals(value)) {
+                        hospital = "Hospital, ";
+                    } else if ("DPRespite".equals(value) || "YouRespite".equals(value)) {
+                        respite = "Respite or care home, ";
+                    } else if ("Other".equals(value)) {
+                        other = "Yes";
+                    }
+                }
+            }
+        }
+        if (count >= 2) {
+            Node copyNode = firstCareBreak.cloneNode(true);
+            node.insertBefore(copyNode, lastNode);
+            firstCareBreak.getFirstChild().getFirstChild().getNextSibling().getFirstChild().setTextContent(StringUtils.substringBeforeLast(hospital + respite, ",").trim());
+            firstCareBreak.getLastChild().getFirstChild().getNextSibling().getFirstChild().setTextContent(other);
+        }
     }
 
     @Override
@@ -61,6 +97,7 @@ public class XmlClaimBuilder extends XmlBuilder {
             String elementNameToUse = elementName;
             String xPathToUse = xPath;
             String mappingNameToUse = elementName;
+            replaceCarerCaree(fieldCollectionList);
             for (int index = 0; index < fieldCollectionList.size(); index++) {
                 Map<String, Object> fieldCollection = fieldCollectionList.get(index);
                 if (elementName.startsWith("breaks")) {
@@ -94,5 +131,18 @@ public class XmlClaimBuilder extends XmlBuilder {
         AssistedDecision assistedDecision = new AssistedDecision(maxAge, values);
         values.put("assistedDecisionReason", assistedDecision.getReason());
         values.put("assistedDecisionDecision", assistedDecision.getDecision());
+    }
+
+    private void replaceCarerCaree(final List<Map<String, Object>> fieldCollectionList) {
+        for (Map<String, Object> fieldCollection : fieldCollectionList) {
+            for (String key : fieldCollection.keySet()) {
+                Object value = fieldCollection.get(key);
+                if ("Carer".equals(value)) {
+                    fieldCollection.put(key, "You");
+                } else if ("Caree".equals(value)) {
+                    fieldCollection.put(key, "@dpname");
+                }
+            }
+        }
     }
 }

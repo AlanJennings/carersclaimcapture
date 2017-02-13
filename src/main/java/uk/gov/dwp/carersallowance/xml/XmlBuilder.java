@@ -147,7 +147,7 @@ public class XmlBuilder {
                 }
             } else if (valueKey != null && (valueKey.endsWith(".label") || valueKey.endsWith(".text"))) {
                 LOG.debug("Checking QuestionLabel:{}", valueKey);
-                String question = getQuestion(valueKey, values);
+                String question = getQuestion(valueKey, processingInstruction, values);
                 String relatedAnswerKey = valueKey.replace(".label", "").replace(".text", "");
                 // If we have a corresponding Answer and value set for this QuestionLabel then we add to xml
                 if (valuesByValueKey.containsKey(relatedAnswerKey)) {
@@ -183,18 +183,22 @@ public class XmlBuilder {
         }
     }
 
-    private String getQuestion(final String questionKey, final Map<String, Object> values) {
+    private String getQuestion(final String questionKey, final String processingInstruction, final Map<String, Object> values) {
         // TODO throw exception and stop processing if gap in messages. But too many Income / Breaks gaps as of 10/01/2016
         String questionMessage;
+        String newQuestionKey = questionKey;
         try {
-            Object[] parameters = getParameters(questionKey, values);
-            questionMessage = messageSource.getMessage(questionKey, parameters, Locale.getDefault());
+            if (processingInstruction != null && processingInstruction.contains("messages(")) {
+                newQuestionKey = StringUtils.substringBefore(processingInstruction, "\")").replace("messages(\"", "");
+            }
+            Object[] parameters = getParameters(newQuestionKey, values);
+            questionMessage = messageSource.getMessage(newQuestionKey, parameters, Locale.getDefault());
         } catch (NoSuchMessageException e) {
-            LOG.error("NoSuchMessageException thrown looking for message for key:" + questionKey);
-            questionMessage = "ERROR " + questionKey + " - message not found";
+            LOG.error("NoSuchMessageException thrown looking for message for key:" + newQuestionKey);
+            questionMessage = "ERROR " + newQuestionKey + " - message not found";
         } catch (Exception e) {
-            LOG.error("Exception thrown looking for message for key:" + questionKey);
-            questionMessage = "ERROR " + questionKey + " - exception";
+            LOG.error("Exception thrown looking for message for key:" + newQuestionKey);
+            questionMessage = "ERROR " + newQuestionKey + " - exception";
         }
         return (questionMessage);
     }
