@@ -179,7 +179,7 @@ public class PreviewPageProcessing {
     }
 
     private void displayParametersForBankDetailsPage(final Model model, final Session session) {
-        model.addAttribute("bankDetailsEntered", previewUtils.notGivenIfEmptyElseDetailsProvided((String)session.getAttribute("accountNumber"), "preview.bankDetailsNotGiven"));
+        model.addAttribute("bankDetailsEntered", previewUtils.textIfEmptyElseDetailsProvided((String)session.getAttribute("accountNumber"), "preview.bankDetailsNotGiven"));
         model.addAttribute("bankDetailsLink", previewUtils.getLink("bank_details"));
     }
 

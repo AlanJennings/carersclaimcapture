@@ -154,12 +154,11 @@ public class PreviewUtils {
         return value;
     }
 
-    public String notGivenIfEmptyElseDetailsProvided(final String value, final String withExtraText) {
-        final String notGiven = notGivenIfEmpty(value, withExtraText);
+    public String textIfEmptyElseDetailsProvided(final String value, final String withExtraText) {
         if (StringUtils.isNotEmpty(value)) {
             return getDetailsMessage(C3Constants.YES);
         }
-        return notGiven;
+        return getMessage(withExtraText);
     }
 
     public String getMessage(final String code) {
