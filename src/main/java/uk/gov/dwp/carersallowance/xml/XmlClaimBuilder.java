@@ -31,6 +31,17 @@ public class XmlClaimBuilder extends XmlBuilder {
     }
 
     @Override
+    public void loadValuesIntoXML(final Map<String, Object> values) throws ParserConfigurationException {
+        super.loadValuesIntoXML(values);
+        updateBreaks(getDocument());
+    }
+
+    private void updateBreaks(final Document document) {
+        //get breaks change first if others exist and add new at end for None and No
+
+    }
+
+    @Override
     protected Map<String, String> getNamespaces() {
         Map<String, String> namespaces = new HashMap<>();
         namespaces.put("xmlns", "http://www.govtalk.gov.uk/dwp/carers-allowance");
@@ -79,7 +90,7 @@ public class XmlClaimBuilder extends XmlBuilder {
     }
 
     @Override
-    protected void addAdditionalValues(Map<String, Object> values) {
+    protected void addAdditionalValues(final Map<String, Object> values) {
         AssistedDecision assistedDecision = new AssistedDecision(maxAge, values);
         values.put("assistedDecisionReason", assistedDecision.getReason());
         values.put("assistedDecisionDecision", assistedDecision.getDecision());

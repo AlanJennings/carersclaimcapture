@@ -74,7 +74,7 @@ public class XmlBuilder {
         return namespaces;
     }
 
-    private Document createDocument(String rootNodeName, Map<String, String> namespaces) throws ParserConfigurationException {
+    private Document createDocument(final String rootNodeName, final Map<String, String> namespaces) throws ParserConfigurationException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
@@ -100,7 +100,7 @@ public class XmlBuilder {
      * @param values
      * @param localRootNode XPath calculations use this as the root location, usually document, but can be different for FieldCollections
      */
-    protected void addNodes(Map<String, Object> values, String mappingName, Node localRootNode) {
+    protected void addNodes(final Map<String, Object> values, final String mappingName, final Node localRootNode) {
         if (values == null) {
             return;
         }
@@ -163,7 +163,7 @@ public class XmlBuilder {
         }
     }
 
-    private Object getClaimValue(String key, Map<String, Object> values) {
+    private Object getClaimValue(final String key, final Map<String, Object> values) {
         Object value = values.get(key);
         if (value != null) {
             LOG.debug("GOT REGULAR KEY!!");
@@ -183,7 +183,7 @@ public class XmlBuilder {
         }
     }
 
-    private String getQuestion(String questionKey, final Map<String, Object> values) {
+    private String getQuestion(final String questionKey, final Map<String, Object> values) {
         // TODO throw exception and stop processing if gap in messages. But too many Income / Breaks gaps as of 10/01/2016
         String questionMessage;
         try {
@@ -214,7 +214,7 @@ public class XmlBuilder {
     /**
      * Adds an attribute to an existing node.
      */
-    private void addAttr(String xPath, String name, String value, Node localRootNode) {
+    private void addAttr(final String xPath, final String name, final String value, final Node localRootNode) {
         Element node = (Element) getNamedNode(xPath, null, false, localRootNode);
         node.setAttribute(name.replace("@", ""), value);
     }
@@ -226,7 +226,7 @@ public class XmlBuilder {
      * @param value e.g. DLA
      * @return the newly created node
      */
-    private Node addNode(String xPath, String value, boolean createEmptyNodes, Node localRootNode, String processingInstruction) {
+    private Node addNode(final String xPath, final String value, final Boolean createEmptyNodes, final Node localRootNode, final String processingInstruction) {
         if (xPath == null || (createEmptyNodes == false && isValueEmpty(value))) {
             return null;
         }
@@ -268,7 +268,7 @@ public class XmlBuilder {
         }
     }
 
-    private List<Map<String, Object>> castFieldCollectionList(Object untypedfieldCollection) {
+    private List<Map<String, Object>> castFieldCollectionList(final Object untypedfieldCollection) {
         if ((untypedfieldCollection instanceof List) == false) {
             throw new IllegalArgumentException("field collection list is not a 'List'");
         }
@@ -294,7 +294,7 @@ public class XmlBuilder {
         return result;
     }
 
-    private String subpath(String path, int start, int end) {
+    private String subpath(final String path, final int start, final int end) {
         if (path == null) {
             return null;
         }
@@ -329,7 +329,7 @@ public class XmlBuilder {
      * @param localRootNode the rootNode used for xPath calculations
      * @return
      */
-    protected Node getNamedNode(String xPath, Map<String, String> attributes, boolean attrExactMatch, Node localRootNode) {
+    protected Node getNamedNode(final String xPath, final Map<String, String> attributes, final Boolean attrExactMatch, final Node localRootNode) {
         //remove Line from path
         String[] pathElements = xPath.split(PATH_SEPARATOR);
         Node current = localRootNode;
@@ -356,7 +356,7 @@ public class XmlBuilder {
      *
      * @return
      */
-    private Node getNamedNode(Node node, String childName, boolean create, Map<String, String> attributes, boolean attrExactMatch) {
+    private Node getNamedNode(final Node node, final String childName, final Boolean create, final Map<String, String> attributes, final Boolean attrExactMatch) {
         if (node == null || childName == null) {
             return null;
         }
@@ -399,7 +399,7 @@ public class XmlBuilder {
         return hasChild ? child : null;
     }
 
-    private boolean attrsMatch(Map<String, String> childAttrs, Map<String, String> attributes, boolean attrExactMatch) {
+    private boolean attrsMatch(final Map<String, String> childAttrs, final Map<String, String> attributes, final Boolean attrExactMatch) {
         if (attrExactMatch) {
             return childAttrs.equals(attributes);
         }
@@ -416,16 +416,7 @@ public class XmlBuilder {
 
     }
 
-    private Map<String, String> addToAttrMap(Map<String, String> map, String name, String value) {
-        Parameters.validateMandatoryArgs(name, "name");
-        if (map == null) {
-            map = new HashMap<>();
-        }
-        map.put(name, value);
-        return map;
-    }
-
-    private Map<String, String> attrsToMap(NamedNodeMap rawAttrMap) {
+    private Map<String, String> attrsToMap(final NamedNodeMap rawAttrMap) {
         if (rawAttrMap == null) {
             return null;
         }
@@ -441,7 +432,7 @@ public class XmlBuilder {
         return map;
     }
 
-    private boolean isValueEmpty(Object value) {
+    private boolean isValueEmpty(final Object value) {
         if (value == null) {
             return true;
         }
@@ -454,11 +445,7 @@ public class XmlBuilder {
         return false;
     }
 
-    public String render() throws InstantiationException {
-        return render(true, false);
-    }
-
-    public String render(boolean includeXmlDeclaration, boolean prettyPrint) throws InstantiationException {
+    public String render(final Boolean includeXmlDeclaration, final Boolean prettyPrint) throws InstantiationException {
         String xml = XmlPrettyPrinter.xmlToString(document, prettyPrint, includeXmlDeclaration);
         return xml;
     }
@@ -466,7 +453,7 @@ public class XmlBuilder {
     protected void addAdditionalValues(final Map<String, Object> values) {
     }
 
-    public String getNodeValue(String nodepath) {
+    public String getNodeValue(final String nodepath) {
         XPath xpath = XPathFactory.newInstance().newXPath();
         String nodevalue = null;
         try {

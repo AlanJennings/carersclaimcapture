@@ -66,8 +66,8 @@ public class XmlReaderTest {
 
     @Test
     public void loadXmlThirdPartyTest() throws Exception {
-        URL xmlfile = XmlReader.class.getClassLoader().getResource("claimreader-thirdparty.xml");
-        String xml = FileUtils.readFileToString(new File(xmlfile.toURI()), Charset.defaultCharset());
+        URL xmlFile = XmlReader.class.getClassLoader().getResource("claimreader-thirdparty.xml");
+        String xml = FileUtils.readFileToString(new File(xmlFile.toURI()), Charset.defaultCharset());
 
         XmlReader claimReader = new XmlReader(xml, valueMappings, true);
         assertThat(claimReader.getErrors().size(), is(0));
