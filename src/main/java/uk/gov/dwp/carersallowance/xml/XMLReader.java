@@ -18,8 +18,8 @@ import java.util.*;
 /**
  * Created by peterwhitehead on 10/02/2017.
  */
-public class AbstractXMLReader {
-    private static final Logger LOG = LoggerFactory.getLogger(XmlClaimReader.class);
+public class XmlReader {
+    private static final Logger LOG = LoggerFactory.getLogger(XmlReader.class);
 
 
     private static final Set<String> ACTIVE_ATTRS = new HashSet<>(Arrays.asList(new String[]{"type", "order"}));
@@ -27,7 +27,7 @@ public class AbstractXMLReader {
 
     protected Set<String> IGNORE_MAPPING = new HashSet<>();
     protected Set<String> NOT_SUPPORTED = new HashSet<>();
-    protected final List<CollectionDetails> collections = new ArrayList<>();
+    protected final List<CollectionDetail> collectionDetails = new ArrayList<>();
 
     private Map<String, Object> values;
     private List<String> errors;
@@ -36,7 +36,7 @@ public class AbstractXMLReader {
     private Document document;
     private Map<String, XPathMappingList> valueMappings;
 
-    public AbstractXMLReader(final String xmlFile, final Boolean sessionVariablesOnly, final URL mappingFile) throws Exception {
+    public XmlReader(final String xmlFile, final Boolean sessionVariablesOnly, final URL mappingFile) throws Exception {
         String xml = IOUtils.toString(XmlClaimReader.class.getClassLoader().getResourceAsStream(xmlFile), Charset.defaultCharset());
         createSessionValues(createMappings(mappingFile), sessionVariablesOnly, xml);
     }
@@ -65,7 +65,7 @@ public class AbstractXMLReader {
         }
     }
 
-    public AbstractXMLReader(final String xml, final XPathMappingList valueMapping, final Boolean sessionVariablesOnly) throws InstantiationException {
+    public XmlReader(final String xml, final XPathMappingList valueMapping, final Boolean sessionVariablesOnly) throws InstantiationException {
         createSessionValues(valueMapping, sessionVariablesOnly, xml);
     }
 
@@ -279,14 +279,14 @@ public class AbstractXMLReader {
     protected void createCollectionDetails() {}
 
     protected boolean createCollection(final Map<String, Object> values, final Node node, final String parentPath, final String data) {
-        return true;
+        return false;
     }
 
-    class CollectionDetails {
+    class CollectionDetail {
         private final String startWith;
         private final String newMapKey;
         private final String collectionName;
-        public CollectionDetails(final String collectionName, final String startWith, final String newMapKey) {
+        public CollectionDetail(final String collectionName, final String startWith, final String newMapKey) {
             this.collectionName = collectionName;
             this.startWith = startWith;
             this.newMapKey = newMapKey;

@@ -1,9 +1,7 @@
 package uk.gov.dwp.carersallowance.xml;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -13,7 +11,6 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathFactory;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,27 +34,32 @@ import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
 public class XmlBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(XmlBuilder.class);
 
-    private static final String XML_MAPPING__CLAIM = "xml.mapping.claim";
     private static final String PATH_SEPARATOR = "/";
 
     private Document document;
     private Map<String, XPathMappingList> valueMappings;
     private final MessageSource messageSource;
     private final ServerSideResolveArgs serverSideResolveArgs;
+    protected String xmlMapping;
+    private final String rootNodeName;
 
-    public XmlBuilder(final String rootNodeName, final Map<String, Object> values, final MessageSource messageSource, final ServerSideResolveArgs serverSideResolveArgs) throws ParserConfigurationException, IOException, XPathMappingList.MappingException {
+    public XmlBuilder(final String rootNodeName, final MessageSource messageSource, final ServerSideResolveArgs serverSideResolveArgs, final String xmlMapping) throws ParserConfigurationException, IOException, XPathMappingList.MappingException {
         this.messageSource = messageSource;
         this.serverSideResolveArgs = serverSideResolveArgs;
-        Parameters.validateMandatoryArgs(new Object[]{rootNodeName}, new String[]{"rootNodeName"});
+        this.xmlMapping = xmlMapping;
+        this.rootNodeName = rootNodeName;
+        Parameters.validateMandatoryArgs(new Object[]{rootNodeName}, new String[]{ "rootNodeName" });
+        this.valueMappings = loadXPathMappings(null, xmlMapping);
+    }
+
+    public void loadValuesIntoXML(final Map<String, Object> values) throws ParserConfigurationException {
         Map<String, String> namespaces = getNamespaces();
         document = createDocument(rootNodeName, namespaces);
-        //this.valueMappings = loadXPathMappings(null, XML_MAPPING__CLAIM);
-
-        addAssistedDecisionToClaim(values);
+        addAdditionalValues(values);
         addNodes(values, null, document);
     }
 
-    private Map<String, XPathMappingList> loadXPathMappings(final String elementName, final String xmlMapping) throws IOException, XPathMappingList.MappingException {
+    protected Map<String, XPathMappingList> loadXPathMappings(final String elementName, final String xmlMapping) throws IOException, XPathMappingList.MappingException {
         Map<String, XPathMappingList> mappings = new HashMap<>();
         URL claimTemplateUrl = this.getClass().getClassLoader().getResource(xmlMapping);
         List<String> xmlMappings = LoadFile.readLines(claimTemplateUrl);
@@ -67,13 +69,8 @@ public class XmlBuilder {
         return mappings;
     }
 
-
-    private Map<String, String> getNamespaces() {
+    protected Map<String, String> getNamespaces() {
         Map<String, String> namespaces = new HashMap<>();
-        namespaces.put("xmlns", "http://www.govtalk.gov.uk/dwp/carers-allowance");
-        namespaces.put("xmlns:ds", "http://www.w3.org/2000/09/xmldsig#");
-        namespaces.put("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        namespaces.put("xsi:schemaLocation", "http://www.govtalk.gov.uk/dwp/carers-allowance file:/future/schema/ca/CarersAllowance_Schema.xsd");
         return namespaces;
     }
 
@@ -103,7 +100,7 @@ public class XmlBuilder {
      * @param values
      * @param localRootNode XPath calculations use this as the root location, usually document, but can be different for FieldCollections
      */
-    private void addNodes(Map<String, Object> values, String mappingName, Node localRootNode) {
+    protected void addNodes(Map<String, Object> values, String mappingName, Node localRootNode) {
         if (values == null) {
             return;
         }
@@ -250,18 +247,20 @@ public class XmlBuilder {
         return node;
     }
 
-    private void add(List<Map<String, Object>> fieldCollectionList, Document document, String elementName, String xPath) {
+    protected void add(final List<Map<String, Object>> fieldCollectionList, final Document document, final String elementName, final String xPath) {
         // create enclosing node, one per list item using order attribute, then create the inner values
         if (fieldCollectionList == null) {
             return;
         }
         try {
-            this.valueMappings.put(elementName, loadXPathMappings(elementName, XML_MAPPING__CLAIM + "." + elementName.toLowerCase()).get(elementName));
+            String elementNameToUse = elementName;
+            String xPathToUse = xPath;
+            String mappingNameToUse = elementName;
             for (int index = 0; index < fieldCollectionList.size(); index++) {
                 Map<String, Object> fieldCollection = fieldCollectionList.get(index);
-                Element childNode = document.createElement(elementName);
-                addNodes(fieldCollection, elementName, childNode);
-                Node node = getNamedNode(xPath, null, false, document);
+                Element childNode = document.createElement(elementNameToUse);
+                addNodes(fieldCollection, mappingNameToUse, childNode);
+                Node node = getNamedNode(xPathToUse, null, false, document);
                 node.appendChild(childNode);
             }
         } catch (Exception e) {
@@ -330,7 +329,7 @@ public class XmlBuilder {
      * @param localRootNode the rootNode used for xPath calculations
      * @return
      */
-    private Node getNamedNode(String xPath, Map<String, String> attributes, boolean attrExactMatch, Node localRootNode) {
+    protected Node getNamedNode(String xPath, Map<String, String> attributes, boolean attrExactMatch, Node localRootNode) {
         //remove Line from path
         String[] pathElements = xPath.split(PATH_SEPARATOR);
         Node current = localRootNode;
@@ -464,10 +463,7 @@ public class XmlBuilder {
         return xml;
     }
 
-    private void addAssistedDecisionToClaim(Map<String, Object> values) {
-        AssistedDecision assistedDecision = new AssistedDecision(65, values);
-        values.put("assistedDecisionReason", assistedDecision.getReason());
-        values.put("assistedDecisionDecision", assistedDecision.getDecision());
+    protected void addAdditionalValues(final Map<String, Object> values) {
     }
 
     public String getNodeValue(String nodepath) {
@@ -483,5 +479,9 @@ public class XmlBuilder {
 
     public Document getDocument() {
         return document;
+    }
+
+    protected Map<String, XPathMappingList> getValueMappings() {
+        return valueMappings;
     }
 }

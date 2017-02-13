@@ -10,9 +10,6 @@ import uk.gov.dwp.carersallowance.utils.C3Constants;
 import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
 import uk.gov.dwp.carersallowance.utils.xml.XmlPrettyPrinter;
 
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathFactory;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -53,7 +50,8 @@ public class ClaimHeaderItemsTest {
         sessionMap.put("originTag", origin);
         sessionMap.put("language", language);
 
-        xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource, serverSideResolveArgs);
+        xmlBuilder = new XmlClaimBuilder("DWPBody", messageSource, serverSideResolveArgs, "xml.mapping.claim", 65);
+        xmlBuilder.loadValuesIntoXML(sessionMap);
     }
 
     @Test

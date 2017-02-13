@@ -2,7 +2,6 @@ package uk.gov.dwp.carersallowance.xml;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +18,7 @@ public class AssistedDecision {
 
     private static final DateTimeFormatter FORMATTERDDMMYYY = DateTimeFormatter.ofPattern("ddMMyyyy");
 
-    public AssistedDecision(@Value("${age.hide.paydetails}") final int oldPersonAge, Map<String, Object> claimvalues) {
+    public AssistedDecision(final Integer oldPersonAge, final Map<String, Object> claimvalues) {
         this.oldPersonAge = oldPersonAge;
         this.claimvalues = claimvalues;
         try {

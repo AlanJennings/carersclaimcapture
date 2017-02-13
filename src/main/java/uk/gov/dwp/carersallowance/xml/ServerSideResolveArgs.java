@@ -3,6 +3,7 @@ package uk.gov.dwp.carersallowance.xml;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import uk.gov.dwp.carersallowance.jsp.Functions;
 import uk.gov.dwp.carersallowance.jsp.ResolveArgs;
 
@@ -11,6 +12,7 @@ import java.util.*;
 /**
  * Created by peterwhitehead on 12/01/2017.
  */
+@Component
 public class ServerSideResolveArgs extends ResolveArgs {
     private static final Logger LOG = LoggerFactory.getLogger(ServerSideResolveArgs.class);
 

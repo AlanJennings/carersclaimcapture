@@ -9,7 +9,7 @@ import org.springframework.context.MessageSource;
 import uk.gov.dwp.carersallowance.utils.C3Constants;
 import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
 import uk.gov.dwp.carersallowance.xml.ServerSideResolveArgs;
-import uk.gov.dwp.carersallowance.xml.XmlBuilder;
+import uk.gov.dwp.carersallowance.xml.XmlClaimBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -53,7 +53,8 @@ public class XmlBuilderTest {
     @Test
     public void testDocument() {
         try {
-            XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource, serverSideResolveArgs);
+            XmlClaimBuilder xmlBuilder = new XmlClaimBuilder("DWPBody", messageSource, serverSideResolveArgs, "xml.mapping.claim", 65);
+            xmlBuilder.loadValuesIntoXML(sessionMap);
             assertThat(xmlBuilder.getNodeValue("/DWPBody/Version"), is(xmlVersion));
         } catch (Exception e) {
             LOG.error("Exception calling XmlBuilder :", e);
@@ -63,7 +64,8 @@ public class XmlBuilderTest {
     @Test
     public void testXml() {
         try {
-            XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource, serverSideResolveArgs);
+            XmlClaimBuilder xmlBuilder = new XmlClaimBuilder("DWPBody", messageSource, serverSideResolveArgs, "xml.mapping.claim", 65);
+            xmlBuilder.loadValuesIntoXML(sessionMap);
             String xml = xmlBuilder.render(true, false);
             assertTrue(xml.startsWith("<?xml"));
             assertTrue(xml.contains("<DWPBody"));

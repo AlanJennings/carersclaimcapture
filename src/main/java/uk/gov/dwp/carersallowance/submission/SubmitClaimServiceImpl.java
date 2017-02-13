@@ -18,14 +18,12 @@ import uk.gov.dwp.carersallowance.database.Status;
 import uk.gov.dwp.carersallowance.database.TransactionIdService;
 import uk.gov.dwp.carersallowance.email.EmailService;
 import uk.gov.dwp.carersallowance.email.EmailServletResponse;
-import uk.gov.dwp.carersallowance.encryption.ClaimEncryptionService;
 import uk.gov.dwp.carersallowance.session.SessionManager;
 import uk.gov.dwp.carersallowance.sessiondata.Session;
 import uk.gov.dwp.carersallowance.utils.C3Constants;
 import uk.gov.dwp.carersallowance.utils.Parameters;
 import uk.gov.dwp.carersallowance.utils.xml.ClaimXmlUtil;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
-import uk.gov.dwp.carersallowance.xml.ServerSideResolveArgs;
 import uk.gov.dwp.carersallowance.xml.XmlBuilder;
 
 import javax.inject.Inject;
@@ -47,6 +45,7 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
     private final MessageSource messageSource;
     private final Counters counters;
     private final EmailService emailService;
+    private final XmlBuilder xmlBuilder;
 
     private static final Integer JS_ENABLED = 1;
     private static final Integer JS_DISABLED = 0;
@@ -60,7 +59,8 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
                                   final TransactionIdService transactionIdService,
                                   final MessageSource messageSource,
                                   final Counters counters,
-                                  final EmailService emailService) {
+                                  final EmailService emailService,
+                                  final XmlBuilder xmlBuilder) {
         this.restTemplate = restTemplate;
         this.crUrl = crUrl;
         this.sessionManager = sessionManager;
@@ -68,6 +68,7 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
         this.messageSource = messageSource;
         this.counters = counters;
         this.emailService = emailService;
+        this.xmlBuilder = xmlBuilder;
     }
 
     @Override
@@ -166,12 +167,13 @@ public class SubmitClaimServiceImpl implements SubmitClaimService {
         Parameters.validateMandatoryArgs(session, "session");
 
         Map<String, Object> sessionMap = new HashMap<>(session.getData());
-
         sessionMap.put("dateTimeGenerated", ClaimXmlUtil.currentDateTime("dd-MM-yyyy HH:mm"));
 
-        final XmlBuilder xmlBuilder = new XmlBuilder("DWPBody", sessionMap, messageSource, new ServerSideResolveArgs());
+        xmlBuilder.loadValuesIntoXML(sessionMap);
         final String xml = xmlBuilder.render(true, false);
+
         LOG.debug("xml:{}", xml);
+
         final String signedXml = signClaim(xml, transactionId);
         LOG.debug("signedXml:{}", signedXml);
         return signedXml;

@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import uk.gov.dwp.carersallowance.utils.C3Constants;
 import uk.gov.dwp.carersallowance.utils.LoadFile;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
-import uk.gov.dwp.carersallowance.xml.XmlClaimReader;
+import uk.gov.dwp.carersallowance.xml.XmlReader;
 
 import java.io.File;
 import java.net.URL;
@@ -18,13 +18,13 @@ import java.util.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class XmlClaimReaderTest {
-    private static final Logger LOG = LoggerFactory.getLogger(XmlClaimReaderTest.class);
+public class XmlReaderTest {
+    private static final Logger LOG = LoggerFactory.getLogger(XmlReaderTest.class);
     private XPathMappingList valueMappings;
 
     @Before
     public void setUp() throws Exception {
-        URL claimTemplateUrl = XmlClaimReader.class.getClassLoader().getResource("xml.mapping.claim");
+        URL claimTemplateUrl = XmlReader.class.getClassLoader().getResource("xml.mapping.claim");
         List<String> xmlMappings = LoadFile.readLines(claimTemplateUrl);
         valueMappings = new XPathMappingList();
         valueMappings.add(xmlMappings);
@@ -52,7 +52,7 @@ public class XmlClaimReaderTest {
                 "    </DWPCATransaction>\n" +
                 "</DWPBody>";
 
-        XmlClaimReader claimReader = new XmlClaimReader(simplexml, valueMappings, true);
+        XmlReader claimReader = new XmlReader(simplexml, valueMappings, true);
         assertThat(claimReader.getErrors().size(), is(0));
         Map<String, Object> sessionValues = claimReader.getValues();
         assertThat(sessionValues.get("xmlVersion"), is("0.27"));
@@ -66,26 +66,10 @@ public class XmlClaimReaderTest {
 
     @Test
     public void loadXmlThirdPartyTest() throws Exception {
-        URL xmlfile = XmlClaimReader.class.getClassLoader().getResource("claimreader-thirdparty.xml");
+        URL xmlfile = XmlReader.class.getClassLoader().getResource("claimreader-thirdparty.xml");
         String xml = FileUtils.readFileToString(new File(xmlfile.toURI()), Charset.defaultCharset());
 
-        XmlClaimReader claimReader = new XmlClaimReader(xml, valueMappings, true);
-        assertThat(claimReader.getErrors().size(), is(0));
-        Map<String, Object> sessionValues = claimReader.getValues();
-        Map<String, Object> values = claimReader.getValues();
-        for (String name : values.keySet()) {
-            LOG.debug("VALUE:{}=>{}\n", name, values.get(name));
-        }
-        assertThat(sessionValues.get("thirdParty"), is(C3Constants.NO));
-        assertThat(sessionValues.get("nameAndOrganisation"), is("Jenny Bloggs Preston carers"));
-    }
-
-    @Test
-    public void loadXmlTest() throws Exception {
-        URL xmlfile = XmlClaimReader.class.getClassLoader().getResource("claimreader-caree.xml");
-        String xml = FileUtils.readFileToString(new File(xmlfile.toURI()), Charset.defaultCharset());
-
-        XmlClaimReader claimReader = new XmlClaimReader(xml, valueMappings, true);
+        XmlReader claimReader = new XmlReader(xml, valueMappings, true);
         assertThat(claimReader.getErrors().size(), is(0));
         Map<String, Object> sessionValues = claimReader.getValues();
         Map<String, Object> values = claimReader.getValues();

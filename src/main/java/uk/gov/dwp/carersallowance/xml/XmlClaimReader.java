@@ -15,7 +15,7 @@ import org.w3c.dom.Node;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMapping;
 import uk.gov.dwp.carersallowance.utils.xml.XPathMappingList;
 
-public class XmlClaimReader extends AbstractXMLReader {
+public class XmlClaimReader extends XmlReader {
     private static final Logger LOG = LoggerFactory.getLogger(XmlClaimReader.class);
 
     private String fileSuffix;
@@ -34,35 +34,35 @@ public class XmlClaimReader extends AbstractXMLReader {
 
     @Override
     protected void createCollectionDetails() {
-        collections.add(new CollectionDetails("JobDetails", "DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/", "DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/CurrentlyEmployed/QuestionLabel"));
-        collections.add(new CollectionDetails("breakshospital", "DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/", "DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/BreaksType/QuestionLabel"));
-        collections.add(new CollectionDetails("breaksrespite", "DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/", "DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/BreaksType/QuestionLabel"));
-        collections.add(new CollectionDetails("breaksother", "DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/", "DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/BreaksType/QuestionLabel"));
+        collectionDetails.add(new CollectionDetail("JobDetails", "DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/", "DWPBody/DWPCATransaction/DWPCAClaim/Incomes/Employment/JobDetails/Employer/CurrentlyEmployed/QuestionLabel"));
+        collectionDetails.add(new CollectionDetail("breakshospital", "DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/", "DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/BreaksType/QuestionLabel"));
+        collectionDetails.add(new CollectionDetail("breaksrespite", "DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/", "DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/BreaksType/QuestionLabel"));
+        collectionDetails.add(new CollectionDetail("breaksother", "DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/", "DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/BreaksType/QuestionLabel"));
     }
 
     @Override
     protected boolean createCollection(final Map<String, Object> values, final Node node, final String parentPath, final String data) {
         try {
-            CollectionDetails collectionDetails = findParentPath(parentPath, node);
-            if (collectionDetails != null) {
+            CollectionDetail collectionDetail = findParentPath(parentPath, node);
+            if (collectionDetail != null) {
                 Map<String, Object> latestValues;
-                List<Map<String, Object>> collection = (List<Map<String, Object>>) values.get(collectionDetails.getCollectionName());
-                if (collectionDetails.getNewMapKey().equals(parentPath)) {
+                List<Map<String, Object>> collection = (List<Map<String, Object>>) values.get(collectionDetail.getCollectionName());
+                if (collectionDetail.getNewMapKey().equals(parentPath)) {
                     latestValues = new HashMap<>();
                     if (collection == null) {
                         collection = new ArrayList<>();
-                        values.put(collectionDetails.getCollectionName(), collection);
+                        values.put(collectionDetail.getCollectionName(), collection);
                     }
-                    latestValues.put(collectionDetails.getCollectionName() + "_id", String.valueOf(collection.size()+1));
+                    latestValues.put(collectionDetail.getCollectionName() + "_id", String.valueOf(collection.size()+1));
                     collection.add(latestValues);
                 } else {
                     latestValues = collection.get(collection.size()-1);
                 }
                 //find mapping
-                if (collectionDetails.getCollectionName().contains("breaks")) {
-                    addBreaks(collectionDetails, latestValues, parentPath, data);
-                } else if (collectionDetails.getCollectionName().contains("JobDetails")) {
-                    addJobDetails(collectionDetails, latestValues, parentPath, data);
+                if (collectionDetail.getCollectionName().contains("breaks")) {
+                    addBreaks(collectionDetail, latestValues, parentPath, data);
+                } else if (collectionDetail.getCollectionName().contains("JobDetails")) {
+                    addJobDetails(collectionDetail, latestValues, parentPath, data);
                 } else {
                     return false;
                 }
@@ -76,19 +76,19 @@ public class XmlClaimReader extends AbstractXMLReader {
         return true;
     }
 
-    private void addJobDetails(final CollectionDetails collectionDetails, final Map<String, Object> latestValues, final String parentPath, final String data) {
-        final String path = parentPath.replace(collectionDetails.getStartWith(), "");
-        XPathMapping xPathMapping = findMapping(path, collectionDetails.getCollectionName());
+    private void addJobDetails(final CollectionDetail collectionDetail, final Map<String, Object> latestValues, final String parentPath, final String data) {
+        final String path = parentPath.replace(collectionDetail.getStartWith(), "");
+        XPathMapping xPathMapping = findMapping(path, collectionDetail.getCollectionName());
         if (xPathMapping == null) {
-            createAdditionalMappings(mappingFileName + "." + collectionDetails.getCollectionName().toLowerCase(), collectionDetails.getCollectionName());
-            xPathMapping = findMapping(path, collectionDetails.getCollectionName());
+            createAdditionalMappings(mappingFileName + "." + collectionDetail.getCollectionName().toLowerCase(), collectionDetail.getCollectionName());
+            xPathMapping = findMapping(path, collectionDetail.getCollectionName());
         }
         processMapping(xPathMapping, latestValues, data);
     }
 
-    private void addBreaks(final CollectionDetails collectionDetails, final Map<String, Object> latestValues, String parentPath, String data) {
+    private void addBreaks(final CollectionDetail collectionDetail, final Map<String, Object> latestValues, String parentPath, String data) {
         //need to decipher which type of break it is BreaksType = DPHospital/YouHospital,DPRespite/YouRespite or Other
-        final String path = parentPath.replace(collectionDetails.getStartWith(), "");
+        final String path = parentPath.replace(collectionDetail.getStartWith(), "");
         XPathMapping xPathMapping = findMapping(path, fileSuffix);
         if (xPathMapping == null) {
             createAdditionalMappings(mappingFileName + ".breaks" + fileSuffix, fileSuffix);
@@ -106,7 +106,7 @@ public class XmlClaimReader extends AbstractXMLReader {
         return null;
     }
 
-    private CollectionDetails findParentPath(final String parentPath, final Node node) {
+    private CollectionDetail findParentPath(final String parentPath, final Node node) {
         if (parentPath.contains("DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak")) {
             if (parentPath.equals("DWPBody/DWPCATransaction/DWPCAClaim/Caree/CareBreak/BreaksType/QuestionLabel")) {
                 fileSuffix = getAnswerToBreakQuestion(node).toLowerCase();
@@ -114,18 +114,18 @@ public class XmlClaimReader extends AbstractXMLReader {
             return findCollectionForSuffix("breaks" + fileSuffix.replace("dp", "").replace("you", ""));
         }
 
-        for (CollectionDetails collectionDetails : collections) {
-            if (parentPath.equals(collectionDetails.getNewMapKey()) || parentPath.startsWith(collectionDetails.getStartWith())) {
-                return collectionDetails;
+        for (CollectionDetail collectionDetail : collectionDetails) {
+            if (parentPath.equals(collectionDetail.getNewMapKey()) || parentPath.startsWith(collectionDetail.getStartWith())) {
+                return collectionDetail;
             }
         }
         return null;
     }
 
-    private CollectionDetails findCollectionForSuffix(String collectionName) {
-        for (CollectionDetails collectionDetails : collections) {
-            if (collectionDetails.getCollectionName().equals(collectionName)) {
-                return collectionDetails;
+    private CollectionDetail findCollectionForSuffix(String collectionName) {
+        for (CollectionDetail collectionDetail : collectionDetails) {
+            if (collectionDetail.getCollectionName().equals(collectionName)) {
+                return collectionDetail;
             }
         }
         return null;
