@@ -18,7 +18,6 @@ import org.springframework.web.servlet.handler.AbstractHandlerMapping;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import uk.gov.dwp.carersallowance.controller.AbstractFormController;
-import uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultChangeOfCircsController;
 import uk.gov.dwp.carersallowance.controller.defaultcontoller.DefaultFormController;
 
 /**
@@ -68,18 +67,12 @@ public class FilteredRequestMappingHandlerMapping extends RequestMappingHandlerM
             }
 
             try {
-                Object controller;
                 String path = request.getRequestURI();
-                if (path.startsWith("/circumstances")) {
-                    controller = getApplicationContext().getBean(DefaultChangeOfCircsController.class);
-                } else {
-                    controller = getApplicationContext().getBean(DefaultFormController.class);
-                }
+                Object controller = getApplicationContext().getBean(DefaultFormController.class);
+
                 AbstractFormController defaultController = null;
                 if (controller instanceof DefaultFormController) {
                     defaultController = (DefaultFormController)controller;
-                } else if (controller instanceof DefaultChangeOfCircsController){
-                    defaultController = (DefaultChangeOfCircsController) controller;
                 }
                 if (defaultController == null || defaultController.supportsRequest(request) == false) {
                     return null;

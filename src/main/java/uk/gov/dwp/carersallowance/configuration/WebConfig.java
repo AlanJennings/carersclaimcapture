@@ -66,14 +66,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
       registry.addViewController("/").setViewName("/index");
     }
 
-    @Bean(name = "pageCircsOrder")
-    public PageOrder getCircsPageOrder(final MessageSource messageSource, @Value("${form.circs.name}") final String circsFormName) throws Exception {
-        return new PageOrder(messageSource, circsFormName);
-    }
 
     @Bean(name = "pageOrder")
     @Primary
-    public PageOrder getClaimPageOrder(final MessageSource messageSource, @Value("${form.claim.name}") final String claimFormName) throws Exception {
+    public PageOrder getClaimPageOrder(final MessageSource messageSource, @Value("${form.name}") final String claimFormName) throws Exception {
         return new PageOrder(messageSource, claimFormName);
     }
 
@@ -114,7 +110,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public ReloadableResourceBundleMessageSource messageSource() {
         final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames("classpath:messages","classpath:circs_messages");
+        messageSource.setBasenames("classpath:messages");
         messageSource.setCacheSeconds(10); //reload messages every 10 seconds
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
